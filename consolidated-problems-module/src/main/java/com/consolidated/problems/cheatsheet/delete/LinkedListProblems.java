@@ -1,4 +1,4 @@
-package com.consolidated.problems.cheatsheet;
+package com.consolidated.problems.cheatsheet.delete;
 
 import java.util.HashMap;
 import java.util.Map;

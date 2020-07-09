@@ -1,4 +1,4 @@
-package com.consolidated.problems.cheatsheet;
+package com.consolidated.problems.cheatsheet.delete;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;

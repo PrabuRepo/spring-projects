@@ -1,5 +1,5 @@
 
-package com.consolidated.problems.cheatsheet;
+package com.consolidated.problems.cheatsheet.delete;
 
 import java.util.ArrayList;
 import java.util.Arrays;

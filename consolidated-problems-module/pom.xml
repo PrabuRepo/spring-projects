@@ -6,10 +6,6 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>consolidated-problems-module</artifactId>
-  	<!-- Consolidated Problems: This module contains consolidated interview 
-		problems collected from many web sites and make my own understanding problem 
-		patterns/type. Note: Problem Patterns/Type keep changing. Union of all the 
-		problems in the Interview Questions. -->
   	<dependencies>
 		<dependency>
 			<groupId>com.problems.practice</groupId>
