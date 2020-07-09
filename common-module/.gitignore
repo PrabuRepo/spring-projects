@@ -27,5 +27,7 @@ hs_err_pid*
 /org.eclipse.m2e.core.prefs
 /org.eclipse.jdt.apt.core.prefs
 
-/target
-/MANIFEST.MF
+#Maven directories
+*/target/** 
+**/META-INF/	
+/MANIFEST.MFa
