@@ -14,8 +14,8 @@ public class TestArrayProblems extends ArrayProblems {
 		System.out.println("Max Consecutive Ones II: " + ob.findMaxConsecutiveOnes2(nums3));
 
 		int[] num4 = { 7, 1, 5, 3, 6, 4 };
-		System.out.println("Max Profit with cooldown: " + ob.maxProfit5(num4));
+		//System.out.println("Max Profit with cooldown: " + ob.maxProfit5(num4));
 
-		System.out.println("Max Profit with K transactions: " + ob.maxProfit4(2, num4));
+		//System.out.println("Max Profit with K transactions: " + ob.maxProfit4(2, num4));
 	}
 }

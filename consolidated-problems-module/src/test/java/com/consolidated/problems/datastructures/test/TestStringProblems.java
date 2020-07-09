@@ -6,7 +6,7 @@ public class TestStringProblems extends StringProblems {
 	public static void main(String[] args) {
 
 		TestStringProblems ob = new TestStringProblems();
-		System.out.println("Reverse Words: " + ob.reverseWords("the sky is blue"));
+		System.out.println("Reverse Words: " + ob.reverseWords11("the sky is blue"));
 		System.out.println("Reverse Words: " + ob.reverseWords2("the sky is blue"));
 
 		System.out.println("Count no of non consecutive ones: " + ob.count1(5));
