@@ -2,9 +2,9 @@ package com.consolidated.problems.datastructures.test;
 
 import java.util.Arrays;
 
-import com.consolidated.problems.datastructures.StackAndQueueProblems;
+import com.consolidated.problems.datastructures.StackProblems;
 
-public class TestQueueProblems extends StackAndQueueProblems {
+public class TestQueueProblems extends StackProblems {
 	public static void main(String[] args) {
 		TestQueueProblems ob = new TestQueueProblems();
 

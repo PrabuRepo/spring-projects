@@ -2,7 +2,6 @@ package com.problems.patterns;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,15 +35,13 @@ public class SlidingWindowPatterns {
 		for (int i = 0; i < len2; i++)
 			hashPat[pat.charAt(i)]++;
 
-		int l = 0, r = 0, minWindow = Integer.MAX_VALUE,
-				minLeft = -1, count = 0, index = 0;
+		int l = 0, r = 0, minWindow = Integer.MAX_VALUE, minLeft = -1, count = 0, index = 0;
 		// Move 'r' one by one from zero
 		while (r < len1) {
 			index = str.charAt(r); // Get the String index
 			// Increase the char count in hashStr
 			hashStr[index]++;
-			if (hashPat[index] != 0
-					&& hashStr[index] <= hashPat[index])
+			if (hashPat[index] != 0 && hashStr[index] <= hashPat[index])
 				count++;
 
 			// Move 'l' from zero and update minwindow & the string map
@@ -62,10 +59,7 @@ public class SlidingWindowPatterns {
 			}
 			r++;
 		}
-		return minLeft != -1
-				? str.substring(minLeft,
-						minLeft + minWindow)
-				: "";
+		return minLeft != -1 ? str.substring(minLeft, minLeft + minWindow) : "";
 	}
 
 	/* Longest Substring Without Repeating Characters:
@@ -76,7 +70,8 @@ public class SlidingWindowPatterns {
 	 */
 	// Approach1: Sliding Window solution using Array to store the data
 	public int lengthOfLongestSubstring1(String s) {
-		if (s.length() == 0) return 0;
+		if (s.length() == 0)
+			return 0;
 
 		int l = 0, r = 0, maxLen = 0, n = s.length();
 		int[] countArr = new int[128];
@@ -98,7 +93,8 @@ public class SlidingWindowPatterns {
 
 	//Approach2: Sliding Window solution using map to store the data
 	public int lengthOfLongestSubstring2(String s) {
-		if (s.length() == 0) return 0;
+		if (s.length() == 0)
+			return 0;
 		HashMap<Character, Integer> map = new HashMap<Character, Integer>();
 		int l = 0, r = 0, maxLen = 0, n = s.length();
 		while (r < n) {
@@ -117,12 +113,12 @@ public class SlidingWindowPatterns {
 
 	// Similar to previous
 	public int lengthOfLongestSubstring3(String s) {
-		int l = 0, r = 0, maxLen = 0, n = s.length(),
-				counter = 0;
+		int l = 0, r = 0, maxLen = 0, n = s.length(), counter = 0;
 		int[] countArr = new int[128];
 		while (r < n) {
 			char ch = s.charAt(r++);
-			if (countArr[ch]++ > 0) counter++;
+			if (countArr[ch]++ > 0)
+				counter++;
 			while (counter > 0 && l < n)
 				if (countArr[s.charAt(l++)]-- > 1)
 					counter--;
@@ -134,7 +130,8 @@ public class SlidingWindowPatterns {
 
 	// Approach2: Sliding Window solution using map to store the data
 	public int lengthOfLongestSubstring4(String s) {
-		if (s.length() == 0) return 0;
+		if (s.length() == 0)
+			return 0;
 		HashMap<Character, Integer> map = new HashMap<Character, Integer>();
 		int l = 0, r = 0, maxLen = 0, n = s.length();
 		while (r < n) {
@@ -156,8 +153,7 @@ public class SlidingWindowPatterns {
 	 * Given a string, find the longest substring that contains only two unique characters. For example, given "abcbbbbcccbdddadacb",
 	 * the longest substring that contains 2 unique character is "bcbbbbcccb".
 	 */
-	public int lengthOfLongestSubstringTwoDistinct(
-			String s) {
+	public int lengthOfLongestSubstringTwoDistinct(String s) {
 		int max = 0, start = 0;
 		HashMap<Character, Integer> map = new HashMap<Character, Integer>();
 
@@ -187,8 +183,7 @@ public class SlidingWindowPatterns {
 	/*
 	 * Longest Substring with At Most K Distinct Characters:
 	 */
-	public int lengthOfLongestSubstringKDistinct(String s,
-			int k) {
+	public int lengthOfLongestSubstringKDistinct(String s, int k) {
 		int result = 0;
 		int i = 0;
 		HashMap<Character, Integer> map = new HashMap<Character, Integer>();
@@ -262,8 +257,7 @@ public class SlidingWindowPatterns {
 		int[] charCount = new int[26];
 		int l = 0, r = 0, maxCharCount = 0, maxLength = 0;
 		while (r < s.length()) {
-			maxCharCount = Math.max(maxCharCount,
-					++charCount[s.charAt(r) - 'A']);
+			maxCharCount = Math.max(maxCharCount, ++charCount[s.charAt(r) - 'A']);
 			while ((r - l + 1) - maxCharCount > k) {
 				charCount[s.charAt(l) - 'A']--;
 				l++;
@@ -277,7 +271,8 @@ public class SlidingWindowPatterns {
 	// Time Complexity: O(26n)
 	public int characterReplacement2(String s, int k) {
 		int n = s.length();
-		if (n < k) return 0;
+		if (n < k)
+			return 0;
 
 		// Added this to improve the performance; Solution will work without this
 		int[] countArray = new int[26];
@@ -289,7 +284,8 @@ public class SlidingWindowPatterns {
 			char ch = (char) (i + 'A'); // Get the char one by one from A to Z;(input has only upper case)
 			int l = 0, r = 0, count = 0;
 
-			if (countArray[ch - 'A'] == 0) continue;
+			if (countArray[ch - 'A'] == 0)
+				continue;
 
 			while (r < n) {
 				if (s.charAt(r) != ch) // if char mismatches, increase the count
@@ -333,7 +329,8 @@ public class SlidingWindowPatterns {
 				l++;
 			}
 
-			if (r - l + 1 == s1.length()) return true;
+			if (r - l + 1 == s1.length())
+				return true;
 			r++;
 		}
 
@@ -348,11 +345,9 @@ public class SlidingWindowPatterns {
 	 * Explanation: Substrings starting at index 0 and 9 are "barfoor" and "foobar" respectively. The output order does 
 	 * not matter, returning [9,0] is fine too.
 	 */
-	public List<Integer> findSubstring(String s,
-			String[] words) {
+	public List<Integer> findSubstring(String s, String[] words) {
 		List<Integer> result = new ArrayList<>();
-		if (s == null || s.length() == 0
-				|| words.length == 0)
+		if (s == null || s.length() == 0 || words.length == 0)
 			return result;
 
 		HashMap<String, Integer> map = new HashMap<>();
@@ -360,19 +355,17 @@ public class SlidingWindowPatterns {
 		for (String word : words)
 			map.put(word, map.getOrDefault(word, 0) + 1);
 
-		int n = s.length(), len = words[0].length(),
-				size = words.length;
+		int n = s.length(), len = words[0].length(), size = words.length;
 
 		for (int i = 0; i <= n - len * size; i++) {
-			HashMap<String, Integer> copy = new HashMap<>(
-					map);
+			HashMap<String, Integer> copy = new HashMap<>(map);
 			for (int j = 0; j < size; j++) {
-				String sub = s.substring(i + j * len,
-						i + j * len + len);
+				String sub = s.substring(i + j * len, i + j * len + len);
 				if (copy.containsKey(sub)) {
 					if (copy.get(sub) == 1)
 						copy.remove(sub);
-					else copy.put(sub, copy.get(sub) - 1);
+					else
+						copy.put(sub, copy.get(sub) - 1);
 					if (copy.isEmpty()) {
 						result.add(i);
 						break;
@@ -386,16 +379,15 @@ public class SlidingWindowPatterns {
 		return result;
 	}
 
-	/*****************************Sliding Window: Array ******************************/
-	/*************1.Flexible Window: Move from left to right till reach the target*************/
+	/***************************** Sliding Window: Array ******************************/
+	/************* 1.Flexible Window: Move from left to right till reach the target *************/
 	/*
 	 * Subarray with given sum:Given an unsorted array A of size N of non-negative integers, find a continuous sub-array 
 	 * which adds to a given number.
 	 */
 	public void subArrayWithGivenSum(int[] arr, int sum) {
 
-		int currSum = arr[0], start = 0, end = 0,
-				n = arr.length, i;
+		int currSum = arr[0], start = 0, end = 0, n = arr.length, i;
 		for (i = 1; i < n; i++) {
 			currSum += arr[i];
 
@@ -410,9 +402,10 @@ public class SlidingWindowPatterns {
 			}
 		}
 
-		if (sum == currSum) System.out
-				.println((start + 1) + " " + (end + 1));
-		else System.out.println("-1");
+		if (sum == currSum)
+			System.out.println((start + 1) + " " + (end + 1));
+		else
+			System.out.println("-1");
 	}
 
 	/* Minimum Size Subarray Sum:
@@ -421,10 +414,10 @@ public class SlidingWindowPatterns {
 	 * 2 Explanation: the subarray [4,3] has the minimal length under the problem constraint.
 	 */
 	public int minSubArrayLen(int s, int[] nums) {
-		if (nums.length == 0) return 0;
+		if (nums.length == 0)
+			return 0;
 
-		int l = 0, r = 0, sum = 0,
-				minLen = Integer.MAX_VALUE;
+		int l = 0, r = 0, sum = 0, minLen = Integer.MAX_VALUE;
 		while (r < nums.length) {
 			sum += nums[r];
 			while (sum >= s && l <= r) {
@@ -444,13 +437,15 @@ public class SlidingWindowPatterns {
 	 * Example: Input: [-2,1,-3,4,-1,2,1,-5,4], Output: 6 Explanation: [4,-1,2,1] has the largest sum = 6.
 	 */
 	public int maxSubArray(int[] nums) {
-		if (nums.length == 0) return 0;
+		if (nums.length == 0)
+			return 0;
 
 		int sum = 0, maxSum = Integer.MIN_VALUE;
 		for (int num : nums) {
 			sum += num;
 			maxSum = Math.max(sum, maxSum);
-			if (sum < 0) sum = 0;
+			if (sum < 0)
+				sum = 0;
 
 		}
 		return maxSum;
@@ -461,14 +456,13 @@ public class SlidingWindowPatterns {
 	 * has the largest product. Example 1: Input: [2,3,-2,4] Output: 6 Explanation: [2,3] has the largest product 6.
 	 */
 	public int maxProduct(int[] nums) {
-		if (nums.length == 0) return 0;
+		if (nums.length == 0)
+			return 0;
 		int max = nums[0], min = nums[0], result = nums[0];
 		for (int i = 1; i < nums.length; i++) {
 			int tempMax = max;
-			max = Utils.max(max * nums[i], min * nums[i],
-					nums[i]);
-			min = Utils.min(tempMax * nums[i],
-					min * nums[i], nums[i]);
+			max = Utils.max(max * nums[i], min * nums[i], nums[i]);
+			min = Utils.min(tempMax * nums[i], min * nums[i], nums[i]);
 			result = Math.max(max, result);
 		}
 		return result;
@@ -501,10 +495,12 @@ public class SlidingWindowPatterns {
 		int max = 0, zero = 0, k = 1; // flip at most k zero
 		int l = 0, r = 0;
 		while (r < nums.length) {
-			if (nums[r] == 0) zero++;
+			if (nums[r] == 0)
+				zero++;
 
 			while (zero > k)
-				if (nums[l++] == 0) zero--;
+				if (nums[l++] == 0)
+					zero--;
 
 			max = Math.max(max, r - l + 1);
 			r++;
@@ -519,7 +515,8 @@ public class SlidingWindowPatterns {
 		int max = 0, k = 1; // flip at most k zero
 		Queue<Integer> zeroIndex = new LinkedList<>();
 		for (int l = 0, h = 0; h < nums.length; h++) {
-			if (nums[h] == 0) zeroIndex.offer(h);
+			if (nums[h] == 0)
+				zeroIndex.offer(h);
 			if (zeroIndex.size() > k)
 				l = zeroIndex.poll() + 1;
 			max = Math.max(max, h - l + 1);
@@ -527,7 +524,7 @@ public class SlidingWindowPatterns {
 		return max;
 	}
 
-	/*****************2.Fixed Window: Calculate value for each fixed window***********************/
+	/***************** 2.Fixed Window: Calculate value for each fixed window ***********************/
 
 	/* Maximum Average Subarray I, II/Maximum average subarray of size k:
 	 * Given an array consisting of n integers, find the contiguous subarray of given length k that has the maximum
@@ -535,12 +532,14 @@ public class SlidingWindowPatterns {
 	 * Example 1: Input: [1,12,-5,-6,50,3], k = 4 Output: 12.75 Explanation: Maximum average is (12-5-6+50)/4 = 51/4 = 12.75
 	 */
 	public double findMaxAverage(int[] arr, int k) {
-		if (arr.length == 0 || arr.length < k) return 0;
+		if (arr.length == 0 || arr.length < k)
+			return 0;
 
 		int sum = 0;
 		double maxAvg = Integer.MIN_VALUE;
 		for (int i = 0; i < arr.length; i++) {
-			if (i < k) sum += arr[i];
+			if (i < k)
+				sum += arr[i];
 			else {
 				maxAvg = Math.max(maxAvg, (double) sum / k);
 				sum -= arr[i - k];
@@ -561,12 +560,15 @@ public class SlidingWindowPatterns {
 		for (int i = 0; i < n; i++) {
 			if (i >= k) {
 				value = map.get(A[i - k]);
-				if (value > 1) map.put(A[i - k], --value);
-				else map.remove(A[i - k]);
+				if (value > 1)
+					map.put(A[i - k], --value);
+				else
+					map.remove(A[i - k]);
 			}
 
 			value = map.get(A[i]);
-			if (value == null) value = 0;
+			if (value == null)
+				value = 0;
 			map.put(A[i], ++value);
 
 			if (i >= k - 1)
@@ -575,56 +577,13 @@ public class SlidingWindowPatterns {
 
 	}
 
-	/* Sliding Window Maximum/Maximum of all subarrays of size k:
-	 * Given an array nums, there is a sliding window of size k which is moving from the very left of the array to the
-	 * very right. You can only see the k numbers in the window. Each time the sliding window moves right by one
-	 * position. Return the max sliding window.
-	 * Input: nums = [1,3,-1,-3,5,3,6,7], and k = 3; Output: [3,3,5,5,6,7] 
-	 * 
-	 * Solution:
-	 * 	1. BruteForce: O(nk)
-	 *  2. Balanced BST(TreeMap): O(nlogk)
-	 *  3.Sliding Window: O(n)
-	 */
-	public int[] maxSlidingWindow(int[] nums, int k) {
-		if (nums.length == 0 || k > nums.length)
-			return new int[0];
-
-		int n = nums.length;
-		int[] result = new int[n - k + 1];
-		// Queue to store the index of the elements; Max element index should be retained in the deque front.
-		Deque<Integer> deque = new LinkedList<>();
-
-		for (int i = 0; i <= n; i++) {
-			if (i >= k) result[i - k] = nums[deque.peek()]; // or initialize index=0 and increment->result[index++]
-
-			if (i == n) break;
-
-			// If 'i' reaches the size k, then Remove the top element
-			if (!deque.isEmpty() && i - deque.peek() == k)
-				deque.poll();
-
-			// Keep removing the smaller element from the last in deque
-			while (!deque.isEmpty()
-					&& nums[i] > nums[deque.peekLast()])
-				deque.removeLast();
-
-			deque.addLast(i);
-		}
-
-		return result;
-	}
-
 	//TODO: Moving Average from Data Stream - Queue/Array - Design
 
-	/***********************3.Apply prefix sum logic***********************/
+	/*********************** 3.Apply prefix sum logic ***********************/
 
 	/**
-	 * Sliding Window - Prefix Sum Patterns
-	 * If we consider all prefix sums, we can notice 
-	 * that there is a subarray with 0 sum when :
-	 * 	1) Either a prefix sum repeats or
-	 * 	2) Or prefix sum becomes 0.
+	 * Sliding Window - Prefix Sum Patterns If we consider all prefix sums, we can notice that there is
+	 * a subarray with 0 sum when : 1) Either a prefix sum repeats or 2) Or prefix sum becomes 0.
 	 */
 	/* Subarray Sum Equals K/Zero Sum Subarrays
 	 * Given an array of integers and an integer k, you need to find the total number of continuous subarrays whose sum
@@ -680,8 +639,7 @@ public class SlidingWindowPatterns {
 			sum += arr[i];
 			if (sumMap.containsKey(sum)) {
 				int oldIndex = sumMap.get(sum);
-				return Arrays.copyOfRange(arr, oldIndex + 1,
-						i + 1); // Sum range from next index of sum to curr index
+				return Arrays.copyOfRange(arr, oldIndex + 1, i + 1); // Sum range from next index of sum to curr index
 			} else {
 				sumMap.put(sum, i);
 			}
@@ -702,11 +660,13 @@ public class SlidingWindowPatterns {
 
 		for (int i = 0; i < nums.length; i++) {
 			sum += nums[i];
-			if (sum == k) max = Math.max(max, i + 1);
+			if (sum == k)
+				max = Math.max(max, i + 1);
 			int diff = sum - k;
 			if (map.containsKey(diff))
 				max = Math.max(max, i - map.get(diff));
-			if (!map.containsKey(sum)) map.put(sum, i);
+			if (!map.containsKey(sum))
+				map.put(sum, i);
 
 		}
 
@@ -767,13 +727,12 @@ public class SlidingWindowPatterns {
 		} else if (index == 1) {
 			return Math.max(arr[0], arr[1]);
 		}
-		return Math.max(
-				maxSubsetSum1(arr, index - 2) + arr[index],
-				maxSubsetSum1(arr, index - 1));
+		return Math.max(maxSubsetSum1(arr, index - 2) + arr[index], maxSubsetSum1(arr, index - 1));
 	}
 
 	public int maxSubsetSum(int[] arr) {
-		if (arr.length == 0) return 0;
+		if (arr.length == 0)
+			return 0;
 		int incl = 0, excl = 0, temp = 0;
 		for (int a : arr) {
 			temp = incl;
@@ -799,7 +758,8 @@ public class SlidingWindowPatterns {
 				sum -= arr[i - k];
 			}
 
-			if (i == n) break;
+			if (i == n)
+				break;
 
 			sum += arr[i];
 		}
@@ -808,54 +768,9 @@ public class SlidingWindowPatterns {
 	}
 
 	/*
-	Min Max Riddle - Deque
 	Max Sum of Rectangle No Larger Than K
 	Shortest Unsorted Continuous Subarray
 	Sliding Window Median - Heap
 	 */
 
-	/*
-	 * Max Min:
-	 * You will be given a list of integers arr and a single integer k. You must create an array of length k
-	 *  from elements of arr such that its unfairness is minimized. Call that array subArr. 
-	 *  Unfairness of an array is calculated as
-	 *  	max(subArr) - min(subArr);
-	 *  	Where:
-	 *  		- max denotes the largest integer in subArr
-	 *   		- min denotes the smallest integer in subArr*/
-	int maxMin(int k, int[] nums) {
-		if (nums.length == 0 || k > nums.length) return 0;
-		Arrays.sort(nums);
-
-		int n = nums.length, maxDiff = Integer.MAX_VALUE;
-		// Queue to store the index of the elements; Max element index should be
-		// retained in the deque front.
-		Deque<Integer> minDeque = new LinkedList<>();
-		Deque<Integer> maxDeque = new LinkedList<>();
-
-		for (int i = 0; i < n; i++) {
-			// If 'i' reaches the size k, then Remove the top element
-			if (!minDeque.isEmpty()
-					&& i - minDeque.peek() == k)
-				minDeque.poll();
-			if (!maxDeque.isEmpty()
-					&& i - maxDeque.peek() == k)
-				maxDeque.poll();
-
-			// Keep removing the smaller element from the last in deque
-			while (!minDeque.isEmpty()
-					&& nums[i] < nums[minDeque.peekLast()])
-				minDeque.removeLast();
-			while (!maxDeque.isEmpty()
-					&& nums[i] > nums[maxDeque.peekLast()])
-				maxDeque.removeLast();
-			minDeque.addLast(i);
-			maxDeque.addLast(i);
-
-			if (i + 1 >= k) maxDiff = Math.min(maxDiff,
-					nums[maxDeque.peek()]
-							- nums[minDeque.peek()]);
-		}
-		return maxDiff;
-	}
 }

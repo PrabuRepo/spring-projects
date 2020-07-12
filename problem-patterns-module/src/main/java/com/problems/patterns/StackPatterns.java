@@ -1,5 +1,7 @@
 package com.problems.patterns;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 import com.common.utilities.Utils;
@@ -23,21 +25,21 @@ public class StackPatterns {
 				int val2 = stack.pop();
 				int result = 0;
 				switch (ch) {
-					case '+':
-						result = val2 + val1;
-						break;
-					case '-':
-						result = val2 - val1;
-						break;
-					case '*':
-						result = val2 * val1;
-						break;
-					case '/':
-						result = val2 / val1;
-						break;
-					case '^':
-						result = pow(val2, val1);
-						break;
+				case '+':
+					result = val2 + val1;
+					break;
+				case '-':
+					result = val2 - val1;
+					break;
+				case '*':
+					result = val2 * val1;
+					break;
+				case '/':
+					result = val2 / val1;
+					break;
+				case '^':
+					result = pow(val2, val1);
+					break;
 				}
 				stack.push(result);
 			}
@@ -46,11 +48,12 @@ public class StackPatterns {
 	}
 
 	private static int pow(int a, int b) {
-		if (b == 1) return a;
+		if (b == 1)
+			return a;
 		return a * pow(a, b - 1);
 	}
 
-	//TOSO:  Compare this solution with Post Fix Evaluation
+	//TODO:  Compare this solution with Post Fix Evaluation
 	// Evaluate Reverse Polish/Postfix Notation
 	public int evalRPN(String[] tokens) {
 		Stack<Integer> stack = new Stack<>();
@@ -58,20 +61,59 @@ public class StackPatterns {
 		int val1 = 0, val2 = 0;
 		for (int i = 0; i < tokens.length; i++) {
 			str = tokens[i];
-			if (str.equals("/") || str.equals("-")
-					|| str.equals("*") || str.equals("+")) {
+			if (str.equals("/") || str.equals("-") || str.equals("*") || str.equals("+")) {
 				val2 = stack.pop();
 				val1 = stack.pop();
-				stack.push(arithmeticOperation(
-						str.charAt(0), val1, val2));
+				stack.push(arithmeticOperation(str.charAt(0), val1, val2));
 			} else {
 				stack.push(Integer.valueOf(str));
 			}
 		}
-		return (!stack.isEmpty() && stack.size() == 1)
-				? stack.pop()
-				: 0;
+		return (!stack.isEmpty() && stack.size() == 1) ? stack.pop() : 0;
 	}
+
+	// Without using stack
+	int i;
+
+	public int evalRPN2(String[] tokens) {
+		i = tokens.length - 1;
+		return eval(tokens);
+	}
+
+	int eval(String[] ss) {
+		switch (ss[i--]) {
+		case "+":
+			return eval(ss) + eval(ss);
+		case "-":
+			return -eval(ss) + eval(ss);
+		case "*":
+			return eval(ss) * eval(ss);
+		case "/":
+			return (int) (1.0 / eval(ss) * eval(ss));
+		default:
+			return Integer.valueOf(ss[i + 1]);
+		}
+	}
+
+	public boolean isValid(String s) {
+		Stack<Character> stack = new Stack<>();
+		char ch;
+		for (int i = 0; i < s.length(); i++) {
+			ch = s.charAt(i);
+			if (ch == '(' || ch == '{' || ch == '[') {
+				stack.push(ch);
+			} else {
+				if (!stack.isEmpty() && ((ch == ')' && stack.peek() == '(') || (ch == ']' && stack.peek() == '[')
+						|| (ch == '}' && stack.peek() == '{')))
+					stack.pop();
+				else
+					return false;
+			}
+		}
+
+		return stack.isEmpty();
+	}
+
 	//Evaluate infix expression/Basic Calculator I, II, III
 	/*Evaluate Infix Expression:
 	 *  - Basic Calculator I
@@ -91,10 +133,8 @@ public class StackPatterns {
 			char ch = s.charAt(i);
 			if (Character.isDigit(ch)) {
 				int digit = (int) ch - '0';
-				while (i + 1 < n && Character
-						.isDigit(s.charAt(i + 1))) { // Collect all the digits from the input
-					digit = digit * 10 + s.charAt(i + 1)
-							- '0';
+				while (i + 1 < n && Character.isDigit(s.charAt(i + 1))) { // Collect all the digits from the input
+					digit = digit * 10 + s.charAt(i + 1) - '0';
 					i++;
 				}
 				result += digit * sign;
@@ -134,13 +174,14 @@ public class StackPatterns {
 				continue;
 			} else if (Character.isDigit(ch)) {
 				num = (int) ch - '0';
-				while (i + 1 < n && Character
-						.isDigit(s.charAt(i + 1))) { // Collect all the digits from the input
+				while (i + 1 < n && Character.isDigit(s.charAt(i + 1))) { // Collect all the digits from the input
 					num = num * 10 + s.charAt(i + 1) - '0';
 					i++;
 				}
-				if (oper == '+') stack.push(num);
-				else if (oper == '-') stack.push(-num);
+				if (oper == '+')
+					stack.push(num);
+				else if (oper == '-')
+					stack.push(-num);
 				else if (oper == '*')
 					stack.push(stack.pop() * num);
 				else if (oper == '/')
@@ -158,8 +199,7 @@ public class StackPatterns {
 
 	// Approach2: Without using Stack
 	public int calculator22(String s) {
-		int n = s.length(), result = 0, num = 0,
-				prevVal = 0;
+		int n = s.length(), result = 0, num = 0, prevVal = 0;
 		char oper = '+';
 		for (int i = 0; i < n; i++) {
 			char ch = s.charAt(i);
@@ -167,8 +207,7 @@ public class StackPatterns {
 				continue;
 			} else if (Character.isDigit(ch)) {
 				num = (int) ch - '0';
-				while (i + 1 < n && Character
-						.isDigit(s.charAt(i + 1))) { // Collect all the digits from the input
+				while (i + 1 < n && Character.isDigit(s.charAt(i + 1))) { // Collect all the digits from the input
 					num = num * 10 + s.charAt(i + 1) - '0';
 					i++;
 				}
@@ -206,37 +245,28 @@ public class StackPatterns {
 		int n = s.length();
 		for (int i = 0; i < n; i++) {
 			char ch = s.charAt(i);
-			if (ch == ' ') continue;
+			if (ch == ' ')
+				continue;
 			else if (Character.isDigit(ch)) {
 				int start = i;
-				while (i + 1 < n && Character
-						.isDigit(s.charAt(i + 1)))
+				while (i + 1 < n && Character.isDigit(s.charAt(i + 1)))
 					i++;
-				valStack.push(Integer.valueOf(
-						s.substring(start, i + 1)));
+				valStack.push(Integer.valueOf(s.substring(start, i + 1)));
 			} else if (ch == '(') {
 				operStack.push('(');
 			} else if (ch == ')') {
 				while (operStack.peek() != '(')
-					valStack.push(arithmeticOperation(
-							operStack.pop(), valStack.pop(),
-							valStack.pop()));
+					valStack.push(arithmeticOperation(operStack.pop(), valStack.pop(), valStack.pop()));
 				operStack.pop();
 			} else {
-				while (!operStack.isEmpty()
-						&& (operStack.peek() == '*'
-								|| operStack.peek() == '/'))
-					valStack.push(arithmeticOperation(
-							operStack.pop(), valStack.pop(),
-							valStack.pop()));
+				while (!operStack.isEmpty() && (operStack.peek() == '*' || operStack.peek() == '/'))
+					valStack.push(arithmeticOperation(operStack.pop(), valStack.pop(), valStack.pop()));
 				operStack.push(ch);
 			}
 		}
 
 		while (!operStack.isEmpty())
-			valStack.push(arithmeticOperation(
-					operStack.pop(), valStack.pop(),
-					valStack.pop()));
+			valStack.push(arithmeticOperation(operStack.pop(), valStack.pop(), valStack.pop()));
 
 		return valStack.pop();
 	}
@@ -244,18 +274,18 @@ public class StackPatterns {
 	private int arithmeticOperation(char ch, int b, int a) {
 		int result = 0;
 		switch (ch) {
-			case '+':
-				result = a + b;
-				break;
-			case '-':
-				result = a - b;
-				break;
-			case '*':
-				result = a * b;
-				break;
-			case '/':
-				result = a / b;
-				break;
+		case '+':
+			result = a + b;
+			break;
+		case '-':
+			result = a - b;
+			break;
+		case '*':
+			result = a * b;
+			break;
+		case '/':
+			result = a / b;
+			break;
 		}
 		return result;
 	}
@@ -267,8 +297,7 @@ public class StackPatterns {
 		for (String str : path.split("/")) {
 			if (!stack.isEmpty() && str.equals(".."))
 				stack.pop();
-			else if (!str.equals("") && !str.equals(".")
-					&& !str.equals(".."))
+			else if (!str.equals("") && !str.equals(".") && !str.equals(".."))
 				stack.push(str);
 		}
 
@@ -279,7 +308,121 @@ public class StackPatterns {
 		return stack.isEmpty() ? "/" : result.toString();
 	}
 
-	/********************** Type2: Stack usage problems *******************/
+	/********************** Type2: Monotonic Stack problems *******************/
+	/*
+	 * 	Monotonic stack is actually a stack. It just uses some ingenious logic to keep the elements in the stack orderly
+	 * (monotone increasing or monotone decreasing) after each new element putting into the stack. Well,sounds like a heap?
+	 * No, monotonic stack is not widely used. It only deals with one typical problem, which is called Next Greater Element
+	 * The monotonically increasing stack can find the first element from the left that is smaller than the current number.
+	 * The monotonically decreasing stack can find the first element from the left that is larger than the current number.
+	 * The monotonous stack mainly answers several questions like this.
+	 * 		The next element larger than the current element
+	 * 		The previous element larger than the current element
+	 * 		The next element smaller than the current element
+	 * 		The previous element smaller than the current element
+	 * Tips: You can store indexes in the stack, or you can directly store elements
+	 */
+
+	//monotonous increasing stack: elements in the monotonous increase stack keeps an increasing order.
+	public void monotonicIncreasingStack(int[] arr) {
+		Stack<Integer> stack = new Stack<>();
+		for (int i = 0; i < arr.length; i++) {
+			while (!stack.empty() && stack.peek() > arr[i]) {
+				stack.pop();
+			}
+			stack.push(arr[i]);
+		}
+	}
+
+	//monotonous decreasing stack: elements in the monotonous decrease stack keeps an decreasing order.
+	public void monotonicDecreasingStack(int[] arr) {
+		Stack<Integer> stack = new Stack<>();
+		for (int i = 0; i < arr.length; i++) {
+			while (!stack.empty() && stack.peek() < arr[i]) {
+				stack.pop();
+			}
+			stack.push(arr[i]);
+		}
+	}
+
+	//Next Greater Element I
+	// Approach1: BruteForce Approach -> Time Complexity: O(n^2)
+	public static void nextGreaterElementI1(int[] a) {
+		int next;
+		for (int i = 0; i < a.length; i++) {
+			next = -1;
+			for (int j = i + 1; j < a.length; j++) {
+				if (a[i] < a[j]) {
+					next = a[j];
+					break;
+				}
+			}
+			System.out.println(a[i] + " -- " + next);
+		}
+	}
+
+	// Approach2: Using Stack; Time Complexity: O(n), with additional stack space
+	//Loop once, we can get the Next Greater Number of a normal array.
+	public int[] nextGreaterElementI2(int[] nums1, int[] nums2) {
+		if (nums2.length == 0 || nums1.length == 0)
+			return new int[0];
+
+		int[] result = new int[nums1.length];
+		Stack<Integer> stack = new Stack<>();
+		Map<Integer, Integer> map = new HashMap<>();
+
+		for (int i = 0; i < nums2.length; i++) {
+			while (!stack.isEmpty() && stack.peek() < nums2[i])
+				map.put(stack.pop(), nums2[i]);
+			stack.push(nums2[i]);
+		}
+
+		/*while (!stack.isEmpty())
+			map.put(stack.pop(), -1);*/
+
+		for (int i = 0; i < nums1.length; i++)
+			result[i] = map.getOrDefault(nums1[i], -1);
+
+		return result;
+	}
+
+	//Next Greater Element II: Time-O(n), Space-O(n)
+	public int[] nextGreaterElementsII(int[] nums) {
+		if (nums.length == 0)
+			return new int[0];
+
+		Stack<Integer> stack = new Stack<>();
+		int n = nums.length;
+		for (int i = n - 1; i >= 0; i--) {
+			stack.push(nums[i]);
+		}
+
+		int[] result = new int[n];
+		for (int i = n - 1; i >= 0; i--) {
+			while (!stack.isEmpty() && stack.peek() <= nums[i]) {
+				stack.pop();
+			}
+			result[i] = stack.isEmpty() ? -1 : stack.peek();
+			stack.push(nums[i]);
+		}
+
+		return result;
+	}
+
+	//Online Stock Span
+	public void stockSpan(int[] prices) {
+		//0-price, 1-consecutive days count
+		Stack<int[]> stack = new Stack<>();
+		for (int i = 0; i < prices.length; i++) {
+			int count = 1;
+			while (!stack.isEmpty() && stack.peek()[0] <= prices[i]) {
+				count += stack.pop()[1];
+			}
+			stack.push(new int[] { prices[i], count });
+			System.out.println(i + " - " + count);
+		}
+	}
+
 	// Largest Rectangle in Histogram
 	// Approach1: BruteForce Approach: Time Complexity-O(n^2)
 	public int largestRectangleArea1(int[] h) {
@@ -309,138 +452,71 @@ public class StackPatterns {
 	 * T(n) = O(Logn) + T(n-1)
 	 */
 	public int largestRectangleArea2(int[] heights) {
-		if (heights.length == 0) return 0;
-		return largestRectangleArea2(heights, 0,
-				heights.length - 1);
+		if (heights.length == 0)
+			return 0;
+		return largestRectangleArea2(heights, 0, heights.length - 1);
 	}
 
-	public int largestRectangleArea2(int[] heights, int l,
-			int h) {
-		if (l > h) return 0;
-		if (l == h) return heights[l];
+	public int largestRectangleArea2(int[] heights, int l, int h) {
+		if (l > h)
+			return 0;
+		if (l == h)
+			return heights[l];
 
 		// Rewrite this using Range Minimum query
 		int m = findMin(heights, l, h);
 
-		return Utils.max(
-				largestRectangleArea2(heights, l, m - 1),
-				largestRectangleArea2(heights, m + 1, h),
+		return Utils.max(largestRectangleArea2(heights, l, m - 1), largestRectangleArea2(heights, m + 1, h),
 				(h - l + 1) * heights[m]);
 	}
 
 	private int findMin(int[] a, int l, int h) {
 		int minIndex = l;
 		for (int i = l + 1; i <= h; i++)
-			if (a[i] < a[minIndex]) minIndex = i;
+			if (a[i] < a[minIndex])
+				minIndex = i;
 
 		return minIndex;
 	}
 
 	// Using Stack
-	public int largestRectangleArea3(int[] heights) {
+	public int largestRectangleArea31(int[] heights) {
+		if (heights == null || heights.length == 0)
+			return 0;
+
+		Stack<Integer> stack = new Stack<Integer>();
+		int maxArea = 0, n = heights.length;
+		for (int i = 0; i <= n; i++) {
+			while (!stack.isEmpty() && (i == n || heights[stack.peek()] >= heights[i])) {
+				int h = heights[stack.pop()];
+				int w = stack.isEmpty() ? i : i - stack.peek() - 1;
+				maxArea = Math.max(maxArea, h * w);
+			}
+			stack.push(i);
+		}
+		return maxArea;
+	}
+
+	public int largestRectangleArea32(int[] heights) {
 		int n = heights.length;
-		if (n == 0) return 0;
+		if (n == 0)
+			return 0;
 		Stack<Integer> stack = new Stack<>();
 		int i = 0, width = 0, maxArea = 0, topIndex = 0;
 
 		while (i < n || !stack.isEmpty()) {
-			if (stack.isEmpty() || i < n && (heights[stack
-					.peek()] <= heights[i])) {
+			if (stack.isEmpty() || i < n && (heights[stack.peek()] <= heights[i])) {
 				stack.push(i++); // Store the index
 			} else {
 				topIndex = stack.pop(); // Get the top value, this will be used below to get height
-				width = stack.isEmpty() ? i
-						: (i - stack.peek() - 1); // i - peek/prev in the stack
-				maxArea = Math.max(maxArea,
-						heights[topIndex] * width);
+				width = stack.isEmpty() ? i : (i - stack.peek() - 1); // i - peek/prev in the stack
+				maxArea = Math.max(maxArea, heights[topIndex] * width);
 			}
 		}
 
 		return maxArea;
 	}
 
-	/*The Celebrity Problem
-	 *  1. Using Graph
-	 *  2. Using Stack
-	 *  3. Efficient Approach(Without any data structure)
-	 */
-	// Using Graph: Time Complexity: O(n^2)
-	public int celebrityProblem1(int[][] input, int n) {
-		if (n == 0) return -1;
-
-		int[] indegree = new int[n], outdegree = new int[n];
-
-		// Find indegree, outdegree
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				if (input[i][j] == 1) {
-					outdegree[i]++;
-					indegree[j]++;
-				}
-			}
-		}
-
-		for (int i = 0; i < n; i++)
-			if (indegree[i] == n - 1 && outdegree[i] == 0)
-				return i;
-
-		return -1;
-	}
-
-	// Using Stack
-	public int celebrityProblem2(int[][] input, int n) {
-		if (n == 0) return -1;
-
-		Stack<Integer> stack = new Stack<>();
-
-		// Push all the celebrities into a stack.
-		for (int i = 0; i < n; i++)
-			stack.push(i);
-
-		// Pop off top two persons from the stack, discard one person based on status
-		while (stack.size() > 1) {
-			int a = stack.pop();
-			int b = stack.pop();
-
-			if (input[a][b] == 1) stack.push(b);
-			else stack.push(a);
-		}
-
-		// Check the remained person in stack doesn’t have acquaintance with anyone else.
-		int celeb = stack.pop();
-		for (int i = 0; i < n; i++)
-			if (i != celeb && (input[i][celeb] != 1
-					|| input[celeb][i] != 0)) // check celebrity in all the rows, if
-				// cond satisfies return -1;
-				return -1;
-
-		return celeb;
-	}
-
-	// Efficient Approach(Without any data structure): Time Complexity: O(n)
-	public int celebrityProblem3(int[][] input, int n) {
-		if (n == 0) return -1;
-
-		int celeb = 0;
-
-		for (int j = 0; j < n; j++)
-			if (input[celeb][j] == 1) // Find the celebrity from first row
-				celeb = j;
-
-		for (int i = 0; i < n; i++)
-			if (i != celeb && (input[i][celeb] != 1
-					|| input[celeb][i] != 0)) // check celebrity in all the rows, if
-				// cond satisfies return -1;
-				return -1;
-
-		return celeb;
-	}
-
-	public boolean knows(int[][] M, int i, int j) {
-		return M[i][j] == 1 ? true : false;
-	}
-
 	/********************** Type3: Stack design problems *******************/
 
-	/********************** Type4: Monotonic Stack problems *******************/
 }
