@@ -32,60 +32,60 @@ public class SortingAlgorithms {
 			System.out.print("Enter option:");
 			input = in.nextInt();
 			switch (input) {
-				case 1:
-					a = sort.insert(in);
-					// sort.bubbleSort(a);
-					sort.bubbleSortRecursive(a);
-					break;
-				case 2:
-					a = sort.insert(in);
-					sort.selectionSort(a);
-					break;
-				case 3:
-					a = sort.insert(in);
-					// sort.insertionSort(a.length, a);
-					sort.insertionSortRecursive(a);
-					break;
-				case 4:
-					a = sort.insert(in);
-					sort.mergeSort(a);
-					break;
-				case 5:
-					System.out.println("Enter no of elements to be inserted:");
-					int t = in.nextInt();
-					ListNode head = null;
-					for (int i = 0; i < t; i++)
-						head = sort.insertLL(head, in.nextInt());
-					head = sort.mergeSortForLL(head);
-					sort.displayLL(head);
-					break;
-				case 6:
-					a = sort.insert(in);
-					// sort.quickSort(a);
-					quickSort1(a, 0, a.length - 1);
-					break;
-				case 7:
-					a = sort.insert(in);
-					sort.heapSort(a);
-					break;
-				case 8:
-					char arr[] = { 'g', 'e', 'e', 'k', 's', 'f', 'o', 'r', 'g', 'e', 'e', 'k', 's', 'a', 'z' };
-					countingSort(arr);
-					System.out.println("Sorted Array:");
-					for (int i = 0; i < arr.length; i++)
-						System.out.print(arr[i]);
-					System.out.println();
-				case 9:
-					a = sort.insert(in);
-					sort.radixSort(a);
-					break;
-				case 10:
-					float[] arr2 = sort.insertFloat(in);
-					sort.bucketSort(arr2);
-					break;
-				default:
-					System.out.println("Please enter the valid option!!!");
-					break;
+			case 1:
+				a = sort.insert(in);
+				// sort.bubbleSort(a);
+				sort.bubbleSortRecursive(a);
+				break;
+			case 2:
+				a = sort.insert(in);
+				sort.selectionSort(a);
+				break;
+			case 3:
+				a = sort.insert(in);
+				// sort.insertionSort(a.length, a);
+				sort.insertionSortRecursive(a);
+				break;
+			case 4:
+				a = sort.insert(in);
+				sort.mergeSort(a);
+				break;
+			case 5:
+				System.out.println("Enter no of elements to be inserted:");
+				int t = in.nextInt();
+				ListNode head = null;
+				for (int i = 0; i < t; i++)
+					head = sort.insertLL(head, in.nextInt());
+				head = sort.mergeSortForLL(head);
+				sort.displayLL(head);
+				break;
+			case 6:
+				a = sort.insert(in);
+				// sort.quickSort(a);
+				quickSort1(a, 0, a.length - 1);
+				break;
+			case 7:
+				a = sort.insert(in);
+				sort.heapSort(a);
+				break;
+			case 8:
+				char arr[] = { 'g', 'e', 'e', 'k', 's', 'f', 'o', 'r', 'g', 'e', 'e', 'k', 's', 'a', 'z' };
+				countingSort(arr);
+				System.out.println("Sorted Array:");
+				for (int i = 0; i < arr.length; i++)
+					System.out.print(arr[i]);
+				System.out.println();
+			case 9:
+				a = sort.insert(in);
+				sort.radixSort(a);
+				break;
+			case 10:
+				float[] arr2 = sort.insertFloat(in);
+				sort.bucketSort(arr2);
+				break;
+			default:
+				System.out.println("Please enter the valid option!!!");
+				break;
 			}
 			if (a != null) {
 				System.out.println("\nDisplay:");
@@ -102,7 +102,8 @@ public class SortingAlgorithms {
 	public void bubbleSort(int[] a) {
 		boolean swapFlag;
 		int count = 0;
-		if (a.length == 1) return;
+		if (a.length == 1)
+			return;
 
 		for (int i = 1; i < a.length; i++) {
 			swapFlag = false;
@@ -126,7 +127,8 @@ public class SortingAlgorithms {
 	}
 
 	private void bubbleSortAlg(int[] a, int n) {
-		if (n == 1) return;
+		if (n == 1)
+			return;
 
 		/*for (int j = 0; j < n - 1; j++) {
 			if (a[j] > a[j + 1]) {
@@ -139,8 +141,10 @@ public class SortingAlgorithms {
 	}
 
 	void compare(int[] a, int l, int r) {
-		if (l >= r) return;
-		if (a[l] > a[l + 1]) swap(a, l, l + 1);
+		if (l >= r)
+			return;
+		if (a[l] > a[l + 1])
+			swap(a, l, l + 1);
 		compare(a, l + 1, r);
 	}
 	// Bubble sort - end
@@ -151,7 +155,8 @@ public class SortingAlgorithms {
 		for (int i = 0; i < a.length; i++) {
 			minIndex = i;
 			for (int j = i; j < a.length; j++) {
-				if (a[j] < a[minIndex]) minIndex = j;
+				if (a[j] < a[minIndex])
+					minIndex = j;
 			}
 			swap(a, minIndex, i);
 		}
@@ -172,7 +177,8 @@ public class SortingAlgorithms {
 		int n = arr.length;
 		for (int i = n - 1; i > 0; i--) {
 			int maxIndex = findMax(arr, i);
-			if (maxIndex == i) continue;
+			if (maxIndex == i)
+				continue;
 			flip(arr, maxIndex);
 			flip(arr, i);
 		}
@@ -182,7 +188,8 @@ public class SortingAlgorithms {
 	public int findMax(int[] arr, int end) {
 		int i = 1, maxIndex = 0;
 		while (i <= end) {
-			if (arr[i] > arr[maxIndex]) maxIndex = i;
+			if (arr[i] > arr[maxIndex])
+				maxIndex = i;
 			i++;
 		}
 		return maxIndex;
@@ -227,7 +234,8 @@ public class SortingAlgorithms {
 	}
 
 	private void insertionSortAlg(int[] a, int n) {
-		if (n == 0) return;
+		if (n == 0)
+			return;
 
 		insertionSortAlg(a, n - 1);
 
@@ -250,7 +258,8 @@ public class SortingAlgorithms {
 	}
 
 	private void divide(int[] a, int l, int r) {
-		if (l >= r) return;
+		if (l >= r)
+			return;
 
 		int m = (l + r) / 2;
 		divide(a, l, m);
@@ -318,39 +327,34 @@ public class SortingAlgorithms {
 	}
 
 	private ListNode divideLL(ListNode head) {
-		if (head == null || head.next == null) { return head; }
+		if (head == null || head.next == null)
+			return head;
 
 		ListNode middle = middleNode(head);
-		ListNode nextMiddle = middle.next;
+		ListNode middleNext = middle.next;
 		middle.next = null;
 
 		ListNode left = divideLL(head);
-		ListNode right = divideLL(nextMiddle);
+		ListNode right = divideLL(middleNext);
 
-		ListNode sortedListHead = mergeLL(left, right);
-		return sortedListHead;
+		return mergeLL(left, right);
 	}
 
-	private ListNode middleNode(ListNode node) {
-		if (node == null) return node;
-
-		ListNode slowPtr = node;
-		ListNode fastPtr = node;
-		while (fastPtr != null) {
-			if (fastPtr.next != null && fastPtr.next.next != null) {
-				fastPtr = fastPtr.next.next;
-				slowPtr = slowPtr.next;
-			} else {
-				break;
-			}
+	private ListNode middleNode(ListNode head) {
+		ListNode slowPtr = head, fastPtr = head;
+		while (fastPtr != null && fastPtr.next != null && fastPtr.next.next != null) {
+			slowPtr = slowPtr.next;
+			fastPtr = fastPtr.next.next;
 		}
 		return slowPtr;
 	}
 
 	private ListNode mergeLL(ListNode left, ListNode right) {
 		ListNode result;
-		if (left == null) return right;
-		if (right == null) return left;
+		if (left == null)
+			return right;
+		if (right == null)
+			return left;
 
 		if (left.data < right.data) {
 			result = left;
@@ -598,13 +602,15 @@ public class SortingAlgorithms {
 		// Insert the elements into the bucket; where n is size of the array
 		for (int i = 0; i < n; i++) {
 			int key = (int) (arr[i] * n);
-			if (buckets[key] == null) buckets[key] = new LinkedList<>();
+			if (buckets[key] == null)
+				buckets[key] = new LinkedList<>();
 			buckets[key].add(arr[i]);
 		}
 
 		// Sort individual buckets
 		for (int i = 0; i < n; i++)
-			if (buckets[i] != null) Collections.sort(buckets[i]);
+			if (buckets[i] != null)
+				Collections.sort(buckets[i]);
 
 		// Set all the elements back into the arr
 		int curr = 0;

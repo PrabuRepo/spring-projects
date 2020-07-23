@@ -4,10 +4,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Stack;
 
 public class TwoPointerPatterns {
 
-	/*********************Sorted: 2 ptr *******************/
+	/********************* Sorted: 2 ptr *******************/
 	// Two Sum: Given an array of integers, return indices of the two numbers such that they add up to a specific
 	// target.
 	// 1. Brute force approach: Time Complexity:(n^2)
@@ -50,14 +51,11 @@ public class TwoPointerPatterns {
 		Arrays.sort(arr);
 		int[] result = new int[2];
 		for (int i = 0; i < arr.length; i++) {
-			int siblingIndex = Arrays.binarySearch(arr,
-					k - arr[i]);
+			int siblingIndex = Arrays.binarySearch(arr, k - arr[i]);
 			if (siblingIndex >= 0) { // Found it!
 				/* If this points at us, then the pair exists only if there is another copy of the element. Look ahead of us and behind us. */
-				if (siblingIndex != i
-						|| (i > 0 && arr[i - 1] == arr[i])
-						|| (i < arr.length - 1
-								&& arr[i + 1] == arr[i])) {
+				if (siblingIndex != i || (i > 0 && arr[i - 1] == arr[i])
+						|| (i < arr.length - 1 && arr[i + 1] == arr[i])) {
 					result[0] = i;
 					result[1] = siblingIndex;
 					return result;
@@ -93,9 +91,7 @@ public class TwoPointerPatterns {
 			for (int j = i + 1; j < n - 1; j++) {
 				for (int k = j + 1; k < n; k++) {
 					if (a[i] + a[j] + a[k] == sum) {
-						System.out.println("Triplet is: "
-								+ a[i] + ", " + a[j] + ", "
-								+ a[k]);
+						System.out.println("Triplet is: " + a[i] + ", " + a[j] + ", " + a[k]);
 						return true;
 					}
 				}
@@ -114,8 +110,7 @@ public class TwoPointerPatterns {
 		// 2. Take element one by one from 0th the index
 		for (int i = 0; i < n - 2; i++) {
 			// 3. Find remaining two elements using two ptr alg
-			if (sumPresent1(a, i + 1, n - 1, a[i],
-					sum - a[i]))
+			if (sumPresent1(a, i + 1, n - 1, a[i], sum - a[i]))
 				return true;
 		}
 
@@ -129,8 +124,7 @@ public class TwoPointerPatterns {
 		// 1. Take element one by one from 0th the index
 		for (int i = 0; i < n - 2; i++) {
 			// 3. Find remaining two elements using hash DS
-			if (sumPresent2(a, i + 1, n - 1, a[i],
-					sum - a[i]))
+			if (sumPresent2(a, i + 1, n - 1, a[i], sum - a[i]))
 				return true;
 		}
 
@@ -138,15 +132,12 @@ public class TwoPointerPatterns {
 	}
 
 	// Using 2 ptr approach
-	public boolean sumPresent1(int[] nums, int l, int h,
-			int firstValue, int target) {
+	public boolean sumPresent1(int[] nums, int l, int h, int firstValue, int target) {
 		// target -= firstValue; // Remove first value from the target, two find the remaining two values
 
 		while (l < h) {
 			if (nums[l] + nums[h] == target) {
-				System.out.println("The Triplet is: "
-						+ firstValue + ", " + nums[l] + ", "
-						+ nums[h]);
+				System.out.println("The Triplet is: " + firstValue + ", " + nums[l] + ", " + nums[h]);
 				return true;
 			} else if (nums[l] + nums[h] > target) {
 				h--;
@@ -158,17 +149,13 @@ public class TwoPointerPatterns {
 		return false;
 	}
 
-	public boolean sumPresent2(int[] nums, int l, int h,
-			int firstValue, int target) {
+	public boolean sumPresent2(int[] nums, int l, int h, int firstValue, int target) {
 		// target -= firstValue; // Remove first value from the target, two find the remaining two values
 		HashSet<Integer> set = new HashSet<>();
 
 		for (int i = l; i <= h; i++) {
 			if (set.contains(target - nums[i])) {
-				System.out.println(
-						"The Triplet is: " + firstValue
-								+ ", " + (target - nums[i])
-								+ ", " + nums[i]);
+				System.out.println("The Triplet is: " + firstValue + ", " + (target - nums[i]) + ", " + nums[i]);
 				return true;
 			} else {
 				set.add(nums[i]);
@@ -209,7 +196,7 @@ public class TwoPointerPatterns {
 		return result;
 	}
 
-	/*******************UnSorted: Forward & Reverse Traversals****************/
+	/******************* UnSorted: Forward & Reverse Traversals ****************/
 
 	/*Trapping rain water:
 	 * Height of water = Minimum(tallest left hand bar & tallest right hand bar) - height of current bar 
@@ -223,20 +210,17 @@ public class TwoPointerPatterns {
 		// Find the tallest bar from the left side
 		tallestLeftArr[0] = a[0];
 		for (int i = 1; i < n; i++)
-			tallestLeftArr[i] = Math
-					.max(tallestLeftArr[i - 1], a[i]);
+			tallestLeftArr[i] = Math.max(tallestLeftArr[i - 1], a[i]);
 
 		// Find the tallest bar from the right side
 		tallestRightArr[n - 1] = a[n - 1];
 		for (int i = n - 2; i >= 0; i--)
-			tallestRightArr[i] = Math
-					.max(tallestRightArr[i + 1], a[i]);
+			tallestRightArr[i] = Math.max(tallestRightArr[i + 1], a[i]);
 
 		// Find minimum from tallestLeftArr & tallestRightAr and then subtract with current bar
 		int sum = 0;
 		for (int i = 0; i < n; i++)
-			sum += (Math.min(tallestLeftArr[i],
-					tallestRightArr[i]) - a[i]);
+			sum += (Math.min(tallestLeftArr[i], tallestRightArr[i]) - a[i]);
 
 		return sum;
 	}
@@ -272,6 +256,28 @@ public class TwoPointerPatterns {
 		return sum;
 	}
 
+	//Using Stack 
+	public int trap(int[] height) {
+		if (height.length <= 1)
+			return 0;
+
+		Stack<Integer> stack = new Stack<>();
+		int n = height.length, water = 0;
+
+		for (int i = 0; i < n; i++) {
+			while (!stack.isEmpty() && height[stack.peek()] < height[i]) {
+				int prev = stack.pop();
+				if (stack.isEmpty())
+					break;
+				int minHeight = Math.min(height[stack.peek()], height[i]);
+				water += (minHeight - height[prev]) * (i - stack.peek() - 1);
+			}
+			stack.push(i);
+		}
+
+		return water;
+	}
+
 	/* Container With Most Water: 
 	 * Given n non-negative integers a1, a2, ..., an , where each represents a point at coordinate (i, ai). n vertical
 	 * lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together
@@ -281,8 +287,7 @@ public class TwoPointerPatterns {
 		if (height.length <= 1)
 			return 0;
 
-		int l = 0, h = height.length - 1, max = 0,
-				minHeight = 0;
+		int l = 0, h = height.length - 1, max = 0, minHeight = 0;
 		while (l < h) {
 			minHeight = Math.min(height[l], height[h]);
 			max = Math.max(max, minHeight * (h - l));

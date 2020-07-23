@@ -14,38 +14,32 @@ import com.common.model.TreeNode;
 //Binary Tree Patterns - DFS/BFS
 public class BTPatterns {
 
-	/***********************4.BT Checking***************/
+	/*********************** 4.BT Checking ***************/
 	// Check if given BT is Height Balanced/Balanced Binary Tree:
 	// Approach 1: Time Complexity: O(n^2)
-	public boolean isBinaryTreeBalanced1(
-			TreeNode root) {
-		if (root == null) return true;
+	public boolean isBinaryTreeBalanced1(TreeNode root) {
+		if (root == null)
+			return true;
 
-		return Math.abs(heightOfTree1(root.left)
-				- heightOfTree1(root.right)) <= 1
-				&& isBinaryTreeBalanced1(
-						root.left)
-				&& isBinaryTreeBalanced1(
-						root.right);
+		return Math.abs(heightOfTree1(root.left) - heightOfTree1(root.right)) <= 1 && isBinaryTreeBalanced1(root.left)
+				&& isBinaryTreeBalanced1(root.right);
 	}
 
 	public int heightOfTree1(TreeNode root) {
-		if (root == null) return 0; // 0 means count the nodes, -1 means count the edges
-		return 1 + Math.max(
-				heightOfTree1(root.left),
-				heightOfTree1(root.right));
+		if (root == null)
+			return 0; // 0 means count the nodes, -1 means count the edges
+		return 1 + Math.max(heightOfTree1(root.left), heightOfTree1(root.right));
 	}
 
 	// Approach 2: This approach avoids two recursive calls & check the tree 
 	// is balanced or not while calculating the height. Time Complexity: O(n);
-	public boolean isBinaryTreeBalanced2(
-			TreeNode root) {
-		return checkHeight(
-				root) != Integer.MIN_VALUE;
+	public boolean isBinaryTreeBalanced2(TreeNode root) {
+		return checkHeight(root) != Integer.MIN_VALUE;
 	}
 
 	public int checkHeight(TreeNode root) {
-		if (root == null) return 0;
+		if (root == null)
+			return 0;
 
 		int leftHeight = checkHeight(root.left);
 		if (leftHeight == Integer.MIN_VALUE)
@@ -53,53 +47,45 @@ public class BTPatterns {
 		int rightHeight = checkHeight(root.right);
 		if (rightHeight == Integer.MIN_VALUE)
 			return Integer.MIN_VALUE;
-		return Math.abs(
-				leftHeight - rightHeight) <= 1
-						? Math.max(leftHeight,
-								rightHeight) + 1
-						: Integer.MIN_VALUE;
+		return Math.abs(leftHeight - rightHeight) <= 1 ? Math.max(leftHeight, rightHeight) + 1 : Integer.MIN_VALUE;
 	}
 
-	/***********************5.BT Print, Path, Sum & LCA Problems ***************/
+	/*********************** 5.BT Print, Path, Sum & LCA Problems ***************/
 	// Diameter of Binary Tree:
 	// Approach1: Time Complexity: O(n^2)
 	public int diameterOfTree1(TreeNode root) {
-		if (root == null) return 0;
+		if (root == null)
+			return 0;
 		// Get the height of left and right sub trees
 		int leftHeight = heightOfTree1(root.left);
-		int rightHeight = heightOfTree1(
-				root.right);
+		int rightHeight = heightOfTree1(root.right);
 
 		/*
 		 * Return max of following three 1) Height of left subtree + Height of right
 		 * subtree + 1; 2) Diameter of left subtree; 3) Diameter of right subtree
 		 */
-		return Integer.max(
-				leftHeight + rightHeight + 1,
-				Integer.max(
-						diameterOfTree1(
-								root.left),
-						diameterOfTree1(
-								root.right)));
+		return Integer.max(leftHeight + rightHeight + 1,
+				Integer.max(diameterOfTree1(root.left), diameterOfTree1(root.right)));
 	}
 
 	int maxDiameter = 0;
 
 	// Efficient Approach: Modification of Height calculation; Time Complexity-O(n)
 	public int diameterOfTree2(TreeNode root) {
-		if (root == null) return 0;
+		if (root == null)
+			return 0;
 		height2(root);
 		return maxDiameter;
 	}
 
 	// Modification of Height
 	public int height2(TreeNode root) {
-		if (root == null) return 0;
+		if (root == null)
+			return 0;
 		int left = height2(root.left);
 		int right = height2(root.right);
 
-		maxDiameter = Math.max(maxDiameter,
-				left + right + 1);
+		maxDiameter = Math.max(maxDiameter, left + right + 1);
 
 		return Math.max(left, right) + 1;
 	}
@@ -110,17 +96,15 @@ public class BTPatterns {
 	 * If one key is present and other is absent, then it returns the present key as
 	 * LCA (Ideally should have returned NULL).
 	 */
-	public TreeNode lowestCommonAncestor1(
-			TreeNode root, int n1, int n2) {
-		if (root == null) return null;
+	public TreeNode lowestCommonAncestor1(TreeNode root, int n1, int n2) {
+		if (root == null)
+			return null;
 
 		if (root.data == n1 || root.data == n2)
 			return root;
 
-		TreeNode left = lowestCommonAncestor1(
-				root.left, n1, n2);
-		TreeNode right = lowestCommonAncestor1(
-				root.right, n1, n2);
+		TreeNode left = lowestCommonAncestor1(root.left, n1, n2);
+		TreeNode right = lowestCommonAncestor1(root.right, n1, n2);
 
 		if (left != null && right != null)
 			return root;
@@ -135,97 +119,123 @@ public class BTPatterns {
 	 */
 	static boolean node1 = false, node2 = false;
 
-	public TreeNode LCA(TreeNode root, int n1,
-			int n2) {
-		TreeNode node = lowestCommonAncestor2(
-				root, n1, n2);
-
-		if (root.data == n1 || root.data == n2) {
-			return node; // To handle one of the element is root element; bcoz here node1 & node2 wont be
-			// true.
-		} else if (node1 && node2) return node;
-		return null;
+	public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+		if (root == null)
+			return null;
+		boolean[] flag = { false, false };
+		TreeNode result = lca(root, p, q, flag);
+		//return node1 && node2 ? result : null;
+		return flag[0] && flag[1] ? result : null;
 	}
 
-	public TreeNode lowestCommonAncestor2(
-			TreeNode root, int n1, int n2) {
-		if (root == null) return null;
+	public TreeNode lca(TreeNode root, TreeNode p, TreeNode q) {
+		if (root == null)
+			return null;
 
-		if (root.data == n1) {
+		TreeNode left = lca(root.left, p, q);
+		TreeNode right = lca(root.right, p, q);
+
+		if (root.data == p.data)
 			node1 = true;
-			return root;
-		}
-		if (root.data == n2) {
+		if (root.data == q.data)
 			node2 = true;
+		if (root.data == p.data || root.data == q.data)
 			return root;
-		}
-
-		TreeNode left = lowestCommonAncestor2(
-				root.left, n1, n2);
-		TreeNode right = lowestCommonAncestor2(
-				root.right, n1, n2);
 
 		if (left != null && right != null)
 			return root;
+		return left != null ? left : right;
+	}
 
+	public TreeNode lca(TreeNode root, TreeNode p, TreeNode q, boolean[] flag) {
+		if (root == null)
+			return null;
+
+		TreeNode left = lca(root.left, p, q);
+		TreeNode right = lca(root.right, p, q);
+
+		if (root.data == p.data)
+			flag[0] = true;
+		if (root.data == q.data)
+			flag[1] = true;
+		if (root.data == p.data || root.data == q.data)
+			return root;
+
+		if (left != null && right != null)
+			return root;
+		return left != null ? left : right;
+	}
+
+	public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
+		if (root == null)
+			return null;
+		boolean[] flag = { false, false };
+		TreeNode result = lca2(root, p, q, flag);
+		//return node1 && node2 ? result : null;
+		return flag[0] && flag[1] ? result : null;
+	}
+
+	public TreeNode lca2(TreeNode root, TreeNode p, TreeNode q, boolean[] flag) {
+		if (root == null)
+			return null;
+
+		TreeNode left = lca2(root.left, p, q, flag);
+		TreeNode right = lca2(root.right, p, q, flag);
+
+		if (root.data == p.data)
+			flag[0] = true;
+		if (root.data == q.data)
+			flag[1] = true;
+		if (root.data == p.data || root.data == q.data)
+			return root;
+
+		if (left != null && right != null)
+			return root;
 		return left != null ? left : right;
 	}
 
 	// LCA- Approach-3: Find the path from root to n1 & n2. Then common node in
 	// these two path is lowest common ancestor
-	public Integer lowestCommonAncestor3(
-			TreeNode root, int n1, int n2) {
-		if (root == null) return null;
+	public Integer lowestCommonAncestor3(TreeNode root, int n1, int n2) {
+		if (root == null)
+			return null;
 
 		ArrayList<Integer> path1 = new ArrayList<>();
 		ArrayList<Integer> path2 = new ArrayList<>();
 
-		if (!findPathFromRootToAnyNode1(root, n1,
-				path1)
-				|| !findPathFromRootToAnyNode1(
-						root, n2, path2)) {
-			System.out.println(
-					"Element is not present in the Tree");
+		if (!findPathFromRootToAnyNode1(root, n1, path1) || !findPathFromRootToAnyNode1(root, n2, path2)) {
+			System.out.println("Element is not present in the Tree");
 			return null;
 		}
 
-		System.out.println("Path1:");
-		path1.stream().forEach(
-				k -> System.out.print(k + " "));
-		System.out.println("\nPath2:");
-		path2.stream().forEach(
-				k -> System.out.print(k + " "));
-
 		int i = 0;
-		for (i = 0; i < path1.size()
-				&& i < path2.size(); i++) {
+		for (i = 0; i < path1.size() && i < path2.size(); i++) {
 			if (!(path1.get(i) == path2.get(i)))
 				break;
 		}
 
-		return path1.get(i - 1);
+		return i == 0 ? path1.get(0) : path1.get(i - 1);
 	}
 
-	private boolean findPathFromRootToAnyNode1(
-			TreeNode root, int n,
-			ArrayList<Integer> path) {
-		if (root == null) return false;
+	private boolean findPathFromRootToAnyNode1(TreeNode root, int n, ArrayList<Integer> path) {
+		if (root == null)
+			return false;
 
 		// To find the path, first add the element in the list and check the data
 		path.add(root.data);
-		if (root.data == n) return true;
+		if (root.data == n)
+			return true;
 
-		boolean flag = findPathFromRootToAnyNode1(
-				root.left, n, path);
+		boolean flag = findPathFromRootToAnyNode1(root.left, n, path);
 		// This flag should check separately, otherwise when root.right returns,
 		// required element will be removed
 		if (!flag)
-			flag = findPathFromRootToAnyNode1(
-					root.right, n, path);
+			flag = findPathFromRootToAnyNode1(root.right, n, path);
 
 		// Remove the visited path from list, if node is not present in the path;
-		if (!flag) path.remove(path.size() - 1);
-		return false;
+		if (!flag)
+			path.remove(path.size() - 1);
+		return flag;
 	}
 
 	// Binary Tree Maximum Path Sum:
@@ -239,75 +249,56 @@ public class BTPatterns {
 	}
 
 	private int maxPathDown(TreeNode node) {
-		if (node == null) return 0;
-		int left = Math
-				.max(maxPathDown(node.left), 0); // Compare with zero to eliminate the -ve values
-		int right = Math
-				.max(maxPathDown(node.right), 0);
-		maxValue = Math.max(maxValue,
-				left + right + node.data);
+		if (node == null)
+			return 0;
+		int left = Math.max(maxPathDown(node.left), 0); // Compare with zero to eliminate the -ve values
+		int right = Math.max(maxPathDown(node.right), 0);
+		maxValue = Math.max(maxValue, left + right + node.data);
 		return Math.max(left, right) + node.data;
 	}
 
 	/****************************** 6.BT Construction, Conversion **********************************/
 
 	//Construct Binary Tree from Preorder and Inorder Traversal
-	public TreeNode constructTreeFromInAndPreOrder(
-			char[] inOrder, char[] preOrder) {
+	public TreeNode constructTreeFromInAndPreOrder(char[] inOrder, char[] preOrder) {
 		OrderIndex preOrderIndex = new OrderIndex();
 		preOrderIndex.index = 0;
-		return buildTreeFromInAndPreOrder(inOrder,
-				preOrder, 0, inOrder.length - 1,
-				preOrderIndex);
+		return buildTreeFromInAndPreOrder(inOrder, preOrder, 0, inOrder.length - 1, preOrderIndex);
 	}
 
-	private TreeNode buildTreeFromInAndPreOrder(
-			char[] inOrder, char[] preOrder,
-			int inOrderStart, int inOrderEnd,
+	private TreeNode buildTreeFromInAndPreOrder(char[] inOrder, char[] preOrder, int inOrderStart, int inOrderEnd,
 			OrderIndex preOrderIndex) {
 		if (inOrderStart > inOrderEnd)
 			return null;
 
-		TreeNode node = new TreeNode(
-				preOrder[preOrderIndex.index++]);
+		TreeNode node = new TreeNode(preOrder[preOrderIndex.index++]);
 		if (inOrderStart == inOrderEnd)
 			return node;
 
-		int rootNodeIndex = search(inOrder,
-				inOrderStart, inOrderEnd,
-				node.ch);
-		node.left = buildTreeFromInAndPreOrder(
-				inOrder, preOrder, inOrderStart,
-				rootNodeIndex - 1, preOrderIndex);
-		node.right = buildTreeFromInAndPreOrder(
-				inOrder, preOrder,
-				rootNodeIndex + 1, inOrderEnd,
-				preOrderIndex);
+		int rootNodeIndex = search(inOrder, inOrderStart, inOrderEnd, node.ch);
+		node.left = buildTreeFromInAndPreOrder(inOrder, preOrder, inOrderStart, rootNodeIndex - 1, preOrderIndex);
+		node.right = buildTreeFromInAndPreOrder(inOrder, preOrder, rootNodeIndex + 1, inOrderEnd, preOrderIndex);
 		return node;
 	}
 
-	private int search(char[] charArray,
-			int start, int end, char x) {
+	private int search(char[] charArray, int start, int end, char x) {
 		for (int i = start; i <= end; i++) {
-			if (charArray[i] == x) return i;
+			if (charArray[i] == x)
+				return i;
 		}
 		return -1;
 	}
 
 	//Serialize and Deserialize a BT
 	// Approach1: Convert the tree to list; use PreOrder
-	public ArrayList<Integer> serialize1(
-			TreeNode root) {
+	public ArrayList<Integer> serialize1(TreeNode root) {
 		ArrayList<Integer> result = new ArrayList<>();
 		serialize1(result, root);
-		result.stream().forEach(
-				k -> System.out.print(k + " "));
+		result.stream().forEach(k -> System.out.print(k + " "));
 		return result;
 	}
 
-	private void serialize1(
-			ArrayList<Integer> result,
-			TreeNode root) {
+	private void serialize1(ArrayList<Integer> result, TreeNode root) {
 		if (root == null) {
 			result.add(-1);
 			return;
@@ -320,13 +311,10 @@ public class BTPatterns {
 	// Approach1: Convert the list to Tree;
 	static int index = 0;
 
-	public TreeNode deserialize1(
-			ArrayList<Integer> list) {
-		if (list.size() == index
-				|| list.get(index) == -1)
+	public TreeNode deserialize1(ArrayList<Integer> list) {
+		if (list.size() == index || list.get(index) == -1)
 			return null;
-		TreeNode node = new TreeNode(
-				list.get(index));
+		TreeNode node = new TreeNode(list.get(index));
 		index++;
 		node.left = deserialize1(list);
 		index++;
@@ -335,14 +323,10 @@ public class BTPatterns {
 	}
 
 	// Same approach, but used class variable to increment the serialized data index
-	public TreeNode deSerialize1(
-			ArrayList<Integer> list,
-			OrderIndex in) {
-		if (list.size() == in.index
-				|| list.get(in.index) == -1)
+	public TreeNode deSerialize1(ArrayList<Integer> list, OrderIndex in) {
+		if (list.size() == in.index || list.get(in.index) == -1)
 			return null;
-		TreeNode root = new TreeNode(
-				list.get(in.index));
+		TreeNode root = new TreeNode(list.get(in.index));
 		in.index++;
 		root.left = deSerialize1(list, in);
 		in.index++;
@@ -354,13 +338,11 @@ public class BTPatterns {
 	public String serialize2(TreeNode root) {
 		StringBuilder sb = new StringBuilder();
 		serialize2(root, sb);
-		System.out.println("Serialized data: "
-				+ sb.toString());
+		System.out.println("Serialized data: " + sb.toString());
 		return sb.toString();
 	}
 
-	public void serialize2(TreeNode root,
-			StringBuilder sb) {
+	public void serialize2(TreeNode root, StringBuilder sb) {
 		if (root == null) {
 			sb.append("#,");
 			return;
@@ -377,13 +359,10 @@ public class BTPatterns {
 		return deSerialize2(str, in);
 	}
 
-	public TreeNode deSerialize2(String[] str,
-			OrderIndex in) {
-		if (str.length == in.index - 1
-				|| str[in.index].equals("#"))
+	public TreeNode deSerialize2(String[] str, OrderIndex in) {
+		if (str.length == in.index - 1 || str[in.index].equals("#"))
 			return null;
-		TreeNode root = new TreeNode(
-				Integer.valueOf(str[in.index]));
+		TreeNode root = new TreeNode(Integer.valueOf(str[in.index]));
 		in.index++;
 		root.left = deSerialize2(str, in);
 		in.index++;
@@ -401,15 +380,14 @@ public class BTPatterns {
 	 * variable say prev. For every visited node, make it next of prev and previous
 	 * of this node as prev. Note: Here left -> prev, right -> next
 	 */
-	public TreeNode convertBinaryTreeToDLL1(
-			TreeNode root) {
+	public TreeNode convertBinaryTreeToDLL1(TreeNode root) {
 		head = null;
 		return binaryTreeToDLLUtil1(root);
 	}
 
-	public TreeNode binaryTreeToDLLUtil1(
-			TreeNode root) {
-		if (root == null) return null;
+	public TreeNode binaryTreeToDLLUtil1(TreeNode root) {
+		if (root == null)
+			return null;
 
 		binaryTreeToDLLUtil1(root.left);
 
@@ -431,21 +409,21 @@ public class BTPatterns {
 	 * first traverse the right subtree before the left subtree. i.e. do a reverse
 	 * inorder traversal.
 	 */
-	public TreeNode convertBinaryTreeToDLL2(
-			TreeNode root) {
+	public TreeNode convertBinaryTreeToDLL2(TreeNode root) {
 		head = null;
 		return binaryTreeToDLLUtil2(root);
 	}
 
-	public TreeNode binaryTreeToDLLUtil2(
-			TreeNode root) {
-		if (root == null) return null;
+	public TreeNode binaryTreeToDLLUtil2(TreeNode root) {
+		if (root == null)
+			return null;
 
 		binaryTreeToDLLUtil2(root.right);
 
 		root.right = head;
 
-		if (head != null) head.left = root;
+		if (head != null)
+			head.left = root;
 
 		head = root;
 		binaryTreeToDLLUtil2(root.left);
@@ -454,9 +432,9 @@ public class BTPatterns {
 
 	// Convert a given Binary Tree to Doubly Linked List(using Level order
 	// Traversal) -> It's totally wrong
-	public void convertBinaryTreeToDLL3(
-			TreeNode root) {
-		if (root == null) return;
+	public void convertBinaryTreeToDLL3(TreeNode root) {
+		if (root == null)
+			return;
 		Queue<TreeNode> queue = new LinkedList<>();
 		TreeNode curr, prev = null;
 		queue.add(root);
@@ -472,12 +450,13 @@ public class BTPatterns {
 		}
 	}
 
-	/****************************** 7.BT Traversal Modification Probs, Misc Probs **********************************/
+	/******************************
+	 * 7.BT Traversal Modification Probs, Misc Probs
+	 **********************************/
 	//Connect Nodes at Same Level/Populating Next Right Pointers in Each Node I, II
 	// Approach1: Using extended level order traversal - Level order traversal with null markers;
 	// Time Complexity: O(n) & Space Complexity: O(n)
-	public void connectNodesAtSameLevel1(
-			TreeNode root) {
+	public void connectNodesAtSameLevel1(TreeNode root) {
 		Queue<TreeNode> q = new LinkedList<>();
 		q.add(root);
 		q.add(null);
@@ -498,14 +477,12 @@ public class BTPatterns {
 
 	// Approach2: Using extended pre order traversal(Works only for complete binary tree or perfect binary tree)
 	// Time Complexity:O(n); Space complexity: Only recursion stack space or O(1)
-	public void connectNodesAtSameLevel2(
-			TreeNode root) {
-		if (root == null) return;
-		if (root.left == null
-				&& root.right == null)
+	public void connectNodesAtSameLevel2(TreeNode root) {
+		if (root == null)
 			return;
-		if (root.left != null
-				&& root.right != null)
+		if (root.left == null && root.right == null)
+			return;
+		if (root.left != null && root.right != null)
 			root.left.next = root.right;
 		if (root.next != null)
 			root.right.next = root.next.left;
@@ -517,27 +494,24 @@ public class BTPatterns {
 	 *    Traverse the nextRight ptr before the left & right ptr, then traverse getNextRight().
 	 */
 	// i.Approach30: Recursive approach
-	public void connectNodesAtSameLevel30(
-			TreeNode root) {
-		if (root == null) return;
+	public void connectNodesAtSameLevel30(TreeNode root) {
+		if (root == null)
+			return;
 		if (root.next != null)
 			connectNodesAtSameLevel30(root.next);
 		if (root.left != null) {
 			if (root.right != null) {
 				root.left.next = root.right;
-				root.right.next = getNextRight(
-						root);
+				root.right.next = getNextRight(root);
 			} else {
-				root.left.next = getNextRight(
-						root);
+				root.left.next = getNextRight(root);
 			}
 			connectNodesAtSameLevel30(root.left);
 		} else if (root.right != null) {
 			root.right.next = getNextRight(root);
 			connectNodesAtSameLevel30(root.right);
 		} else {
-			connectNodesAtSameLevel30(
-					getNextRight(root));
+			connectNodesAtSameLevel30(getNextRight(root));
 		}
 	}
 
@@ -570,7 +544,8 @@ public class BTPatterns {
 	// Binary Tree Level Order Traversal (easy)
 	// 1.Iterative Approach using Queue:
 	public void levelOrder(TreeNode root) {
-		if (root == null) return;
+		if (root == null)
+			return;
 		Queue<TreeNode> queue = new LinkedList<>();
 		queue.add(root);
 		while (!queue.isEmpty()) {
@@ -584,17 +559,15 @@ public class BTPatterns {
 	}
 
 	// 2.Recursive Approach:
-	public List<List<Integer>> levelByLevelOrderRecursive(
-			TreeNode root) {
+	public List<List<Integer>> levelByLevelOrderRecursive(TreeNode root) {
 		List<List<Integer>> result = new LinkedList<>();
 		levelOrder(root, result, 0);
 		return result;
 	}
 
-	public void levelOrder(TreeNode root,
-			List<List<Integer>> result,
-			int level) {
-		if (root == null) return;
+	public void levelOrder(TreeNode root, List<List<Integer>> result, int level) {
+		if (root == null)
+			return;
 		if (result.size() <= level)
 			result.add(new ArrayList<>());
 		result.get(level).add(root.data);
@@ -617,8 +590,7 @@ public class BTPatterns {
 					queue.add(root.left);
 			}
 			while (!stack.isEmpty())
-				System.out.print(
-						stack.pop().data + " ");
+				System.out.print(stack.pop().data + " ");
 		}
 	}
 
@@ -628,9 +600,9 @@ public class BTPatterns {
 	 *  2.Using Deque    
 	 */
 	// 1.Using 2 stack
-	public void levelOrderSpiralForm(
-			TreeNode root) {
-		if (root == null) return;
+	public void levelOrderSpiralForm(TreeNode root) {
+		if (root == null)
+			return;
 		Stack<TreeNode> s1 = new Stack<>();
 		Stack<TreeNode> s2 = new Stack<>();
 		s1.push(root);
@@ -656,10 +628,10 @@ public class BTPatterns {
 
 	// Level Averages in a Binary Tree (easy) - Average of Levels in Binary Tree - LeetCode -???
 	// Breadth First Search
-	public List<Double> averageOfLevels1(
-			TreeNode root) {
+	public List<Double> averageOfLevels1(TreeNode root) {
 		List<Double> result = new ArrayList<>();
-		if (root == null) return result;
+		if (root == null)
+			return result;
 		Queue<TreeNode> queue = new LinkedList<>();
 		queue.add(root);
 		while (!queue.isEmpty()) {
@@ -679,8 +651,7 @@ public class BTPatterns {
 	}
 
 	// Depth First Search
-	public List<Double> averageOfLevels2(
-			TreeNode root) {
+	public List<Double> averageOfLevels2(TreeNode root) {
 		List<Double> sum = new ArrayList<>();
 		List<Integer> count = new ArrayList<>();
 		// Calculate the sum in each level
@@ -692,58 +663,52 @@ public class BTPatterns {
 		return sum;
 	}
 
-	public void average(TreeNode curr, int level,
-			List<Double> sum,
-			List<Integer> count) {
-		if (curr == null) return;
+	public void average(TreeNode curr, int level, List<Double> sum, List<Integer> count) {
+		if (curr == null)
+			return;
 		if (level < sum.size()) {
-			sum.set(level,
-					sum.get(level) + curr.data);
-			count.set(level,
-					count.get(level) + 1);
+			sum.set(level, sum.get(level) + curr.data);
+			count.set(level, count.get(level) + 1);
 		} else {
 			sum.add(curr.data * 1.0);
 			count.add(1);
 		}
 		average(curr.left, level + 1, sum, count);
-		average(curr.right, level + 1, sum,
-				count);
+		average(curr.right, level + 1, sum, count);
 	}
 
 	// Minimum Depth of a Binary Tree (easy) - Minimum Depth of Binary Tree is equal to the nearest leaf from root.
 	public int minDepth1(TreeNode root) {
-		if (root == null) return 0;
+		if (root == null)
+			return 0;
 		int left = minDepth(root.left);
 		int right = minDepth(root.right);
-		return (left == 0 || right == 0)
-				? left + right + 1
-				: Math.min(left, right) + 1;
+		return (left == 0 || right == 0) ? left + right + 1 : Math.min(left, right) + 1;
 	}
 
 	// Using BFS version 1
 	public int minDepth2(TreeNode root) {
-		if (root == null) return 0;
+		if (root == null)
+			return 0;
 		Queue<QueuePack> queue = new LinkedList<>();
 		queue.add(new QueuePack(root, 1));
 		while (!queue.isEmpty()) {
 			QueuePack queuePack = queue.poll();
 			TreeNode curr = queuePack.node;
-			if (curr.left == null
-					&& curr.right == null)
+			if (curr.left == null && curr.right == null)
 				return queuePack.depth;
 			if (curr.left != null)
-				queue.add(new QueuePack(curr.left,
-						queuePack.depth + 1));
-			if (curr.right != null) queue
-					.add(new QueuePack(curr.right,
-							queuePack.depth + 1));
+				queue.add(new QueuePack(curr.left, queuePack.depth + 1));
+			if (curr.right != null)
+				queue.add(new QueuePack(curr.right, queuePack.depth + 1));
 		}
 		return 0;
 	}
 
 	// Using BFS version 2
 	public int minDepth(TreeNode root) {
-		if (root == null) return 0;
+		if (root == null)
+			return 0;
 		Queue<TreeNode> queue = new LinkedList<>();
 		queue.add(root);
 		int level = 1;
@@ -751,8 +716,7 @@ public class BTPatterns {
 			int len = queue.size();
 			while (len-- > 0) {
 				TreeNode node = queue.poll();
-				if (node.left == null
-						&& node.right == null)
+				if (node.left == null && node.right == null)
 					return level;
 				if (node.left != null)
 					queue.add(node.left);
@@ -765,9 +729,9 @@ public class BTPatterns {
 	}
 
 	// Level Order Successor of a node in Binary Tree
-	public TreeNode levelOrderSuccessor(
-			TreeNode root, TreeNode key) {
-		if (root == null) return root;
+	public TreeNode levelOrderSuccessor(TreeNode root, TreeNode key) {
+		if (root == null)
+			return root;
 		Queue<TreeNode> queue = new LinkedList<>();
 		queue.add(root);
 		while (!queue.isEmpty()) {
@@ -776,22 +740,25 @@ public class BTPatterns {
 				queue.add(curr.left);
 			if (curr.right != null)
 				queue.add(curr.right);
-			if (curr.data == key.data) break;
+			if (curr.data == key.data)
+				break;
 		}
 		return queue.peek();
 	}
 
 	// Level Order Predecessor of a node in Binary Tree
-	public TreeNode levelOrderPredecessor(
-			TreeNode root, TreeNode key) {
-		if (root == null) return root;
+	public TreeNode levelOrderPredecessor(TreeNode root, TreeNode key) {
+		if (root == null)
+			return root;
 		Queue<TreeNode> queue = new LinkedList<>();
 		queue.add(root);
 		TreeNode prev = null;
 		while (!queue.isEmpty()) {
 			TreeNode curr = queue.poll();
-			if (curr.data == key.data) break;
-			else prev = curr;
+			if (curr.data == key.data)
+				break;
+			else
+				prev = curr;
 			if (curr.left != null)
 				queue.add(curr.left);
 			if (curr.right != null)
@@ -811,9 +778,9 @@ public class BTPatterns {
 		rightViewOfTree2(root, 1);
 	}
 
-	public void rightViewOfTree2(TreeNode root,
-			int level) {
-		if (root == null) return;
+	public void rightViewOfTree2(TreeNode root, int level) {
+		if (root == null)
+			return;
 		if (maxRightLevel < level) {
 			System.out.print(root.data + " ");
 			maxRightLevel = level;
@@ -827,22 +794,19 @@ public class BTPatterns {
 	 * 	   1.Each depth/level of the tree only select one node.
 	 * 	   2. View depth/level is current size of result list.
 	 */
-	public List<Integer> rightSideView(
-			TreeNode root) {
+	public List<Integer> rightSideView(TreeNode root) {
 		List<Integer> result = new ArrayList<>();
 		rightSideView(root, result, 0);
 		return result;
 	}
 
-	public void rightSideView(TreeNode root,
-			List<Integer> result, int level) {
-		if (root == null) return;
+	public void rightSideView(TreeNode root, List<Integer> result, int level) {
+		if (root == null)
+			return;
 		if (level == result.size()) // Add one element per level
 			result.add(root.data);
-		rightSideView(root.right, result,
-				level + 1);
-		rightSideView(root.left, result,
-				level + 1);
+		rightSideView(root.right, result, level + 1);
+		rightSideView(root.left, result, level + 1);
 	}
 
 	// Tree Boundary (hard) - ???
@@ -864,18 +828,14 @@ public class BTPatterns {
 	 *  Note: A leaf is a node with no children.
 	 *  Example: Given the below binary tree and sum = 22,
 	 */
-	public boolean hasPathSum(TreeNode root,
-			int sum) {
-		if (root == null) return false;
+	public boolean hasPathSum(TreeNode root, int sum) {
+		if (root == null)
+			return false;
 
-		if (sum == root.data && root.left == null
-				&& root.right == null)
+		if (sum == root.data && root.left == null && root.right == null)
 			return true;
 
-		return hasPathSum(root.left,
-				sum - root.data)
-				|| hasPathSum(root.right,
-						sum - root.data);
+		return hasPathSum(root.left, sum - root.data) || hasPathSum(root.right, sum - root.data);
 	}
 
 	/*
@@ -883,26 +843,21 @@ public class BTPatterns {
 	 * Note: A leaf is a node with no children.
 	 * Example: Given the below binary tree and sum = 22,
 	 */
-	public List<List<Integer>> pathSumII(
-			TreeNode root, int sum) {
+	public List<List<Integer>> pathSumII(TreeNode root, int sum) {
 		List<List<Integer>> result = new ArrayList<>();
 		List<Integer> eachList = new ArrayList<>();
 		pathSum(root, result, eachList, sum);
 		return result;
 	}
 
-	public void pathSum(TreeNode root,
-			List<List<Integer>> result,
-			List<Integer> eachList, int sum) {
-		if (root == null) return;
+	public void pathSum(TreeNode root, List<List<Integer>> result, List<Integer> eachList, int sum) {
+		if (root == null)
+			return;
 		eachList.add(root.data);
-		if (root.data == sum && root.left == null
-				&& root.right == null)
+		if (root.data == sum && root.left == null && root.right == null)
 			result.add(new ArrayList<>(eachList));
-		pathSum(root.left, result, eachList,
-				sum - root.data);
-		pathSum(root.right, result, eachList,
-				sum - root.data);
+		pathSum(root.left, result, eachList, sum - root.data);
+		pathSum(root.right, result, eachList, sum - root.data);
 		eachList.remove(eachList.size() - 1);
 	}
 
@@ -914,78 +869,58 @@ public class BTPatterns {
 	 * Example: root = [10,5,-3,3,2,null,11,3,-2,null,1], sum = 8
 	 */
 	// Brute Force DFS Approach: Time - O(n^2)
-	public int pathSumIII(TreeNode root,
-			int sum) {
-		if (root == null) return 0;
+	public int pathSumIII(TreeNode root, int sum) {
+		if (root == null)
+			return 0;
 
-		return pathSumFrom(root, sum)
-				+ pathSumIII(root.left, sum)
-				+ pathSumIII(root.right, sum);
+		return pathSumFrom(root, sum) + pathSumIII(root.left, sum) + pathSumIII(root.right, sum);
 	}
 
-	public int pathSumFrom(TreeNode root,
-			int sum) {
-		if (root == null) return 0;
+	public int pathSumFrom(TreeNode root, int sum) {
+		if (root == null)
+			return 0;
 
-		return (sum == root.data ? 1 : 0)
-				+ pathSumFrom(root.left,
-						sum - root.data)
-				+ pathSumFrom(root.right,
-						sum - root.data);
+		return (sum == root.data ? 1 : 0) + pathSumFrom(root.left, sum - root.data)
+				+ pathSumFrom(root.right, sum - root.data);
 	}
 
 	// Prefix Sum Method: Time: O(n), Space:O(n)
-	public int pathSumIII2(TreeNode root,
-			int sum) {
+	public int pathSumIII2(TreeNode root, int sum) {
 		HashMap<Integer, Integer> preSum = new HashMap<>();
 		preSum.put(0, 1);
 		return helper(root, 0, sum, preSum);
 	}
 
-	public int helper(TreeNode root, int currSum,
-			int target,
-			HashMap<Integer, Integer> preSum) {
+	public int helper(TreeNode root, int currSum, int target, HashMap<Integer, Integer> preSum) {
 		if (root == null) {
 			return 0;
 		}
 
 		currSum += root.data;
-		int res = preSum.getOrDefault(
-				currSum - target, 0);
-		preSum.put(currSum,
-				preSum.getOrDefault(currSum, 0)
-						+ 1);
+		int res = preSum.getOrDefault(currSum - target, 0);
+		preSum.put(currSum, preSum.getOrDefault(currSum, 0) + 1);
 
-		res += helper(root.left, currSum, target,
-				preSum)
-				+ helper(root.right, currSum,
-						target, preSum);
-		preSum.put(currSum,
-				preSum.get(currSum) - 1);
+		res += helper(root.left, currSum, target, preSum) + helper(root.right, currSum, target, preSum);
+		preSum.put(currSum, preSum.get(currSum) - 1);
 		return res;
 	}
 
 	// All Paths for a Sum - Check all the root to leaf path for the given Sum
-	public void sumOfNodesFromRootToLeaf(
-			TreeNode root, int sum) {
+	public void sumOfNodesFromRootToLeaf(TreeNode root, int sum) {
 		ArrayList<Integer> path = new ArrayList<>();
 		if (rootToLeafUtil1(root, sum, path)) {
-			System.out.print("Sum Path for " + sum
-					+ " is:");
-			path.stream().forEach(k -> System.out
-					.print(k + " "));
+			System.out.print("Sum Path for " + sum + " is:");
+			path.stream().forEach(k -> System.out.print(k + " "));
 		} else {
-			System.out.println(
-					"Sum is not present from root to leaf!");
+			System.out.println("Sum is not present from root to leaf!");
 		}
 	}
 
-	private boolean rootToLeafUtil1(TreeNode root,
-			int sum, ArrayList<Integer> path) {
-		if (root == null) return false;
+	private boolean rootToLeafUtil1(TreeNode root, int sum, ArrayList<Integer> path) {
+		if (root == null)
+			return false;
 
-		if (root.left == null
-				&& root.right == null) {
+		if (root.left == null && root.right == null) {
 			if (sum == root.data) {
 				path.add(root.data);
 				return true;
@@ -994,40 +929,37 @@ public class BTPatterns {
 			}
 		}
 
-		if (rootToLeafUtil1(root.left,
-				sum - root.data, path)) {
+		if (rootToLeafUtil1(root.left, sum - root.data, path)) {
 			path.add(root.data);
 			return true;
 		}
 
-		if (rootToLeafUtil1(root.right,
-				sum - root.data, path)) {
+		if (rootToLeafUtil1(root.right, sum - root.data, path)) {
 			path.add(root.data);
 			return true;
 		}
 		return false;
 	}
 
-	private boolean rootToLeafUtil2(TreeNode root,
-			int currSum, int sum,
-			ArrayList<Integer> path) {
-		if (root == null) return false;
+	private boolean rootToLeafUtil2(TreeNode root, int currSum, int sum, ArrayList<Integer> path) {
+		if (root == null)
+			return false;
 
 		currSum += root.data;
-		if (root.left == null
-				&& root.right == null) {
-			if (currSum == sum) return true;
-			else return false;
+		if (root.left == null && root.right == null) {
+			if (currSum == sum)
+				return true;
+			else
+				return false;
 		}
 
-		boolean flag = rootToLeafUtil2(root.left,
-				currSum, sum, path);
+		boolean flag = rootToLeafUtil2(root.left, currSum, sum, path);
 
 		if (!flag)
-			flag = rootToLeafUtil2(root.right,
-					currSum, sum, path);
+			flag = rootToLeafUtil2(root.right, currSum, sum, path);
 
-		if (!flag) path.remove(path.size() - 1);
+		if (!flag)
+			path.remove(path.size() - 1);
 
 		return false;
 	}
@@ -1044,16 +976,13 @@ public class BTPatterns {
 
 		int left = maxPathSumUtil(root.left);
 		int right = maxPathSumUtil(root.right);
-		return Math.max(left + right + root.data,
-				Math.max(maxPathSum(root.left),
-						maxPathSum(root.right)));
+		return Math.max(left + right + root.data, Math.max(maxPathSum(root.left), maxPathSum(root.right)));
 	}
 
 	private int maxPathSumUtil(TreeNode root) {
-		if (root == null) return 0;
-		return Math.max(0, root.data + Math.max(
-				maxPathSumUtil(root.left),
-				maxPathSumUtil(root.right)));
+		if (root == null)
+			return 0;
+		return Math.max(0, root.data + Math.max(maxPathSumUtil(root.left), maxPathSumUtil(root.right)));
 	}
 
 	/****************************** Tree Traversal Modification **********************************/
@@ -1061,7 +990,8 @@ public class BTPatterns {
 	// Flatten Binary Tree to Linked List:
 	// Modification of Inorder Traversal
 	public void flatten(TreeNode root) {
-		if (root == null) return;
+		if (root == null)
+			return;
 
 		flatten(root.left);
 
@@ -1079,10 +1009,9 @@ public class BTPatterns {
 
 	// Recover Binary Search Tree:
 
-	TreeNode firstNode  = null;
+	TreeNode firstNode = null;
 	TreeNode secondNode = null;
-	TreeNode prevNode   = new TreeNode(
-			Integer.MIN_VALUE);
+	TreeNode prevNode = new TreeNode(Integer.MIN_VALUE);
 
 	public void recoverTree(TreeNode root) {
 		inorderTraversal(root);
@@ -1090,16 +1019,15 @@ public class BTPatterns {
 	}
 
 	public void inorderTraversal(TreeNode root) {
-		if (root == null) return;
+		if (root == null)
+			return;
 
 		inorderTraversal(root.left);
 
-		if (firstNode == null
-				&& prevNode.data >= root.data)
+		if (firstNode == null && prevNode.data >= root.data)
 			firstNode = prevNode;
 
-		if (firstNode != null
-				&& prevNode.data >= root.data)
+		if (firstNode != null && prevNode.data >= root.data)
 			secondNode = root;
 
 		prevNode = root;
@@ -1107,31 +1035,31 @@ public class BTPatterns {
 		inorderTraversal(root.right);
 	}
 
-	public void swap(TreeNode node1,
-			TreeNode node2) {
+	public void swap(TreeNode node1, TreeNode node2) {
 		int temp = node1.data;
 		node1.data = node2.data;
 		node2.data = temp;
 	}
 
 	// Minimum Absolute Difference in BST:
-	int     min     = Integer.MAX_VALUE;
+	int min = Integer.MAX_VALUE;
 	Integer prevVal = null;
 
 	// Approach1: Inorder Traversal Modification
-	public int getMinimumDifference1(
-			TreeNode root) {
-		if (root == null) return min;
+	public int getMinimumDifference1(TreeNode root) {
+		if (root == null)
+			return min;
 		inorder(root);
 		return min;
 	}
 
 	public void inorder(TreeNode root) {
-		if (root == null) return;
+		if (root == null)
+			return;
 
 		inorder(root.left);
-		if (prevVal != null) min = Math.min(min,
-				root.data - prevVal);
+		if (prevVal != null)
+			min = Math.min(min, root.data - prevVal);
 		prevVal = root.data;
 		inorder(root.right);
 	}
@@ -1159,16 +1087,12 @@ public class BTPatterns {
 		return result;
 	}
 
-	public void inorder(TreeNode root,
-			Map<Integer, Integer> map,
-			int[] max) {
-		if (root == null) return;
+	public void inorder(TreeNode root, Map<Integer, Integer> map, int[] max) {
+		if (root == null)
+			return;
 
-		map.put(root.data,
-				map.getOrDefault(root.data, 0)
-						+ 1);
-		max[0] = Math.max(max[0],
-				map.get(root.data));
+		map.put(root.data, map.getOrDefault(root.data, 0) + 1);
+		max[0] = Math.max(max[0], map.get(root.data));
 
 		inorder(root.left, map, max);
 		inorder(root.right, map, max);
@@ -1179,7 +1103,8 @@ public class BTPatterns {
 	int maxCount = 0;
 
 	public int[] findMode(TreeNode root) {
-		if (root == null) return new int[0];
+		if (root == null)
+			return new int[0];
 		List<Integer> list = new ArrayList<>();
 		inorder(root, list);
 		int[] res = new int[list.size()];
@@ -1189,15 +1114,16 @@ public class BTPatterns {
 	}
 
 	// Simple Modification of inorder traversal
-	private void inorder(TreeNode root,
-			List<Integer> list) {
-		if (root == null) return;
+	private void inorder(TreeNode root, List<Integer> list) {
+		if (root == null)
+			return;
 		inorder(root.left, list);
 
 		if (prev != null) {
 			if (root.data == prev.data)
 				curCount++;
-			else curCount = 1;
+			else
+				curCount = 1;
 		}
 		prev = new TreeNode(root.data);
 		if (curCount > maxCount) {
@@ -1213,8 +1139,7 @@ public class BTPatterns {
 	/****************************** Optimized Tree Traversal **********************************/
 
 	// Most Frequent Subtree Sum:
-	public int[] findFrequentTreeSum(
-			TreeNode root) {
+	public int[] findFrequentTreeSum(TreeNode root) {
 		Map<Integer, Integer> map = new HashMap<>();
 		List<Integer> list = new ArrayList<>();
 		int[] max = new int[1];
@@ -1232,17 +1157,15 @@ public class BTPatterns {
 		return result;
 	}
 
-	public int subTreeSum(TreeNode root,
-			Map<Integer, Integer> map,
-			int[] max) {
-		if (root == null) return 0;
+	public int subTreeSum(TreeNode root, Map<Integer, Integer> map, int[] max) {
+		if (root == null)
+			return 0;
 		int sum = root.data;
 
 		sum += subTreeSum(root.left, map, max);
 		sum += subTreeSum(root.right, map, max);
 
-		map.put(sum,
-				map.getOrDefault(sum, 0) + 1);
+		map.put(sum, map.getOrDefault(sum, 0) + 1);
 		max[0] = Math.max(max[0], map.get(sum));
 		return sum;
 	}
@@ -1250,7 +1173,7 @@ public class BTPatterns {
 }
 
 class QueuePack {
-	public int      depth;
+	public int depth;
 	public TreeNode node;
 
 	public QueuePack(TreeNode node, int depth) {

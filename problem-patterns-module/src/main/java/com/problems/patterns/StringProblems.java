@@ -53,19 +53,13 @@ public class StringProblems {
 			return 1;
 		int l = 0, h = str.length() - 1;
 		while (l < h) {
-			while (l < h && (str.charAt(l) == ' '
-					|| !Character.isLetterOrDigit(
-							str.charAt(l))))
+			while (l < h && (str.charAt(l) == ' ' || !Character.isLetterOrDigit(str.charAt(l))))
 				l++;
-			while (l < h && (str.charAt(h) == ' '
-					|| !Character.isLetterOrDigit(
-							str.charAt(h))))
+			while (l < h && (str.charAt(h) == ' ' || !Character.isLetterOrDigit(str.charAt(h))))
 				h--;
 			if (l == h)
 				break;
-			if (Character
-					.toLowerCase(str.charAt(l)) == Character
-							.toLowerCase(str.charAt(h))) {
+			if (Character.toLowerCase(str.charAt(l)) == Character.toLowerCase(str.charAt(h))) {
 				l++;
 				h--;
 			} else {
@@ -82,8 +76,7 @@ public class StringProblems {
 		int index = 0;
 		for (int i = 0; i < s.length(); i++) {
 			index = (int) s.charAt(i);
-			if ((index >= 97 && index <= 122)
-					|| (index >= 65 && index <= 90)) {
+			if ((index >= 97 && index <= 122) || (index >= 65 && index <= 90)) {
 				if (index <= 90)
 					index += 32;
 				sb.append((char) index);
@@ -110,9 +103,7 @@ public class StringProblems {
 			} else if (!Character.isLetterOrDigit(cTail)) {
 				h--;
 			} else {
-				if (Character
-						.toLowerCase(cHead) != Character
-								.toLowerCase(cTail))
+				if (Character.toLowerCase(cHead) != Character.toLowerCase(cTail))
 					return false;
 				l++;
 				h--;
@@ -137,14 +128,13 @@ public class StringProblems {
 		if (l >= r)
 			return true;
 
-		if (isPalindrome(s, l + 1, r)
-				|| isPalindrome(s, l, r - 1))
+		if (isPalindrome(s, l + 1, r) || isPalindrome(s, l, r - 1))
 			return true;
 
 		return false;
 	}
 
-	/***************3.Sting Pretty Print**************/
+	/*************** 3.Sting Pretty Print **************/
 	/* ZigZag Conversion:
 	 * The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of 
 	 * rows like this: (you may want to display this pattern in a fixed font for better legibility)
@@ -158,12 +148,11 @@ public class StringProblems {
 		StringBuilder sb = new StringBuilder();
 		int n = s.length(), step1, step2, pos;
 
-		for (int i = 0; i < numRows; i++) {
-			step1 = 2 * (numRows - i - 1); // 2(n-1), 2(n-2), 2(n-3)...0
-			step2 = 2 * i; // 0, 2, 4,...
+		for (int i = 0; i < Math.min(n, numRows); i++) {
+			step1 = 2 * (numRows - i - 1); //2(n-1), 2(n-2), 2(n-3)...0
+			step2 = 2 * i; //0, 2, 4,... 
 			pos = i;
-			if (pos < n)
-				sb.append(s.charAt(pos));
+			sb.append(s.charAt(pos));
 			while (true) {
 				pos += step1;
 				if (pos >= n)
@@ -182,6 +171,34 @@ public class StringProblems {
 		return sb.toString();
 	}
 
+	public String convert2(String s, int numRows) {
+		if (numRows <= 1)
+			return s;
+
+		String[] arr = new String[numRows];
+		Arrays.fill(arr, "");
+		int n = s.length(), row = 0;
+		boolean down = false;
+
+		for (int i = 0; i < n; i++) {
+			arr[row] += s.charAt(i);
+			if (row == 0)
+				down = true;
+			if (row == numRows - 1)
+				down = false;
+
+			if (down)
+				row++;
+			else
+				row--;
+		}
+
+		StringBuilder sb = new StringBuilder();
+		for (String str : arr)
+			sb.append(str);
+		return sb.toString();
+	}
+
 	/************************* 4.String Math ************************/
 
 	/* Compare Version Numbers:
@@ -189,21 +206,14 @@ public class StringProblems {
 	 * If version1 > version2 return 1; if version1 < version2 
 	 * return -1;otherwise return 0.
 	 */
-	public int compareVersion(String version1,
-			String version2) {
-		if (version1.length() == 0
-				&& version2.length() == 0)
+	public int compareVersion(String version1, String version2) {
+		if (version1.length() == 0 && version2.length() == 0)
 			return 0;
 		String[] ver1 = version1.split("\\.");
 		String[] ver2 = version2.split("\\.");
-		for (int i = 0; i < Math.max(ver1.length,
-				ver2.length); i++) {
-			int v1 = i < ver1.length
-					? Integer.valueOf(ver1[i])
-					: 0;
-			int v2 = i < ver2.length
-					? Integer.valueOf(ver2[i])
-					: 0;
+		for (int i = 0; i < Math.max(ver1.length, ver2.length); i++) {
+			int v1 = i < ver1.length ? Integer.valueOf(ver1[i]) : 0;
+			int v2 = i < ver2.length ? Integer.valueOf(ver2[i]) : 0;
 			if (v1 > v2)
 				return 1;
 			if (v1 < v2)
@@ -226,8 +236,7 @@ public class StringProblems {
 	public String encode(List<String> strs) {
 		StringBuilder output = new StringBuilder();
 		for (String str : strs) {
-			output.append(
-					String.valueOf(str.length()) + "#");
+			output.append(String.valueOf(str.length()) + "#");
 			output.append(str);
 		}
 		return output.toString();
@@ -240,11 +249,9 @@ public class StringProblems {
 		while (i < s.length()) {
 			// Get length
 			int strIdx = s.indexOf('#', i); // Find the '#' index from 'i'
-			int len = Integer
-					.parseInt(s.substring(i, strIdx));
+			int len = Integer.parseInt(s.substring(i, strIdx));
 			// Get string
-			res.add(s.substring(strIdx + 1,
-					strIdx + len + 1));
+			res.add(s.substring(strIdx + 1, strIdx + len + 1));
 			i = strIdx + len + 1;
 		}
 		return res;
@@ -260,8 +267,7 @@ public class StringProblems {
 			int len = 0;
 			// Get length
 			while (i < s.length() && s.charAt(i) != '#') {
-				len = len * 10 + Character
-						.getNumericValue(s.charAt(i));
+				len = len * 10 + Character.getNumericValue(s.charAt(i));
 				i++;
 			}
 			// Get string

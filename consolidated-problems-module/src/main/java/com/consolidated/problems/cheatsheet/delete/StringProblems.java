@@ -476,39 +476,6 @@ public class StringProblems {
 		return count / len;
 	}
 
-	/* ZigZag Conversion:
-	 * The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may 
-	 * want to display this pattern in a fixed font for better legibility)
-	 * Example 1: Input: s = "PAYPALISHIRING", numRows = 3; Output: "PAHNAPLSIIGYIR"
-	 * Example 2: Input: s = "PAYPALISHIRING", numRows = 4; Output: "PINALSIGYAHRPI"
-	 */
-	public String convert(String s, int numRows) {
-		if (numRows <= 1)
-			return s;
-		StringBuilder sb = new StringBuilder();
-		int n = s.length(), step1, step2, pos;
-		for (int i = 0; i < numRows; i++) {
-			step1 = 2 * (numRows - i - 1);
-			step2 = 2 * i;
-			pos = i;
-			if (pos < n)
-				sb.append(s.charAt(pos));
-			while (true) {
-				pos += step1;
-				if (pos >= n)
-					break;
-				if (step1 != 0)
-					sb.append(s.charAt(pos));
-				pos += step2;
-				if (pos >= n)
-					break;
-				if (step2 != 0)
-					sb.append(s.charAt(pos));
-			}
-		}
-		return sb.toString();
-	}
-
 	/************************* Type4: String Math *************/
 
 	/* Compare Version Numbers:
@@ -788,27 +755,40 @@ public class StringProblems {
 	public List<List<String>> groupAnagrams(String[] strs) {
 		HashMap<String, List<String>> map = new HashMap<>();
 		for (String str : strs) {
-			String asc = ascOrder(str);
-			List<String> list = null;
-			if (map.containsKey(asc)) {
-				list = map.get(asc);
-			} else {
-				list = new ArrayList<>();
+			String sortedStr = sort2(str);
+			if (!map.containsKey(sortedStr)) {
+				map.put(sortedStr, new ArrayList<>());
 			}
-			list.add(str);
-			map.put(asc, list);
+			map.get(sortedStr).add(str);
 		}
+
 		List<List<String>> result = new ArrayList<>();
 		result.addAll(map.values());
 		return result;
 	}
 
-	public String ascOrder(String str) {
+	public String sort1(String str) {
 		char[] arr = new char[26];
 		for (int i = 0; i < str.length(); i++) {
 			arr[str.charAt(i) - 'a']++;
 		}
 		return new String(arr);
+	}
+
+	public String sort2(String str) {
+		int[] arr = new int[26];
+
+		for (int i = 0; i < str.length(); i++) {
+			arr[str.charAt(i) - 'a']++;
+		}
+
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < 26; i++) {
+			while (arr[i]-- > 0)
+				sb.append(i + 'a');
+		}
+
+		return sb.toString();
 	}
 
 	/*

@@ -9,13 +9,15 @@ public class BitAlgorithms {
 	/*************************** Type1: Check/Scan the bits *******************/
 	// Check whether K-th bit is set or not
 	public static String checkKthBit(int data, int k) {
-		if ((data & (1 << k)) >= 1) return "Yes";
+		if ((data & (1 << k)) >= 1)
+			return "Yes";
 		return "No";
 	}
 
 	// Find first set bit
 	public static int findFirstSetBit(int data) {
-		if (data == 0) return 0;
+		if (data == 0)
+			return 0;
 
 		int bit = 1;
 		int count = 1;
@@ -33,7 +35,8 @@ public class BitAlgorithms {
 			while (count < 32) {
 				count++;
 				temp = data & testBit;
-				if (temp == testBit) return count;
+				if (temp == testBit)
+					return count;
 
 				testBit <<= 1;
 			}
@@ -171,6 +174,62 @@ public class BitAlgorithms {
 		return result;
 	}
 
+	/*
+	 * Count Total Set Bits: 
+	 * 	Given a positive integer A, the task is to count the total number of set bits in the binary representation of all the numbers from 1 to A.
+	 */
+	//Similar to prev problem efficient approach - But it has thrown heap memory space issue
+	public int solve3(int A) {
+		if (A <= 2)
+			return A;
+		int[] dp = new int[A + 1];
+		int count = 0, prev = 1, twoPow = 1;
+
+		for (int i = 1; i <= A; i++) {
+			if (i == twoPow) {
+				dp[i] = 1;
+				twoPow <<= 1;
+				prev = 1;
+			} else {
+				dp[i] = dp[prev] + 1;
+				prev++;
+			}
+			count += dp[i];
+			count %= 1000000007;
+		}
+
+		return count;
+	}
+
+	//Efficient Approach:
+	public int solve(int n) {
+		n++;
+		int M = 1000000007;
+		// To store the powers of 2 
+		int powerOf2 = 2;
+
+		// To store the result, it is initialized with n/2 because the count of set least significant bits in the integers from 1 to n is n/2 
+		int cnt = n / 2;
+
+		while (powerOf2 <= n) {
+			// Total count of pairs of 0s and 1s 
+			int totalPairs = n / powerOf2;
+
+			// totalPairs/2 gives the complete count of the pairs of 1s Multiplying it with the current power of 2 will give the count of 
+			// 1s in the current bit 
+			cnt += (totalPairs / 2) * powerOf2;
+
+			// If the count of pairs was odd then add the remaining 1s which could not be grouped together 
+			cnt += (totalPairs % 2 == 1) ? (n % powerOf2) : 0;
+
+			cnt %= M;
+			// Next power of 2 
+			powerOf2 <<= 1;
+		}
+
+		return cnt % M;
+	}
+
 	/*  Maximum Binary Gap/Binary Gap - Sliding Window
 	 * Given a positive integer N, find and return the longest distance between two consecutive 1's in the binary 
 	 * representation of N.	If there aren't two consecutive 1's, return 0.
@@ -231,7 +290,8 @@ public class BitAlgorithms {
 		/* If c is 0, then n is a sequence of 1s followed by a sequence of 0s. This is already the biggest
 		 * number with c1 ones. Return error.
 		 */
-		if (c0 + c1 == 31 || c0 + c1 == 0) return -1;
+		if (c0 + c1 == 31 || c0 + c1 == 0)
+			return -1;
 
 		/* Arithmetically:
 		 * 2^c0 = 1 << c0
@@ -251,7 +311,8 @@ public class BitAlgorithms {
 		/* If temp is 0, then the number is a sequence of 0s followed by a sequence of 1s. This is already
 		 * the smallest number with c1 ones. Return -1 for an error.
 		 */
-		if (temp == 0) return -1;
+		if (temp == 0)
+			return -1;
 
 		while ((temp & 1) == 0 && (temp != 0)) {
 			c0++;
@@ -280,7 +341,8 @@ public class BitAlgorithms {
 	 */
 
 	public int flipBitToWin(int n) {
-		if (n == -1) return Integer.BYTES * 8; // 4 * 8 = 32
+		if (n == -1)
+			return Integer.BYTES * 8; // 4 * 8 = 32
 		int maxLen = 0, prevLen = 0, currLen = 0;
 
 		while (n != 0) {
@@ -303,7 +365,8 @@ public class BitAlgorithms {
 	public int toggleBits(int data) {
 		int result = 0, setBit = 1;
 		while (data > 0) {
-			if ((data & 1) == 0) result |= setBit;
+			if ((data & 1) == 0)
+				result |= setBit;
 			setBit <<= 1;
 			data >>= 1;
 		}
@@ -364,17 +427,19 @@ public class BitAlgorithms {
 	}
 
 	// Rotate Bits
-	static int	BITS		= 16;
-	static int	CLEAR_BITS	= (-1 >>> BITS);
+	static int BITS = 16;
+	static int CLEAR_BITS = (-1 >>> BITS);
 
 	public static int rotateLeft(int n, int d) {
-		if (d > 16) d = d % BITS;
+		if (d > 16)
+			d = d % BITS;
 
 		return ((n << d) | (n >> BITS - d)) & 0xFFFF;
 	}
 
 	public static int rotateRight(int n, int d) {
-		if (d > 16) d = d % BITS;
+		if (d > 16)
+			d = d % BITS;
 		return ((n >> d) | (n << BITS - d)) & CLEAR_BITS;
 	}
 
@@ -494,8 +559,10 @@ public class BitAlgorithms {
 		while (left < right) {
 			mid = (left + right) / 2;
 			// Modification: Compare mid with mid index element.
-			if (nums[mid] > mid) right = mid;
-			else left = mid + 1;
+			if (nums[mid] > mid)
+				right = mid;
+			else
+				left = mid + 1;
 		}
 		return left;
 	}
@@ -520,7 +587,8 @@ public class BitAlgorithms {
 		List<String> result = new ArrayList<>();
 		for (int h = 0; h < 12; h++)
 			for (int m = 0; m < 60; m++)
-				if (Integer.bitCount(h) + Integer.bitCount(m) == num) result.add(h + (m < 10 ? ":0" : ":") + m);
+				if (Integer.bitCount(h) + Integer.bitCount(m) == num)
+					result.add(h + (m < 10 ? ":0" : ":") + m);
 
 		return result;
 	}
@@ -618,7 +686,8 @@ public class BitAlgorithms {
 				}
 			}
 
-			if (maxEle == -2147483648) continue;
+			if (maxEle == -2147483648)
+				continue;
 
 			int temp = set[index];
 			set[index] = set[maxInd];
@@ -627,7 +696,8 @@ public class BitAlgorithms {
 			maxInd = index;
 
 			for (int j = 0; j < n; j++) {
-				if (j != maxInd && (set[j] & (1 << i)) != 0) set[j] = set[j] ^ set[maxInd];
+				if (j != maxInd && (set[j] & (1 << i)) != 0)
+					set[j] = set[j] ^ set[maxInd];
 			}
 
 			index++;
@@ -679,12 +749,17 @@ public class BitAlgorithms {
 
 		for (int d : data) {
 			if (count == 0) {
-				if (d >> 5 == 0b110) count = 1; // 2 Bytes data, Remaining :1 - '10' starting should be there
-				else if (d >> 4 == 0b1110) count = 2; // 3 Bytes, Remaining :2 - '10' starting should be there
-				else if (d >> 3 == 0b11110) count = 3; // 4 Bytes, Remaining :3 - '10' starting should be there
-				else if (d >> 7 != 0) return false; // More than 4 Bytes -> return false
+				if (d >> 5 == 0b110)
+					count = 1; // 2 Bytes data, Remaining :1 - '10' starting should be there
+				else if (d >> 4 == 0b1110)
+					count = 2; // 3 Bytes, Remaining :2 - '10' starting should be there
+				else if (d >> 3 == 0b11110)
+					count = 3; // 4 Bytes, Remaining :3 - '10' starting should be there
+				else if (d >> 7 != 0)
+					return false; // More than 4 Bytes -> return false
 			} else {
-				if (d >> 6 != 0b10) return false;
+				if (d >> 6 != 0b10)
+					return false;
 				count--;
 			}
 		}
@@ -717,14 +792,18 @@ public class BitAlgorithms {
 				}
 
 				// Invalid scenarios according to the rules of the problem.
-				if (numberOfBytesToProcess > 4 || numberOfBytesToProcess == 1) { return false; }
+				if (numberOfBytesToProcess > 4 || numberOfBytesToProcess == 1) {
+					return false;
+				}
 
 			} else {
 
 				// data[i] should have most significant bit set and
 				// second most significant bit unset. So, we use the two masks
 				// to make sure this is the case.
-				if (!((data[i] & mask1) != 0 && (mask2 & data[i]) == 0)) { return false; }
+				if (!((data[i] & mask1) != 0 && (mask2 & data[i]) == 0)) {
+					return false;
+				}
 			}
 
 			// We reduce the number of bytes to process by 1 after each integer.

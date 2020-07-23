@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import com.common.model.ListNode;
@@ -441,8 +442,8 @@ public class MathProblems {
 	private final String[] lessThan10 = { "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine" };
 	private final String[] lessThan20 = { "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
 			"Seventeen", "Eighteen", "Nineteen" };
-	private final String[] lessThan100 = { "", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty",
-			"Ninety" };
+	private final String[] lessThan100 = { "", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy",
+			"Eighty", "Ninety" };
 
 	public String numberToWords(int num) {
 		if (num == 0)
@@ -1221,6 +1222,59 @@ public class MathProblems {
 		return count;
 	}
 
+	/********************** Type6: Geometry ****************************/
+	/*
+	 * Max Points on a Line: Given n points on a 2D plane, find the maximum number of points that lie on the same straight line.
+	 * Ref: https://leetcode.com/problems/max-points-on-a-line/discuss/47113/A-java-solution-with-notes
+	 * 		https://leetcode.com/problems/max-points-on-a-line/discuss/47117/Sharing-my-simple-solution-with-explanation
+	 */
+	//Time: O(n^2)
+	public int maxPoints(int[][] points) {
+		if (points.length == 0)
+			return 0;
+		Map<String, Integer> map = new HashMap<>();
+		int n = points.length, result = 0;
+
+		for (int i = 0; i < n; i++) {
+			int[] p1 = points[i];
+			int max = 0, dup = 0;
+			String key = null;
+
+			for (int j = i + 1; j < n; j++) {
+				int[] p2 = points[j];
+				int y = p2[1] - p1[1]; //y2-y1
+				int x = p2[0] - p1[0]; //x2-x1
+				if (y == 0 && x == 0) { //Handle duplicate or overlap point
+					dup++;
+					continue;
+				} else if (y == 0) { //Handle horizontal line
+					key = "Horizontal";
+				} else if (x == 0) { //Handle Vertical line
+					key = "Vertical";
+				} else { //Handle slope
+					int gcd = gcd(x, y);
+					//System.out.println(x + "," + y + ": " + gcd);
+					x /= gcd;
+					y /= gcd;
+					key = x + "," + y;
+				}
+
+				map.put(key, map.getOrDefault(key, 0) + 1);
+				max = Math.max(max, map.get(key));
+			}
+
+			//Every iteration add max value with duplicate/overlapping point and one for point1 or ith point.
+			result = Math.max(result, max + dup + 1);
+			map.clear();
+		}
+		return result;
+	}
+
+	private int gcd(int a, int b) {
+		if (b == 0)
+			return a;
+		return gcd(b, a % b);
+	}
 	/********* clean up below ****/
 
 }

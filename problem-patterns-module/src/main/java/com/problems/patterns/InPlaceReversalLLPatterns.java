@@ -29,7 +29,8 @@ public class InPlaceReversalLLPatterns {
 	}
 
 	public ListNode helper(ListNode curr, ListNode prev) {
-		if (curr == null) return prev;
+		if (curr == null)
+			return prev;
 		ListNode next = curr.next;
 		curr.next = prev;
 		return helper(next, curr);
@@ -69,9 +70,11 @@ public class InPlaceReversalLLPatterns {
 	// Reverse every K-element Sub-list (medium)
 	/* Reverse Nodes in k-Group:
 	 * Given a linked list, reverse the nodes of a linked list k at a time and return its modified list.
+	 * Eg: 1->2->3->4->5 and k=3; Result: 3->2->1->4->5
 	 */
 	public ListNode reverseKGroup(ListNode head, int k) {
-		if (head == null) return head;
+		if (head == null)
+			return head;
 		int count = 0;
 		ListNode curr = head, prev = null, next = null;
 		// Find the k+1 node
@@ -80,7 +83,8 @@ public class InPlaceReversalLLPatterns {
 			count++;
 		}
 
-		if (count != k) return head;
+		if (count != k)
+			return head;
 		// reverse list with k+1 node as head
 		prev = reverseKGroup(curr, k);
 		// LL Reversal Alg: reverse current k-group from head ptr
@@ -90,6 +94,24 @@ public class InPlaceReversalLLPatterns {
 			prev = head;
 			head = next;
 		}
+		return prev;
+	}
+
+	// Reverse K group including no of elements less than k. 
+	// Eg: 1->2->3->4->5 and k=3; Result: 3->2->1->5->4
+	public ListNode reverseKGroup2(ListNode head, int k) {
+		if (head == null || head.next == null)
+			return head;
+		ListNode prev = null, curr = head, next = null;
+		int count = 1;
+		while (count <= k && curr != null) {
+			next = curr.next;
+			curr.next = prev;
+			prev = curr;
+			curr = next;
+			count++;
+		}
+		head.next = reverseKGroup2(curr, k);
 		return prev;
 	}
 
@@ -130,12 +152,14 @@ public class InPlaceReversalLLPatterns {
 	 * Output: 3->4->5->1->2->NULL
 	 */
 	public ListNode rotateLeft(ListNode head, int k) {
-		if (k <= 0) return head;
+		if (k <= 0)
+			return head;
 		ListNode curr = head;
 		int count = 1;
 		while (count++ < k && curr != null)
 			curr = curr.next;
-		if (curr == null) return head;
+		if (curr == null)
+			return head;
 		ListNode nextHead = curr;
 		while (curr.next != null)
 			curr = curr.next;
@@ -151,8 +175,10 @@ public class InPlaceReversalLLPatterns {
 	 */
 	public ListNode rotateRight(ListNode head, int k) {
 		int size = listSize(head);
-		if (head == null || k <= 0 || k == size) return head;
-		if (k > size) k %= size;
+		if (head == null || k <= 0 || k == size)
+			return head;
+		if (k > size)
+			k %= size;
 		int count = 1;
 		ListNode curr = head;
 		k = size - k;

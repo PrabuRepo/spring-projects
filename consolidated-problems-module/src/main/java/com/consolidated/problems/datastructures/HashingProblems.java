@@ -20,7 +20,9 @@ public class HashingProblems {
 
 	private static final int EXTENDED_ASCII_CHAR_SIZE = 256;
 
-	/************************************* Type1: Hashing(Array/Set/Map) Problems ************************/
+	/*************************************
+	 * Type1: Hashing(Array/Set/Map) Problems
+	 ************************/
 	/*
 	 * Longest Consecutive Sequence:
 	 * Given an unsorted array of integers, find the length of the longest consecutive elements sequence.
@@ -46,8 +48,7 @@ public class HashingProblems {
 				curr++;
 			}
 
-			longestSeq = Math.max(longestSeq,
-					count);
+			longestSeq = Math.max(longestSeq, count);
 		}
 
 		return longestSeq;
@@ -55,14 +56,16 @@ public class HashingProblems {
 
 	private boolean contains(int[] arr, int num) {
 		for (int i = 0; i < arr.length; i++)
-			if (arr[i] == num) return true;
+			if (arr[i] == num)
+				return true;
 
 		return false;
 	}
 
 	// Approach2:
 	public int longestConsecutive2(int[] nums) {
-		if (nums.length == 0) return 0;
+		if (nums.length == 0)
+			return 0;
 
 		// Sort
 		Arrays.sort(nums);
@@ -72,14 +75,12 @@ public class HashingProblems {
 		for (int i = 1; i < nums.length; i++) {
 			if (nums[i - 1] == nums[i]) {
 				continue;
-			} else if (nums[i - 1]
-					+ 1 == nums[i]) {
-						count++;
-					} else {
-						longestSeq = Math.max(longestSeq,
-								count);
-						count = 1;
-					}
+			} else if (nums[i - 1] + 1 == nums[i]) {
+				count++;
+			} else {
+				longestSeq = Math.max(longestSeq, count);
+				count = 1;
+			}
 		}
 
 		return Math.max(longestSeq, count);
@@ -95,7 +96,8 @@ public class HashingProblems {
 		// Up/Down search
 		int longestSeq = 0, up, down;
 		for (int i = 0; i < nums.length; i++) {
-			if (!set.contains(nums[i])) continue;
+			if (!set.contains(nums[i]))
+				continue;
 
 			set.remove(nums[i]);
 
@@ -113,8 +115,7 @@ public class HashingProblems {
 				set.remove(up);
 			}
 
-			longestSeq = Math.max(longestSeq,
-					up - down + 1);
+			longestSeq = Math.max(longestSeq, up - down + 1);
 		}
 
 		return longestSeq;
@@ -131,25 +132,20 @@ public class HashingProblems {
 	isUnique("cane") -> false
 	isUnique("make") -> true
 	 */
-	public boolean isUnique(
-			Map<String, String> map,
-			String word) {
+	public boolean isUnique(Map<String, String> map, String word) {
 		String abb = getAbbrevation(word);
-		return (!map.containsKey(abb)
-				|| map.get(abb).equals(word));
+		return (!map.containsKey(abb) || map.get(abb).equals(word));
 	}
 
 	public String getAbbrevation(String word) {
 		int n = word.length();
-		if (n <= 2) return word;
+		if (n <= 2)
+			return word;
 
-		return String.valueOf(word.charAt(0)
-				+ Integer.toString(n - 2)
-				+ word.charAt(n - 1));
+		return String.valueOf(word.charAt(0) + Integer.toString(n - 2) + word.charAt(n - 1));
 	}
 
-	public Map<String, String> buildDictionary(
-			String[] strings) {
+	public Map<String, String> buildDictionary(String[] strings) {
 		Map<String, String> map = new HashMap<>();
 
 		for (String str : strings) {
@@ -157,7 +153,8 @@ public class HashingProblems {
 			// If there is any duplicate str, put empty or put str
 			if (map.containsKey(abb))
 				map.put(abb, "");
-			else map.put(abb, str);
+			else
+				map.put(abb, str);
 		}
 
 		return map;
@@ -171,14 +168,11 @@ public class HashingProblems {
 	 * 	Example: Input: s = "AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT"
 	 * 	Output: ["AAAAACCCCC", "CCCCCAAAAA"]
 	 */
-	public List<String> findRepeatedDnaSequences0(
-			String s) {
+	public List<String> findRepeatedDnaSequences0(String s) {
 		Set<String> uniqueSeq = new HashSet<>();
 		Set<String> repeatedSeq = new HashSet<>();
-		for (int i = 0; i <= s.length()
-				- 10; i++) {
-			String subStr = s.substring(i,
-					i + 10);
+		for (int i = 0; i <= s.length() - 10; i++) {
+			String subStr = s.substring(i, i + 10);
 			if (!uniqueSeq.add(subStr))
 				repeatedSeq.add(subStr);
 		}
@@ -187,8 +181,7 @@ public class HashingProblems {
 	}
 
 	// Approach2: Bit Manipulations - 1
-	public List<String> findRepeatedDnaSequences1(
-			String s) {
+	public List<String> findRepeatedDnaSequences1(String s) {
 		Set<Integer> words = new HashSet<>();
 		Set<Integer> doubleWords = new HashSet<>();
 		List<String> rv = new ArrayList<>();
@@ -204,8 +197,7 @@ public class HashingProblems {
 				v <<= 2;
 				v |= map[s.charAt(j) - 'A'];
 			}
-			if (!words.add(v)
-					&& doubleWords.add(v)) {
+			if (!words.add(v) && doubleWords.add(v)) {
 				rv.add(s.substring(i, i + 10));
 			}
 		}
@@ -215,10 +207,10 @@ public class HashingProblems {
 	// Approach2: Bit Manipulations Improved version -
 	// why Bitwise AND operation with 0x3FFFF? - To consider only 18 bits from LSB, remaining will be zero. Because
 	// "A,C,G,T" -> Char set needs only 2 bits.
-	public List<String> findRepeatedDnaSequences(
-			String s) {
+	public List<String> findRepeatedDnaSequences(String s) {
 		int len = s.length(), cur = 0;
-		if (len < 10) return new ArrayList();
+		if (len < 10)
+			return new ArrayList();
 
 		Set seen = new HashSet();
 		Set repeated = new HashSet();
@@ -229,16 +221,13 @@ public class HashingProblems {
 		map.put('T', 3);
 
 		for (int i = 0; i < 9; i++) {
-			cur = (cur << 2)
-					| map.get(s.charAt(i));
+			cur = (cur << 2) | map.get(s.charAt(i));
 		}
 
 		for (int i = 9; i < len; i++) {
-			cur = ((cur & 0x3ffff) << 2)
-					| map.get(s.charAt(i));
+			cur = ((cur & 0x3ffff) << 2) | map.get(s.charAt(i));
 			if (!seen.add(cur)) {
-				repeated.add(s.substring(i - 9,
-						i + 1));
+				repeated.add(s.substring(i - 9, i + 1));
 			}
 		}
 
@@ -256,27 +245,28 @@ public class HashingProblems {
 	 *  Explanation: The 1st 1 in friend's guess is a bull, the 2nd or 3rd 1 is a cow.
 	 */
 	// Approach1: Brute Force Approach
-	public String getHint(String secret,
-			String guess) {
+	public String getHint(String secret, String guess) {
 		Map<Character, Integer> map = new HashMap<>();
-		int n = secret.length(), bulls = 0,
-				cows = 0;
+		int n = secret.length(), bulls = 0, cows = 0;
 
 		for (int i = 0; i < n; i++) {
 			char s = secret.charAt(i);
-			if (s == guess.charAt(i)) bulls++;
-			else map.put(s,
-					map.getOrDefault(s, 0) + 1);
+			if (s == guess.charAt(i))
+				bulls++;
+			else
+				map.put(s, map.getOrDefault(s, 0) + 1);
 		}
 
 		for (int i = 0; i < n; i++) {
 			char g = guess.charAt(i);
-			if (g == secret.charAt(i)) continue;
+			if (g == secret.charAt(i))
+				continue;
 			if (map.containsKey(g)) {
 				cows++;
 				if (map.get(g) == 1)
 					map.remove(g);
-				else map.put(g, map.get(g) - 1);
+				else
+					map.put(g, map.get(g) - 1);
 			}
 		}
 
@@ -289,10 +279,8 @@ public class HashingProblems {
 	 * For example, Assume that words = ["practice", "makes", "perfect", "coding", "makes"]. 
 	 * Given word1 = "coding", word2 = "practice", return 3. Given word1 = "makes", word2 = "coding", return 1.
 	 */
-	public int shortestDistanceI(String[] words,
-			String word1, String word2) {
-		int min = Integer.MAX_VALUE, index1 = -1,
-				index2 = -1;
+	public int shortestDistanceI(String[] words, String word1, String word2) {
+		int min = Integer.MAX_VALUE, index1 = -1, index2 = -1;
 		for (int i = 0; i < words.length; i++) {
 			if (words[i].equals(word1))
 				index1 = i;
@@ -301,8 +289,7 @@ public class HashingProblems {
 				index2 = i;
 
 			if (index1 != -1 && index2 != -1)
-				min = Math.min(min, Math
-						.abs(index1 - index2));
+				min = Math.min(min, Math.abs(index1 - index2));
 		}
 		return min;
 	}
@@ -328,31 +315,28 @@ public class HashingProblems {
 		for (int i = 0; i < words.length; i++) {
 			String curWord = words[i];
 			if (!map.containsKey(curWord)) {
-				map.put(curWord,
-						new ArrayList<>());
+				map.put(curWord, new ArrayList<>());
 			}
 			map.get(curWord).add(i);
 		}
 	}
 
 	// Here apply merging sorted lists to get the minimum.
-	public int shortestDistanceII(String word1,
-			String word2) {
+	public int shortestDistanceII(String word1, String word2) {
 		List<Integer> indexList1 = map.get(word1);
 		List<Integer> indexList2 = map.get(word2);
 		int minDistance = Integer.MAX_VALUE;
 		int i1 = 0, i2 = 0;
 
-		while (i1 < indexList1.size()
-				&& i2 < indexList2.size()) {
+		while (i1 < indexList1.size() && i2 < indexList2.size()) {
 			int wordIndex1 = indexList1.get(i1);
 			int wordIndex2 = indexList2.get(i2);
 
-			minDistance = Math.min(minDistance,
-					Math.abs(wordIndex1
-							- wordIndex2));
-			if (wordIndex1 < wordIndex2) i1++;
-			else i2++;
+			minDistance = Math.min(minDistance, Math.abs(wordIndex1 - wordIndex2));
+			if (wordIndex1 < wordIndex2)
+				i1++;
+			else
+				i2++;
 		}
 
 		return minDistance;
@@ -367,26 +351,26 @@ public class HashingProblems {
 	 * Given word1 = “makes”, word2 = “coding”, return 1. Given word1 = “makes”, word2 = “makes”, return 3. 
 	 * Note: You may assume word1 and word2 are both in the list.
 	 */
-	int shortestWordDistanceIII(String[] words,
-			String word1, String word2) {
-		int i1 = -1, i2 = -1,
-				minDistance = Integer.MAX_VALUE;
+	int shortestWordDistanceIII(String[] words, String word1, String word2) {
+		int i1 = -1, i2 = -1, minDistance = Integer.MAX_VALUE;
 		for (int i = 0; i < words.length; ++i) {
 			String curWord = words[i];
 			if (word1.equals(word2)) {
 				if (curWord.equals(word1)) {
 					// let i1, i2 point to the two largest indexes
-					if (i2 < i1) i2 = i;
-					else i1 = i;
+					if (i2 < i1)
+						i2 = i;
+					else
+						i1 = i;
 				}
 			} else {
-				if (curWord.equals(word1)) i1 = i;
-				if (curWord.equals(word2)) i2 = i;
+				if (curWord.equals(word1))
+					i1 = i;
+				if (curWord.equals(word2))
+					i2 = i;
 			}
 			if (i1 >= 0 && i2 >= 0)
-				minDistance = Math.min(
-						minDistance,
-						Math.abs(i1 - i2));
+				minDistance = Math.min(minDistance, Math.abs(i1 - i2));
 		}
 		return minDistance;
 	}
@@ -397,15 +381,13 @@ public class HashingProblems {
 	 * shifting sequence. For example, given: ["abc", "bcd", "acef", "xyz", "az", "ba", "a", "z"], 
 	 * A solution is: [ ["abc","bcd","xyz"], ["az","ba"], ["acef"], ["a","z"] ]
 	 */
-	public List<List<String>> groupStrings(
-			String[] strings) {
+	public List<List<String>> groupStrings(String[] strings) {
 		List<List<String>> result = new ArrayList<>();
 		Map<String, List<String>> map = new HashMap<>();
 		for (String str : strings) {
 			String bitMap = bitMap(str);
 			if (!map.containsKey(bitMap))
-				map.put(bitMap,
-						new ArrayList<>());
+				map.put(bitMap, new ArrayList<>());
 			map.get(bitMap).add(str);
 		}
 
@@ -413,8 +395,7 @@ public class HashingProblems {
 			List<String> list = map.get(key);
 			result.add(list);
 		}
-		result.stream().forEach(
-				k -> System.out.println(k));
+		result.stream().forEach(k -> System.out.println(k));
 		return result;
 	}
 
@@ -422,10 +403,8 @@ public class HashingProblems {
 		int[] arr = new int[str.length()];
 		arr[0] = 0;
 		for (int i = 1; i < str.length(); i++) {
-			int diff = str.charAt(i)
-					- str.charAt(0);
-			arr[i] = diff > 0 ? diff
-					: (diff % 26) + 26;
+			int diff = str.charAt(i) - str.charAt(0);
+			arr[i] = diff > 0 ? diff : (diff % 26) + 26;
 		}
 		return Arrays.toString(arr);
 	}
@@ -443,19 +422,18 @@ public class HashingProblems {
 	 * Why n*(n-1)? Permutation: Take 2 from n elements (order matters), there are total 
 	 * P(2, n) = n! / (n-2)! = n * (n-1) possible solutions
 	 */
-	public int numberOfBoomerangs(
-			int[][] points) {
-		if (points.length == 0) return 0;
+	public int numberOfBoomerangs(int[][] points) {
+		if (points.length == 0)
+			return 0;
 		int count = 0;
 		Map<Integer, Integer> map = new HashMap<>();
 
 		for (int i1 = 0; i1 < points.length; i1++) {
 			for (int i2 = 0; i2 < points.length; i2++) {
-				if (i1 == i2) continue;
-				int d = getDistance(points[i1],
-						points[i2]); // Find the distance for each 2 points
-				map.put(d, map.getOrDefault(d, 0)
-						+ 1);
+				if (i1 == i2)
+					continue;
+				int d = getDistance(points[i1], points[i2]); // Find the distance for each 2 points
+				map.put(d, map.getOrDefault(d, 0) + 1);
 			}
 
 			for (int n : map.values()) // Permutations for 2 points
@@ -485,8 +463,7 @@ public class HashingProblems {
 	 */
 	public boolean isReflected(int[][] points) {
 		Set<String> set = new HashSet<>();
-		int min = Integer.MAX_VALUE,
-				max = Integer.MIN_VALUE;
+		int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
 
 		for (int[] point : points) {
 			min = Math.min(min, point[0]);
@@ -496,8 +473,7 @@ public class HashingProblems {
 		int sum = min + max;
 
 		for (int[] point : points)
-			if (!set.contains(sum - point[0] + "-"
-					+ point[1]))
+			if (!set.contains(sum - point[0] + "-" + point[1]))
 				return false;
 
 		return true;
@@ -508,12 +484,10 @@ public class HashingProblems {
 	 * For each h, apply two pointer technique to find the longest substring with at least K repeating characters and the number 
 	 * of unique characters in substring is h.
 	 */
-	public int longestSubstringAtleastKRepeatingChar(
-			String s, int k) {
+	public int longestSubstringAtleastKRepeatingChar(String s, int k) {
 		char[] str = s.toCharArray();
 		int[] counts = new int[26];
-		int h, i, j, idx, max = 0, unique,
-				noLessThanK;
+		int h, i, j, idx, max = 0, unique, noLessThanK;
 		for (h = 1; h <= 26; h++) {
 			Arrays.fill(counts, 0);
 			i = 0;
@@ -538,8 +512,7 @@ public class HashingProblems {
 						unique--;
 					i++;
 				}
-				if (unique == h
-						&& unique == noLessThanK)
+				if (unique == h && unique == noLessThanK)
 					max = Math.max(j - i, max);
 			}
 		}
@@ -547,10 +520,10 @@ public class HashingProblems {
 	}
 
 	// Array Pair Sum Divisibility Problem
-	public boolean isArrayPairDivisibleByK(
-			int[] a, int k) {
+	public boolean isArrayPairDivisibleByK(int[] a, int k) {
 		int n = a.length;
-		if (n == 0 || n % 2 == 1) return false;
+		if (n == 0 || n % 2 == 1)
+			return false;
 
 		Map<Integer, Integer> map = new HashMap<>();
 		int rem = 0;
@@ -558,14 +531,13 @@ public class HashingProblems {
 			rem = a[i] % k;
 			if (map.get(rem) == null)
 				map.put(rem, 1);
-			else map.put(rem, map.get(rem) + 1);
+			else
+				map.put(rem, map.get(rem) + 1);
 
 		}
 
-		for (Entry<Integer, Integer> entry : map
-				.entrySet())
-			System.out.println(entry.getKey()
-					+ " - " + entry.getValue());
+		for (Entry<Integer, Integer> entry : map.entrySet())
+			System.out.println(entry.getKey() + " - " + entry.getValue());
 
 		Integer value;
 		for (int i = 0; i < n; i++) {
@@ -573,19 +545,14 @@ public class HashingProblems {
 			value = map.get(rem);
 
 			if (rem == 0) {
-				if (value != null
-						&& value % 2 == 1)
+				if (value != null && value % 2 == 1)
 					return false;
 			} else if (2 * rem == k) {
-				if (value != null
-						&& value % 2 == 1)
+				if (value != null && value % 2 == 1)
 					return false;
-			} else if (value != null
-					&& map.get(k - rem) != null
-					&& value != map.get(k
-							- rem)) {
-								return false;
-							}
+			} else if (value != null && map.get(k - rem) != null && value != map.get(k - rem)) {
+				return false;
+			}
 		}
 		return true;
 	}
@@ -593,8 +560,7 @@ public class HashingProblems {
 	// Array Subset of another array
 
 	// Find all pairs with a given sum
-	public void allPairsWithSum(int[] arr1,
-			int[] arr2, int sum) {
+	public void allPairsWithSum(int[] arr1, int[] arr2, int sum) {
 		Set<Integer> set = new HashSet<>();
 
 		for (int i = 0; i < arr2.length; i++)
@@ -602,8 +568,7 @@ public class HashingProblems {
 
 		for (int i = 0; i < arr1.length; i++) {
 			if (set.contains(sum - arr1[i]))
-				System.out.print(arr1[i] + " "
-						+ (sum - arr1[i]) + ", ");
+				System.out.print(arr1[i] + " " + (sum - arr1[i]) + ", ");
 		}
 	}
 
@@ -622,9 +587,9 @@ public class HashingProblems {
 	// Minimum indexed character
 
 	// Check if two arrays are equal or not
-	public int isTwoArraysSame(int[] arr1,
-			int[] arr2) {
-		if (arr1.length != arr2.length) return 0;
+	public int isTwoArraysSame(int[] arr1, int[] arr2) {
+		if (arr1.length != arr2.length)
+			return 0;
 
 		int n = arr1.length;
 
@@ -634,13 +599,16 @@ public class HashingProblems {
 			count = map.get(arr2[i]);
 			if (count == null)
 				map.put(arr2[i], 1);
-			else map.put(arr2[i], count + 1);
+			else
+				map.put(arr2[i], count + 1);
 		}
 
 		for (int i = 0; i < n; i++) {
 			count = map.get(arr1[i]);
-			if (count == null) return 0;
-			if (count == 0) return 0;
+			if (count == null)
+				return 0;
+			if (count == 0)
+				return 0;
 			count--;
 			map.put(arr1[i], count);
 		}
@@ -648,8 +616,7 @@ public class HashingProblems {
 	}
 
 	// Uncommon characters
-	public static void uncommonChars(String s1,
-			String s2) {
+	public static void uncommonChars(String s1, String s2) {
 		int[] count = new int[26];
 
 		for (int i = 0; i < s1.length(); i++)
@@ -657,16 +624,15 @@ public class HashingProblems {
 		int index = 0;
 		for (int i = 0; i < s2.length(); i++) {
 			index = s2.charAt(i) - 'a';
-			if (count[index] == 1
-					|| count[index] == -1)
+			if (count[index] == 1 || count[index] == -1)
 				count[index] = -1;
-			else count[index] = 2;
+			else
+				count[index] = 2;
 		}
 
 		for (int i = 0; i < 26; i++) {
 			if (count[i] == 1 || count[i] == 2)
-				System.out
-						.print((char) (i + 'a'));
+				System.out.print((char) (i + 'a'));
 		}
 		System.out.println();
 	}
@@ -674,9 +640,9 @@ public class HashingProblems {
 	// Smallest window in a string containing all the char of another string - Tricky Question
 
 	// First element to occur k times
-	public static int firstElementOccurKtimes(
-			int[] arr, int k) {
-		if (arr.length == 0) return -1;
+	public static int firstElementOccurKtimes(int[] arr, int k) {
+		if (arr.length == 0)
+			return -1;
 
 		int n = arr.length;
 
@@ -684,8 +650,10 @@ public class HashingProblems {
 		Integer count;
 		for (int i = 0; i < n; i++) {
 			count = map.get(arr[i]);
-			if (count == null) map.put(arr[i], 1);
-			else map.put(arr[i], count + 1);
+			if (count == null)
+				map.put(arr[i], 1);
+			else
+				map.put(arr[i], count + 1);
 		}
 
 		for (int i = 0; i < n; i++)
@@ -699,22 +667,18 @@ public class HashingProblems {
 	 * sumA-a+b = sumB-b+a
 	 * sumA- sumB = 2a-2b => sumA-sumB = 2(a-b) => a-b = (sumA - sumB)/2
 	 */
-	public static int isSwappingPairMakesSumEqual1(
-			int[] a1, int m, int[] a2, int n) {
+	public static int isSwappingPairMakesSumEqual1(int[] a1, int m, int[] a2, int n) {
 		int sum1 = sum(a1, m);
 		int sum2 = sum(a2, n);
 		int diff = Math.abs(sum1 - sum2);
-		if (diff % 2 == 1) return -1;
+		if (diff % 2 == 1)
+			return -1;
 
 		diff /= 2;
 		for (int i = 0; i < m; i++) {
 			for (int j = 0; j < n; j++) {
-				if (diff == Math
-						.abs(a1[i] - a2[j])) {
-					System.out.println(
-							"Swapping Values are: "
-									+ a1[i] + ", "
-									+ a2[j]);
+				if (diff == Math.abs(a1[i] - a2[j])) {
+					System.out.println("Swapping Values are: " + a1[i] + ", " + a2[j]);
 					return 1;
 				}
 			}
@@ -729,8 +693,7 @@ public class HashingProblems {
 		return sum;
 	}
 
-	public static int isSwappingPairMakesSumEqual2(
-			int[] a1, int m, int[] a2, int n) {
+	public static int isSwappingPairMakesSumEqual2(int[] a1, int m, int[] a2, int n) {
 		int sum1 = sum(a1, m);
 		int sum2 = sum(a2, n);
 
@@ -738,17 +701,15 @@ public class HashingProblems {
 		Arrays.sort(a2);
 
 		int diff = Math.abs(sum1 - sum2);
-		if (diff % 2 == 1) return -1;
+		if (diff % 2 == 1)
+			return -1;
 
 		diff = diff / 2;
 		int i = 0, j = 0;
 		while (i < m && j < n) {
 			int temp = Math.abs(a1[i] - a2[j]);
 			if (diff == temp) {
-				System.out.println(
-						"Swapping Values are: "
-								+ a1[i] + ", "
-								+ a2[j]);
+				System.out.println("Swapping Values are: " + a1[i] + ", " + a2[j]);
 				return 1;
 			} else if (diff < temp) {
 				i++;
@@ -769,14 +730,10 @@ public class HashingProblems {
 	static int sherlockAndAnagrams1(String s) {
 		int n = s.length(), count = 0;
 		for (int len = 1; len < n; len++) {
-			for (int i = 0; i < n - len
-					+ 1; i++) {
-				String s1 = s.substring(i,
-						i + len);
-				for (int j = i + 1; j < n - len
-						+ 1; j++) {
-					String s2 = s.substring(j,
-							j + len);
+			for (int i = 0; i < n - len + 1; i++) {
+				String s1 = s.substring(i, i + len);
+				for (int j = i + 1; j < n - len + 1; j++) {
+					String s2 = s.substring(j, j + len);
 					if (isAnagram(s1, s2))
 						count++;
 				}
@@ -792,19 +749,13 @@ public class HashingProblems {
 		HashMap<String, Integer> map = new HashMap<>();
 		for (int i = 0; i < n; i++) {
 			for (int j = i + 1; j <= n; j++) {
-				char[] charArray = s
-						.substring(i, j)
-						.toCharArray();
+				char[] charArray = s.substring(i, j).toCharArray();
 				Arrays.sort(charArray);
-				String str = new String(
-						charArray);
-				map.put(str,
-						map.getOrDefault(str, 0)
-								+ 1);
+				String str = new String(charArray);
+				map.put(str, map.getOrDefault(str, 0) + 1);
 			}
 		}
-		Iterator<Integer> iter = map.values()
-				.iterator();
+		Iterator<Integer> iter = map.values().iterator();
 		while (iter.hasNext()) {
 			int val = iter.next();
 			count += (val * (val - 1)) / 2;
@@ -812,10 +763,10 @@ public class HashingProblems {
 		return count;
 	}
 
-	private static boolean isAnagram(String s1,
-			String s2) {
+	private static boolean isAnagram(String s1, String s2) {
 		int m = s1.length(), n = s2.length();
-		if (m != n) return false;
+		if (m != n)
+			return false;
 		if (m == 1)
 			return s1.equals(s2) ? true : false;
 		int[] hash = new int[26];
@@ -842,12 +793,9 @@ public class HashingProblems {
 	 * complexity O(n). 
 	 * Example: Input: S = "ADOBECODEBANC", T = "ABC" Output: "BANC"
 	 */
-	public String minWindow1(String str,
-			String pat) {
-		int len1 = str.length(),
-				len2 = pat.length();
-		if (len1 == 0 || len2 == 0
-				|| (len1 < len2))
+	public String minWindow1(String str, String pat) {
+		int len1 = str.length(), len2 = pat.length();
+		if (len1 == 0 || len2 == 0 || (len1 < len2))
 			return "";
 
 		int[] hashStr = new int[EXTENDED_ASCII_CHAR_SIZE];
@@ -856,17 +804,13 @@ public class HashingProblems {
 		for (int i = 0; i < len2; i++)
 			hashPat[pat.charAt(i)]++;
 
-		int l = 0, r = 0,
-				minWindow = Integer.MAX_VALUE,
-				minLeft = -1, count = 0,
-				index = 0;
+		int l = 0, r = 0, minWindow = Integer.MAX_VALUE, minLeft = -1, count = 0, index = 0;
 		// Move 'r' one by one from zero
 		while (r < len1) {
 			index = str.charAt(r); // Get the String index
 			// Increase the char count in hashStr
 			hashStr[index]++;
-			if (hashPat[index] != 0
-					&& hashStr[index] <= hashPat[index])
+			if (hashPat[index] != 0 && hashStr[index] <= hashPat[index])
 				count++;
 
 			// Move 'l' from zero and update minwindow & the string map
@@ -884,10 +828,7 @@ public class HashingProblems {
 			}
 			r++;
 		}
-		return minLeft != -1
-				? str.substring(minLeft,
-						minLeft + minWindow)
-				: "";
+		return minLeft != -1 ? str.substring(minLeft, minLeft + minWindow) : "";
 	}
 
 	/* Longest Substring Without Repeating Characters:
@@ -897,12 +838,11 @@ public class HashingProblems {
 	 * Note that the answer must be a substring, "pwke" is a subsequence and not a substring.
 	 */
 	// Approach1: Sliding Window solution using Array to store the data
-	public int lengthOfLongestSubstring1(
-			String s) {
-		if (s.length() == 0) return 0;
+	public int lengthOfLongestSubstring1(String s) {
+		if (s.length() == 0)
+			return 0;
 
-		int l = 0, r = 0, maxLen = 0,
-				n = s.length();
+		int l = 0, r = 0, maxLen = 0, n = s.length();
 		int[] countArr = new int[128];
 		while (r < n) {
 			char ch = s.charAt(r);
@@ -921,14 +861,13 @@ public class HashingProblems {
 	}
 
 	// Similar to previous
-	public int lengthOfLongestSubstring2(
-			String s) {
-		int l = 0, r = 0, maxLen = 0,
-				n = s.length(), counter = 0;
+	public int lengthOfLongestSubstring2(String s) {
+		int l = 0, r = 0, maxLen = 0, n = s.length(), counter = 0;
 		int[] countArr = new int[128];
 		while (r < n) {
 			char ch = s.charAt(r++);
-			if (countArr[ch]++ > 0) counter++;
+			if (countArr[ch]++ > 0)
+				counter++;
 			while (counter > 0 && l < n)
 				if (countArr[s.charAt(l++)]-- > 1)
 					counter--;
@@ -939,12 +878,11 @@ public class HashingProblems {
 	}
 
 	// Approach2: Sliding Window solution using map to store the data
-	public int lengthOfLongestSubstring3(
-			String s) {
-		if (s.length() == 0) return 0;
+	public int lengthOfLongestSubstring3(String s) {
+		if (s.length() == 0)
+			return 0;
 		HashMap<Character, Integer> map = new HashMap<Character, Integer>();
-		int l = 0, r = 0, maxLen = 0,
-				n = s.length();
+		int l = 0, r = 0, maxLen = 0, n = s.length();
 		while (r < n) {
 			char ch = s.charAt(r);
 			if (!map.containsKey(ch)) {
@@ -964,16 +902,14 @@ public class HashingProblems {
 	 * Given a string, find the longest substring that contains only two unique characters. For example, given "abcbbbbcccbdddadacb",
 	 * the longest substring that contains 2 unique character is "bcbbbbcccb".
 	 */
-	public int lengthOfLongestSubstringTwoDistinct(
-			String s) {
+	public int lengthOfLongestSubstringTwoDistinct(String s) {
 		int max = 0, start = 0;
 		HashMap<Character, Integer> map = new HashMap<Character, Integer>();
 
 		for (int i = 0; i < s.length(); i++) {
 			char ch = s.charAt(i);
 
-			map.put(ch,
-					map.getOrDefault(ch, 0) + 1);
+			map.put(ch, map.getOrDefault(ch, 0) + 1);
 			if (map.size() > 2) {
 				max = Math.max(max, i - start);
 
@@ -996,8 +932,7 @@ public class HashingProblems {
 	/*
 	 * Longest Substring with At Most K Distinct Characters:
 	 */
-	public int lengthOfLongestSubstringKDistinct(
-			String s, int k) {
+	public int lengthOfLongestSubstringKDistinct(String s, int k) {
 		int result = 0;
 		int i = 0;
 		HashMap<Character, Integer> map = new HashMap<Character, Integer>();
@@ -1005,12 +940,10 @@ public class HashingProblems {
 		for (int j = 0; j < s.length(); j++) {
 			char ch = s.charAt(i);
 
-			map.put(ch,
-					map.getOrDefault(ch, 0) + 1);
+			map.put(ch, map.getOrDefault(ch, 0) + 1);
 
 			if (map.size() <= k) {
-				result = Math.max(result,
-						j - i + 1);
+				result = Math.max(result, j - i + 1);
 			} else {
 				while (map.size() > k) {
 					char l = s.charAt(i);
@@ -1036,8 +969,7 @@ public class HashingProblems {
 	 * Example 1: Input: s: "cbaebabacd" p: "abc" Output: [0, 6] Explanation: The substring with start index = 0 is "cba", 
 	 * which is an anagram of "abc". The substring with start index = 6 is "bac", which is an anagram of "abc".
 	 */
-	public List<Integer> findAnagrams(String s,
-			String p) {
+	public List<Integer> findAnagrams(String s, String p) {
 		int[] hash = new int[26];
 		for (char c : p.toCharArray())
 			hash[c - 'a']++;
@@ -1072,8 +1004,7 @@ public class HashingProblems {
 	 * Example 1: Input:s1 = "ab" s2 = "eidbaooo" Output:True Explanation: s2 contains one permutation of s1 ("ba").
 	 */
 	// Using Sliding Window
-	public boolean checkInclusion(String s1,
-			String s2) { // Here s1 is Pattern, s2 is whole string
+	public boolean checkInclusion(String s1, String s2) { // Here s1 is Pattern, s2 is whole string
 		int l = 0, r = 0;
 		int[] hash = new int[26];
 
@@ -1106,32 +1037,26 @@ public class HashingProblems {
 	 */
 	// Sliding Window approach
 	// Time Complexity: O(n)
-	public int characterReplacement1(String s,
-			int k) {
+	public int characterReplacement1(String s, int k) {
 		int[] charCount = new int[26];
-		int l = 0, r = 0, maxCharCount = 0,
-				maxLength = 0;
+		int l = 0, r = 0, maxCharCount = 0, maxLength = 0;
 		while (r < s.length()) {
-			maxCharCount = Math.max(maxCharCount,
-					++charCount[s.charAt(r)
-							- 'A']);
-			while ((r - l + 1)
-					- maxCharCount > k) {
+			maxCharCount = Math.max(maxCharCount, ++charCount[s.charAt(r) - 'A']);
+			while ((r - l + 1) - maxCharCount > k) {
 				charCount[s.charAt(l) - 'A']--;
 				l++;
 			}
-			maxLength = Math.max(maxLength,
-					r - l + 1);
+			maxLength = Math.max(maxLength, r - l + 1);
 			r++;
 		}
 		return maxLength;
 	}
 
 	// Time Complexity: O(26n)
-	public int characterReplacement2(String s,
-			int k) {
+	public int characterReplacement2(String s, int k) {
 		int n = s.length();
-		if (n < k) return 0;
+		if (n < k)
+			return 0;
 
 		// Added this to improve the performance; Solution will work without this
 		int[] countArray = new int[26];
@@ -1156,8 +1081,7 @@ public class HashingProblems {
 					l++;
 				}
 
-				maxLen = Math.max(maxLen,
-						r - l + 1); // Find the max length
+				maxLen = Math.max(maxLen, r - l + 1); // Find the max length
 				r++;
 			}
 		}
@@ -1173,37 +1097,65 @@ public class HashingProblems {
 	 * Explanation: Substrings starting at index 0 and 9 are "barfoor" and "foobar" respectively. The output order does 
 	 * not matter, returning [9,0] is fine too.
 	 */
-	public List<Integer> findSubstring(String s,
-			String[] words) {
+	//Brute Force Approach: Time: O(n^2)
+	public List<Integer> findSubstring(String s, String[] words) {
 		List<Integer> result = new ArrayList<>();
-		if (s == null || s.length() == 0
-				|| words.length == 0)
+		if (s == null || s.length() == 0 || words.length == 0)
+			return result;
+
+		Map<String, Integer> map = new HashMap<>();
+		int n = s.length(), len = words[0].length();
+		for (String str : words) {
+			map.put(str, map.getOrDefault(str, 0) + 1);
+		}
+
+		for (int i = 0; i <= n - (words.length * len); i++) {
+			String subStr = s.substring(i, i + len);
+			if (map.containsKey(subStr)) {
+				Map<String, Integer> temp = new HashMap<>();
+				int j = i, count = 0;
+				while (j <= n - len) {
+					subStr = s.substring(j, j + len);
+					if (map.containsKey(subStr) && (!temp.containsKey(subStr) || temp.get(subStr) < map.get(subStr))) {
+						count++;
+						temp.put(subStr, temp.getOrDefault(subStr, 0) + 1);
+						j += len;
+					} else {
+						break;
+					}
+				}
+
+				if (count == words.length && temp.size() == map.size())
+					result.add(i);
+			}
+		}
+
+		return result;
+	}
+
+	//Optimized solution: Time: O(n*len), where len - no of words
+	public List<Integer> findSubstring2(String s, String[] words) {
+		List<Integer> result = new ArrayList<>();
+		if (s == null || s.length() == 0 || words.length == 0)
 			return result;
 
 		HashMap<String, Integer> map = new HashMap<>();
 
 		for (String word : words)
-			map.put(word,
-					map.getOrDefault(word, 0)
-							+ 1);
+			map.put(word, map.getOrDefault(word, 0) + 1);
 
-		int n = s.length(),
-				len = words[0].length(),
-				size = words.length;
+		int n = s.length(), len = words[0].length(), size = words.length;
 
-		for (int i = 0; i <= n
-				- len * size; i++) {
-			HashMap<String, Integer> copy = new HashMap<>(
-					map);
+		for (int i = 0; i <= n - len * size; i++) {
+			HashMap<String, Integer> copy = new HashMap<>(map);
+			//Iterate 
 			for (int j = 0; j < size; j++) {
-				String sub = s.substring(
-						i + j * len,
-						i + j * len + len);
+				String sub = s.substring(i + j * len, i + j * len + len);
 				if (copy.containsKey(sub)) {
 					if (copy.get(sub) == 1)
 						copy.remove(sub);
-					else copy.put(sub,
-							copy.get(sub) - 1);
+					else
+						copy.put(sub, copy.get(sub) - 1);
 					if (copy.isEmpty()) {
 						result.add(i);
 						break;
@@ -1224,13 +1176,15 @@ public class HashingProblems {
 	 * Example: Input: [-2,1,-3,4,-1,2,1,-5,4], Output: 6 Explanation: [4,-1,2,1] has the largest sum = 6.
 	 */
 	public int maxSubArray(int[] nums) {
-		if (nums.length == 0) return 0;
+		if (nums.length == 0)
+			return 0;
 
 		int sum = 0, maxSum = Integer.MIN_VALUE;
 		for (int num : nums) {
 			sum += num;
 			maxSum = Math.max(sum, maxSum);
-			if (sum < 0) sum = 0;
+			if (sum < 0)
+				sum = 0;
 
 		}
 		return maxSum;
@@ -1241,15 +1195,13 @@ public class HashingProblems {
 	 * has the largest product. Example 1: Input: [2,3,-2,4] Output: 6 Explanation: [2,3] has the largest product 6.
 	 */
 	public int maxProduct(int[] nums) {
-		if (nums.length == 0) return 0;
-		int max = nums[0], min = nums[0],
-				result = nums[0];
+		if (nums.length == 0)
+			return 0;
+		int max = nums[0], min = nums[0], result = nums[0];
 		for (int i = 1; i < nums.length; i++) {
 			int tempMax = max;
-			max = Utils.max(max * nums[i],
-					min * nums[i], nums[i]);
-			min = Utils.min(tempMax * nums[i],
-					min * nums[i], nums[i]);
+			max = Utils.max(max * nums[i], min * nums[i], nums[i]);
+			min = Utils.min(tempMax * nums[i], min * nums[i], nums[i]);
 			result = Math.max(max, result);
 		}
 		return result;
@@ -1260,18 +1212,17 @@ public class HashingProblems {
 	 * average value. And you need to output the maximum average value. 
 	 * Example 1: Input: [1,12,-5,-6,50,3], k = 4 Output: 12.75 Explanation: Maximum average is (12-5-6+50)/4 = 51/4 = 12.75
 	 */
-	public double findMaxAverage(int[] arr,
-			int k) {
+	public double findMaxAverage(int[] arr, int k) {
 		if (arr.length == 0 || arr.length < k)
 			return 0;
 
 		int sum = 0;
 		double maxAvg = Integer.MIN_VALUE;
 		for (int i = 0; i < arr.length; i++) {
-			if (i < k) sum += arr[i];
+			if (i < k)
+				sum += arr[i];
 			else {
-				maxAvg = Math.max(maxAvg,
-						(double) sum / k);
+				maxAvg = Math.max(maxAvg, (double) sum / k);
 				sum -= arr[i - k];
 				sum += arr[i];
 			}
@@ -1284,15 +1235,13 @@ public class HashingProblems {
 	 * Given a binary array, find the maximum number of consecutive 1s in this array. Example 1: Input: [1,1,0,1,1,1]
 	 * Output: 3
 	 */
-	public int findMaxConsecutiveOnes(
-			int[] nums) {
+	public int findMaxConsecutiveOnes(int[] nums) {
 		int count = 0, maxCount = 0;
 		for (int i = 0; i < nums.length; i++) {
 			if (nums[i] == 1) {
 				count++;
 			} else {
-				maxCount = Math.max(maxCount,
-						count);
+				maxCount = Math.max(maxCount, count);
 				count = 0;
 			}
 		}
@@ -1305,16 +1254,17 @@ public class HashingProblems {
 	 * Example 1: Input: [1,0,1,1,0] Output: 4 Explanation: Flip the first zero will get the the maximum number of
 	 * consecutive 1s. After flipping, the maximum number of consecutive 1s is 4.
 	 */
-	public int findMaxConsecutiveOnesII1(
-			int[] nums) {
+	public int findMaxConsecutiveOnesII1(int[] nums) {
 		StringBuilder sb = new StringBuilder();
 		int max = 0, zero = 0, k = 1; // flip at most k zero
 		int l = 0, r = 0;
 		while (r < nums.length) {
-			if (nums[r] == 0) zero++;
+			if (nums[r] == 0)
+				zero++;
 
 			while (zero > k)
-				if (nums[l++] == 0) zero--;
+				if (nums[l++] == 0)
+					zero--;
 
 			max = Math.max(max, r - l + 1);
 			r++;
@@ -1325,12 +1275,12 @@ public class HashingProblems {
 	/* Follow up: What if the input numbers come in one by one as an infinite stream? In other words, you can't store
 	 * all numbers coming from the stream as it's too large to hold in memory. Could you solve it efficiently?
 	 */
-	public int findMaxConsecutiveOnesII2(
-			int[] nums) {
+	public int findMaxConsecutiveOnesII2(int[] nums) {
 		int max = 0, k = 1; // flip at most k zero
 		Queue<Integer> zeroIndex = new LinkedList<>();
 		for (int l = 0, h = 0; h < nums.length; h++) {
-			if (nums[h] == 0) zeroIndex.offer(h);
+			if (nums[h] == 0)
+				zeroIndex.offer(h);
 			if (zeroIndex.size() > k)
 				l = zeroIndex.poll() + 1;
 			max = Math.max(max, h - l + 1);
@@ -1344,39 +1294,34 @@ public class HashingProblems {
 	 * 2 Explanation: the subarray [4,3] has the minimal length under the problem constraint.
 	 */
 	public int minSubArrayLen(int s, int[] nums) {
-		if (nums.length == 0) return 0;
+		if (nums.length == 0)
+			return 0;
 
-		int l = 0, r = 0, sum = 0,
-				minLen = Integer.MAX_VALUE;
+		int l = 0, r = 0, sum = 0, minLen = Integer.MAX_VALUE;
 		while (r < nums.length) {
 			sum += nums[r];
 			while (sum >= s && l <= r) {
 				// if (sum == s)
-				minLen = Math.min(minLen,
-						r - l + 1);
+				minLen = Math.min(minLen, r - l + 1);
 				sum -= nums[l];
 				l++;
 			}
 			r++;
 		}
-		return minLen == Integer.MAX_VALUE ? 0
-				: minLen;
+		return minLen == Integer.MAX_VALUE ? 0 : minLen;
 	}
 
 	/*
 	 * Subarray with given sum:Given an unsorted array A of size N of non-negative integers, find a continuous sub-array 
 	 * which adds to a given number.
 	 */
-	public void subArrayWithGivenSum(int[] arr,
-			int sum) {
+	public void subArrayWithGivenSum(int[] arr, int sum) {
 
-		int currSum = arr[0], start = 0, end = 0,
-				n = arr.length, i;
+		int currSum = arr[0], start = 0, end = 0, n = arr.length, i;
 		for (i = 1; i < n; i++) {
 			currSum += arr[i];
 
-			while (currSum > sum
-					&& start < i - 1) {
+			while (currSum > sum && start < i - 1) {
 				currSum = currSum - arr[start];
 				start++;
 			}
@@ -1387,9 +1332,10 @@ public class HashingProblems {
 			}
 		}
 
-		if (sum == currSum) System.out.println(
-				(start + 1) + " " + (end + 1));
-		else System.out.println("-1");
+		if (sum == currSum)
+			System.out.println((start + 1) + " " + (end + 1));
+		else
+			System.out.println("-1");
 	}
 
 	/*
@@ -1405,8 +1351,8 @@ public class HashingProblems {
 			if (sum == k)
 				max = Math.max(max, i + 1);
 			int diff = sum - k;
-			if (map.containsKey(diff)) max = Math
-					.max(max, i - map.get(diff));
+			if (map.containsKey(diff))
+				max = Math.max(max, i - map.get(diff));
 			if (!map.containsKey(sum))
 				map.put(sum, i);
 
@@ -1428,8 +1374,7 @@ public class HashingProblems {
 			if (map.containsKey(sum - k))
 				count += map.get(sum - k);
 
-			map.put(sum,
-					map.getOrDefault(sum, 0) + 1);
+			map.put(sum, map.getOrDefault(sum, 0) + 1);
 		}
 		return count;
 
@@ -1470,8 +1415,7 @@ public class HashingProblems {
 			sum += arr[i];
 			if (sumMap.containsKey(sum)) {
 				int oldIndex = sumMap.get(sum);
-				return Arrays.copyOfRange(arr,
-						oldIndex + 1, i + 1); // Sum range from next index of sum to curr index
+				return Arrays.copyOfRange(arr, oldIndex + 1, i + 1); // Sum range from next index of sum to curr index
 			} else {
 				sumMap.put(sum, i);
 			}
@@ -1485,10 +1429,8 @@ public class HashingProblems {
 	 * Given an array, find the maximum sum of subarray close to k but not larger than k
 	 */
 	// Approach1: Using Sliding Window
-	public int getLargestSumCloseToK1(int[] arr,
-			int k) {
-		int sum = 0, n = arr.length, len = 0,
-				maxLen = 0;
+	public int getLargestSumCloseToK1(int[] arr, int k) {
+		int sum = 0, n = arr.length, len = 0, maxLen = 0;
 
 		for (int i = 0; i < n; i++) {
 			if ((sum + arr[i]) <= k) { // If adding current element doesn't cross limit add it to current window
@@ -1504,8 +1446,7 @@ public class HashingProblems {
 	}
 
 	// Approach1: Using HashSet Ceiling Method
-	public int getLargestSumCloseToK2(int[] arr,
-			int k) {
+	public int getLargestSumCloseToK2(int[] arr, int k) {
 		int sum = 0;
 		TreeSet<Integer> set = new TreeSet<Integer>();
 		int maxLen = Integer.MIN_VALUE;
@@ -1514,11 +1455,9 @@ public class HashingProblems {
 		for (int i = 0; i < arr.length; i++) {
 			sum = sum + arr[i];
 
-			Integer ceiling = set
-					.ceiling(sum - k);
+			Integer ceiling = set.ceiling(sum - k);
 			if (ceiling != null) {
-				maxLen = Math.max(maxLen,
-						sum - ceiling);
+				maxLen = Math.max(maxLen, sum - ceiling);
 			}
 
 			set.add(sum);
@@ -1531,8 +1470,7 @@ public class HashingProblems {
 	 * Given an array A[] of size N and an integer K. Your task is to complete the function countDistinct() which prints
 	 * the count of distinct numbers in all windows of size k in the array A[].
 	 */
-	public void countDistinct(int A[], int k,
-			int n) {
+	public void countDistinct(int A[], int k, int n) {
 		Map<Integer, Integer> map = new HashMap<>(); // Number, count
 		Integer value;
 		for (int i = 0; i < n; i++) {
@@ -1540,15 +1478,17 @@ public class HashingProblems {
 				value = map.get(A[i - k]);
 				if (value > 1)
 					map.put(A[i - k], --value);
-				else map.remove(A[i - k]);
+				else
+					map.remove(A[i - k]);
 			}
 
 			value = map.get(A[i]);
-			if (value == null) value = 0;
+			if (value == null)
+				value = 0;
 			map.put(A[i], ++value);
 
-			if (i >= k - 1) System.out
-					.print(map.size() + " ");
+			if (i >= k - 1)
+				System.out.print(map.size() + " ");
 		}
 
 	}
@@ -1564,8 +1504,7 @@ public class HashingProblems {
 	 *  2. Balanced BST(TreeMap): O(nlogk)
 	 *  3.Sliding Window: O(n)
 	 */
-	public int[] maxSlidingWindow(int[] nums,
-			int k) {
+	public int[] maxSlidingWindow(int[] nums, int k) {
 		if (nums.length == 0 || k > nums.length)
 			return new int[0];
 
@@ -1575,20 +1514,18 @@ public class HashingProblems {
 		Deque<Integer> deque = new LinkedList<>();
 
 		for (int i = 0; i <= n; i++) {
-			if (i >= k) result[i - k] = nums[deque
-					.peek()]; // or initialize index=0 and increment->result[index++]
+			if (i >= k)
+				result[i - k] = nums[deque.peek()]; // or initialize index=0 and increment->result[index++]
 
-			if (i == n) break;
+			if (i == n)
+				break;
 
 			// If 'i' reaches the size k, then Remove the top element
-			if (!deque.isEmpty()
-					&& i - deque.peek() == k)
+			if (!deque.isEmpty() && i - deque.peek() == k)
 				deque.poll();
 
 			// Keep removing the smaller element from the last in deque
-			while (!deque.isEmpty()
-					&& nums[i] > nums[deque
-							.peekLast()])
+			while (!deque.isEmpty() && nums[i] > nums[deque.peekLast()])
 				deque.removeLast();
 
 			deque.addLast(i);
@@ -1611,8 +1548,7 @@ public class HashingProblems {
 	 *   BruteForce Algorithm: O(nk)
 	 *   Sliding Window Algorithm: O(n)
 	 */
-	public int[] printSubarraySumRangeK(int[] arr,
-			int k) {
+	public int[] printSubarraySumRangeK(int[] arr, int k) {
 		int sum = 0, n = arr.length;
 		int[] result = new int[n - k + 1];
 		for (int i = 0; i <= n; i++) {
@@ -1621,7 +1557,8 @@ public class HashingProblems {
 				sum -= arr[i - k];
 			}
 
-			if (i == n) break;
+			if (i == n)
+				break;
 
 			sum += arr[i];
 		}

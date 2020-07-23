@@ -517,6 +517,29 @@ public class StackPatterns {
 		return maxArea;
 	}
 
+	//Trapping Rain Water - Duplicate here
+	//Using Stack 
+	public int trap(int[] height) {
+		if (height.length <= 1)
+			return 0;
+
+		Stack<Integer> stack = new Stack<>();
+		int n = height.length, water = 0;
+
+		for (int i = 0; i < n; i++) {
+			while (!stack.isEmpty() && height[stack.peek()] < height[i]) {
+				int prev = stack.pop();
+				if (stack.isEmpty())
+					break;
+				int minHeight = Math.min(height[stack.peek()], height[i]);
+				water += (minHeight - height[prev]) * (i - stack.peek() - 1);
+			}
+			stack.push(i);
+		}
+
+		return water;
+	}
+
 	/********************** Type3: Stack design problems *******************/
 
 }
