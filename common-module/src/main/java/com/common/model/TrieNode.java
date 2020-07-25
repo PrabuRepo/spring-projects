@@ -16,6 +16,8 @@ public class TrieNode {
 
 	public boolean isEndOfWord;
 
+	public int count;
+
 	// Added for word Boggle problem
 	public String word;
 
@@ -24,5 +26,6 @@ public class TrieNode {
 		children = new TrieNode[26];
 		startWith = new ArrayList<>();
 		isEndOfWord = false;
+		count = 0;
 	}
 }

@@ -75,29 +75,41 @@ public class Trie {
 			trie.insertIterative(keys[i]);
 
 		// Search for different keys
-		if (trie.searchIterative("the") == true) System.out.println("the --- " + "Present in trie");
-		else System.out.println("the --- " + "Not present in trie");
+		if (trie.searchIterative("the") == true)
+			System.out.println("the --- " + "Present in trie");
+		else
+			System.out.println("the --- " + "Not present in trie");
 
-		if (trie.searchIterative("these") == true) System.out.println("these --- " + "Present in trie");
-		else System.out.println("these --- " + "Not present in trie");
+		if (trie.searchIterative("these") == true)
+			System.out.println("these --- " + "Present in trie");
+		else
+			System.out.println("these --- " + "Not present in trie");
 
-		if (trie.searchIterative("their") == true) System.out.println("their --- " + "Present in trie");
-		else System.out.println("their --- " + "Not present in trie");
+		if (trie.searchIterative("their") == true)
+			System.out.println("their --- " + "Present in trie");
+		else
+			System.out.println("their --- " + "Not present in trie");
 
-		if (trie.searchIterative("thaw") == true) System.out.println("thaw --- " + "Present in trie");
-		else System.out.println("thaw --- " + "Not present in trie");
+		if (trie.searchIterative("thaw") == true)
+			System.out.println("thaw --- " + "Present in trie");
+		else
+			System.out.println("thaw --- " + "Not present in trie");
 
 		// Delete Operation
 		System.out.println("After delete operation");
 		trie.delete("the");
 
-		if (trie.searchIterative("the") == true) System.out.println("the --- " + "Present in trie");
-		else System.out.println("the --- " + "Not present in trie");
+		if (trie.searchIterative("the") == true)
+			System.out.println("the --- " + "Present in trie");
+		else
+			System.out.println("the --- " + "Not present in trie");
 
 		trie.delete("these");
 
-		if (trie.searchIterative("these") == true) System.out.println("these --- " + "Present in trie");
-		else System.out.println("these --- " + "Not present in trie");
+		if (trie.searchIterative("these") == true)
+			System.out.println("these --- " + "Present in trie");
+		else
+			System.out.println("these --- " + "Not present in trie");
 	}
 }
 
@@ -146,7 +158,8 @@ class Trie1 {
 
 		for (int i = 0; i < word.length(); i++) {
 			index = word.charAt(i) - 'a';
-			if (current.children[index] == null) return null;
+			if (current.children[index] == null)
+				return null;
 
 			current = current.children[index];
 		}
@@ -154,29 +167,33 @@ class Trie1 {
 	}
 
 	/**
-	 * Wildcard Match: Returns if the word is in the data structure. A word could contain the dot character '.' to
-	 * represent any one letter.
+	 * Wildcard Match: Returns if the word is in the data structure. A word could contain the dot
+	 * character '.' to represent any one letter.
 	 */
 	public boolean wildcardMatch(String word) {
 		return dfsSearch(root, word, 0);
 	}
 
 	public boolean dfsSearch(TrieNode node, String word, int index) {
-		if (node.isEndOfWord && word.length() == index) return true;
+		if (node.isEndOfWord && word.length() == index)
+			return true;
 
-		if (index >= word.length()) return false;
+		if (index >= word.length())
+			return false;
 
 		char ch = word.charAt(index);
 
 		if ('.' == ch) {
 			for (int i = 0; i < 26; i++) {
 				if (node.children[i] != null) {
-					if (dfsSearch(node.children[i], word, index + 1)) return true;
+					if (dfsSearch(node.children[i], word, index + 1))
+						return true;
 				}
 			}
 		} else {
 			TrieNode next = node.children[ch - 'a'];
-			if (next != null) return dfsSearch(next, word, index + 1);
+			if (next != null)
+				return dfsSearch(next, word, index + 1);
 		}
 
 		return false;
@@ -207,8 +224,10 @@ class Trie1 {
 
 	// Autocomplete or Autosuggestions
 	public void autoSuggestions(TrieNode node, List<String> suggestions) {
-		if (node == null) return;
-		if (node.isEndOfWord) suggestions.add(node.word);
+		if (node == null)
+			return;
+		if (node.isEndOfWord)
+			suggestions.add(node.word);
 
 		for (int i = 0; i < 26; i++) {
 			if (node.children[i] != null) {
@@ -223,27 +242,32 @@ class Trie1 {
 	}
 
 	public TrieNode delete(TrieNode node, String str, int index) {
-		if (node == null) return null;
+		if (node == null)
+			return null;
 
 		if (index == str.length()) {
 			node.isEndOfWord = false;
-			if (!node.isEndOfWord && isEmpty(node)) node = null;
+			if (!node.isEndOfWord && isEmpty(node))
+				node = null;
 			return node;
 		}
 
 		int chIndex = str.charAt(index) - 'a';
 		node.children[chIndex] = delete(node.children[chIndex], str, index + 1);
 
-		if (!node.isEndOfWord && isEmpty(node)) node = null;
+		if (!node.isEndOfWord && isEmpty(node))
+			node = null;
 
 		return node;
 	}
 
 	private boolean isEmpty(TrieNode root) {
-		if (root == null) return true;
+		if (root == null)
+			return true;
 
 		for (int i = 0; i < 26; i++)
-			if (root.children[i] != null) return false;
+			if (root.children[i] != null)
+				return false;
 
 		return true;
 	}
@@ -257,24 +281,26 @@ class Trie2 {
 	}
 
 	public void insertIterative(String word) {
-		TrieNode current = root;
+		TrieNode curr = root;
 		for (int i = 0; i < word.length(); i++) {
 			char ch = word.charAt(i);
-			TrieNode childNode = current.childNodes.get(ch);
+			curr = curr.childNodes.computeIfAbsent(ch, c -> new TrieNode());
+			/* TrieNode childNode = curr.childNodes.get(ch);
 			if (childNode == null) {
 				childNode = new TrieNode();
-				current.childNodes.put(ch, childNode);
+				curr.childNodes.put(ch, childNode);
 			}
-			current = childNode;
+			curr = childNode;*/
 		}
-		current.isEndOfWord = true;
+		curr.isEndOfWord = true;
 	}
 
 	public boolean searchIterative(String word) {
 		TrieNode current = root;
 		for (int i = 0; i < word.length(); i++) {
 			TrieNode childNode = current.childNodes.get(word.charAt(i));
-			if (childNode == null) return false;
+			if (childNode == null)
+				return false;
 			current = childNode;
 		}
 		return current.isEndOfWord;
@@ -287,7 +313,8 @@ class Trie2 {
 	public boolean delete(TrieNode current, String word, int index) {
 		if (word.length() == index) {
 			// If EOW is false, then word is not present in the Trie DS
-			if (!current.isEndOfWord) return false;
+			if (!current.isEndOfWord)
+				return false;
 			// Reset EOW to false
 			current.isEndOfWord = false;
 			/*If last node of the word has childNodes, then simple reset the EOW.
@@ -298,7 +325,8 @@ class Trie2 {
 		char ch = word.charAt(index);
 		TrieNode next = current.childNodes.get(ch);
 		// if char is not present in the node, then next will be null.
-		if (next == null) return false;
+		if (next == null)
+			return false;
 
 		// Recursive call for every char in the word
 		boolean deleteNodeFlag = delete(next, word, index + 1);

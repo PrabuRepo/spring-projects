@@ -62,7 +62,8 @@ public class Backtracking {
 	private void backtrack2(List<List<Integer>> res, List<Integer> tmp, int[] nums, int start) {
 		res.add(new ArrayList<>(tmp));
 		for (int i = start; i < nums.length; i++) {
-			if (i > start && nums[i] == nums[i - 1]) continue;
+			if (i > start && nums[i] == nums[i - 1])
+				continue;
 			tmp.add(nums[i]);
 			backtrack2(res, tmp, nums, i + 1);
 			tmp.remove(tmp.size() - 1);
@@ -116,8 +117,10 @@ public class Backtracking {
 	}
 
 	private void backtrack4(List<List<Integer>> res, List<Integer> tmp, int[] nums, int target, int start) {
-		if (target < 0) return;
-		else if (target == 0) res.add(new ArrayList<>(tmp));
+		if (target < 0)
+			return;
+		else if (target == 0)
+			res.add(new ArrayList<>(tmp));
 		else {
 			for (int i = start; i < nums.length; i++) {
 				tmp.add(nums[i]);
@@ -138,11 +141,14 @@ public class Backtracking {
 	}
 
 	private void backtrack5(List<List<Integer>> res, List<Integer> tmp, int[] nums, int target, int start) {
-		if (target < 0) return;
-		else if (target == 0) res.add(new ArrayList<>(tmp));
+		if (target < 0)
+			return;
+		else if (target == 0)
+			res.add(new ArrayList<>(tmp));
 		else {
 			for (int i = start; i < nums.length; i++) {
-				if (i > start && nums[i] == nums[i - 1]) continue;
+				if (i > start && nums[i] == nums[i - 1])
+					continue;
 				tmp.add(nums[i]);
 				backtrack5(res, tmp, nums, target - nums[i], i + 1);
 				tmp.remove(tmp.size() - 1);
@@ -159,8 +165,10 @@ public class Backtracking {
 	}
 
 	public void backtrack6(int sum, int k, int start, List<Integer> list, List<List<Integer>> res) {
-		if (list.size() == k && sum == 0) res.add(new ArrayList<>(list));
-		else if (list.size() >= k || sum < 0) return;
+		if (list.size() == k && sum == 0)
+			res.add(new ArrayList<>(list));
+		else if (list.size() >= k || sum < 0)
+			return;
 		else {
 			for (int i = start; i <= 9; i++) {
 				list.add(i);
@@ -180,10 +188,12 @@ public class Backtracking {
 
 	public void backtrack7(int n, int start, List<List<Integer>> res, List<Integer> tmp) {
 		if (n == 1) {
-			if (tmp.size() > 1) res.add(new ArrayList<>(tmp));
+			if (tmp.size() > 1)
+				res.add(new ArrayList<>(tmp));
 		} else {
 			for (int i = start; i <= n; i++) {
-				if (n < i) break;
+				if (n < i)
+					break;
 				if (n % i == 0) {
 					tmp.add(i);
 					backtrack7(n / i, i, res, tmp);
@@ -207,7 +217,8 @@ public class Backtracking {
 			res.add(new ArrayList<>(tmp));
 		} else {
 			for (int i = 0; i < nums.length; i++) {
-				if (tmp.contains(nums[i])) continue;
+				if (tmp.contains(nums[i]))
+					continue;
 				tmp.add(nums[i]);
 				backtrack8(res, tmp, nums);
 				tmp.remove(tmp.size() - 1);
@@ -251,7 +262,8 @@ public class Backtracking {
 			list.add(new ArrayList<>(tmp));
 		} else {
 			for (int i = 0; i < nums.length; i++) {
-				if (used[i] || i > 0 && nums[i] == nums[i - 1] && !used[i - 1]) continue;
+				if (used[i] || i > 0 && nums[i] == nums[i - 1] && !used[i - 1])
+					continue;
 				used[i] = true;
 				tmp.add(nums[i]);
 				backtrack10(list, tmp, nums, used);
@@ -295,7 +307,8 @@ public class Backtracking {
 	}
 
 	public void backtrack12(List<List<String>> res, List<String> tmp, String s, int start) {
-		if (start == s.length()) res.add(new ArrayList<>(tmp));
+		if (start == s.length())
+			res.add(new ArrayList<>(tmp));
 		else {
 			for (int i = start; i < s.length(); i++) {
 				if (isPalindrome(s, start, i)) {
@@ -309,7 +322,8 @@ public class Backtracking {
 
 	public boolean isPalindrome(String s, int low, int high) {
 		while (low < high)
-			if (s.charAt(low++) != s.charAt(high--)) return false;
+			if (s.charAt(low++) != s.charAt(high--))
+				return false;
 		return true;
 	}
 
@@ -318,7 +332,8 @@ public class Backtracking {
 	 Combination: Eg: 236 -> 3C1*3C1*3C1 -> 3*3*3 -> 27 combinations
 	 */
 	public List<String> letterCombinations(String num) {
-		if (num.length() == 0) return new ArrayList<>();
+		if (num.length() == 0)
+			return new ArrayList<>();
 		Map<Character, String> map = new HashMap<>();
 		map.put('2', "abc");
 		map.put('3', "def");
@@ -357,13 +372,17 @@ public class Backtracking {
 					for (int l = 1; l <= 3; l++)
 						if (i + j + k + l == s.length()) {
 							String a = s.substring(0, i);
-							if (Integer.parseInt(a) > 255 || (a.charAt(0) == '0' && a.length() > 1)) continue;
+							if (Integer.parseInt(a) > 255 || (a.charAt(0) == '0' && a.length() > 1))
+								continue;
 							String b = s.substring(i, i + j);
-							if (Integer.parseInt(b) > 255 || (b.charAt(0) == '0' && b.length() > 1)) continue;
+							if (Integer.parseInt(b) > 255 || (b.charAt(0) == '0' && b.length() > 1))
+								continue;
 							String c = s.substring(i + j, i + j + k);
-							if (Integer.parseInt(c) > 255 || (c.charAt(0) == '0' && c.length() > 1)) continue;
+							if (Integer.parseInt(c) > 255 || (c.charAt(0) == '0' && c.length() > 1))
+								continue;
 							String d = s.substring(i + j + k, i + j + k + l);
-							if (Integer.parseInt(d) > 255 || (d.charAt(0) == '0' && d.length() > 1)) continue;
+							if (Integer.parseInt(d) > 255 || (d.charAt(0) == '0' && d.length() > 1))
+								continue;
 							res.add(a + "." + b + "." + c + "." + d);
 						}
 		return res;
@@ -378,12 +397,16 @@ public class Backtracking {
 	}
 
 	private void restoreIp(String ip, List<String> solutions, int idx, String restored, int digits) {
-		if (digits == 4 && idx == ip.length()) solutions.add(restored);
-		if (digits == 4) return;
+		if (digits == 4 && idx == ip.length())
+			solutions.add(restored);
+		if (digits == 4)
+			return;
 		for (int i = 1; i <= 3; i++) {
-			if (idx + i > ip.length()) break;
+			if (idx + i > ip.length())
+				break;
 			String s = ip.substring(idx, idx + i);
-			if ((s.startsWith("0") && s.length() > 1) || (i == 3 && Integer.parseInt(s) > 255)) continue;
+			if ((s.startsWith("0") && s.length() > 1) || (i == 3 && Integer.parseInt(s) > 255))
+				continue;
 			restoreIp(ip, solutions, idx + i, restored + s + (digits == 3 ? "" : "."), digits + 1);
 		}
 	}
@@ -391,7 +414,8 @@ public class Backtracking {
 	/* Generate Parentheses: write a function to generate all combinations of well-formed parentheses.
 	 */
 	public List<String> generateParentheses(int n) {
-		if (n <= 0) return null;
+		if (n <= 0)
+			return null;
 		List<String> res = new ArrayList<>();
 		backtrack14(0, 0, n, res, "");
 		res.stream().forEach(k -> System.out.print(k + ", "));
@@ -399,10 +423,14 @@ public class Backtracking {
 	}
 
 	public void backtrack14(int op, int cp, int n, List<String> res, String str) {
-		if (op == n && cp == n) res.add(str);
-		if (op < cp) return;
-		if (op < n) backtrack14(op + 1, cp, n, res, str + "(");
-		if (cp < n) backtrack14(op, cp + 1, n, res, str + ")");
+		if (op == n && cp == n)
+			res.add(str);
+		if (op < cp)
+			return;
+		if (op < n)
+			backtrack14(op + 1, cp, n, res, str + "(");
+		if (cp < n)
+			backtrack14(op, cp + 1, n, res, str + ")");
 	}
 
 	/*
@@ -435,7 +463,8 @@ public class Backtracking {
 		queue.add(S);
 
 		for (int i = 0; i < S.length(); i++) {
-			if (Character.isDigit(S.charAt(i))) continue;
+			if (Character.isDigit(S.charAt(i)))
+				continue;
 			int size = queue.size();
 			while (size-- > 0) {
 				char[] arr = queue.poll().toCharArray();
@@ -457,8 +486,9 @@ public class Backtracking {
 		for (int i = 0; i < size; i++) {
 			char[] arr = S.toCharArray();
 			for (int j = 0; j < n; j++) {
-				if (Character.isLetter(arr[j]) && (i >> j & 1) == 1) arr[j] = (char) (arr[j] - 32); // or
-																									// Character.toUpperCase(arr[j]);
+				if (Character.isLetter(arr[j]) && (i >> j & 1) == 1)
+					arr[j] = (char) (arr[j] - 32); // or
+													// Character.toUpperCase(arr[j]);
 			}
 			set.add(String.valueOf(arr));
 		}
@@ -476,23 +506,29 @@ public class Backtracking {
 	public void remove(String s, List<String> ans, int last_i, int last_j, char[] par) {
 		int count = 0;
 		for (int i = last_i; i < s.length(); i++) {
-			if (s.charAt(i) == par[0]) count++;
-			if (s.charAt(i) == par[1]) count--;
-			if (count >= 0) continue;
+			if (s.charAt(i) == par[0])
+				count++;
+			if (s.charAt(i) == par[1])
+				count--;
+			if (count >= 0)
+				continue;
 			for (int j = last_j; j <= i; j++)
 				if (s.charAt(j) == par[1] && (j == last_j || s.charAt(j - 1) != par[1]))
 					remove(s.substring(0, j) + s.substring(j + 1, s.length()), ans, i, j, par);
 			return;
 		}
 		String reversed = new StringBuilder(s).reverse().toString();
-		if (par[0] == '(') remove(reversed, ans, 0, 0, new char[] { ')', '(' });
-		else ans.add(reversed);
+		if (par[0] == '(')
+			remove(reversed, ans, 0, 0, new char[] { ')', '(' });
+		else
+			ans.add(reversed);
 	}
 
 	// Using BFS
 	public List<String> removeInvalidParentheses2(String s) {
 		List<String> res = new ArrayList<>();
-		if (s == null) return res;
+		if (s == null)
+			return res;
 		Queue<String> queue = new LinkedList<>();
 		Set<String> visited = new HashSet<>();
 		boolean level = false;
@@ -504,11 +540,14 @@ public class Backtracking {
 				res.add(curr);
 				level = true;
 			}
-			if (level) continue;
+			if (level)
+				continue;
 			for (int i = 0; i < curr.length(); i++) {
-				if (curr.charAt(i) != '(' && curr.charAt(i) != ')') continue;
+				if (curr.charAt(i) != '(' && curr.charAt(i) != ')')
+					continue;
 				String subStr = curr.substring(0, i) + curr.substring(i + 1);
-				if (visited.add(subStr)) queue.add(subStr);
+				if (visited.add(subStr))
+					queue.add(subStr);
 			}
 		}
 		return res;
@@ -517,9 +556,12 @@ public class Backtracking {
 	private boolean isValid(String s) {
 		int count = 0;
 		for (int i = 0; i < s.length(); i++) {
-			if (s.charAt(i) == '(') count++;
-			if (s.charAt(i) == ')') count--;
-			if (count < 0) return false;
+			if (s.charAt(i) == '(')
+				count++;
+			if (s.charAt(i) == ')')
+				count--;
+			if (count < 0)
+				return false;
 		}
 		return count == 0;
 	}
@@ -531,23 +573,28 @@ public class Backtracking {
 	 * Time Complexity: O(n)
 	 */
 	public String getPermutation(int n, int k) {
-		if (n == 0 || k == 0) return "";
+		if (n == 0 || k == 0)
+			return "";
+
 		int[] fact = new int[n + 1];
+		List<Integer> nums = new ArrayList<>();
 		fact[0] = 1;
-		List<Integer> list = new ArrayList<>();
 		for (int i = 1; i <= n; i++) {
+			//Add 1 to n in nums
+			nums.add(i);
+			//Calculate fact and add it to corresponding index
 			fact[i] = fact[i - 1] * i;
-			list.add(i);
 		}
-		k--;
-		int index = 0;
+
+		k--; //decrease k by 1
 		StringBuilder sb = new StringBuilder();
 		for (int i = 1; i <= n; i++) {
-			index = k / fact[n - i];
-			sb.append(String.valueOf(list.get(index)));
-			list.remove(index);
-			k -= fact[n - i] * index;
+			int index = k / fact[n - i];
+			sb.append(nums.get(index));
+			nums.remove(index);
+			k %= fact[n - i]; //or k -= (index * fact[n-i]);
 		}
+
 		return sb.toString();
 	}
 
@@ -560,24 +607,30 @@ public class Backtracking {
 	 * 				pattern = "aabb", str = "xyzabcxzyabc" should return false.
 	 */
 	public boolean wordPatternMatch1(String pat, String str) {
-		if (pat.length() == 0 && str.length() == 0) return true;
-		if (pat.length() == 0) return false;
+		if (pat.length() == 0 && str.length() == 0)
+			return true;
+		if (pat.length() == 0)
+			return false;
 		HashMap<Character, String> map = new HashMap<Character, String>();
 		return helper(pat, str, 0, 0, map);
 	}
 
 	public boolean helper(String pat, String str, int i, int j, HashMap<Character, String> map) {
-		if (i == pat.length() && j == str.length()) return true;
-		if (i >= pat.length() || j >= str.length()) return false;
+		if (i == pat.length() && j == str.length())
+			return true;
+		if (i >= pat.length() || j >= str.length())
+			return false;
 		char ch = pat.charAt(i);
 		for (int k = j + 1; k <= str.length(); k++) {
 			String sub = str.substring(j, k);
 			if (!map.containsKey(ch) && !map.containsValue(sub)) {
 				map.put(ch, sub);
-				if (helper(pat, str, i + 1, k, map)) return true;
+				if (helper(pat, str, i + 1, k, map))
+					return true;
 				map.remove(ch);
 			} else if (map.containsKey(ch) && map.get(ch).equals(sub)) {
-				if (helper(pat, str, i + 1, k, map)) return true;
+				if (helper(pat, str, i + 1, k, map))
+					return true;
 			}
 		}
 		return false;
@@ -587,27 +640,33 @@ public class Backtracking {
 	 * set which leads to time complexity of O(1):
 	 */
 	public boolean wordPatternMatch2(String pat, String str) {
-		if (pat.length() == 0 && str.length() == 0) return true;
-		if (pat.length() == 0) return false;
+		if (pat.length() == 0 && str.length() == 0)
+			return true;
+		if (pat.length() == 0)
+			return false;
 		HashMap<Character, String> map = new HashMap<Character, String>();
 		HashSet<String> set = new HashSet<String>();
 		return helper(pat, str, 0, 0, map, set);
 	}
 
 	public boolean helper(String pat, String str, int i, int j, HashMap<Character, String> map, HashSet<String> set) {
-		if (i == pat.length() && j == str.length()) return true;
-		if (i >= pat.length() || j >= str.length()) return false;
+		if (i == pat.length() && j == str.length())
+			return true;
+		if (i >= pat.length() || j >= str.length())
+			return false;
 		char c = pat.charAt(i);
 		for (int k = j + 1; k <= str.length(); k++) {
 			String sub = str.substring(j, k);
 			if (!map.containsKey(c) && !set.contains(sub)) {
 				map.put(c, sub);
 				set.add(sub);
-				if (helper(pat, str, i + 1, k, map, set)) return true;
+				if (helper(pat, str, i + 1, k, map, set))
+					return true;
 				map.remove(c);
 				set.remove(sub);
 			} else if (map.containsKey(c) && map.get(c).equals(sub)) {
-				if (helper(pat, str, i + 1, k, map, set)) return true;
+				if (helper(pat, str, i + 1, k, map, set))
+					return true;
 			}
 		}
 		return false;
@@ -637,7 +696,8 @@ public class Backtracking {
 
 	public List<String> generatePossibleNextMoves2(String s) {
 		List<String> res = new ArrayList<String>();
-		if (s == null) return res;
+		if (s == null)
+			return res;
 		char[] arr = s.toCharArray();
 		for (int i = 0; i < arr.length - 1; i++) {
 			if (arr[i] == arr[i + 1] && arr[i] == '+') {
@@ -654,11 +714,13 @@ public class Backtracking {
 	// Flip Game II:
 	// Approach1: Backtracking Solution
 	public boolean canWin1(String s) {
-		if (s == null || s.length() < 2) return false;
+		if (s == null || s.length() < 2)
+			return false;
 		for (int i = 0; i < s.length() - 1; i++) {
 			if (s.startsWith("++", i)) {
 				String subStr = s.substring(0, i) + "--" + s.substring(i + 2);
-				if (!canWin1(subStr)) return true;
+				if (!canWin1(subStr))
+					return true;
 			}
 		}
 		return false;
@@ -666,13 +728,15 @@ public class Backtracking {
 
 	// Approach2: Optimization: DP+ memory search
 	public boolean canWin2(String s) {
-		if (s == null || s.length() < 2) return false;
+		if (s == null || s.length() < 2)
+			return false;
 		Map<String, Boolean> map = new HashMap<>();
 		return helper(s, map);
 	}
 
 	public boolean helper(String s, Map<String, Boolean> map) {
-		if (map.containsKey(s)) return map.get(s);
+		if (map.containsKey(s))
+			return map.get(s);
 		for (int i = 0; i < s.length() - 1; i++) {
 			if (s.startsWith("++", i)) {
 				String subStr = s.substring(0, i) + "--" + s.substring(i + 2);
@@ -688,7 +752,7 @@ public class Backtracking {
 
 	// Minimum Unique Word Abbreviation - Heap/Trie/Bactracking
 
-	/********************* Backtracking Template - II ***********************/
+	/********************* Type3: Backtracking Template-2 ***********************/
 	// N-Queens, N-Queens II/Eight Queens
 	// N Queen Problem
 	public boolean solveNQ() {
@@ -707,7 +771,8 @@ public class Backtracking {
 	boolean solveNQUtil(int board[][], int col) {
 		int N = board.length;
 		// base case: If all queens are placed then return true
-		if (col >= N) return true;
+		if (col >= N)
+			return true;
 
 		// Consider this column and try placing this queen in all rows one by one
 		for (int i = 0; i < N; i++) {
@@ -733,15 +798,18 @@ public class Backtracking {
 
 		/* Check this row on left side */
 		for (i = 0; i < col; i++)
-			if (board[row][i] == 1) return false;
+			if (board[row][i] == 1)
+				return false;
 
 		/* Check upper diagonal on left side */
 		for (i = row, j = col; i >= 0 && j >= 0; i--, j--)
-			if (board[i][j] == 1) return false;
+			if (board[i][j] == 1)
+				return false;
 
 		/* Check lower diagonal on left side */
 		for (i = row, j = col; j >= 0 && i < N; i++, j--)
-			if (board[i][j] == 1) return false;
+			if (board[i][j] == 1)
+				return false;
 
 		return true;
 	}
@@ -769,7 +837,8 @@ public class Backtracking {
 				}
 
 		// All the boxes are filled; success
-		if (row == -1 && col == -1) return true;
+		if (row == -1 && col == -1)
+			return true;
 
 		for (int i = 1; i <= n; i++) {
 			if (isSafe(grid, row, col, i)) {
@@ -790,7 +859,8 @@ public class Backtracking {
 		int n = grid.length;
 		for (int i = 0; i < n; i++)
 			for (int j = 0; j < n; j++)
-				if (grid[i][j] == 0) return true;
+				if (grid[i][j] == 0)
+					return true;
 		return false;
 	}
 
@@ -804,13 +874,15 @@ public class Backtracking {
 
 	public boolean usedInRow(int[][] grid, int row, int num) {
 		for (int j = 0; j < grid.length; j++)
-			if (grid[row][j] == num) return true;
+			if (grid[row][j] == num)
+				return true;
 		return false;
 	}
 
 	public boolean usedInCol(int[][] grid, int col, int num) {
 		for (int i = 0; i < grid.length; i++)
-			if (grid[i][col] == num) return true;
+			if (grid[i][col] == num)
+				return true;
 		return false;
 	}
 
@@ -818,7 +890,8 @@ public class Backtracking {
 		int boxSize = 3;
 		for (int i = 0; i < boxSize; i++)
 			for (int j = 0; j < boxSize; j++)
-				if (grid[i + boxStartRow][j + boxStartCol] == num) return true;
+				if (grid[i + boxStartRow][j + boxStartCol] == num)
+					return true;
 		return false;
 	}
 
@@ -832,9 +905,9 @@ public class Backtracking {
 	}
 
 	// Crossword Puzzle
-	static final int	SIZE		= 10;
-	static final int[]	R_OFFSETS	= { 0, 1 };
-	static final int[]	C_OFFSETS	= { 1, 0 };
+	static final int SIZE = 10;
+	static final int[] R_OFFSETS = { 0, 1 };
+	static final int[] C_OFFSETS = { 1, 0 };
 
 	// Crossword Puzzle: DFS & Backtracking
 	public char[][] solvePuzzle(char[][] grid, String words) {
@@ -842,9 +915,12 @@ public class Backtracking {
 	}
 
 	public char[][] search(char[][] grid, Set<String> words, int r, int c, int direction) {
-		if (r == SIZE) return grid;
-		if (c == SIZE) return search(grid, words, r + 1, 0, 0);
-		if (direction == R_OFFSETS.length) return search(grid, words, r, c + 1, 0);
+		if (r == SIZE)
+			return grid;
+		if (c == SIZE)
+			return search(grid, words, r + 1, 0, 0);
+		if (direction == R_OFFSETS.length)
+			return search(grid, words, r, c + 1, 0);
 
 		// Count the length of the path in the grid
 		int insertLength = countInsertLength(grid, r, c, direction);
@@ -869,7 +945,8 @@ public class Backtracking {
 
 					char[][] subResult = search(grid, words, r, c, direction + 1);
 
-					if (subResult != null) return subResult;
+					if (subResult != null)
+						return subResult;
 
 					// Backtracking: Reassign the values
 					words.add(word);
@@ -894,7 +971,8 @@ public class Backtracking {
 		int prevRow = r - R_OFFSETS[direction];
 		int prevCol = c - C_OFFSETS[direction];
 
-		if (prevRow >= 0 && prevRow < SIZE && prevCol >= 0 && prevCol < SIZE && grid[prevRow][prevCol] != '+') return 0;
+		if (prevRow >= 0 && prevRow < SIZE && prevCol >= 0 && prevCol < SIZE && grid[prevRow][prevCol] != '+')
+			return 0;
 
 		int insertLength = 0;
 		while (r >= 0 && r < SIZE && c >= 0 && c < SIZE && grid[r][c] != '+') {
@@ -906,12 +984,14 @@ public class Backtracking {
 	}
 
 	public boolean canInsertWord1(char[][] grid, int r, int c, int direction, int insertLength, String word) {
-		if (word.length() != insertLength) return false;
+		if (word.length() != insertLength)
+			return false;
 
 		for (int k = 0; k < word.length(); k++) {
 			int row = r + R_OFFSETS[direction] * k;
 			int col = c + C_OFFSETS[direction] * k;
-			if (grid[row][col] != '-' && grid[row][col] != word.charAt(k)) return false;
+			if (grid[row][col] != '-' && grid[row][col] != word.charAt(k))
+				return false;
 		}
 
 		return true;
@@ -955,7 +1035,8 @@ public class Backtracking {
 	private boolean knightTourUtil(int x, int y, int N, int moveCount, int[] xMove, int[] yMove, int[][] table) {
 		int nextX, nextY;
 		count++;
-		if (moveCount == (N * N)) return true;
+		if (moveCount == (N * N))
+			return true;
 
 		for (int i = 0; i < N; i++) {
 			nextX = x + xMove[i];

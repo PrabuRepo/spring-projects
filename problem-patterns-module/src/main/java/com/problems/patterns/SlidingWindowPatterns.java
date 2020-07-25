@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.TreeSet;
 
-import com.common.utilities.Utils;
-
 public class SlidingWindowPatterns {
 
 	/***************************** Type1: Sliding Window: String ******************************/
@@ -458,14 +456,22 @@ public class SlidingWindowPatterns {
 	public int maxProduct(int[] nums) {
 		if (nums.length == 0)
 			return 0;
-		int max = nums[0], min = nums[0], result = nums[0];
-		for (int i = 1; i < nums.length; i++) {
+		int max = 1, min = 1, result = Integer.MIN_VALUE;
+		for (int num : nums) {
 			int tempMax = max;
-			max = Utils.max(max * nums[i], min * nums[i], nums[i]);
-			min = Utils.min(tempMax * nums[i], min * nums[i], nums[i]);
+			max = max(max * num, min * num, num);
+			min = min(tempMax * num, min * num, num);
 			result = Math.max(max, result);
 		}
 		return result;
+	}
+
+	private int max(int d1, int d2, int d3) {
+		return Math.max(Math.max(d1, d2), d3);
+	}
+
+	private int min(int d1, int d2, int d3) {
+		return Math.min(Math.min(d1, d2), d3);
 	}
 
 	/* Max Consecutive one I:

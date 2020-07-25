@@ -43,8 +43,7 @@ public class RollingArrayPatterns {
 			int tmp = curr;
 			if (s.charAt(i) == '0')
 				curr = 0;
-			int num = Integer
-					.valueOf(s.substring(i - 1, i + 1));
+			int num = Integer.valueOf(s.substring(i - 1, i + 1));
 			if (num >= 10 && num <= 26)
 				curr += prev;
 			prev = tmp;
@@ -81,22 +80,18 @@ public class RollingArrayPatterns {
 	 * elements with the maximum sum. Calculate the sum of that subset.
 	 */
 	// Recursive slow solution.
-	public int maxSubsetSum1(int arr[],
-			int index) {
+	public int maxSubsetSum1(int arr[], int index) {
 		if (index == 0) {
 			return arr[0];
 		} else if (index == 1) {
-			return Math
-					.max(arr[0], arr[1]);
+			return Math.max(arr[0], arr[1]);
 		}
-		return Math.max(
-				maxSubsetSum1(arr, index - 2)
-						+ arr[index],
-				maxSubsetSum1(arr, index - 1));
+		return Math.max(maxSubsetSum1(arr, index - 2) + arr[index], maxSubsetSum1(arr, index - 1));
 	}
 
 	public int maxSubsetSum(int[] arr) {
-		if (arr.length == 0) return 0;
+		if (arr.length == 0)
+			return 0;
 		int incl = 0, excl = 0, temp = 0;
 		for (int a : arr) {
 			temp = incl;
@@ -104,6 +99,25 @@ public class RollingArrayPatterns {
 			excl = temp;
 		}
 		return incl;
+	}
+
+	/*
+	 * Maximum sum in a 2 x n grid such that no two elements are adjacent
+	 * Sample:
+	 * 	Input : 1 2 3 4 5
+	 *          6 7 8 9 10
+	 *  Output : 24
+	 */
+	public int maxSubsetSum2D(int[][] A) {
+		int prev = 0, curr = 0, temp = 0;
+
+		for (int i = 0; i < A[0].length; i++) {
+			temp = Math.max(prev, curr);
+			curr = prev + Math.max(A[0][i], A[1][i]);
+			prev = temp;
+		}
+
+		return Math.max(prev, curr);
 	}
 
 }

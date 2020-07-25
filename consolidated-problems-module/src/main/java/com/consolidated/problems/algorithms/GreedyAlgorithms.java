@@ -25,7 +25,8 @@ public class GreedyAlgorithms {
 	 *  Time Complexity: O(nlogn)
 	 */
 	public int maxActivities(int[] start, int[] end) {
-		if (start.length == 0 || end.length == 0) return 0;
+		if (start.length == 0 || end.length == 0)
+			return 0;
 		int n = start.length;
 
 		// Construct Interval Object;
@@ -61,7 +62,8 @@ public class GreedyAlgorithms {
 				i = j;
 				j++;
 			} else {
-				if (pairs[i][1] > pairs[j][1]) i = j;
+				if (pairs[i][1] > pairs[j][1])
+					i = j;
 				j++;
 			}
 		}
@@ -77,7 +79,8 @@ public class GreedyAlgorithms {
 	 */
 	// Similar to Activity Selection Problem -2
 	public void findMeetingsInOneRoom(int[] start, int[] end) {
-		if (start.length == 0 || end.length == 0) return;
+		if (start.length == 0 || end.length == 0)
+			return;
 		int n = start.length;
 		// Construct Interval Object;
 		Interval[] intervals = new Interval[n];
@@ -105,12 +108,14 @@ public class GreedyAlgorithms {
 	 * false.
 	 */
 	public boolean canAttendAllMeetings(Interval[] intervals) {
-		if (intervals.length <= 1) return true;
+		if (intervals.length <= 1)
+			return true;
 
 		Arrays.sort(intervals, (ob1, ob2) -> ob1.start - ob2.start);
 
 		for (int i = 0; i < intervals.length - 1; i++) {
-			if (intervals[i].end > intervals[i + 1].start) return false;
+			if (intervals[i].end > intervals[i + 1].start)
+				return false;
 		}
 		return true;
 	}
@@ -121,7 +126,8 @@ public class GreedyAlgorithms {
 	 */
 	// Approach1: Greedy Algorithm:
 	public int minMeetingRooms1(Interval[] intervals) {
-		if (intervals == null || intervals.length == 0) return 0;
+		if (intervals == null || intervals.length == 0)
+			return 0;
 
 		int len = intervals.length;
 		int[] startTime = new int[len];
@@ -153,7 +159,8 @@ public class GreedyAlgorithms {
 
 	// Approach2: Using Heap
 	public int minMeetingRooms2(Interval[] intervals) {
-		if (intervals == null || intervals.length == 0) return 0;
+		if (intervals == null || intervals.length == 0)
+			return 0;
 
 		Arrays.sort(intervals, (ob1, ob2) -> ob1.start - ob2.start);
 
@@ -173,7 +180,9 @@ public class GreedyAlgorithms {
 
 	// Approach2: Using TreeMap:
 	public int minMeetingRooms3(Interval[] intervals) {
-		if (intervals == null || intervals.length == 0) { return 0; }
+		if (intervals == null || intervals.length == 0) {
+			return 0;
+		}
 
 		TreeMap<Integer, Integer> timesMap = new TreeMap<>(); // Here treeMap sorts the time in asc order
 		for (Interval i : intervals) {
@@ -197,7 +206,8 @@ public class GreedyAlgorithms {
 	 */
 	// Using Simple Greedy Alg:
 	public int minPlatformRequired1(int[][] arr, int[][] dep) {
-		if (arr.length == 0) return 0;
+		if (arr.length == 0)
+			return 0;
 
 		// arr, dep has 2 dim array, 0th index has time, 1st index has order/seq of the train
 		Arrays.sort(arr, (a, b) -> a[0] - b[0]);
@@ -222,7 +232,8 @@ public class GreedyAlgorithms {
 
 	// Approach2: Using TreeMap
 	public static int minPlatformRequired2(int[] arrv, int[] dep) {
-		if (arrv.length == 0) return 0;
+		if (arrv.length == 0)
+			return 0;
 
 		TreeMap<Integer, Integer> map = new TreeMap<>();
 
@@ -336,7 +347,8 @@ public class GreedyAlgorithms {
 	 * Example 1: Input: [[1,3],[2,6],[8,10],[15,18]]; Output: [[1,6],[8,10],[15,18]]
 	 */
 	public List<Interval> merge(List<Interval> intervals) {
-		if (intervals.size() <= 1) return intervals;
+		if (intervals.size() <= 1)
+			return intervals;
 
 		Collections.sort(intervals, Comparator.comparing(i -> i.start));
 
@@ -383,7 +395,8 @@ public class GreedyAlgorithms {
 	private final int[] coins = { 1, 2, 5, 10, 20, 50, 100, 200, 500, 2000 };
 
 	public void minNoOfCoins(int sum) {
-		if (sum < 1) return;
+		if (sum < 1)
+			return;
 
 		int i = coins.length - 1;
 		while (sum > 0) {
@@ -403,7 +416,8 @@ public class GreedyAlgorithms {
 	 */
 	// Similar to Minimum number of Coins
 	public static int maximizeToys(int[] prices, int k) {
-		if (k < 1) return 0;
+		if (k < 1)
+			return 0;
 
 		Arrays.sort(prices);
 		int count = 0;
@@ -440,7 +454,8 @@ public class GreedyAlgorithms {
 	 * Example 2: Input: [3,30,34,5,9]; Output: "9534330"
 	 */
 	public String largestNumber(int[] nums) {
-		if (nums.length == 0) return "0";
+		if (nums.length == 0)
+			return "0";
 
 		String[] arr = new String[nums.length];
 		for (int i = 0; i < nums.length; i++)
@@ -471,7 +486,8 @@ public class GreedyAlgorithms {
 	 * Input:3 20; Output: 992 
 	 */
 	public String largestNumber(int n, int sum) {
-		if (sum == 0 || sum > n * 9) return "-1";
+		if (sum == 0 || sum > n * 9)
+			return "-1";
 		StringBuilder sb = new StringBuilder();
 		while (n-- > 0) {
 			if (sum > 9) {
@@ -491,7 +507,8 @@ public class GreedyAlgorithms {
 	 */
 	// Approach 1: Traverse from right to left index and find the max & min index to swap;
 	public int maximumSwap(int num) {
-		if (num < 10) return num;
+		if (num < 10)
+			return num;
 
 		char[] digits = String.valueOf(num).toCharArray();
 
@@ -522,7 +539,8 @@ public class GreedyAlgorithms {
 		int maxIndex = chars.length - 1;
 		int x = 0, y = 0;
 		for (int i = chars.length - 2; i >= 0; i--) {
-			if (chars[maxIndex] == chars[i]) continue;
+			if (chars[maxIndex] == chars[i])
+				continue;
 
 			if (chars[maxIndex] < chars[i]) {
 				maxIndex = i;
@@ -564,8 +582,10 @@ public class GreedyAlgorithms {
 			int pos1 = 0, pos2 = 0, tpos = 0;
 			// Merge the max arrays
 			while (res1.length > 0 && res2.length > 0 && pos1 < res1.length && pos2 < res2.length) {
-				if (compare(res1, pos1, res2, pos2)) res[tpos++] = res1[pos1++];
-				else res[tpos++] = res2[pos2++];
+				if (compare(res1, pos1, res2, pos2))
+					res[tpos++] = res1[pos1++];
+				else
+					res[tpos++] = res2[pos2++];
 			}
 			while (pos1 < res1.length)
 				res[tpos++] = res1[pos1++];
@@ -573,7 +593,8 @@ public class GreedyAlgorithms {
 				res[tpos++] = res2[pos2++];
 
 			// Finally choose the maximum number combinations
-			if (!compare(maxNumber, 0, res, 0)) maxNumber = res;
+			if (!compare(maxNumber, 0, res, 0))
+				maxNumber = res;
 		}
 
 		return maxNumber;
@@ -586,15 +607,18 @@ public class GreedyAlgorithms {
 			while (len > 0 && len + nums.length - i > k && res[len - 1] < nums[i]) {
 				len--;
 			}
-			if (len < k) res[len++] = nums[i];
+			if (len < k)
+				res[len++] = nums[i];
 		}
 		return res;
 	}
 
 	public boolean compare(int[] nums1, int start1, int[] nums2, int start2) {
 		for (; start1 < nums1.length && start2 < nums2.length; start1++, start2++) {
-			if (nums1[start1] > nums2[start2]) return true;
-			if (nums1[start1] < nums2[start2]) return false;
+			if (nums1[start1] > nums2[start2])
+				return true;
+			if (nums1[start1] < nums2[start2])
+				return false;
 		}
 		return start1 != nums1.length;
 	}
@@ -731,13 +755,15 @@ public class GreedyAlgorithms {
 		// find two adjacent elements, n[i-1] < n[i]
 		int i = nums.length - 1;
 		for (; i > 0; i--)
-			if (nums[i] > nums[i - 1]) break;
+			if (nums[i] > nums[i - 1])
+				break;
 
 		if (i != 0) {
 			// swap (i-1, min), where min is index of the smallest number in [i, n)
 			int minIndex = nums.length - 1;
 			for (; minIndex >= i; minIndex--)
-				if (nums[minIndex] > nums[i - 1]) break;
+				if (nums[minIndex] > nums[i - 1])
+					break;
 
 			Utils.swap(nums, i - 1, minIndex);
 		}
@@ -745,6 +771,22 @@ public class GreedyAlgorithms {
 	}
 
 	/*************************** Type4: Other Greedy Problems -Revisit this ******************/
+	/*
+	 * Queue Reconstruction by Height:
+	 */
+	//Ref: https://leetcode.com/problems/queue-reconstruction-by-height/discuss/672958/Problem-Explanation-or-Detailed-Steps-Solution-or-Simple-or-Using-Sorting
+	public int[][] reconstructQueue(int[][] people) {
+		// sort array using Arrays.sort with custom comparator
+		Arrays.sort(people, (p1, p2) -> p1[0] == p2[0] ? p1[1] - p2[1] : p2[0] - p1[0]);
+
+		List<int[]> list = new ArrayList<>();
+		for (int i = 0; i < people.length; i++) {
+			list.add(people[i][1], people[i]); // placing people based on the K value
+		}
+
+		return list.toArray(people); // convert list to array
+	}
+
 	/*
 	 * Huffman Coding & Decoding:
 	 *    Huffman coding is a lossless data compression algorithm. The idea is to assign variable-length codes to input characters, 
@@ -841,7 +883,8 @@ public class GreedyAlgorithms {
 		for (int i = 0; i < encodedString.length(); i++) {
 			char ch = encodedString.charAt(i);
 			// 1.If current bit is 0, we move to left node of the tree.
-			if (ch == '0') curr = curr.left;
+			if (ch == '0')
+				curr = curr.left;
 			else // 2.If the bit is 1, we move to right node of the tree.
 				curr = curr.right;
 
