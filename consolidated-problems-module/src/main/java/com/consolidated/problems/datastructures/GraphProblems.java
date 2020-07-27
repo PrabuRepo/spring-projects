@@ -15,7 +15,6 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
-import com.common.model.WordNode;
 import com.common.utilities.DisjointSet;
 
 public class GraphProblems {
@@ -31,11 +30,9 @@ public class GraphProblems {
 	public boolean isTree(int n, int[][] edges) {
 		if (n == 0 || edges.length == 0)
 			return false;
-		LinkedList<Integer>[] adjList = buildAdjListUndirectedGraph(
-				n, edges);
+		LinkedList<Integer>[] adjList = buildAdjListUndirectedGraph(n, edges);
 		boolean[] visited = new boolean[n];
-		boolean isCycle = hasCycleInUndirectedGraphUtil(
-				adjList, 0, visited, -1);
+		boolean isCycle = hasCycleInUndirectedGraphUtil(adjList, 0, visited, -1);
 		if (!isCycle) {
 			for (int i = 0; i < n; i++)
 				if (!visited[i])
@@ -45,18 +42,14 @@ public class GraphProblems {
 	}
 
 	// using DFS
-	private boolean hasCycleInUndirectedGraphUtil(
-			LinkedList<Integer>[] adjList, int vertex,
-			boolean[] visited,
+	private boolean hasCycleInUndirectedGraphUtil(LinkedList<Integer>[] adjList, int vertex, boolean[] visited,
 			int parent) {
 		visited[vertex] = true;
-		ListIterator<Integer> iter = adjList[vertex]
-				.listIterator();
+		ListIterator<Integer> iter = adjList[vertex].listIterator();
 		while (iter.hasNext()) {
 			int adjVertex = iter.next();
 			if (!visited[adjVertex]) {
-				if (hasCycleInUndirectedGraphUtil(adjList,
-						adjVertex, visited, vertex))
+				if (hasCycleInUndirectedGraphUtil(adjList, adjVertex, visited, vertex))
 					return true;
 			} else if (adjVertex != parent)
 				return true;
@@ -65,8 +58,7 @@ public class GraphProblems {
 	}
 
 	// d.Build undirected graph from given input(edges); where n - No of vertices, edges - Edge list
-	public LinkedList<Integer>[] buildAdjListUndirectedGraph(
-			int n, int[][] edges) {
+	public LinkedList<Integer>[] buildAdjListUndirectedGraph(int n, int[][] edges) {
 		if (n == 0 || edges.length == 0)
 			return null;
 		LinkedList<Integer>[] adjList = new LinkedList[n];
@@ -119,8 +111,7 @@ public class GraphProblems {
 	 * dependencies: (a, d), (f, b), (b, d), (f, a), (d, c) -> {{0,3}, {5,1}, {1,3}, {5,0}, {3,2}}
 	 * Output: f, e, a, b, d, c
 	 */
-	public void buildOrder(char[] projects,
-			char[][] dependencies) {
+	public void buildOrder(char[] projects, char[][] dependencies) {
 		int n = projects.length;
 		LinkedList<Character>[] adjList = new LinkedList[n];
 		for (int i = 0; i < n; i++)
@@ -138,8 +129,7 @@ public class GraphProblems {
 		       Now let S be the longest path from u(source) to v(destination). Since S is the longest path there can be no incoming edge to u and 
 		       no outgoing edge from v, if this situation had occurred then S would not have been the longest path
 		=> indegree(u) = 0 and outdegree(v) = 0*/
-	public void topoSortUsingIndegree2(
-			LinkedList<Character>[] adjList, int n) {
+	public void topoSortUsingIndegree2(LinkedList<Character>[] adjList, int n) {
 		Queue<Character> queue = new LinkedList<>();
 		ArrayList<Character> linearOrder = new ArrayList<>();
 		int[] indegree;
@@ -152,8 +142,7 @@ public class GraphProblems {
 			char vertex = queue.poll();
 			linearOrder.add(vertex);
 			count++;
-			ListIterator<Character> iter = adjList[charToInt(
-					vertex)].listIterator();
+			ListIterator<Character> iter = adjList[charToInt(vertex)].listIterator();
 			while (iter.hasNext()) {
 				char data = iter.next();
 				if (--indegree[charToInt(data)] == 0)
@@ -161,21 +150,17 @@ public class GraphProblems {
 			}
 		}
 		if (count == n) {
-			linearOrder.stream().forEach(
-					i -> System.out.print(i + "-"));
+			linearOrder.stream().forEach(i -> System.out.print(i + "-"));
 		} else {
-			System.out.println(
-					"Not an a DAG and contains a cycle.");
+			System.out.println("Not an a DAG and contains a cycle.");
 		}
 	}
 
-	private int[] indegree2(LinkedList<Character>[] adjList,
-			int n) {
+	private int[] indegree2(LinkedList<Character>[] adjList, int n) {
 		int[] indegree = new int[n];
 		for (int i = 0; i < n; i++) {
 			if (adjList[i].size() > 0) {
-				ListIterator<Character> iterator = adjList[i]
-						.listIterator();
+				ListIterator<Character> iterator = adjList[i].listIterator();
 				while (iterator.hasNext())
 					indegree[charToInt(iterator.next())]++;
 			}
@@ -205,11 +190,9 @@ public class GraphProblems {
 			String words1 = words[i];
 			String words2 = words[i + 1];
 			int j = 0;
-			while (j < Math.min(words1.length(),
-					words2.length())) {
+			while (j < Math.min(words1.length(), words2.length())) {
 				if (words1.charAt(j) != words2.charAt(j)) {
-					adjList[words1.charAt(j) - 'a']
-							.add(words2.charAt(j) - 'a');
+					adjList[words1.charAt(j) - 'a'].add(words2.charAt(j) - 'a');
 					break;
 				}
 				j++;
@@ -222,16 +205,12 @@ public class GraphProblems {
 			if (!visited[i])
 				topoSortUtil(adjList, i, visited, stack);
 		while (!stack.isEmpty())
-			System.out.print(
-					(char) (stack.pop() + 'a') + "-");
+			System.out.print((char) (stack.pop() + 'a') + "-");
 	}
 
-	private void topoSortUtil(LinkedList<Integer>[] adjList,
-			int v, boolean[] visited,
-			Stack<Integer> stack) {
+	private void topoSortUtil(LinkedList<Integer>[] adjList, int v, boolean[] visited, Stack<Integer> stack) {
 		visited[v] = true;
-		ListIterator<Integer> listIterator = adjList[v]
-				.listIterator();
+		ListIterator<Integer> listIterator = adjList[v].listIterator();
 		while (listIterator.hasNext()) {
 			int next = listIterator.next();
 			if (!visited[next])
@@ -241,9 +220,9 @@ public class GraphProblems {
 	}
 
 	// Topological Sort DFS - using HashMap
-	Map<Character, List<Character>> graph   = new HashMap<>();
-	Map<Character, Integer>         visited = new HashMap<>();
-	StringBuffer                    sb      = new StringBuffer();
+	Map<Character, List<Character>> graph = new HashMap<>();
+	Map<Character, Integer> visited = new HashMap<>();
+	StringBuffer sb = new StringBuffer();
 
 	public String alienDictionary2(String[] words) {
 		if (words == null || words.length == 0)
@@ -278,8 +257,7 @@ public class GraphProblems {
 			int index = 0;
 			String word1 = words[i];
 			String word2 = words[i + 1];
-			while (index < Math.min(word1.length(),
-					word2.length())) {
+			while (index < Math.min(word1.length(), word2.length())) {
 				char c1 = word1.charAt(index);
 				char c2 = word2.charAt(index);
 				if (c1 != c2) {
@@ -293,8 +271,10 @@ public class GraphProblems {
 
 	//It handles cycle in graph as well. 0 -> Not visited, -1->In Progress & 1-> visited 
 	private boolean dfs(Character c) {
-		if (visited.get(c) == 1) return true;
-		if (visited.get(c) == -1) return false;
+		if (visited.get(c) == 1)
+			return true;
+		if (visited.get(c) == -1)
+			return false;
 
 		visited.put(c, -1);
 		for (char edgeNode : graph.get(c)) {
@@ -321,12 +301,11 @@ public class GraphProblems {
 		return order.length() == graph.size() ? order : "";
 	}
 
-	private void buildGraph(String[] words,
-			Map<Character, Set<Character>> graph,
-			int[] inDegree) {
+	private void buildGraph(String[] words, Map<Character, Set<Character>> graph, int[] inDegree) {
 		for (String word : words) {
 			for (char c : word.toCharArray()) {
-				if (graph.containsKey(c)) continue;
+				if (graph.containsKey(c))
+					continue;
 				graph.put(c, new HashSet<>());
 			}
 		}
@@ -334,15 +313,13 @@ public class GraphProblems {
 		for (int i = 1; i < words.length; i++) {
 			String first = words[i - 1];
 			String second = words[i];
-			int length = Math.min(first.length(),
-					second.length());
+			int length = Math.min(first.length(), second.length());
 
 			for (int j = 0; j < length; j++) {
 				char parent = first.charAt(j);
 				char child = second.charAt(j);
 				if (parent != child) {
-					if (!graph.get(parent)
-							.contains(child)) {
+					if (!graph.get(parent).contains(child)) {
 						graph.get(parent).add(child);
 						inDegree[child - 'a']++;
 					}
@@ -352,9 +329,7 @@ public class GraphProblems {
 		}
 	}
 
-	private String topologicalSort(
-			Map<Character, Set<Character>> graph,
-			int[] inDegree) {
+	private String topologicalSort(Map<Character, Set<Character>> graph, int[] inDegree) {
 		Queue<Character> queue = new LinkedList<>();
 		for (char c : graph.keySet()) {
 			if (inDegree[c - 'a'] == 0) {
@@ -390,9 +365,7 @@ public class GraphProblems {
 	}
 
 	// Using DFS, but remove the visted data from the priority queue
-	public void reconstructItinerary(String s,
-			Map<String, PriorityQueue<String>> map,
-			LinkedList<String> result) {
+	public void reconstructItinerary(String s, Map<String, PriorityQueue<String>> map, LinkedList<String> result) {
 		PriorityQueue<String> queue = map.get(s);
 		while (queue != null && !queue.isEmpty())
 			reconstructItinerary(queue.poll(), map, result);
@@ -421,18 +394,15 @@ public class GraphProblems {
 	     are 2 or 1 nodes left.
 	  The time complexity and space complexity are both O(n). Note that for a tree we always have V = n, E = n-1.        
 	*/
-	public List<Integer> findMinHeightTrees(int n,
-			int[][] edges) {
+	public List<Integer> findMinHeightTrees(int n, int[][] edges) {
 		List<Integer> leaves = new ArrayList<>();
 		if (n == 1) {
 			leaves.add(0);
 			return leaves;
 		}
-		if (n == 0 || edges.length == 0
-				|| edges[0].length == 0)
+		if (n == 0 || edges.length == 0 || edges[0].length == 0)
 			return leaves;
-		List<Integer>[] adjList = buildAdjListUndirectedGraph(
-				n, edges);
+		List<Integer>[] adjList = buildAdjListUndirectedGraph(n, edges);
 		for (int i = 0; i < n; i++)
 			if (adjList[i].size() == 1)
 				leaves.add(i);
@@ -441,8 +411,7 @@ public class GraphProblems {
 			n -= leaves.size();
 			newLeaves = new ArrayList<>();
 			for (Integer node : leaves) {
-				int neighbor = adjList[node].iterator()
-						.next();
+				int neighbor = adjList[node].iterator().next();
 				adjList[neighbor].remove(node);
 				if (adjList[neighbor].size() == 1)
 					newLeaves.add(neighbor);
@@ -453,8 +422,7 @@ public class GraphProblems {
 	}
 
 	// Same Solution, but Graph represented using Set instead of array
-	public List<Integer> findMinHeightTrees2(int n,
-			int[][] edges) {
+	public List<Integer> findMinHeightTrees2(int n, int[][] edges) {
 		if (n == 1)
 			return Collections.singletonList(0);
 		List<Set<Integer>> adj = new ArrayList<>(n);
@@ -486,8 +454,7 @@ public class GraphProblems {
 	 * Number of Connected Components in an Undirected Graph (Java)
 	 */
 	// 1.i.Using DFS algorithm(Adjacency List)
-	public int disConnectedGraphDFS(
-			LinkedList<Integer>[] adjList, int n, int s) {
+	public int disConnectedGraphDFS(LinkedList<Integer>[] adjList, int n, int s) {
 		boolean[] visited = new boolean[n];
 		int groups = 0;
 		for (int i = 0; i < n; i++) {
@@ -500,12 +467,10 @@ public class GraphProblems {
 		return groups;
 	}
 
-	public void dfsUtil1(LinkedList<Integer>[] adjList,
-			int v, boolean[] visited) {
+	public void dfsUtil1(LinkedList<Integer>[] adjList, int v, boolean[] visited) {
 		visited[v] = true;
 		System.out.print(v + "-");
-		ListIterator<Integer> listIterator = adjList[v]
-				.listIterator();
+		ListIterator<Integer> listIterator = adjList[v].listIterator();
 		while (listIterator.hasNext()) {
 			int data = listIterator.next();
 			if (!visited[data]) {
@@ -515,8 +480,7 @@ public class GraphProblems {
 	}
 
 	// 1.ii.Using DFS algorithm(Adjacency Matrix)
-	public int disConnectedGraphDFS(int[][] adjMatrix,
-			int n) {
+	public int disConnectedGraphDFS(int[][] adjMatrix, int n) {
 		if (adjMatrix.length == 0)
 			return 0;
 		int groups = 0;
@@ -530,22 +494,19 @@ public class GraphProblems {
 		return groups;
 	}
 
-	public void dfsUtil(int[][] adjMatrix,
-			boolean[] visited, int v) {
+	public void dfsUtil(int[][] adjMatrix, boolean[] visited, int v) {
 		int n = adjMatrix.length;
 		visited[v] = true;
 		System.out.print(v + "-");
 		for (int j = 0; j < n; j++) {
-			if (!visited[j] && j != v
-					&& adjMatrix[v][j] == 1) {
+			if (!visited[j] && j != v && adjMatrix[v][j] == 1) {
 				dfsUtil(adjMatrix, visited, j);
 			}
 		}
 	}
 
 	// 2.i.Using BFS algorithm(Adjacency List)
-	public int disConnectedGraphBFS(
-			LinkedList<Integer>[] adjList, int n, int s) {
+	public int disConnectedGraphBFS(LinkedList<Integer>[] adjList, int n, int s) {
 		boolean[] visited = new boolean[n];
 		int groups = 0;
 		for (int i = 0; i < n; i++) {
@@ -558,16 +519,14 @@ public class GraphProblems {
 		return groups;
 	}
 
-	public void bfsUtil(LinkedList<Integer>[] adjList,
-			int s, boolean[] visited) {
+	public void bfsUtil(LinkedList<Integer>[] adjList, int s, boolean[] visited) {
 		Queue<Integer> queue = new LinkedList<>();
 		queue.add(s);
 		visited[s] = true;
 		while (!queue.isEmpty()) {
 			int top = queue.poll();
 			System.out.print(top + "-");
-			ListIterator<Integer> list = adjList[top]
-					.listIterator();
+			ListIterator<Integer> list = adjList[top].listIterator();
 			while (list.hasNext()) {
 				int next = list.next();
 				if (!visited[next]) {
@@ -579,8 +538,7 @@ public class GraphProblems {
 	}
 
 	// 2.ii.Using BFS algorithm(Adjacency Matrix)
-	public int disConnectedGraphBFS(int[][] adjMatrix,
-			int n) {
+	public int disConnectedGraphBFS(int[][] adjMatrix, int n) {
 		if (adjMatrix.length == 0)
 			return 0;
 		int groups = 0;
@@ -594,8 +552,7 @@ public class GraphProblems {
 		return groups;
 	}
 
-	public void bfsUtil(int[][] adjMatrix,
-			boolean[] visited, int v) {
+	public void bfsUtil(int[][] adjMatrix, boolean[] visited, int v) {
 		int n = adjMatrix.length;
 		Queue<Integer> queue = new LinkedList<>();
 		queue.add(v);
@@ -604,8 +561,7 @@ public class GraphProblems {
 			visited[top] = true;
 			System.out.print(top + "-");
 			for (int j = 0; j < n; j++) {
-				if (!visited[j] && j != v
-						&& adjMatrix[top][j] == 1)
+				if (!visited[j] && j != v && adjMatrix[top][j] == 1)
 					queue.add(j);
 			}
 		}
@@ -613,8 +569,7 @@ public class GraphProblems {
 
 	// 3.Using Union-Find/Disjoint set
 	public int disConnectedGraphUF(int[][] adjMatrix) {
-		int row = adjMatrix.length,
-				col = adjMatrix[0].length;
+		int row = adjMatrix.length, col = adjMatrix[0].length;
 		DisjointSet ds = new DisjointSet(row);
 		for (int i = 0; i < row; i++)
 			ds.parent[i] = i;
@@ -681,8 +636,7 @@ public class GraphProblems {
 	 * They can travel by road from their city to a
 	 * city containing a library.
 	 */
-	static long roadsAndLibraries(int n, int c_lib,
-			int c_road, int[][] cities) {
+	static long roadsAndLibraries(int n, int c_lib, int c_road, int[][] cities) {
 		long totalCost = 0;
 		if (c_lib < c_road) {
 			totalCost = (long) c_lib * (long) n;
@@ -709,13 +663,10 @@ public class GraphProblems {
 		return totalCost;
 	}
 
-	public static void dfs(LinkedList<Integer>[] adjList,
-			int s, boolean[] visited,
-			List<Integer> adjCities) {
+	public static void dfs(LinkedList<Integer>[] adjList, int s, boolean[] visited, List<Integer> adjCities) {
 		visited[s] = true;
 		adjCities.add(s);
-		ListIterator<Integer> iter = adjList[s]
-				.listIterator();
+		ListIterator<Integer> iter = adjList[s].listIterator();
 		while (iter.hasNext()) {
 			int node = iter.next();
 			if (!visited[node])
@@ -724,9 +675,7 @@ public class GraphProblems {
 	}
 
 	// Routing bw Node: BFS Approach
-	public boolean routeBwNodes(
-			LinkedList<Integer>[] adjList, int start,
-			int end) {
+	public boolean routeBwNodes(LinkedList<Integer>[] adjList, int start, int end) {
 		if (adjList.length == 0)
 			return false;
 		Queue<Integer> queue = new LinkedList<>();
@@ -735,8 +684,7 @@ public class GraphProblems {
 		queue.add(start);
 		while (!queue.isEmpty()) {
 			int curr = queue.poll();
-			Iterator<Integer> iter = adjList[curr]
-					.iterator();
+			Iterator<Integer> iter = adjList[curr].iterator();
 			while (iter.hasNext()) {
 				int adjNode = iter.next();
 				if (!visited[adjNode]) {
@@ -759,8 +707,7 @@ public class GraphProblems {
 	 *  and each has a weight of 6. 
 	 *  Starting from node 1  and creating a list of distances, for nodes 2 through 6 we have distances = {6,12,18,6,-1}.
 	 */
-	public int[] shortestReach(int n,
-			LinkedList<Integer>[] adjList, int startId) {
+	public int[] shortestReach(int n, LinkedList<Integer>[] adjList, int startId) {
 		int[] distances = new int[n];
 		Arrays.fill(distances, -1);
 		boolean[] visited = new boolean[n];
@@ -775,8 +722,7 @@ public class GraphProblems {
 			while (level-- > 0) {
 				int v = queue.poll();
 				distances[v] = distance;
-				Iterator<Integer> iter = adjList[v]
-						.iterator();
+				Iterator<Integer> iter = adjList[v].iterator();
 				while (iter.hasNext()) {
 					int adjNode = iter.next();
 					if (!visited[adjNode]) {
@@ -796,13 +742,11 @@ public class GraphProblems {
 	 * if the color is not found, print -1. For example, given graph_nodes 5, and 4 edges g_from ={1,2,2,3} and 
 	 * g_to={2,3,4,5}  and colors for each node are arr={1,2,3,1,3}  we can draw the following graph:
 	 */
-	public int findShortest(int graphNodes, int[] graphFrom,
-			int[] graphTo, long[] ids, int val) {
+	public int findShortest(int graphNodes, int[] graphFrom, int[] graphTo, long[] ids, int val) {
 		int minDist = Integer.MAX_VALUE;
 		Queue<GraphNode> queue = new LinkedList<>();
 		boolean[] visited = new boolean[graphNodes];
-		LinkedList<Integer>[] adjList = buildAdjList(
-				graphNodes, graphFrom, graphTo);
+		LinkedList<Integer>[] adjList = buildAdjList(graphNodes, graphFrom, graphTo);
 		int s = 0;
 		for (int i = 0; i < ids.length; i++) {
 			if (ids[i] == val) {
@@ -816,25 +760,20 @@ public class GraphProblems {
 			GraphNode node = queue.poll();
 			if (node.vertex != s && node.color == val)
 				minDist = Math.min(minDist, node.dist);
-			Iterator<Integer> iter = adjList[node.vertex]
-					.iterator();
+			Iterator<Integer> iter = adjList[node.vertex].iterator();
 			while (iter.hasNext()) {
 				int adjNode = iter.next();
 				if (!visited[adjNode]) {
 					visited[adjNode] = true;
-					int dist = node.color == ids[adjNode]
-							? 1
-							: node.dist + 1;
-					queue.add(new GraphNode(adjNode,
-							ids[adjNode], dist));
+					int dist = node.color == ids[adjNode] ? 1 : node.dist + 1;
+					queue.add(new GraphNode(adjNode, ids[adjNode], dist));
 				}
 			}
 		}
 		return minDist == Integer.MAX_VALUE ? -1 : minDist;
 	}
 
-	public LinkedList<Integer>[] buildAdjList(int n,
-			int[] graphFrom, int[] graphTo) {
+	public LinkedList<Integer>[] buildAdjList(int n, int[] graphFrom, int[] graphTo) {
 		LinkedList<Integer>[] adjList = new LinkedList[n];
 		for (int i = 0; i < n; i++)
 			adjList[i] = new LinkedList<>();
@@ -845,95 +784,6 @@ public class GraphProblems {
 		return adjList;
 	}
 
-	/* Word Ladder:
-	 * Given two words (beginWord and endWord), and a dictionary's word list, find the length of shortest transformation sequence 
-	 * from beginWord to endWord, such that:
-	 *    Only one letter can be changed at a time.
-	 *    Each transformed word must exist in the word list. Note that beginWord is not a transformed word.
-	 */
-	public int ladderLength(String beginWord,
-			String endWord, List<String> wordList) {
-		LinkedList<WordNode> queue = new LinkedList<>();
-		queue.add(new WordNode(beginWord, 1));
-		Set<String> wordDict = new HashSet<>(wordList);
-		while (!queue.isEmpty()) {
-			WordNode top = queue.remove();
-			if (top.word.equals(endWord))
-				return top.count;
-			char[] arr = top.word.toCharArray();
-			for (int i = 0; i < arr.length; i++) {
-				for (char c = 'a'; c <= 'z'; c++) {
-					char temp = arr[i];
-					if (arr[i] != c)
-						arr[i] = c;
-					String newStr = new String(arr);
-					if (wordDict.contains(newStr)) {
-						queue.add(new WordNode(newStr,
-								top.count + 1));
-						wordDict.remove((Object) newStr);
-					}
-					arr[i] = temp;
-				}
-			}
-		}
-		return 0;
-	}
-
-	/* Word Ladder II:
-	 * Given two words (beginWord and endWord), and a dictionary's word list, find all shortest transformation
-	 * sequence(s) from beginWord to endWord,
-	 */
-	public List<List<String>> findLadders(String start,
-			String end, List<String> dict) {
-		List<List<String>> result = new ArrayList<List<String>>();
-		LinkedList<WordNode> queue = new LinkedList<WordNode>();
-		queue.add(new WordNode(start, 1, null));
-		int minStep = 0;
-		HashSet<String> visited = new HashSet<String>();
-		HashSet<String> unvisited = new HashSet<String>();
-		unvisited.addAll(dict);
-		int preNumSteps = 0;
-		while (!queue.isEmpty()) {
-			WordNode top = queue.remove();
-			String word = top.word;
-			int currNumSteps = top.count;
-			if (word.equals(end)) {
-				if (minStep == 0)
-					minStep = top.count;
-				if (top.count == minStep && minStep != 0) {
-					ArrayList<String> t = new ArrayList<String>();
-					t.add(top.word);
-					while (top.prev != null) {
-						t.add(0, top.prev.word);
-						top = top.prev;
-					}
-					result.add(t);
-					continue;
-				}
-			}
-			if (preNumSteps < currNumSteps)
-				unvisited.removeAll(visited);
-			preNumSteps = currNumSteps;
-			char[] arr = word.toCharArray();
-			for (int i = 0; i < arr.length; i++) {
-				for (char c = 'a'; c <= 'z'; c++) {
-					char temp = arr[i];
-					if (arr[i] != c) {
-						arr[i] = c;
-					}
-					String newWord = new String(arr);
-					if (unvisited.contains(newWord)) {
-						queue.add(new WordNode(newWord,
-								top.count + 1, top));
-						visited.add(newWord);
-					}
-					arr[i] = temp;
-				}
-			}
-		}
-		return result;
-	}
-
 	/*
 	 * String Deletion: Given a String and dictionary hashset, write a function to determine the minimum no
 	 * of characters to delete to make a word.
@@ -942,8 +792,7 @@ public class GraphProblems {
 	 */
 	// Solution: BFS; Time-O(n!)
 	// because substring Time: n * n-1 * n-2... 1)
-	public int stringDeletion(String query,
-			HashSet<String> dict) {
+	public int stringDeletion(String query, HashSet<String> dict) {
 		Queue<String> queue = new LinkedList<>();
 		Set<String> visited = new HashSet<>();
 		queue.add(query);
@@ -952,10 +801,8 @@ public class GraphProblems {
 			if (dict.contains(top))
 				return query.length() - top.length();
 			for (int i = 0; i < top.length(); i++) {
-				String subStr = top.substring(0, i) + top
-						.substring(i + 1, top.length());
-				if (subStr.length() > 0
-						&& !visited.contains(subStr)) {
+				String subStr = top.substring(0, i) + top.substring(i + 1, top.length());
+				if (subStr.length() > 0 && !visited.contains(subStr)) {
 					visited.add(subStr);
 					queue.add(subStr);
 				}
@@ -971,8 +818,7 @@ public class GraphProblems {
 	 * . return [6.0, 0.5, -1.0, 1.0, -1.0 ].
 	 */
 	// Approach1: Using Floyd Warshall Algorithm
-	public double[] calcEquation1(String[][] equations,
-			double[] values, String[][] queries) {
+	public double[] calcEquation1(String[][] equations, double[] values, String[][] queries) {
 		Map<String, Integer> map = new HashMap<>();
 		int n = 0;
 		for (String[] eqn : equations)
@@ -984,8 +830,7 @@ public class GraphProblems {
 			for (int j = 0; j < n; j++)
 				T[i][j] = (i == j) ? 1d : -1d;
 		for (int i = 0; i < equations.length; i++) {
-			int r = map.get(equations[i][0]),
-					c = map.get(equations[i][1]);
+			int r = map.get(equations[i][0]), c = map.get(equations[i][1]);
 			T[r][c] = values[i];
 			T[c][r] = 1 / values[i];
 		}
@@ -997,19 +842,16 @@ public class GraphProblems {
 		double[] result = new double[queries.length];
 		for (int i = 0; i < queries.length; i++) {
 			String[] query = queries[i];
-			if (!map.containsKey(query[0])
-					|| !map.containsKey(query[1]))
+			if (!map.containsKey(query[0]) || !map.containsKey(query[1]))
 				result[i] = -1d;
 			else
-				result[i] = T[map.get(query[0])][map
-						.get(query[1])];
+				result[i] = T[map.get(query[0])][map.get(query[1])];
 		}
 		return result;
 	}
 
 	// Approach2: Using DFS
-	public double[] calcEquation2(String[][] equations,
-			double[] values, String[][] query) {
+	public double[] calcEquation2(String[][] equations, double[] values, String[][] query) {
 		double[] result = new double[query.length];
 		Set<String> words = new HashSet<>();
 		for (String[] strs : equations) {
@@ -1018,41 +860,32 @@ public class GraphProblems {
 		}
 		for (int i = 0; i < query.length; ++i) {
 			String[] keys = query[i];
-			if (!words.contains(keys[0])
-					|| !words.contains(keys[1]))
+			if (!words.contains(keys[0]) || !words.contains(keys[1]))
 				result[i] = -1.0d;
 			else {
 				Stack<Integer> stack = new Stack<>();
-				result[i] = helper(equations, values, keys,
-						stack);
+				result[i] = helper(equations, values, keys, stack);
 			}
 		}
 		return result;
 	}
 
-	public double helper(String[][] eqn, double[] values,
-			String[] query, Stack<Integer> stack) {
+	public double helper(String[][] eqn, double[] values, String[] query, Stack<Integer> stack) {
 		String from, to;
 		for (int i = 0; i < eqn.length; ++i) {
 			from = eqn[i][0];
 			to = eqn[i][1];
-			if (from.equals(query[0])
-					&& to.equals(query[1]))
+			if (from.equals(query[0]) && to.equals(query[1]))
 				return values[i];
-			if (from.equals(query[1])
-					&& to.equals(query[0]))
+			if (from.equals(query[1]) && to.equals(query[0]))
 				return 1 / values[i];
 		}
 		for (int i = 0; i < eqn.length; ++i) {
 			from = eqn[i][0];
 			to = eqn[i][1];
-			if (!stack.contains(i)
-					&& query[0].equals(from)) {
+			if (!stack.contains(i) && query[0].equals(from)) {
 				stack.push(i);
-				double temp = values[i] * helper(eqn,
-						values,
-						new String[] { to, query[1] },
-						stack);
+				double temp = values[i] * helper(eqn, values, new String[] { to, query[1] }, stack);
 				if (temp > 0)
 					return temp;
 				else
@@ -1060,9 +893,7 @@ public class GraphProblems {
 			}
 			if (!stack.contains(i) && query[0].equals(to)) {
 				stack.push(i);
-				double temp = helper(eqn, values,
-						new String[] { from, query[1] },
-						stack) / values[i];
+				double temp = helper(eqn, values, new String[] { from, query[1] }, stack) / values[i];
 				if (temp > 0)
 					return temp;
 				else
@@ -1090,9 +921,9 @@ class Pair {
 }
 
 class GraphNode {
-	public int  vertex;
+	public int vertex;
 	public long color;
-	public int  dist;
+	public int dist;
 
 	public GraphNode(int vertex, long color, int dist) {
 		this.vertex = vertex;

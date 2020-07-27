@@ -17,7 +17,6 @@ import java.util.Stack;
 
 import com.common.model.EdgeNode;
 import com.common.model.UndirectedGraphNode;
-import com.common.model.WordNode;
 import com.common.utilities.DisjointSet;
 
 /*
@@ -833,91 +832,6 @@ public class GraphProblems {
 			adjList[graphTo[i] - 1].add(graphFrom[i] - 1);
 		}
 		return adjList;
-	}
-
-	/* Word Ladder:
-	 * Given two words (beginWord and endWord), and a dictionary's word list, find the length of shortest transformation sequence 
-	 * from beginWord to endWord, such that:
-	 *    Only one letter can be changed at a time.
-	 *    Each transformed word must exist in the word list. Note that beginWord is not a transformed word.
-	 */
-	public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-		LinkedList<WordNode> queue = new LinkedList<>();
-		queue.add(new WordNode(beginWord, 1));
-		Set<String> wordDict = new HashSet<>(wordList);
-		while (!queue.isEmpty()) {
-			WordNode top = queue.remove();
-			if (top.word.equals(endWord))
-				return top.count;
-			char[] arr = top.word.toCharArray();
-			for (int i = 0; i < arr.length; i++) {
-				for (char c = 'a'; c <= 'z'; c++) {
-					char temp = arr[i];
-					if (arr[i] != c)
-						arr[i] = c;
-					String newStr = new String(arr);
-					if (wordDict.contains(newStr)) {
-						queue.add(new WordNode(newStr, top.count + 1));
-						wordDict.remove((Object) newStr);
-					}
-					arr[i] = temp;
-				}
-			}
-		}
-		return 0;
-	}
-
-	/* Word Ladder II:
-	 * Given two words (beginWord and endWord), and a dictionary's word list, find all shortest transformation
-	 * sequence(s) from beginWord to endWord,
-	 */
-	public List<List<String>> findLadders(String start, String end, List<String> dict) {
-		List<List<String>> result = new ArrayList<List<String>>();
-		LinkedList<WordNode> queue = new LinkedList<WordNode>();
-		queue.add(new WordNode(start, 1, null));
-		int minStep = 0;
-		HashSet<String> visited = new HashSet<String>();
-		HashSet<String> unvisited = new HashSet<String>();
-		unvisited.addAll(dict);
-		int preNumSteps = 0;
-		while (!queue.isEmpty()) {
-			WordNode top = queue.remove();
-			String word = top.word;
-			int currNumSteps = top.count;
-			if (word.equals(end)) {
-				if (minStep == 0)
-					minStep = top.count;
-				if (top.count == minStep && minStep != 0) {
-					ArrayList<String> t = new ArrayList<String>();
-					t.add(top.word);
-					while (top.prev != null) {
-						t.add(0, top.prev.word);
-						top = top.prev;
-					}
-					result.add(t);
-					continue;
-				}
-			}
-			if (preNumSteps < currNumSteps)
-				unvisited.removeAll(visited);
-			preNumSteps = currNumSteps;
-			char[] arr = word.toCharArray();
-			for (int i = 0; i < arr.length; i++) {
-				for (char c = 'a'; c <= 'z'; c++) {
-					char temp = arr[i];
-					if (arr[i] != c) {
-						arr[i] = c;
-					}
-					String newWord = new String(arr);
-					if (unvisited.contains(newWord)) {
-						queue.add(new WordNode(newWord, top.count + 1, top));
-						visited.add(newWord);
-					}
-					arr[i] = temp;
-				}
-			}
-		}
-		return result;
 	}
 
 	/*

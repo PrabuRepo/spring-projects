@@ -4,27 +4,25 @@ import java.util.Arrays;
 
 /*
  * Formula for stock problems:
- * 	buyingPrice = Min(buyingPrice, currPrice-profit)
- *  profit = Max(profit, currPrice-buyingPrice)
+ * 	buyingPrice = Min(buyingPrice, currPrice-profit)   //Find Minimum  - Buying Price
+ *  profit = Max(profit, currPrice-buyingPrice)        //Find Max difference - Profit(SP - BP)
+ * 
+ * In below problems min and diff are,
+ *  min: Minimum BuyingPrice
+ *  diff: Maximum Profit = (Sell Price - Buy Price)
  */
 public class StockProblemPattern {
 	/*
 	 * Buy and Sell Stock Problems:
 	 * Ref: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/discuss/108870/Most-consistent-ways-of-dealing-with-the-series-of-stock-problems
 	 */
-	/*
-	 * Max Profit Stock Problem Solution:
-	 * 	- Find Minimum  - Buying Price 
-	 *  - Find Max difference - Profit(SP - BP) 
+	/*  Problem Types:
 	 *  1. Only 1 trx
 	 *  2. Only 2 trx
-	 *  3: Only K trx
-	 *  4: Any number of Trx
-	 *  5: Any no of Trx with cooling time
+	 *  3. Only K trx
+	 *  4. Any number of Trx
+	 *  5. Any no of Trx with cooling time
 	 *  6. Any no of Trx with Fee
-	 *  Note:
-	 *  min: BuyingPrice,
-	 *  diff: Profit = (Sell Price - Buy Price)
 	 *  
 	 */
 	// Best Time to Buy and Sell Stock - One Transaction
@@ -67,8 +65,7 @@ public class StockProblemPattern {
 		Arrays.fill(min, Integer.MAX_VALUE);
 		for (int price : prices) {
 			for (int i = 1; i <= k; i--) {
-				min[i] = Math.min(min[i],
-						price - diff[i - 1]);
+				min[i] = Math.min(min[i], price - diff[i - 1]);
 				diff[i] = Math.max(diff[i], price - min[i]);
 			}
 		}
@@ -91,8 +88,7 @@ public class StockProblemPattern {
 	// Best Time to Buy and Sell Stock with Cooldown - Multiple Transactions
 	// Similar to Prev soln, but store prev diff
 	public int maxProfit5(int[] prices) {
-		int prevDiff = 0, currDiff = 0,
-				min = Integer.MAX_VALUE;
+		int prevDiff = 0, currDiff = 0, min = Integer.MAX_VALUE;
 		for (int price : prices) {
 			int temp = currDiff;
 			min = Math.min(min, price - prevDiff);

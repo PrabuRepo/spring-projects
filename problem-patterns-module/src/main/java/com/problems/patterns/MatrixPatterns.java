@@ -2,14 +2,12 @@ package com.problems.patterns;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
 import com.common.model.Point;
-import com.common.model.TrieNode;
 import com.common.utilities.DisjointSet;
 import com.common.utilities.Utils;
 
@@ -296,12 +294,13 @@ public class MatrixPatterns {
 
 	public int uniquePathsWithObstacles(int[][] a, int i, int j) {
 		int r = a.length, c = a[0].length;
-		if (i == r - 1 && j == c - 1 && a[i][j] == 0)
+		// Here 1 means obstacle, 0 means empty path
+		if (i >= r || j >= c || a[i][j] == 1)
+			return 0;
+
+		if (i == r - 1 && j == c - 1)
 			return 1;
-		if (i < 0 || i >= r || j < 0 || j >= c)
-			return 0;
-		if (a[i][j] == 1) // Here 1 means obstacle, 0 means empty path
-			return 0;
+
 		return uniquePathsWithObstacles(a, i + 1, j) + uniquePathsWithObstacles(a, i, j + 1);
 	}
 
@@ -781,195 +780,16 @@ public class MatrixPatterns {
 		return lookup[i][j];
 	}
 
-	/* Word Search I:
-	 * Given a 2D board and a "word", find if the word exists in the grid.
-	 */
-	public boolean wordSearchI(char[][] board, String str) {
-		if (str.length() == 0 || board.length == 0 || board[0].length == 0)
-			return false;
-
-		int row = board.length, col = board[0].length;
-
-		for (int i = 0; i < row; i++)
-			for (int j = 0; j < col; j++)
-				if (str.charAt(0) == board[i][j])
-					if (dfsSearch1(board, str, i, j, 0))
-						return true;
-
-		return false;
+	// Word Boggle/Word Search I:
+	public void wordSearchI() {
+		WordProblems.wordSearchI(null, null);
 	}
 
-	/* Word SearchII: 
-	 * Given a 2D board and a "list of words" from the dictionary, find all words in the board.
-	 */
-	public List<String> wordSearchII1(char[][] board, String[] words) {
-		List<String> result = new ArrayList<>();
-		if (words.length == 0 || board.length == 0 || board[0].length == 0)
-			return result;
-
-		HashSet<String> set = new HashSet<>(); // Set is used to remove the duplicate word
-		for (String word : words)
-			if (!set.add(word) && isExist(board, word))
-				result.add(word);
-
-		result.stream().forEach(k -> System.out.print(k + " "));
-		return result;
-	}
-
-	public List<String> wordSearchII2(char[][] board, String[] words) {
-		List<String> result = new ArrayList<>();
-
-		// Build Trie datastructure
-		TrieNode root = buildTrie(words);
-
-		// dfs search
-		for (int i = 0; i < board.length; i++)
-			for (int j = 0; j < board[0].length; j++)
-				dfsSearch(board, root, i, j, result);
-
-		result.stream().forEach(k -> System.out.print(k + " "));
-
-		return result;
-	}
-
-	public List<String> wordSearchII3(char[][] board, String[] words) {
-		List<String> result = new ArrayList<>();
-
-		// Build Trie datastructure
-		TrieNode root = buildTrie2(words);
-
-		// dfs search
-		for (int i = 0; i < board.length; i++)
-			for (int j = 0; j < board[0].length; j++)
-				dfsSearch2(board, root, i, j, new StringBuilder(), result);
-
-		result.stream().forEach(k -> System.out.print(k + " "));
-
-		return result;
-	}
-
-	public boolean dfsSearch1(char[][] board, String word, int i, int j, int index) {
-		int row = board.length, col = board[0].length;
-
-		if (i < 0 || i >= row || j < 0 || j >= col || index >= word.length())
-			return false;
-
-		if (word.charAt(index) == board[i][j]) {
-			if (index == word.length() - 1)
-				return true;
-			char temp = board[i][j];
-			board[i][j] = '#'; // Avoid to revisit the same value
-
-			if (dfsSearch1(board, word, i - 1, j, index + 1) || dfsSearch1(board, word, i + 1, j, index + 1)
-					|| dfsSearch1(board, word, i, j - 1, index + 1) || dfsSearch1(board, word, i, j + 1, index + 1)) {
-				board[i][j] = temp;
-				return true;
-			}
-			board[i][j] = temp;
-		}
-
-		return false;
-	}
-
-	// Try this using iterative approach
-	public boolean dfsSearch2(char[][] board, String str, int i, int j, int index) {
-		return true;
-	}
-
-	public boolean isExist(char[][] board, String word) {
-		int row = board.length, col = board[0].length;
-		for (int i = 0; i < row; i++)
-			for (int j = 0; j < col; j++)
-				if (word.charAt(0) == board[i][j])
-					if (dfsSearch1(board, word, i, j, 0))
-						return true;
-		return false;
-	}
-
-	// Insert all the words in the Trie DS
-	public TrieNode buildTrie(String[] words) {
-		TrieNode root = new TrieNode();
-		for (String word : words) {
-			TrieNode curr = root;
-			for (int i = 0; i < word.length(); i++) {
-				int index = word.charAt(i) - 'a';
-				if (curr.children[index] == null)
-					curr.children[index] = new TrieNode();
-				curr = curr.children[index];
-			}
-			curr.word = word;
-		}
-		return root;
-	}
-
-	public TrieNode buildTrie2(String[] words) {
-		TrieNode root = new TrieNode();
-		for (String word : words) {
-			TrieNode curr = root;
-			for (int i = 0; i < word.length(); i++) {
-				int index = word.charAt(i) - 'a';
-				if (curr.children[index] == null)
-					curr.children[index] = new TrieNode();
-				curr = curr.children[index];
-			}
-			curr.isEndOfWord = true;
-		}
-		return root;
-	}
-
-	public void dfsSearch(char[][] board, TrieNode root, int i, int j, List<String> result) {
-		int rSize = board.length, cSize = board[0].length;
-		// Row & col Validation
-		if (i < 0 || i >= rSize || j < 0 || j >= cSize)
-			return;
-		// Trie Validation
-		char ch = board[i][j];
-		if (ch == '#' || root.children[ch - 'a'] == null)
-			return;
-
-		root = root.children[ch - 'a'];
-		if (root.word != null) {
-			result.add(root.word);
-			root.word = null;
-		}
-
-		board[i][j] = '#';
-
-		dfsSearch(board, root, i, j - 1, result);
-		dfsSearch(board, root, i, j + 1, result);
-		dfsSearch(board, root, i - 1, j, result);
-		dfsSearch(board, root, i + 1, j, result);
-
-		board[i][j] = ch;
-	}
-
-	public void dfsSearch2(char[][] board, TrieNode root, int i, int j, StringBuilder sb, List<String> result) {
-		int rSize = board.length, cSize = board[0].length;
-		// Row & col Validation
-		if (i < 0 || i >= rSize || j < 0 || j >= cSize)
-			return;
-		// Trie Validation
-		char ch = board[i][j];
-		if (ch == '#' || root.children[ch - 'a'] == null)
-			return;
-
-		root = root.children[ch - 'a'];
-
-		if (root.isEndOfWord) {
-			result.add(sb.toString() + ch);
-			root.isEndOfWord = false;
-			return;
-		}
-
-		sb.append(ch);
-		board[i][j] = '#';
-
-		dfsSearch2(board, root, i, j - 1, sb, result);
-		dfsSearch2(board, root, i, j + 1, sb, result);
-		dfsSearch2(board, root, i - 1, j, sb, result);
-		dfsSearch2(board, root, i + 1, j, sb, result);
-
-		board[i][j] = ch;
+	// Word Search II:
+	public void wordSearchII() {
+		WordProblems.wordSearchII1(null, null);
+		WordProblems.wordSearchII2(null, null);
+		WordProblems.wordSearchII3(null, null);
 	}
 
 	/************** 5.3.Find one path from src to dest: ***************/

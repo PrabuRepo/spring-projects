@@ -248,10 +248,14 @@ public class BTPatterns {
 	private int maxPathSumUtil(TreeNode root) {
 		if (root == null)
 			return 0;
-		return Math.max(0, root.data + Math.max(maxPathSumUtil(root.left), maxPathSumUtil(root.right)));
+		int left = maxPathSumUtil(root.left);
+		int right = maxPathSumUtil(root.right);
+
+		// Compare with zero to eliminate the -ve values
+		return Math.max(0, root.data + Math.max(left, right));
 	}
 
-	// Efficient Approach:
+	// Efficient Approach using class variable:
 	int maxValue;
 
 	public int maxPathSum(TreeNode root) {
@@ -263,10 +267,29 @@ public class BTPatterns {
 	private int maxPathDown(TreeNode node) {
 		if (node == null)
 			return 0;
-		int left = Math.max(maxPathDown(node.left), 0); // Compare with zero to eliminate the -ve values
-		int right = Math.max(maxPathDown(node.right), 0);
+		int left = maxPathDown(node.left);
+		int right = maxPathDown(node.right);
 		maxValue = Math.max(maxValue, left + right + node.data);
-		return Math.max(left, right) + node.data;
+		// Compare with zero to eliminate the -ve values
+		return Math.max(0, node.data + Math.max(left, right));
+	}
+
+	// Efficient Approach using array variable:
+	public int maxPathSum3(TreeNode root) {
+		int[] max = new int[1];
+		max[0] = Integer.MIN_VALUE;
+		maxPathDown(root, max);
+		return max[0];
+	}
+
+	private int maxPathDown(TreeNode node, int[] max) {
+		if (node == null)
+			return 0;
+		int left = maxPathDown(node.left, max);
+		int right = maxPathDown(node.right, max);
+		max[0] = Math.max(max[0], left + right + node.data);
+		// Compare with zero to eliminate the -ve values
+		return Math.max(0, node.data + Math.max(left, right));
 	}
 
 	/****************************** 6.BT Construction, Conversion **********************************/

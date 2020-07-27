@@ -698,8 +698,15 @@ public class GraphPatterns {
 		return judge + 1;
 	}
 
-	//TODO:Add this problem
-	//	Word Ladder I, II - BFS 
+	//	Word Ladder I, II - BFS -> Refer: WordProblem Patterns
+	public void wordLadderI() {
+		WordProblems.wordLadderI1(null, null, null);
+		WordProblems.wordLadderI2(null, null, null);
+	}
+
+	public void wordLadderII() {
+		WordProblems.wordLadderII(null, null, null);
+	}
 
 	//TODO: Move below code to consolidate module
 	// Topological Sort

@@ -27,14 +27,13 @@ public class TrieProblems {
 	Output: true
 	 */
 	public boolean validWordSquare(List<String> words) {
-		if (words == null || words.size() == 0) return true;
+		if (words == null || words.size() == 0)
+			return true;
 		int m = words.size();
 		for (int i = 0; i < m; i++) {
 			int n = words.get(i).length();
 			for (int j = 0; j < n; j++)
-				if (j >= m || m != n
-						|| words.get(i).charAt(j) != words
-								.get(j).charAt(i))
+				if (j >= m || m != n || words.get(i).charAt(j) != words.get(j).charAt(i))
 					return false;
 		}
 		return true;
@@ -49,7 +48,8 @@ public class TrieProblems {
 
 	public List<List<String>> wordSquares(String[] words) {
 		List<List<String>> ans = new ArrayList<>();
-		if (words == null || words.length == 0) return ans;
+		if (words == null || words.length == 0)
+			return ans;
 		int len = words[0].length();
 		// Build Trie
 		buildTrie(words);
@@ -60,8 +60,7 @@ public class TrieProblems {
 			search(len, ans, ansBuilder);
 			ansBuilder.remove(ansBuilder.size() - 1);
 		}
-		ans.stream()
-				.forEach(k -> System.out.print(k + ", "));
+		ans.stream().forEach(k -> System.out.print(k + ", "));
 		return ans;
 	}
 
@@ -79,8 +78,7 @@ public class TrieProblems {
 		}
 	}
 
-	private void search(int len, List<List<String>> ans,
-			List<String> ansBuilder) {
+	private void search(int len, List<List<String>> ans, List<String> ansBuilder) {
 		if (ansBuilder.size() == len) {
 			ans.add(new ArrayList<>(ansBuilder));
 			return;
@@ -90,8 +88,7 @@ public class TrieProblems {
 		StringBuilder prefixBuilder = new StringBuilder();
 		for (String s : ansBuilder)
 			prefixBuilder.append(s.charAt(idx));
-		List<String> startWith = findByPrefix(
-				prefixBuilder.toString());
+		List<String> startWith = findByPrefix(prefixBuilder.toString());
 		for (String sw : startWith) {
 			ansBuilder.add(sw);
 			search(len, ans, ansBuilder);
@@ -104,7 +101,8 @@ public class TrieProblems {
 		TrieNode cur = root;
 		for (char ch : prefix.toCharArray()) {
 			int idx = ch - 'a';
-			if (cur.children[idx] == null) return ans;
+			if (cur.children[idx] == null)
+				return ans;
 
 			cur = cur.children[idx];
 		}
@@ -112,165 +110,16 @@ public class TrieProblems {
 		return ans;
 	}
 
-	/* Word Boggle:
-	 * Word Search I - Search one word
-	 * Given a 2D board and a "word", find if the word exists in the grid.The word can be constructed from 
-	 * letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. 
-	 * The same letter cell may not be used more than once.
-	 * Example:
-	 * board =[['A','B','C','E'], ['S','F','C','S'], ['A','D','E','E']]
-	 * Given word = "ABCCED", return true.
-	 * Given word = "SEE", return true.
-	 */
-	public boolean wordSearch(char[][] board, String str) {
-		if (str.length() == 0 || board.length == 0
-				|| board[0].length == 0)
-			return false;
-
-		int row = board.length, col = board[0].length;
-
-		for (int i = 0; i < row; i++)
-			for (int j = 0; j < col; j++)
-				if (str.charAt(0) == board[i][j])
-					if (dfsSearch1(board, str, i, j, 0))
-						return true;
-
-		return false;
+	// Word Boggle/Word Search I:
+	public void wordSearchI() {
+		WordProblems.wordSearchI(null, null);
 	}
 
-	public boolean dfsSearch1(char[][] board, String word,
-			int i, int j, int index) {
-		int row = board.length, col = board[0].length;
-
-		if (i < 0 || i >= row || j < 0 || j >= col
-				|| index >= word.length())
-			return false;
-
-		if (word.charAt(index) == board[i][j]) {
-			if (index == word.length() - 1) return true;
-			char temp = board[i][j];
-			board[i][j] = '#'; // Avoid to revisit the same value
-
-			if (dfsSearch1(board, word, i - 1, j, index + 1)
-					|| dfsSearch1(board, word, i + 1, j,
-							index + 1)
-					|| dfsSearch1(board, word, i, j - 1,
-							index + 1)
-					|| dfsSearch1(board, word, i, j + 1,
-							index + 1)) {
-				board[i][j] = temp;
-				return true;
-			}
-			board[i][j] = temp;
-		}
-
-		return false;
-	}
-	/*
-	 * Given a 2D board and a list of words from the dictionary, find all words in the board.
-	 * Each word must be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally 
-	 * or vertically neighboring. The same letter cell may not be used more than once in a word.
-	 * 	Example:
-	 * 	Input: words = ["oath","pea","eat","rain"] and board =
-	 * 	[ ['o','a','a','n'],
-	 *    ['e','t','a','e'],
-	 *    ['i','h','k','r'],
-	 *    ['i','f','l','v']
-	 *  ]
-	 *  Output: ["eat","oath"]
-	 */
-	// Approach1: Using DFS -> Time Complexity: O(len*m*n) where len- no of words, m- row size, n-colSize
-	// Check Approach1 in Matrix Problems
-
-	/* Word Search II - Search array of words
-	 * Given a 2D board and a "list of words" from the dictionary, find all words in the board.
-	 */
-	public List<String> wordSearchII1(char[][] board,
-			String[] words) {
-		List<String> result = new ArrayList<>();
-		if (words.length == 0 || board.length == 0
-				|| board[0].length == 0)
-			return result;
-
-		HashSet<String> set = new HashSet<>(); // Set is used to remove the duplicate word
-		for (String word : words)
-			if (!set.add(word) && isExist(board, word))
-				result.add(word);
-
-		result.stream()
-				.forEach(k -> System.out.print(k + " "));
-		return result;
-	}
-
-	public boolean isExist(char[][] board, String word) {
-		int row = board.length, col = board[0].length;
-		for (int i = 0; i < row; i++)
-			for (int j = 0; j < col; j++)
-				if (word.charAt(0) == board[i][j])
-					if (dfsSearch1(board, word, i, j, 0))
-						return true;
-		return false;
-	}
-
-	public List<String> wordSearchII2(char[][] board,
-			String[] words) {
-		List<String> result = new ArrayList<>();
-
-		// Build Trie datastructure
-		TrieNode root = buildTrie2(words);
-
-		// dfs search
-		for (int i = 0; i < board.length; i++)
-			for (int j = 0; j < board[0].length; j++)
-				dfsSearch(board, root, i, j, result);
-
-		result.stream()
-				.forEach(k -> System.out.print(k + " "));
-
-		return result;
-	}
-
-	// Insert all the words in the Trie DS
-	public TrieNode buildTrie2(String[] words) {
-		TrieNode root = new TrieNode();
-		for (String word : words) {
-			TrieNode curr = root;
-			for (int i = 0; i < word.length(); i++) {
-				int index = word.charAt(i) - 'a';
-				if (curr.children[index] == null)
-					curr.children[index] = new TrieNode();
-				curr = curr.children[index];
-			}
-			curr.word = word;
-		}
-		return root;
-	}
-
-	public void dfsSearch(char[][] board, TrieNode root,
-			int i, int j, List<String> result) {
-		int rSize = board.length, cSize = board[0].length;
-		// Row & col Validation
-		if (i < 0 || i >= rSize || j < 0 || j >= cSize)
-			return;
-		// Trie Validation
-		char ch = board[i][j];
-		if (ch == '#' || root.children[ch - 'a'] == null)
-			return;
-
-		root = root.children[ch - 'a'];
-		if (root.word != null) {
-			result.add(root.word);
-			root.word = null;
-		}
-
-		board[i][j] = '#';
-
-		dfsSearch(board, root, i, j - 1, result);
-		dfsSearch(board, root, i, j + 1, result);
-		dfsSearch(board, root, i - 1, j, result);
-		dfsSearch(board, root, i + 1, j, result);
-
-		board[i][j] = ch;
+	// Word Search II:
+	public void wordSearchII() {
+		WordProblems.wordSearchII1(null, null);
+		WordProblems.wordSearchII2(null, null);
+		WordProblems.wordSearchII3(null, null);
 	}
 
 	//TODO: Move below to Consolidated Module
@@ -286,8 +135,7 @@ public class TrieProblems {
 		for (String str : arr)
 			insert(pCrawl, str);
 		StringBuilder prefix = new StringBuilder();
-		while (countChildren(pCrawl) == 1
-				&& !pCrawl.isEndOfWord) {
+		while (countChildren(pCrawl) == 1 && !pCrawl.isEndOfWord) {
 			pCrawl = pCrawl.children[index];
 			prefix.append((char) ('a' + index));
 		}
@@ -326,8 +174,7 @@ public class TrieProblems {
 	           is stored because of these type of cases.
 	 */
 	// Approach1: Using HashMap
-	public List<List<Integer>> palindromePairs(
-			String[] words) {
+	public List<List<Integer>> palindromePairs(String[] words) {
 		Map<String, Integer> map = new HashMap<>();
 		int n = words.length;
 		List<List<Integer>> result = new ArrayList<>();
@@ -337,18 +184,19 @@ public class TrieProblems {
 			int index = map.get("");
 			for (int i = 0; i < n; i++) {
 				if (isPalindrome(words[i])) {
-					if (i == index) continue;
+					if (i == index)
+						continue;
 					result.add(Arrays.asList(index, i));
 					result.add(Arrays.asList(i, index));
 				}
 			}
 		}
 		for (int i = 0; i < n; i++) {
-			String revStr = new StringBuilder(words[i])
-					.reverse().toString();
+			String revStr = new StringBuilder(words[i]).reverse().toString();
 			if (map.containsKey(revStr)) {
 				int revIndex = map.get(revStr);
-				if (i == revIndex) continue;
+				if (i == revIndex)
+					continue;
 				result.add(Arrays.asList(i, revIndex));
 			}
 		}
@@ -356,22 +204,20 @@ public class TrieProblems {
 			String curr = words[i];
 			for (int j = 1; j < curr.length(); j++) {
 				if (isPalindrome(curr.substring(0, j))) {
-					String revStr = new StringBuilder(
-							curr.substring(j)).reverse()
-									.toString();
+					String revStr = new StringBuilder(curr.substring(j)).reverse().toString();
 					if (map.containsKey(revStr)) {
 						int index = map.get(revStr);
-						if (index == i) continue;
+						if (index == i)
+							continue;
 						result.add(Arrays.asList(index, i));
 					}
 				}
 				if (isPalindrome(curr.substring(j))) {
-					String revStr = new StringBuilder(
-							curr.substring(0, j)).reverse()
-									.toString();
+					String revStr = new StringBuilder(curr.substring(0, j)).reverse().toString();
 					if (map.containsKey(revStr)) {
 						int index = map.get(revStr);
-						if (index == i) continue;
+						if (index == i)
+							continue;
 						result.add(Arrays.asList(i, index));
 					}
 				}
@@ -400,12 +246,12 @@ public class TrieProblems {
 				String check_str = "";
 
 				// concatenate both strings
-				check_str = check_str + vect.get(i)
-						+ vect.get(j);
+				check_str = check_str + vect.get(i) + vect.get(j);
 
 				// check if the concatenated string is
 				// palindrome
-				if (isPalindrome(check_str)) return true;
+				if (isPalindrome(check_str))
+					return true;
 			}
 		}
 		return false;
@@ -421,11 +267,9 @@ public class TrieProblems {
 	 * "4e" conflicts with "blade") "apple", ["plain", "amber", "blade"] -> "1p3" (other valid answers include "ap3", 
 	 * "a3e", "2p2", "3le", "3l1").
 	 */
-	public String minAbbreviation(String target,
-			String[] dictionary) {
+	public String minAbbreviation(String target, String[] dictionary) {
 		Set<String> visited = new HashSet<>();
-		PriorityQueue<Abbr2> q = new PriorityQueue<>(
-				(a, b) -> a.len - b.len);
+		PriorityQueue<Abbr2> q = new PriorityQueue<>((a, b) -> a.len - b.len);
 		int len = target.length();
 		String first = "";
 
@@ -438,15 +282,15 @@ public class TrieProblems {
 			String abbr = ab.abbr;
 			boolean conflict = false;
 			for (String word : dictionary) {
-				if (word.length() == len
-						&& isConflict(abbr, word)) {
+				if (word.length() == len && isConflict(abbr, word)) {
 					conflict = true;
 					break;
 				}
 			}
 			if (conflict)
 				generateAbbr(target, abbr, visited, q);
-			else return NumAbbr(abbr);
+			else
+				return NumAbbr(abbr);
 		}
 
 		return null;
@@ -454,22 +298,19 @@ public class TrieProblems {
 
 	boolean isConflict(String abbr, String str) {
 		for (int i = 0; i < abbr.length(); i++)
-			if (abbr.charAt(i) != '*'
-					&& str.charAt(i) != abbr.charAt(i))
+			if (abbr.charAt(i) != '*' && str.charAt(i) != abbr.charAt(i))
 				return false;
 		return true;
 	}
 
-	void generateAbbr(String str, String abbr,
-			Set<String> visited, PriorityQueue<Abbr2> q) {
+	void generateAbbr(String str, String abbr, Set<String> visited, PriorityQueue<Abbr2> q) {
 		char[] temp = abbr.toCharArray();
 		for (int i = 0; i < temp.length; i++) {
 			if (temp[i] == '*') {
 				temp[i] = str.charAt(i);
 				String next = new String(temp);
 				if (!visited.contains(next)) {
-					q.offer(new Abbr2(next,
-							abbrLength(next)));
+					q.offer(new Abbr2(next, abbrLength(next)));
 					visited.add(next);
 				}
 				temp[i] = '*';
@@ -504,7 +345,8 @@ public class TrieProblems {
 				count++;
 			}
 		}
-		if (count > 0) ret += count;
+		if (count > 0)
+			ret += count;
 		return ret;
 	}
 
@@ -539,7 +381,7 @@ public class TrieProblems {
 
 class Abbr2 {
 	String abbr;
-	int    len;
+	int len;
 
 	Abbr2(String abbr, int len) {
 		this.abbr = abbr;

@@ -781,6 +781,7 @@ public class DynamicProgramming {
 	/*
 	Fibonacci numbers
 	Staircase
+	Unique Binary Search Trees I, II - DP => Formula based
 	Number factors
 	Minimum jumps to reach the end
 	Minimum jumps with fee
@@ -869,6 +870,54 @@ public class DynamicProgramming {
 		for (int i = 4; i <= n; i++)
 			dp[i] = dp[i - 1] + dp[i - 2] + dp[i - 3];
 		return dp[n];
+	}
+
+	//Unique Binary Search Trees I - DP
+	public int numTrees(int n) {
+		int[] dp = new int[n + 1];
+		dp[0] = dp[1] = 1;
+
+		for (int i = 2; i <= n; i++) {
+			for (int j = 1; j <= i; j++) {
+				dp[i] += dp[j - 1] * dp[i - j];
+			}
+		}
+		return dp[n];
+	}
+
+	//Unique Binary Search Trees II - DP
+	public List<TreeNode> generateTrees(int n) {
+		List<TreeNode>[] result = new List[n + 1];
+		result[0] = new ArrayList<TreeNode>();
+		if (n == 0) {
+			return result[0];
+		}
+
+		result[0].add(null);
+		for (int len = 1; len <= n; len++) {
+			result[len] = new ArrayList<TreeNode>();
+			for (int j = 0; j < len; j++) {
+				for (TreeNode nodeL : result[j]) {
+					for (TreeNode nodeR : result[len - j - 1]) {
+						TreeNode node = new TreeNode(j + 1);
+						node.left = nodeL;
+						node.right = clone(nodeR, j + 1);
+						result[len].add(node);
+					}
+				}
+			}
+		}
+		return result[n];
+	}
+
+	private TreeNode clone(TreeNode n, int offset) {
+		if (n == null) {
+			return null;
+		}
+		TreeNode node = new TreeNode(n.data + offset);
+		node.left = clone(n.left, offset);
+		node.right = clone(n.right, offset);
+		return node;
 	}
 
 	// Approach1: Using Recursion
@@ -2121,5 +2170,7 @@ public class DynamicProgramming {
 		box.width = Math.min(side1, side2);
 		return box;
 	}
+
+	/******************************* Others: Uncategorized ********************/
 
 }
