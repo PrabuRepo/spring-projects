@@ -1,10 +1,6 @@
 package com.problems.patterns;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.common.model.Query;
-import com.common.model.TreeNode;
 
 public class SegmentTreeProblems {
 	public void sumRange(int[] arr, Query[] queries) {
@@ -30,8 +26,10 @@ public class SegmentTreeProblems {
 	}
 
 	public int querySumRange(int[] segTree, int qLow, int qHigh, int arrLow, int arrHigh, int pos) {
-		if (arrLow >= qLow && arrHigh <= qHigh) return segTree[pos];
-		if (arrLow > qHigh || arrHigh < qLow) return 0;
+		if (arrLow >= qLow && arrHigh <= qHigh)
+			return segTree[pos];
+		if (arrLow > qHigh || arrHigh < qLow)
+			return 0;
 		int m = (arrLow + arrHigh) / 2;
 		return querySumRange(segTree, qLow, qHigh, arrLow, m, 2 * pos + 1)
 				+ querySumRange(segTree, qLow, qHigh, m + 1, arrHigh, 2 * pos + 2);
@@ -44,7 +42,8 @@ public class SegmentTreeProblems {
 	          input array. 
 	diff --> Value to be added to all nodes which have i in range */
 	void updateValueUtil(int[] segTree, int l, int h, int index, int diff, int pos) {
-		if (l > index || h < index) return;
+		if (l > index || h < index)
+			return;
 		segTree[pos] = segTree[pos] + diff;
 		if (l != h) {
 			int mid = l + (h - l) / 2;
@@ -65,36 +64,6 @@ public class SegmentTreeProblems {
 		updateValueUtil(segTree, 0, n - 1, i, diff, 0);
 	}
 
-	/*
-	 * Count of Smaller Numbers After Self:
-	 * You are given an integer array nums and you have to return a new counts array. The counts array has the property 
-	 * where counts[i] is the number of smaller elements to the right of nums[i].
-	 * Example:
-	 * 	Input: [5,2,6,1]; Output: [2,1,1,0] 
-	 */
-	public List<Integer> countSmaller(int[] nums) {
-		int n = nums.length;
-		Integer[] result = new Integer[n];
-		TreeNode root = null;
-		for (int i = n - 1; i >= 0; i--) {
-			root = insert(root, nums[i], result, i, 0);
-		}
-		return Arrays.asList(result);
-	}
-
-	public TreeNode insert(TreeNode root, int data, Integer[] result, int i, int currCount) {
-		if (root == null) {
-			root = new TreeNode(data, 0);
-			result[i] = currCount;
-		} else if (data < root.data) {
-			root.count++;
-			root.left = insert(root.left, data, result, i, currCount);
-		} else {
-			root.right = insert(root.right, data, result, i, currCount + root.count + (data > root.data ? 1 : 0));
-		}
-		return root;
-	}
-
 	/**************** Common Method *******************/
 	/* Find the segment size or no of nodes in the tree:
 	 * Find the nth next 2 power value(Which is equal to no of leafs in the tree); 
@@ -106,7 +75,7 @@ public class SegmentTreeProblems {
 	private int findSegTreeSize(int n) {
 		int h = (int) (Math.ceil(Math.log(n) / Math.log(2))); // Find 2th power from input n, which is equal to max no
 																// of leafs in the tree
-		// Maximum size of segment tree
+																// Maximum size of segment tree
 		int noOfLeafs = (int) Math.pow(2, h);
 		int treeSize = 2 * noOfLeafs - 1; // No of nodes in tree: 2*(No of leafs =2^h) - 1
 		return treeSize;

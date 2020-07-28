@@ -48,7 +48,8 @@ public class SortingAlgorithms {
 				break;
 			case 4:
 				a = sort.insert(in);
-				sort.mergeSort(a);
+				sort.mergeSort1(a);
+				//sort.mergeSort2(a); //using helper array
 				break;
 			case 5:
 				System.out.println("Enter no of elements to be inserted:");
@@ -253,7 +254,7 @@ public class SortingAlgorithms {
 	 * Merge sort is a divide-and-conquer algorithm based on the idea of breaking down a list into several sub-lists until each sublist
 	 * consists of a single element and merging those sublists in a manner that results into a sorted list.
 	 */
-	public void mergeSort(int[] a) {
+	public void mergeSort1(int[] a) {
 		divide(a, 0, a.length - 1);
 	}
 
@@ -265,33 +266,33 @@ public class SortingAlgorithms {
 		divide(a, l, m);
 		divide(a, m + 1, r);
 		// Merge sub arrays, used 2 arrays
-		// merge(a, l, m, r);
-		// Merge sub arrays, used 1 array
-		merge2(a, l, m, r);
+		merge(a, l, m, r);
 
 	}
 
 	private void merge(int[] a, int l, int m, int r) {
-		int leftSize = m - l + 1; // left to middle
+		/*int leftSize = m - l + 1; // left to middle
 		int rightSize = r - m; // middle+1 to rightIndex
 		int[] left = new int[leftSize];
 		int[] right = new int[rightSize];
-
 		// Copy the elements index from l to m into left[] array
 		for (int i = 0; i < leftSize; i++)
 			left[i] = a[l + i];
-
 		// Copy the elements index from m+1 to r into right[] array
 		for (int i = 0; i < rightSize; i++)
 			right[i] = a[m + 1 + i];
+		*/
+		//or
+		int[] left = Arrays.copyOfRange(a, l, m + 1);
+		int[] right = Arrays.copyOfRange(a, m + 1, r + 1);
 
 		int leftIndex = 0, rightIndex = 0, curr = l;
 		// Merge the elements in asc order
-		while (leftIndex < leftSize && rightIndex < rightSize)
+		while (leftIndex < left.length && rightIndex < right.length)
 			a[curr++] = (left[leftIndex] <= right[rightIndex]) ? left[leftIndex++] : right[rightIndex++];
 
 		// Copy the remaining left side elements into array
-		while (leftIndex < leftSize)
+		while (leftIndex < left.length)
 			a[curr++] = left[leftIndex++];
 
 		// The right half doesn't need to be copied because it's already there.
@@ -301,27 +302,46 @@ public class SortingAlgorithms {
 
 	}
 
-	private void merge2(int[] a, int l, int m, int r) {
-		int[] helper = new int[a.length]; // This helper should move to mergeSort(a); That would be efficient
+	//Similar to above but created static helper array once and created in first method
+	public void mergeSort2(int[] a) {
+		int[] helper = new int[a.length];
+		divide2(a, 0, a.length - 1, helper);
+	}
 
+	private void divide2(int[] a, int l, int r, int[] helper) {
+		if (l >= r)
+			return;
+
+		int m = (l + r) / 2;
+		divide2(a, l, m, helper);
+		divide2(a, m + 1, r, helper);
+		// Merge sub arrays, used 1 array
+		merge2(a, l, m, r, helper);
+
+	}
+
+	private void merge2(int[] a, int l, int m, int r, int[] helper) {
 		for (int i = l; i <= r; i++)
 			helper[i] = a[i];
 
-		int helperLeft = l, helperRight = m + 1, curr = l;
+		int left = l, right = m + 1, curr = l;
 
-		while (helperLeft <= m && helperRight <= r)
-			a[curr++] = (helper[helperLeft] <= helper[helperRight]) ? helper[helperLeft++] : helper[helperRight++];
+		while (left <= m && right <= r)
+			a[curr++] = (helper[left] <= helper[right]) ? helper[left++] : helper[right++];
 
 		// Copy the remaining left side elements into array
-		while (helperLeft <= m)
-			a[curr++] = helper[helperLeft++];
+		while (left <= m)
+			a[curr++] = helper[left++];
 
 		// The right half doesn't need to be copied because it's already there.
 		// Copy the remaining right side elements into array
-		/*while (helperRight <= r)
-			a[curr++] = helper[helperRight++];*/
+		/*while (right <= r)
+			a[curr++] = helper[right++];*/
 	}
 
+	/*
+	 * Merge Sort: Merge sort for Linked List data structure
+	 */
 	public ListNode mergeSortForLL(ListNode head) {
 		return divideLL(head);
 	}
