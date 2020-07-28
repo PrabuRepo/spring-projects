@@ -1,4 +1,4 @@
-package com.problems.patterns;
+package com.problems.patterns.advds;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +10,7 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 import com.common.model.TrieNode;
+import com.problems.patterns.crossdomains.WordProblems;
 
 public class TrieProblems {
 

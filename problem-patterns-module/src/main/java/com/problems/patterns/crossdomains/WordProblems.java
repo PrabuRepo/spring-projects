@@ -1,4 +1,4 @@
-package com.problems.patterns;
+package com.problems.patterns.crossdomains;
 
 import java.util.ArrayList;
 import java.util.Arrays;

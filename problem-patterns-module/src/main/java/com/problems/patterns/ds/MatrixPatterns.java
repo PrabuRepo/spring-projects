@@ -1,4 +1,4 @@
-package com.problems.patterns;
+package com.problems.patterns.ds;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +10,7 @@ import java.util.Queue;
 import com.common.model.Point;
 import com.common.utilities.DisjointSet;
 import com.common.utilities.Utils;
+import com.problems.patterns.crossdomains.WordProblems;
 
 public class MatrixPatterns {
 	/************** Type1: Basic Matrix Problems ***************/

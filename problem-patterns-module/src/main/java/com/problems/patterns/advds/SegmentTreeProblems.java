@@ -1,4 +1,4 @@
-package com.problems.patterns;
+package com.problems.patterns.advds;
 
 import com.common.model.Query;
 

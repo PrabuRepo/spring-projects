@@ -1,4 +1,4 @@
-package com.problems.patterns;
+package com.problems.patterns.ds;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,6 +16,7 @@ import java.util.Stack;
 import com.common.model.EdgeNode;
 import com.common.model.UndirectedGraphNode;
 import com.common.utilities.DisjointSet;
+import com.problems.patterns.crossdomains.WordProblems;
 
 public class GraphPatterns {
 

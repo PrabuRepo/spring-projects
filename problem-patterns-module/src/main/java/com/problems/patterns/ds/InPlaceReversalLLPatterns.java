@@ -1,4 +1,4 @@
-package com.problems.patterns;
+package com.problems.patterns.ds;
 
 import com.common.model.ListNode;
 
