@@ -20,16 +20,18 @@ public class BTProblems {
 	/* Height of Binary Tree:
 	 * Recursive Approach: - Height - Path/no of nodes from any node to leaf -
 	 * Height of the tree - Height from root to longest leaf - Depth of the tree ==
-	 * Height of the tree == No of levels in the tree
+	 * Height of the tree == No of levels in the tree == Depth of the Tree 
 	 * Maximum Depth/Depth/Level/Height of a Tree - Recursive & Iterative:
 	 */
+
+	//Height of the tree - Recursive approach
 	public int heightOfTree1(TreeNode root) {
 		if (root == null)
 			return 0; // 0 means count the nodes, -1 means count the edges
 		return 1 + Math.max(heightOfTree1(root.left), heightOfTree1(root.right));
 	}
 
-	// Iterative Approach: Height of the tree
+	// Height of the tree - Iterative Approach
 	public int heightOfTree2(TreeNode root) {
 		int nodeCount = 0, height = 0; // 0 means count the nodes, -1 means count the edges
 		if (root != null) {
@@ -454,200 +456,18 @@ public class BTProblems {
 		return prev;
 	}
 
-	/************************ Type2: BT Traversals ************************/
-	//	Binary Tree Preorder, Inorder, Postorder Traversal
-	/*
-	 * DFS Traversals overview: - Preorder/Inorder/Postorder 
-	 * 1.Recursive Approach
-	 * 2.Iterative Approach:
-	 * 	 - PreOrder - Stack 
-	 * 	 - InOrder - Stack 
-	 *   - PostOrder - 2 Stack or single stack
-	 */
-	public void preOrder(TreeNode root) {
-		if (root == null)
-			return;
-
-		System.out.print(root.data + " ");
-		preOrder(root.left);
-		preOrder(root.right);
-	}
-
-	public void inOrder(TreeNode root) {
-		if (root == null)
-			return;
-
-		inOrder(root.left);
-		System.out.print(root.data + " ");
-		inOrder(root.right);
-	}
-
-	public void postOrder(TreeNode root) {
-		if (root == null)
-			return;
-
-		postOrder(root.left);
-		postOrder(root.right);
-		System.out.print(root.data + " ");
-	}
-
-	public void preOrderCharNode(TreeNode root) {
-		if (root == null)
-			return;
-
-		System.out.print(root.data + " ");
-		preOrderCharNode(root.left);
-		preOrderCharNode(root.right);
-	}
-
-	public void inOrderCharNode(TreeNode root) {
-		if (root == null)
-			return;
-
-		inOrderCharNode(root.left);
-		System.out.print(root.data + " ");
-		inOrderCharNode(root.right);
-	}
-
-	public void postOrderCharNode(TreeNode root) {
-		if (root == null)
-			return;
-
-		postOrderCharNode(root.left);
-		postOrderCharNode(root.right);
-		System.out.print(root.data + " ");
-	}
-
-	/*
-	 * DFS Traversals Iterative approach overview: 
-	 * 		PreOrder  - Stack
-	 * 		InOrder - Stack
-	 * 		PostOrder - 2 Stack or single stack
-	 */
-	public void preOrderIterative(TreeNode root) {
-		if (root != null) {
-			Stack<TreeNode> stack = new Stack<>();
-			stack.push(root);
-			while (!stack.isEmpty()) {
-				root = stack.pop();
-				System.out.print(root.data + " ");
-				if (root.right != null)
-					stack.push(root.right);
-				if (root.left != null)
-					stack.push(root.left);
-			}
-		}
-	}
-
-	public void inOrderIterative(TreeNode root) {
-		if (root != null) {
-			Stack<TreeNode> stack = new Stack<>();
-			while (true) {
-				if (root != null) {
-					stack.push(root);
-					root = root.left;
-				} else {
-					if (stack.isEmpty())
-						break;
-					root = stack.pop();
-					System.out.print(root.data + " ");
-					root = root.right;
-				}
-			}
-		}
-	}
-
-	// Reverse logic of Preorder iterative approach
-	public void postOrderUsing2Stack(TreeNode root) {
-		if (root != null) {
-			Stack<TreeNode> s1 = new Stack<>();
-			Stack<Integer> s2 = new Stack<>();
-			s1.push(root);
-			while (!s1.isEmpty()) {
-				root = s1.pop();
-				s2.push(root.data);
-				if (root.left != null)
-					s1.push(root.left);
-				if (root.right != null)
-					s1.push(root.right);
-			}
-
-			while (!s2.isEmpty())
-				System.out.print(s2.pop() + " ");
-		}
-	}
-
-	public void postOrderUsingStack(TreeNode root) {
-		if (root != null) {
-			TreeNode current = root, rightNode, topNode;
-			Stack<TreeNode> stack = new Stack<>();
-			while (current != null || !stack.isEmpty()) {
-				if (current != null) {
-					stack.push(current);
-					current = current.left;
-				} else {
-					rightNode = stack.peek().right;
-					if (rightNode != null) {
-						current = rightNode;
-					} else {
-						topNode = stack.pop();
-						System.out.print(topNode.data + " ");
-						while (!stack.isEmpty() && topNode == stack.peek().right) {
-							topNode = stack.pop();
-							System.out.print(topNode.data + " ");
-						}
-					}
-				}
-			}
-		}
-	}
-
 	//	Binary Tree Level Order Traversal I, II
 	/*
-	 * BFS/Level Order Traversal: 1.Recursive Approach 2.Iterative Approach using
-	 * Queue 3.Level by Level1: using single queue & level size iteration 4.Level by
-	 * Level2 - using 2 queues 5.Bottom-up/Reverse level order traversal: Traverse
-	 * level by level using queue and store the result in Stack 6.Bottom-up
-	 * LevelByLevel Traversal: Iterative Approach; Single Iteration & levelSize
-	 * iteration 7.Bottom-up LevelByLevel Traversal: Recursive Approach 8.Spiral
-	 * Order Traversal:
+	 * BFS/Level Order Traversal: 
+	 * 1.Recursive Approach - Refer Basic Module
+	 * 2.Iterative Approach using Queue - Refer Basic Module
+	 * 3.Level by Level1: using single queue & level size iteration 
+	 * 4.Level by Level2 - using 2 queues 
+	 * 5.Bottom-up/Reverse level order traversal: Traverse level by level using queue and store the result in Stack
+	 * 6.Bottom-up LevelByLevel Traversal: Iterative Approach; Single Iteration & levelSize iteration 
+	 * 7.Bottom-up LevelByLevel Traversal: Recursive Approach 
+	 * 8.Spiral Order Traversal:
 	 */
-
-	// 1.Recursive Approach:(LevelOrder - DFS Traversals)
-	public List<List<Integer>> levelByLevelOrderRecursive(TreeNode root) {
-		List<List<Integer>> result = new LinkedList<>();
-		levelOrder(root, result, 0);
-		return result;
-	}
-
-	public void levelOrder(TreeNode root, List<List<Integer>> result, int level) {
-		if (root == null)
-			return;
-
-		if (result.size() <= level)
-			result.add(new ArrayList<>());
-		result.get(level).add(root.data);
-
-		levelOrder(root.left, result, level + 1);
-		levelOrder(root.right, result, level + 1);
-	}
-
-	// 2.Iterative Approach using Queue:
-	public void levelOrder(TreeNode root) {
-		if (root == null)
-			return;
-
-		Queue<TreeNode> queue = new LinkedList<>();
-		queue.add(root);
-		while (!queue.isEmpty()) {
-			root = queue.remove();
-			System.out.print(root.data + " ");
-			if (root.left != null)
-				queue.add(root.left);
-			if (root.right != null)
-				queue.add(root.right);
-		}
-	}
 
 	// 3. Level by Level1: using single queue & levelsize iteration
 	public List<List<Integer>> levelByLevelOrder1(TreeNode root) {
