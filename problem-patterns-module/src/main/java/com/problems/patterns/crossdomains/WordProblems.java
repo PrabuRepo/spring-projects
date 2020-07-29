@@ -18,17 +18,6 @@ import com.common.model.TrieNode;
 import com.common.model.WordNode;
 
 public class WordProblems {
-	/*
-	String: Shortest Word Distance, Word Pattern 
-	Trie: Add and Search Word; Word Squares; Valid Word Square
-	Graph: Word Ladder I,II(BFS)
-	Backtracking: Word Pattern II 
-	DP: Word Break I, II
-	Map:Unique Word Abbreviation, Minimum Unique Word Abbreviation
-	Bit Manipulations: Maximum Product of Word Lengths/Find the Difference
-	Heap: Top K Frequent Words
-	Backtracking: Crossword Puzzle */
-
 	/* Shortest Word Distance:
 	 * words = ["practice", "makes", "perfect", "coding", "makes"]. 
 	 * Given word1 = "coding", word2 = "practice", Result: 3. 
@@ -52,22 +41,54 @@ public class WordProblems {
 	/* Word Pattern: Example 1: Input: pattern = "abba", 
 	 * str = "dog cat cat dog";  Output: true
 	 */
-	public boolean wordPattern(String pattern, String str) {
+	//Using Map & Set - Time: O(n), Space: O(2n) = O(n)
+	public boolean wordPattern1(String pattern, String str) {
 		if (str == null || str.length() == 0 || pattern.length() == 0)
 			return false;
 
 		Map<Character, String> map = new HashMap<>();
-		String[] arr = str.split(" ");
-		if (pattern.length() != arr.length)
+		Set<String> set = new HashSet<>();
+		String[] words = str.split(" ");
+
+		if (pattern.length() != words.length)
 			return false;
 
-		for (int i = 0; i < pattern.length(); i++) {
-			char pat = pattern.charAt(i);
-			if (map.containsKey(pat) && !map.get(pat).equals(arr[i]))
+		for (int i = 0; i < words.length; i++) {
+			char ch = pattern.charAt(i);
+			if (!map.containsKey(ch)) {
+				if (!set.add(words[i]))
+					return false;
+				map.put(ch, words[i]);
+			} else {
+				if (!map.get(ch).equals(words[i]))
+					return false;
+			}
+		}
+
+		return true;
+	}
+
+	//Using Map to store the index - Time: O(n), Space: O(2n) = O(n)
+	public boolean wordPattern(String pattern, String str) {
+		if (str == null || str.length() == 0 || pattern.length() == 0)
+			return false;
+
+		//Use HashMap without specifying data type
+		Map map = new HashMap();
+		String[] words = str.split(" ");
+
+		if (pattern.length() != words.length)
+			return false;
+
+		for (int i = 0; i < words.length; i++) {
+			char ch = pattern.charAt(i);
+			if (!map.containsKey(ch))
+				map.put(ch, i);
+			if (!map.containsKey(words[i]))
+				map.put(words[i], i);
+
+			if (!map.get(ch).equals(map.get(words[i])))
 				return false;
-			if (!map.containsKey(pat) && map.containsValue(arr[i]))
-				return false;
-			map.put(pat, arr[i]);
 		}
 
 		return true;
@@ -156,6 +177,148 @@ public class WordProblems {
 		}
 
 		return false;
+	}
+
+	/*
+	 * Word Break I:
+	 * Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, determine if s can
+	 * be segmented into a space-separated sequence of one or more dictionary words.
+	 * 	Note:The same word in the dictionary may be reused multiple times in the segmentation. You may assume the 
+	 * dictionary does not contain duplicate words.
+	 * 	Example 1:	Input: s = "leetcode", wordDict = ["leet", "code"]	Output: true
+	 * 	Explanation: Return true because "leetcode" can be segmented as "leet code".
+	 * 	Input: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"] Output: false 
+	 */
+	// Using DFS Search: It throws TLE
+	public boolean wordBreakI1(String s, List<String> wordDict) {
+		return wordBreakHelper(s, wordDict, 0);
+	}
+
+	public boolean wordBreakHelper(String s, List<String> dict, int start) {
+		if (start == s.length())
+			return true;
+
+		for (String word : dict) {
+			int end = start + word.length();
+
+			if (end > s.length())
+				continue;
+
+			String substr = s.substring(start, end);
+			if (substr.equals(word)) {
+				if (wordBreakHelper(s, dict, end))
+					return true;
+			}
+		}
+
+		return false;
+	}
+
+	// DP: Using string length & dict size; Time: O(string length * dict size).
+	public boolean wordBreakI2(String s, List<String> wordDict) {
+		int n = s.length();
+		boolean[] lookup = new boolean[n + 1];
+		lookup[0] = true;
+
+		for (int i = 0; i < n; i++) {
+			if (!lookup[i])
+				continue;
+			for (String word : wordDict) {
+				int end = i + word.length();
+				if (end > s.length() || lookup[end])
+					continue;
+				if (s.substring(i, end).equals(word))
+					lookup[end] = true;
+			}
+		}
+		return lookup[n];
+	}
+
+	// DP: Using only string length; Time: O(string length * string length*dict size).
+	public boolean wordBreakI3(String s, List<String> wordDict) {
+		int n = s.length();
+		boolean[] lookup = new boolean[n + 1];
+		lookup[0] = true;
+
+		for (int i = 0; i < n; i++) {
+			if (lookup[i]) {
+				for (int j = i + 1; j <= n; j++)
+					if (wordDict.contains(s.substring(i, j))) //contains take dict size times
+						lookup[j] = true;
+			}
+		}
+
+		return lookup[n];
+	}
+
+	/*
+	 * Word Break II:
+	 * Return all such possible sentences.
+	 * Example 1: 
+	 *  Input: s = "pineapplepenapple"; wordDict = ["apple", "pen", "applepen", "pine", "pineapple"]
+	 *  Output:["pine apple pen apple", "pineapple pen apple","pine applepen apple"]
+	 *  Explanation: Note that you are allowed to reuse a dictionary word.
+	 */
+	// Using DFS Search: It throws TLE
+	public List<String> wordBreakII1(String s, List<String> wordDict) {
+		List<String> result = new ArrayList<>();
+		wordBreakHelper(s, wordDict, 0, "", result);
+		return result;
+	}
+
+	public void wordBreakHelper(String s, List<String> dict, int start, String str, List<String> result) {
+		if (start == s.length()) {
+			result.add(str.trim());
+			return;
+		}
+
+		for (String word : dict) {
+			int end = start + word.length();
+
+			if (end > s.length())
+				continue;
+
+			String substr = s.substring(start, end);
+			if (substr.equals(word))
+				wordBreakHelper(s, dict, end, str + " " + substr, result);
+
+		}
+	}
+
+	// DP: Using only string length; Time: O(string length * string length).
+	public List<String> wordBreakII2(String s, List<String> wordDict) {
+		int n = s.length();
+		List<String>[] lookup = new ArrayList[n + 1];
+		lookup[0] = new ArrayList<>();
+
+		for (int i = 0; i < n; i++) {
+			if (lookup[i] != null) {
+				for (int j = i + 1; j <= n; j++) {
+					String subStr = s.substring(i, j);
+					if (wordDict.contains(subStr)) {
+						if (lookup[j] == null)
+							lookup[j] = new ArrayList<>();
+						lookup[j].add(subStr);
+					}
+				}
+			}
+		}
+
+		List<String> result = new ArrayList<>();
+		if (lookup[n] == null)
+			return result;
+		dfs(lookup, result, "", s.length());
+
+		return result;
+	}
+
+	public void dfs(List<String>[] lookup, List<String> result, String str, int i) {
+		if (i == 0) {
+			result.add(str.trim());
+		} else {
+			for (String word : lookup[i])
+				dfs(lookup, result, word + " " + str, i - word.length());
+		}
 	}
 
 	/*
@@ -589,175 +752,6 @@ public class WordProblems {
 		return result;
 	}
 
-	/*
-	 * String Deletion: Given a String and dictionary hashset, write a function to determine the minimum no
-	 * of characters to delete to make a word.
-	 * Eg: dict = {a, aa, aaa}; 
-	 * 		query = abc, o/p: 2; query: aac, o/p: 1;
-	 */
-	// Solution: BFS; Time-O(n!) because substring Time: n * n-1 * n-2... 1)
-	public int stringDeletion(String query, HashSet<String> dict) {
-		Queue<String> queue = new LinkedList<>();
-		Set<String> visited = new HashSet<>();
-		queue.add(query);
-		while (!queue.isEmpty()) {
-			String top = queue.poll();
-			if (dict.contains(top))
-				return query.length() - top.length();
-			// Check for all the substring
-			for (int i = 0; i < top.length(); i++) {
-				String subStr = top.substring(0, i) + top.substring(i + 1, top.length());
-				if (subStr.length() > 0 && !visited.contains(subStr)) {
-					visited.add(subStr);
-					queue.add(subStr);
-				}
-			}
-		}
-		return -1;
-	}
-
-	/*
-	 * Word Break I:
-	 * Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, determine if s can
-	 * be segmented into a space-separated sequence of one or more dictionary words.
-	 * 	Note:The same word in the dictionary may be reused multiple times in the segmentation. You may assume the 
-	 * dictionary does not contain duplicate words.
-	 * 	Example 1:	Input: s = "leetcode", wordDict = ["leet", "code"]	Output: true
-	 * 	Explanation: Return true because "leetcode" can be segmented as "leet code".
-	 * 	Input: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"] Output: false 
-	 */
-	// Using DFS Search: It throws TLE
-	public boolean wordBreakI1(String s, List<String> wordDict) {
-		return wordBreakHelper(s, wordDict, 0);
-	}
-
-	public boolean wordBreakHelper(String s, List<String> dict, int start) {
-		if (start == s.length())
-			return true;
-
-		for (String word : dict) {
-			int end = start + word.length();
-
-			if (end > s.length())
-				continue;
-
-			String substr = s.substring(start, end);
-			if (substr.equals(word)) {
-				if (wordBreakHelper(s, dict, end))
-					return true;
-			}
-		}
-
-		return false;
-	}
-
-	// DP: Using string length & dict size; Time: O(string length * dict size).
-	public boolean wordBreakI2(String s, List<String> wordDict) {
-		int n = s.length();
-		boolean[] lookup = new boolean[n + 1];
-		lookup[0] = true;
-
-		for (int i = 0; i < n; i++) {
-			if (!lookup[i])
-				continue;
-			for (String word : wordDict) {
-				int end = i + word.length();
-				if (end > s.length() || lookup[end])
-					continue;
-				if (s.substring(i, end).equals(word))
-					lookup[end] = true;
-			}
-		}
-		return lookup[n];
-	}
-
-	// DP: Using only string length; Time: O(string length * string length*dict size).
-	public boolean wordBreakI3(String s, List<String> wordDict) {
-		int n = s.length();
-		boolean[] lookup = new boolean[n + 1];
-		lookup[0] = true;
-
-		for (int i = 0; i < n; i++) {
-			if (lookup[i]) {
-				for (int j = i + 1; j <= n; j++)
-					if (wordDict.contains(s.substring(i, j))) //contains take dict size times
-						lookup[j] = true;
-			}
-		}
-
-		return lookup[n];
-	}
-
-	/*
-	 * Word Break II:
-	 * Return all such possible sentences.
-	 * Example 1: 
-	 *  Input: s = "pineapplepenapple"; wordDict = ["apple", "pen", "applepen", "pine", "pineapple"]
-	 *  Output:["pine apple pen apple", "pineapple pen apple","pine applepen apple"]
-	 *  Explanation: Note that you are allowed to reuse a dictionary word.
-	 */
-	// Using DFS Search: It throws TLE
-	public List<String> wordBreakII1(String s, List<String> wordDict) {
-		List<String> result = new ArrayList<>();
-		wordBreakHelper(s, wordDict, 0, "", result);
-		return result;
-	}
-
-	public void wordBreakHelper(String s, List<String> dict, int start, String str, List<String> result) {
-		if (start == s.length()) {
-			result.add(str.trim());
-			return;
-		}
-
-		for (String word : dict) {
-			int end = start + word.length();
-
-			if (end > s.length())
-				continue;
-
-			String substr = s.substring(start, end);
-			if (substr.equals(word))
-				wordBreakHelper(s, dict, end, str + " " + substr, result);
-
-		}
-	}
-
-	// DP: Using only string length; Time: O(string length * string length).
-	public List<String> wordBreakII2(String s, List<String> wordDict) {
-		int n = s.length();
-		List<String>[] lookup = new ArrayList[n + 1];
-		lookup[0] = new ArrayList<>();
-
-		for (int i = 0; i < n; i++) {
-			if (lookup[i] != null) {
-				for (int j = i + 1; j <= n; j++) {
-					String subStr = s.substring(i, j);
-					if (wordDict.contains(subStr)) {
-						if (lookup[j] == null)
-							lookup[j] = new ArrayList<>();
-						lookup[j].add(subStr);
-					}
-				}
-			}
-		}
-
-		List<String> result = new ArrayList<>();
-		if (lookup[n] == null)
-			return result;
-		dfs(lookup, result, "", s.length());
-
-		return result;
-	}
-
-	public void dfs(List<String>[] lookup, List<String> result, String str, int i) {
-		if (i == 0) {
-			result.add(str.trim());
-		} else {
-			for (String word : lookup[i])
-				dfs(lookup, result, word + " " + str, i - word.length());
-		}
-	}
-
 	/* Unique Word Abbreviation:
 	 * Assume you have a dictionary and given a word, find whether its abbreviation is unique in the dictionary. A word's abbreviation 
 	 * is unique if no other word from the dictionary has the same abbreviation.
@@ -1067,6 +1061,34 @@ public class WordProblems {
 
 			return grid[row][col] == '-' || grid[row][col] == word.charAt(k);
 		});
+	}
+
+	//TODO: Move this problem to appropriate category
+	/*
+	 * String Deletion: Given a String and dictionary hashset, write a function to determine the minimum no
+	 * of characters to delete to make a word.
+	 * Eg: dict = {a, aa, aaa}; 
+	 * 		query = abc, o/p: 2; query: aac, o/p: 1;
+	 */
+	// Solution: BFS; Time-O(n!) because substring Time: n * n-1 * n-2... 1)
+	public int stringDeletion(String query, HashSet<String> dict) {
+		Queue<String> queue = new LinkedList<>();
+		Set<String> visited = new HashSet<>();
+		queue.add(query);
+		while (!queue.isEmpty()) {
+			String top = queue.poll();
+			if (dict.contains(top))
+				return query.length() - top.length();
+			// Check for all the substring
+			for (int i = 0; i < top.length(); i++) {
+				String subStr = top.substring(0, i) + top.substring(i + 1, top.length());
+				if (subStr.length() > 0 && !visited.contains(subStr)) {
+					visited.add(subStr);
+					queue.add(subStr);
+				}
+			}
+		}
+		return -1;
 	}
 }
 

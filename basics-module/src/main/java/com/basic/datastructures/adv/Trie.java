@@ -20,6 +20,8 @@ import com.common.model.TrieNode;
  *  Why Trie?
  *   - Finding all keys with a common prefix.
  *   - Enumerating a dataset of strings in lexicographical order. 
+ *   
+ *   This class implemented "Add and Search Word" using TRIE data structure.
  */
 public class Trie {
 	public static void main(String[] args) {
