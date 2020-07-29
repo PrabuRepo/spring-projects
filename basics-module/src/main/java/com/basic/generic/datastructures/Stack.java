@@ -95,8 +95,8 @@ public class Stack<T> {
 }
 
 class StackNode<T> {
-	T				data;
-	StackNode<T>	next;
+	T data;
+	StackNode<T> next;
 
 	public StackNode(T data) {
 		this.data = data;

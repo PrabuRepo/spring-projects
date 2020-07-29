@@ -15,7 +15,7 @@ public class MathAPI {
 		System.out.println(Math.ceil(1.01)); // 2.0
 
 		System.out.println(Math.sqrt(9));
-		System.out.println(Math.cbrt(27));// cubic root
+		System.out.println(Math.cbrt(27));// cubic root 
 		System.out.println(Math.pow(2, 4));
 
 		System.out.println(Math.exp(1)); // 2.718

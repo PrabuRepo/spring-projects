@@ -13,18 +13,15 @@ public class Queue {
 		System.out.println("Queue Operations: ");
 		Queue ob = new Queue();
 
-		System.out
-				.println("Queue - Array Impl: ");
+		System.out.println("Queue - Array Impl: ");
 		ob.testQueueArrayImpl();
 
-		System.out.println(
-				"Queue - LinkedList Impl: ");
+		System.out.println("Queue - LinkedList Impl: ");
 		ob.testQueueLinkedListImpl();
 	}
 
 	public void testQueueArrayImpl() {
-		QueueArrayImpl queue = new QueueArrayImpl(
-				5);
+		QueueArrayImpl queue = new QueueArrayImpl(5);
 		System.out.println("Stack Operations:");
 		System.out.println("EnQueue");
 		queue.enQueue(1);
@@ -32,12 +29,9 @@ public class Queue {
 		queue.enQueue(3);
 		System.out.println("Display:");
 		queue.display();
-		System.out.println(
-				"\nDequeue: " + queue.deQueue());
-		System.out.println(
-				"Front: " + queue.getFront());
-		System.out.println(
-				"Rear: " + queue.getRear());
+		System.out.println("\nDequeue: " + queue.deQueue());
+		System.out.println("Front: " + queue.getFront());
+		System.out.println("Rear: " + queue.getRear());
 	}
 
 	public void testQueueLinkedListImpl() {
@@ -49,20 +43,17 @@ public class Queue {
 		queue.enQueue(3);
 		System.out.println("Display:");
 		queue.display();
-		System.out.println(
-				"\nDequeue: " + queue.deQueue());
-		System.out.println(
-				"Front: " + queue.getFront());
-		System.out.println(
-				"Rear: " + queue.getRear());
+		System.out.println("\nDequeue: " + queue.deQueue());
+		System.out.println("Front: " + queue.getFront());
+		System.out.println("Rear: " + queue.getRear());
 	}
 
 }
 
 class QueueArrayImpl {
 	int[] queue;
-	int   front, rear;
-	int   maxSize;
+	int front, rear;
+	int maxSize;
 
 	public QueueArrayImpl(int size) {
 		this.maxSize = size;
@@ -82,10 +73,13 @@ class QueueArrayImpl {
 	}
 
 	public int deQueue() {
-		if (isEmpty()) return -1;
+		if (isEmpty())
+			return -1;
 		int element = queue[front];
-		if (front == rear) front = rear = -1;
-		else front++;
+		if (front == rear)
+			front = rear = -1;
+		else
+			front++;
 		return element;
 	}
 
@@ -127,7 +121,8 @@ class QueueLinkedListImpl {
 	}
 
 	public int deQueue() {
-		if (isEmpty()) return -1;
+		if (isEmpty())
+			return -1;
 		int data = front.data;
 		if (front == rear) {
 			front = rear = null;

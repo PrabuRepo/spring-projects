@@ -3,8 +3,8 @@ package com.basic.generic.datastructures;
 import java.util.Scanner;
 
 class DLNode<T> {
-	T			data;
-	DLNode<T>	prev, next;
+	T data;
+	DLNode<T> prev, next;
 
 	public DLNode(T data) {
 		this.data = data;
@@ -34,14 +34,16 @@ public class DoublyLinkedList<T extends Comparable<T>> {
 			System.out.println("List is empty");
 		} else if (head.data == data) {
 			head = head.next;
-			if (head != null) head.prev = null;
+			if (head != null)
+				head.prev = null;
 		} else {
 			DLNode<T> curr = head;
 			while (curr.next != null) {
 				if (curr.next.data == data) {
 					DLNode<T> next = curr.next.next;
 					curr.next = next;
-					if (next != null) next.prev = curr.next;
+					if (next != null)
+						next.prev = curr.next;
 					break;
 				} else {
 					curr = curr.next;
@@ -60,7 +62,8 @@ public class DoublyLinkedList<T extends Comparable<T>> {
 
 			// Find the Node
 			while (curr != null) {
-				if (curr.data == data) break;
+				if (curr.data == data)
+					break;
 				curr = curr.next;
 			}
 
@@ -136,25 +139,25 @@ public class DoublyLinkedList<T extends Comparable<T>> {
 			input = in.nextInt();
 			switch (input) {
 
-				case 1:
-					System.out.println("Enter no of elements to be inserted:");
-					int t = in.nextInt();
-					while (t-- > 0) {
-						list.insert(in.nextInt());
-					}
-					System.out.println("Elements are inserted!");
-					break;
-				case 2:
-					System.out.println("Enter element needs to be deleted:");
-					list.delete(in.nextInt());
-					break;
-				case 3:
-					System.out.println("Enter elements needs to be find:");
-					System.out.println("Element is present in the list? " + list.search(in.nextInt()));
-					break;
-				default:
-					System.out.println("Please enter the valid option!!!");
-					break;
+			case 1:
+				System.out.println("Enter no of elements to be inserted:");
+				int t = in.nextInt();
+				while (t-- > 0) {
+					list.insert(in.nextInt());
+				}
+				System.out.println("Elements are inserted!");
+				break;
+			case 2:
+				System.out.println("Enter element needs to be deleted:");
+				list.delete(in.nextInt());
+				break;
+			case 3:
+				System.out.println("Enter elements needs to be find:");
+				System.out.println("Element is present in the list? " + list.search(in.nextInt()));
+				break;
+			default:
+				System.out.println("Please enter the valid option!!!");
+				break;
 
 			}
 			System.out.println("\nDisplay:");

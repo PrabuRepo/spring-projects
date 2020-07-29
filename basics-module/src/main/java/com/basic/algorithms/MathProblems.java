@@ -294,13 +294,9 @@ public class MathProblems {
 			return 0;
 		if (str.charAt(i) == '-' || str.charAt(i) == '+')
 			sign = str.charAt(i++) == '-' ? -1 : 1;
-		while (i < str.length() && str.charAt(i) >= '0'
-				&& str.charAt(i) <= '9') {
-			if (base > Integer.MAX_VALUE / 10
-					|| (base == Integer.MAX_VALUE / 10
-							&& str.charAt(i) - '0' > 7)) {
-				return (sign == 1) ? Integer.MAX_VALUE
-						: Integer.MIN_VALUE;
+		while (i < str.length() && str.charAt(i) >= '0' && str.charAt(i) <= '9') {
+			if (base > Integer.MAX_VALUE / 10 || (base == Integer.MAX_VALUE / 10 && str.charAt(i) - '0' > 7)) {
+				return (sign == 1) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
 			}
 			base = 10 * base + (str.charAt(i++) - '0');
 		}
@@ -319,8 +315,7 @@ public class MathProblems {
 			i++;
 
 		// Find sign
-		if (i < n && str.charAt(i) == '+'
-				|| str.charAt(i) == '-') {
+		if (i < n && str.charAt(i) == '+' || str.charAt(i) == '-') {
 			sign = str.charAt(i) == '-' ? -1 : 1;
 			i++;
 		}
@@ -335,15 +330,12 @@ public class MathProblems {
 				break;
 
 			// int parseVal = ch - '0';
-			int parseVal = Integer
-					.parseInt(String.valueOf(ch));
+			int parseVal = Integer.parseInt(String.valueOf(ch));
 
 			// Integer Overflow condition:
-			if (sign == 1
-					&& isIntOverFlow(result, parseVal, 7))
+			if (sign == 1 && isIntOverFlow(result, parseVal, 7))
 				return Integer.MAX_VALUE;
-			if (sign == -1
-					&& isIntOverFlow(result, parseVal, 8))
+			if (sign == -1 && isIntOverFlow(result, parseVal, 8))
 				return Integer.MIN_VALUE;
 
 			result = result * 10 + parseVal;
@@ -353,10 +345,7 @@ public class MathProblems {
 		return result * sign;
 	}
 
-	private boolean isIntOverFlow(int num, int nextVal,
-			int expected) {
-		return (num > Integer.MAX_VALUE / 10
-				|| (num == Integer.MAX_VALUE / 10
-						&& nextVal > expected));
+	private boolean isIntOverFlow(int num, int nextVal, int expected) {
+		return (num > Integer.MAX_VALUE / 10 || (num == Integer.MAX_VALUE / 10 && nextVal > expected));
 	}
 }

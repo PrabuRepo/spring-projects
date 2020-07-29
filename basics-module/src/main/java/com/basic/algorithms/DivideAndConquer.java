@@ -15,12 +15,16 @@ public class DivideAndConquer {
 
 	private static int binarySearch(int[] a, int l, int h, int x) {
 		int index = -1;
-		if (l > h) return index;
+		if (l > h)
+			return index;
 
 		int m = (l + h) / 2;
-		if (a[m] == x) index = m;
-		else if (x < a[m]) index = binarySearch(a, l, m - 1, x);
-		else index = binarySearch(a, m + 1, h, x);
+		if (a[m] == x)
+			index = m;
+		else if (x < a[m])
+			index = binarySearch(a, l, m - 1, x);
+		else
+			index = binarySearch(a, m + 1, h, x);
 
 		return index;
 	}
@@ -42,24 +46,31 @@ public class DivideAndConquer {
 
 	// Calculate pow(x, n)
 	public int pow(int m, int n) {
-		if (n == 0) return 1;
+		if (n == 0)
+			return 1;
 		return m * pow(m, n - 1);
 	}
 
 	// Better Approach: Time Complexity: o(n)
 	public int pow2(int m, int n) {
-		if (n == 0) return 1;
-		else if (n % 2 == 0) return pow2(m, n / 2) * pow2(m, n / 2);
-		else return m * pow2(m, n / 2) * pow2(m, n / 2);
+		if (n == 0)
+			return 1;
+		else if (n % 2 == 0)
+			return pow2(m, n / 2) * pow2(m, n / 2);
+		else
+			return m * pow2(m, n / 2) * pow2(m, n / 2);
 	}
 
 	// Time Complexity of optimized solution: O(logn)
 	static int pow3(int m, int n) {
 		int temp;
-		if (n == 0) return 1;
+		if (n == 0)
+			return 1;
 		temp = pow3(m, n / 2);
-		if (n % 2 == 0) return temp * temp;
-		else return m * temp * temp;
+		if (n % 2 == 0)
+			return temp * temp;
+		else
+			return m * temp * temp;
 	}
 
 }

@@ -27,8 +27,8 @@ public class BinaryIndexedTree {
 		System.out.println("Range sum: " + ob.sumRange(1, 4));
 	}
 
-	int[]	input;
-	int[]	biTree;
+	int[] input;
+	int[] biTree;
 
 	public BinaryIndexedTree(int[] nums) {
 		int n = nums.length;

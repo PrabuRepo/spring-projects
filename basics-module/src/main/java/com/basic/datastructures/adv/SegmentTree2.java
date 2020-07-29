@@ -66,7 +66,8 @@ public class SegmentTree2 {
 	diff --> Value to be added to all nodes which have i in range */
 	void updateUtil(int[] segTree, int l, int h, int index, int diff, int pos) {
 		// Base Case: If the input index lies outside the range of this segment
-		if (l > index || h < index) return;
+		if (l > index || h < index)
+			return;
 
 		// If the input index is in range of this node, then update the
 		// value of the node and its children
@@ -108,7 +109,7 @@ public class SegmentTree2 {
 	private int findSegTreeSize(int n) {
 		int h = (int) (Math.ceil(Math.log(n) / Math.log(2))); // Find 2th power from input n, which is equal to max no
 																// of leafs in the tree
-		// Maximum size of segment tree
+																// Maximum size of segment tree
 		int noOfLeafs = (int) Math.pow(2, h);
 		int treeSize = 2 * noOfLeafs - 1; // No of nodes in tree: 2*(No of leafs =2^h) - 1
 		return treeSize;

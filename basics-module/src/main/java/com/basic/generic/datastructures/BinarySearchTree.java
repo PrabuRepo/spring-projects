@@ -5,8 +5,8 @@ import java.util.Queue;
 import java.util.Scanner;
 
 class BSTNode<T> {
-	T			data;
-	BSTNode<T>	left, right;
+	T data;
+	BSTNode<T> left, right;
 
 	public BSTNode(T x) {
 		this.data = x;

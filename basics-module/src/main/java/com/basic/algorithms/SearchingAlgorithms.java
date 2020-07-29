@@ -3,17 +3,17 @@ package com.basic.algorithms;
 public class SearchingAlgorithms {
 
 	// Time complexity: O(n)
-	public static int linearSearch(int[] a,
-			int x) {
+	public static int linearSearch(int[] a, int x) {
 		for (int i = 0; i < a.length; i++) {
-			if (a[i] == x) { return i; }
+			if (a[i] == x) {
+				return i;
+			}
 		}
 		return -1;
 	}
 
 	// Iterative Approach: Time complexity: O(logn)
-	public static int binarySearch1(int[] a,
-			int x) {
+	public static int binarySearch1(int[] a, int x) {
 		int mid, l = 0, h = a.length - 1;
 		while (l <= h) {
 			mid = (l + h) / 2;
@@ -29,22 +29,22 @@ public class SearchingAlgorithms {
 	}
 
 	// Recursive Approach: Time complexity: O(logn)
-	public static int binarySearch2(int[] a,
-			int x) {
-		return binarySearch(a, 0, a.length - 1,
-				610);
+	public static int binarySearch2(int[] a, int x) {
+		return binarySearch(a, 0, a.length - 1, 610);
 	}
 
-	private static int binarySearch(int[] a,
-			int l, int h, int x) {
+	private static int binarySearch(int[] a, int l, int h, int x) {
 		int index = -1;
-		if (l > h) return index;
+		if (l > h)
+			return index;
 
 		int m = (l + h) / 2;
-		if (a[m] == x) index = m;
+		if (a[m] == x)
+			index = m;
 		else if (x < a[m])
 			index = binarySearch(a, l, m - 1, x);
-		else index = binarySearch(a, m + 1, h, x);
+		else
+			index = binarySearch(a, m + 1, h, x);
 
 		return index;
 	}
@@ -57,8 +57,7 @@ public class SearchingAlgorithms {
 	 * Searching Left: right = mid-1
 	 * Searching Right: left = mid+1
 	 */
-	public int binarySearchTemplate1(int[] nums,
-			int target) {
+	public int binarySearchTemplate1(int[] nums, int target) {
 		if (nums == null || nums.length == 0)
 			return -1;
 
@@ -87,8 +86,7 @@ public class SearchingAlgorithms {
 	 * Searching Left: right = mid
 	 * Searching Right: left = mid+1
 	 */
-	public int binarySearchTemplate2(int[] nums,
-			int target) {
+	public int binarySearchTemplate2(int[] nums, int target) {
 		if (nums == null || nums.length == 0)
 			return -1;
 
@@ -107,8 +105,7 @@ public class SearchingAlgorithms {
 
 		// Post-processing:
 		// End Condition: left == right
-		if (left != nums.length
-				&& nums[left] == target)
+		if (left != nums.length && nums[left] == target)
 			return left;
 		return -1;
 	}
@@ -121,8 +118,7 @@ public class SearchingAlgorithms {
 	 * Searching Left: right = mid
 	 * Searching Right: left = mid+1
 	 */
-	public int binarySearchTemplate3(int[] nums,
-			int target) {
+	public int binarySearchTemplate3(int[] nums, int target) {
 		if (nums == null || nums.length == 0)
 			return -1;
 
@@ -141,25 +137,27 @@ public class SearchingAlgorithms {
 
 		// Post-processing:
 		// End Condition: left + 1 == right
-		if (nums[left] == target) return left;
-		if (nums[right] == target) return right;
+		if (nums[left] == target)
+			return left;
+		if (nums[right] == target)
+			return right;
 		return -1;
 	}
 
 	// Time Complexity: O(log3n)
-	public static int ternarySearch1(int[] a,
-			int x) {
+	public static int ternarySearch1(int[] a, int x) {
 		int n = a.length;
 		int left = 0, right = n - 1, mid1, mid2;
 
 		while (left <= right) {
 			mid1 = left + ((right - left) / 3);
-			mid2 = left
-					+ (2 * (right - left) / 3); // or mid2 = mid1 + ((right - left) / 3);
+			mid2 = left + (2 * (right - left) / 3); // or mid2 = mid1 + ((right - left) / 3);
 
-			if (a[mid1] == x) return mid1;
+			if (a[mid1] == x)
+				return mid1;
 
-			if (a[mid2] == x) return mid2;
+			if (a[mid2] == x)
+				return mid2;
 
 			if (x < a[mid1]) { // Data present in first quarter
 				right = mid1 - 1;
@@ -173,28 +171,26 @@ public class SearchingAlgorithms {
 		return -1;
 	}
 
-	public static int ternarySearch2(int[] a,
-			int x) {
-		return ternarySearch(a, 0, a.length - 1,
-				x);
+	public static int ternarySearch2(int[] a, int x) {
+		return ternarySearch(a, 0, a.length - 1, x);
 	}
 
-	public static int ternarySearch(int[] a,
-			int l, int h, int x) {
-		if (l > h) return -1;
+	public static int ternarySearch(int[] a, int l, int h, int x) {
+		if (l > h)
+			return -1;
 
 		int mid1 = l + (h - l) / 3;
 		int mid2 = l + (2 * (h - l)) / 3;
-		if (a[mid1] == x) return mid1;
-		else if (a[mid2] == x) return mid2;
+		if (a[mid1] == x)
+			return mid1;
+		else if (a[mid2] == x)
+			return mid2;
 		else if (x < a[mid1])
-			return ternarySearch(a, l, mid1 - 1,
-					x);
+			return ternarySearch(a, l, mid1 - 1, x);
 		else if (x > a[mid2])
-			return ternarySearch(a, mid2 + 1, h,
-					x);
-		else return ternarySearch(a, mid1 + 1,
-				mid2 - 1, x);
+			return ternarySearch(a, mid2 + 1, h, x);
+		else
+			return ternarySearch(a, mid1 + 1, mid2 - 1, x);
 	}
 
 	// Time complexity: O(sqrt(n))
@@ -215,7 +211,8 @@ public class SearchingAlgorithms {
 
 		// Linear Search (m-1) comparisons
 		while (a[prev] <= x) {
-			if (a[prev] == x) return prev;
+			if (a[prev] == x)
+				return prev;
 			prev++;
 		}
 
@@ -239,8 +236,7 @@ public class SearchingAlgorithms {
 	 *  
 	 *  Time complexity: a(log(log(n)))
 	 */
-	public static int interpolationSearch(int[] a,
-			int x) {
+	public static int interpolationSearch(int[] a, int x) {
 		int index = -1;
 		int l = 0, h = a.length - 1, pos;
 
@@ -255,8 +251,10 @@ public class SearchingAlgorithms {
 				break;
 			}
 
-			if (x < a[pos]) h = pos - 1;
-			else l = pos + 1;
+			if (x < a[pos])
+				h = pos - 1;
+			else
+				l = pos + 1;
 		}
 		return index;
 	}
@@ -264,20 +262,16 @@ public class SearchingAlgorithms {
 	/* Exponential Search: The idea is to start with subarray size 1 compare its last element with x, then try size 2, 
 	 * then 4 and so on until last element of a subarray is not greater. Time Complexity: O(Log n)
 	 */
-	public static int exponentialSearch(int[] a,
-			int x) {
+	public static int exponentialSearch(int[] a, int x) {
 		int i, n = a.length - 1;
 
-		for (i = 1; i <= n
-				&& a[i] <= x; i = i * 2)
+		for (i = 1; i <= n && a[i] <= x; i = i * 2)
 			;
-		return binarySearch(a, i / 2,
-				Math.min(i, n), x);
+		return binarySearch(a, i / 2, Math.min(i, n), x);
 	}
 
 	/* Returns index of x if present, else returns -1 */
-	public static int fibonacciSearch(int arr[],
-			int x, int n) {
+	public static int fibonacciSearch(int arr[], int x, int n) {
 		/* Initialize fibonacci numbers */
 		int fibMMm2 = 0; // (m-2)'th Fibonacci No.
 		int fibMMm1 = 1; // (m-1)'th Fibonacci No.
@@ -299,8 +293,7 @@ public class SearchingAlgorithms {
 		When fibM becomes 1, fibMm2 becomes 0 */
 		while (fibM > 1) {
 			// Check if fibMm2 is a valid location
-			int i = Math.min(offset + fibMMm2,
-					n - 1);
+			int i = Math.min(offset + fibMMm2, n - 1);
 
 			/* If x is greater than the value at 
 			index fibMm2, cut the subarray array 
@@ -321,7 +314,8 @@ public class SearchingAlgorithms {
 			}
 
 			/* element found. return index */
-			else return i;
+			else
+				return i;
 		}
 
 		/* comparing the last element with x */
@@ -332,8 +326,7 @@ public class SearchingAlgorithms {
 		return -1;
 	}
 
-	public static int ubiquitousBinarySearch(
-			int[] a, int x) {
+	public static int ubiquitousBinarySearch(int[] a, int x) {
 		int index = -1;
 
 		/*Write a logic here*/

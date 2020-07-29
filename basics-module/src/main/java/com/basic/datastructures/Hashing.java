@@ -17,7 +17,7 @@ import com.common.utilities.LinkedList;
  *    2) Uniform distribution: It should provide a uniform distribution across the hash table and should not result in clustering.
  *    3) Less Collisions: Collisions occur when pairs of elements are mapped to the same hash value. These should be avoided.
  * Purpose of Hashing:
-  - Hashing is used to index data 
+  - Hashing is used to index data  
   - In cryptographic application 
   - Sharding the Keys 
   - Finding duplicate records 
@@ -68,9 +68,9 @@ public class Hashing {
  *    
  */
 class HashOpenAddressing {
-	Integer[]	array;
-	int			currSize;
-	int			maxSize;
+	Integer[] array;
+	int currSize;
+	int maxSize;
 
 	// Initialize the array size in the constructor
 	public HashOpenAddressing(int size) {
@@ -149,7 +149,7 @@ class HashOpenAddressing {
 		int index = hash1(data); // First hash function is typically hash1(key) = key % TABLE_SIZE
 		int i = 0, hash1 = index, indexH = hash2(data); // Second hash function is : hash2(key) = PRIME – (key % PRIME)
 														// where PRIME is a prime smaller
-		// than the TABLE_SIZE.
+														// than the TABLE_SIZE.
 		while (array[index] != null) {
 			// 3.Double Hashing: (hash1(key) + i * hash2(key)) % TABLE_SIZE) %S; where i=1,2,3..
 			index = (hash1 + (i * indexH)) % maxSize;
@@ -264,25 +264,25 @@ class HashOpenAddressing {
 			input = in.nextInt();
 			switch (input) {
 
-				case 1:
-					System.out.println("Enter no of elements to be inserted:");
-					int t = in.nextInt();
-					while (t-- > 0) {
-						hashTable.insert(in.nextInt());
-					}
-					System.out.println("Elements are inserted!");
-					break;
-				case 2:
-					System.out.println("Enter element needs to be deleted:");
-					hashTable.delete(in.nextInt());
-					break;
-				case 3:
-					System.out.println("Enter elements needs to be find:");
-					System.out.println("Element present at index: " + hashTable.search(in.nextInt()));
-					break;
-				default:
-					System.out.println("Please enter the valid option!!!");
-					break;
+			case 1:
+				System.out.println("Enter no of elements to be inserted:");
+				int t = in.nextInt();
+				while (t-- > 0) {
+					hashTable.insert(in.nextInt());
+				}
+				System.out.println("Elements are inserted!");
+				break;
+			case 2:
+				System.out.println("Enter element needs to be deleted:");
+				hashTable.delete(in.nextInt());
+				break;
+			case 3:
+				System.out.println("Enter elements needs to be find:");
+				System.out.println("Element present at index: " + hashTable.search(in.nextInt()));
+				break;
+			default:
+				System.out.println("Please enter the valid option!!!");
+				break;
 			}
 			System.out.println("\nDisplay:");
 			hashTable.display();
@@ -299,9 +299,9 @@ class HashOpenAddressing {
  */
 class HashSeperateChaining {
 
-	LinkedList[]	table;
-	int				hashSize;
-	int				capacity;
+	LinkedList[] table;
+	int hashSize;
+	int capacity;
 
 	public HashSeperateChaining(int capacity) {
 		this.capacity = capacity;
@@ -314,7 +314,8 @@ class HashSeperateChaining {
 
 	public void insert(int t) {
 		int pos = hash(t);
-		if (table[pos] == null) table[pos] = new LinkedList();
+		if (table[pos] == null)
+			table[pos] = new LinkedList();
 		hashSize++;
 		table[pos].add(t);
 	}
@@ -322,8 +323,10 @@ class HashSeperateChaining {
 	public void delete(int t) {
 		int pos = hash(t);
 		if (table[pos] != null) {
-			if (table[pos].remove(t)) hashSize--;
-			else System.out.println("Data not found!");
+			if (table[pos].remove(t))
+				hashSize--;
+			else
+				System.out.println("Data not found!");
 		} else {
 			System.out.println("Data not found!");
 		}
@@ -333,7 +336,8 @@ class HashSeperateChaining {
 		int pos = hash(t);
 		boolean flag = false;
 		if (table[pos] != null) {
-			if (table[pos].contains(t)) flag = true;
+			if (table[pos].contains(t))
+				flag = true;
 		}
 		return flag;
 	}
@@ -361,25 +365,25 @@ class HashSeperateChaining {
 			input = in.nextInt();
 			switch (input) {
 
-				case 1:
-					System.out.println("Enter no of elements to be inserted:");
-					int t = in.nextInt();
-					while (t-- > 0) {
-						hashTable.insert(in.nextInt());
-					}
-					System.out.println("Elements are inserted!");
-					break;
-				case 2:
-					System.out.println("Enter element needs to be deleted:");
-					hashTable.delete(in.nextInt());
-					break;
-				case 3:
-					System.out.println("Enter elements needs to be find:");
-					System.out.println("Element is present in the list? " + hashTable.search(in.nextInt()));
-					break;
-				default:
-					System.out.println("Please enter the valid option!!!");
-					break;
+			case 1:
+				System.out.println("Enter no of elements to be inserted:");
+				int t = in.nextInt();
+				while (t-- > 0) {
+					hashTable.insert(in.nextInt());
+				}
+				System.out.println("Elements are inserted!");
+				break;
+			case 2:
+				System.out.println("Enter element needs to be deleted:");
+				hashTable.delete(in.nextInt());
+				break;
+			case 3:
+				System.out.println("Enter elements needs to be find:");
+				System.out.println("Element is present in the list? " + hashTable.search(in.nextInt()));
+				break;
+			default:
+				System.out.println("Please enter the valid option!!!");
+				break;
 			}
 			System.out.println("\nDisplay:");
 			hashTable.display();
@@ -407,8 +411,8 @@ class MyHashSet {
 		System.out.println("Contains: " + set.contains(2));
 	}
 
-	private int[]	map;
-	private int		size;
+	private int[] map;
+	private int size;
 
 	/** Initialize your data structure here. */
 	public MyHashSet() {
@@ -418,11 +422,13 @@ class MyHashSet {
 	}
 
 	public void add(int key) {
-		if (!contains(key)) map[key % size] = key;
+		if (!contains(key))
+			map[key % size] = key;
 	}
 
 	public void remove(int key) {
-		if (!contains(key)) map[key % size] = -1;
+		if (!contains(key))
+			map[key % size] = -1;
 	}
 
 	/** Returns true if this set contains the specified element */

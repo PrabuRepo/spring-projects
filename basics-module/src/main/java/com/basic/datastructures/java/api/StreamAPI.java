@@ -33,7 +33,8 @@ public class StreamAPI {
 		System.out.println("Sorted Sample: ");
 		Stream<String> sortedStream = names.stream().map(s -> s.toLowerCase()).sorted();
 		names.stream().sorted().map(String::toUpperCase).forEach(System.out::println);
-		names.stream().sorted((s1, s2) -> s2.compareToIgnoreCase(s1)).map(String::toUpperCase).forEach(System.out::println);
+		names.stream().sorted((s1, s2) -> s2.compareToIgnoreCase(s1)).map(String::toUpperCase)
+				.forEach(System.out::println);
 	}
 
 	public void conversions() {
@@ -51,7 +52,7 @@ public class StreamAPI {
 		int[] arr3 = ints.stream().mapToInt(i -> i.intValue()).toArray();
 		arr3 = ints.stream().mapToInt(Integer::intValue).toArray();
 
-		/**  List to Object array:*/
+		/** List to Object array: */
 		Integer[] arr4 = ints.toArray(new Integer[ints.size()]);
 		Integer[] arr5 = ints.stream().toArray(Integer[]::new);
 		System.out.println("List to Object array: " + Arrays.toString(arr5));

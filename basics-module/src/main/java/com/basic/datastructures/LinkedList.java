@@ -15,20 +15,16 @@ import com.common.model.ListNode;
  */
 public class LinkedList {
 	public static void main(String[] args) {
-		System.out.println(
-				"Linked List Operations:");
+		System.out.println("Linked List Operations:");
 		LinkedList ob = new LinkedList();
 
-		System.out
-				.println("1. Singly Linked List");
+		System.out.println("1. Singly Linked List");
 		ob.testSinglyLinkedList();
 
-		System.out.println(
-				"\n2. Doubly Linked List");
+		System.out.println("\n2. Doubly Linked List");
 		ob.testDoublyLinkedList();
 
-		System.out.println(
-				"\n3. Circular Singly Linked List");
+		System.out.println("\n3. Circular Singly Linked List");
 		ob.testCircularSLinkedList();
 	}
 
@@ -46,10 +42,8 @@ public class LinkedList {
 		list.insert(7, 8);
 		System.out.println("\nDisplay:");
 		list.display();
-		System.out.println(
-				"\nDelete: " + list.remove(1));
-		System.out.println(
-				"Find: " + list.contains(3));
+		System.out.println("\nDelete: " + list.remove(1));
+		System.out.println("Find: " + list.contains(3));
 	}
 
 	public void testDoublyLinkedList() {
@@ -62,8 +56,7 @@ public class LinkedList {
 		list.display();
 		System.out.println("\nDelete: ");
 		list.delete(1);
-		System.out.println(
-				"Find: " + list.search(3));
+		System.out.println("Find: " + list.search(3));
 
 	}
 
@@ -77,8 +70,7 @@ public class LinkedList {
 		list.display();
 		System.out.println("\nDelete: ");
 		list.delete(1);
-		System.out.println(
-				"Find: " + list.search(3));
+		System.out.println("Find: " + list.search(3));
 	}
 }
 
@@ -113,8 +105,10 @@ class SinglyLinkedList {
 	public boolean contains(int data) {
 		ListNode curr = head;
 		while (curr != null) {
-			if (curr.data == data) return true;
-			else curr = curr.next;
+			if (curr.data == data)
+				return true;
+			else
+				curr = curr.next;
 		}
 		return false;
 	}
@@ -126,8 +120,7 @@ class SinglyLinkedList {
 			flag = true;
 		} else {
 			ListNode curr = head;
-			while (curr != null
-					&& curr.next != null) {
+			while (curr != null && curr.next != null) {
 				if (curr.next.data == data) {
 					curr.next = curr.next.next;
 					flag = true;
@@ -162,15 +155,12 @@ class SinglyLinkedList {
 		boolean flag = true;
 		ListNode middle;
 		ListNode slowPtr = head, fastPtr = head;
-		while (fastPtr.next != null
-				&& fastPtr.next.next != null) {
+		while (fastPtr.next != null && fastPtr.next.next != null) {
 			slowPtr = slowPtr.next;
 			fastPtr = fastPtr.next.next;
 		}
 		// To handle odd and even nodes
-		middle = fastPtr.next != null
-				? slowPtr.next
-				: slowPtr;
+		middle = fastPtr.next != null ? slowPtr.next : slowPtr;
 
 		ListNode temp = head;
 		ListNode reverse = reverse(middle);
@@ -187,8 +177,7 @@ class SinglyLinkedList {
 	}
 
 	public ListNode reverse(ListNode headNode) {
-		ListNode prev = null, next = null,
-				current = headNode;
+		ListNode prev = null, next = null, current = headNode;
 		while (current != null) {
 			next = current.next;
 			current.next = prev;
@@ -223,7 +212,8 @@ class DoublyLinkedList {
 			System.out.println("List is empty");
 		} else if (head.data == data) {
 			head = head.next;
-			if (head != null) head.prev = null;
+			if (head != null)
+				head.prev = null;
 		} else {
 			ListNode curr = head;
 			while (curr.next != null) {
@@ -248,7 +238,8 @@ class DoublyLinkedList {
 			ListNode curr = head;
 			// Find the Node
 			while (curr != null) {
-				if (curr.data == data) break;
+				if (curr.data == data)
+					break;
 				curr = curr.next;
 			}
 			// Delete the node
@@ -263,14 +254,14 @@ class DoublyLinkedList {
 					head = curr;
 				}
 			} else {
-				System.out.println(
-						"Data is not found!");
+				System.out.println("Data is not found!");
 			}
 		}
 	}
 
 	public boolean search(int data) {
-		if (head == null) return false;
+		if (head == null)
+			return false;
 		ListNode curr = head;
 		while (curr != null) {
 			if (curr.data == data)
@@ -342,8 +333,7 @@ class CircularSLinkedList {
 	public void delete(int data) {
 		ListNode curr = head;
 		if (curr != null) {
-			if (curr.data == data
-					&& curr.next == head) {
+			if (curr.data == data && curr.next == head) {
 				head = null;
 			} else if (curr.data == data) {
 				curr.data = curr.next.data;

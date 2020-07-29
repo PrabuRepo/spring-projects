@@ -10,9 +10,11 @@ public class PatternSearching {
 		for (int i = 0; i <= (n - m); i++) {
 			if (str.charAt(i) == pattern.charAt(0)) {
 				for (j = 0; j < m; j++) {
-					if (str.charAt(i + j) != pattern.charAt(j)) break;
+					if (str.charAt(i + j) != pattern.charAt(j))
+						break;
 				}
-				if (j == m) System.out.println("Pattern found at: " + i);
+				if (j == m)
+					System.out.println("Pattern found at: " + i);
 			}
 		}
 	}
@@ -33,8 +35,10 @@ public class PatternSearching {
 					j = lps[j - 1];
 				}
 			} else {
-				if (j != 0) j = lps[j - 1];
-				else i++;
+				if (j != 0)
+					j = lps[j - 1];
+				else
+					i++;
 			}
 		}
 	}
@@ -77,9 +81,11 @@ public class PatternSearching {
 			if (textHash == patternHash) {
 				// Check for characters one by one
 				for (j = 0; j < m; j++) {
-					if (text.charAt(i + j) != pattern.charAt(j)) break;
+					if (text.charAt(i + j) != pattern.charAt(j))
+						break;
 				}
-				if (j == m) System.out.println("Pattern found at index:" + i);
+				if (j == m)
+					System.out.println("Pattern found at index:" + i);
 			}
 
 			// Recalculate the test hash value

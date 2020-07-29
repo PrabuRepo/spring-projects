@@ -5,9 +5,9 @@ import java.util.Scanner;
 // TODO: Try to max & min operation in a single class
 public class BinaryHeap<T extends Comparable<T>> {
 
-	int	heapSize;
-	int	capacity;
-	T[]	elements;
+	int heapSize;
+	int capacity;
+	T[] elements;
 
 	public BinaryHeap(int capacity) {
 		this.heapSize = 0;
@@ -140,31 +140,31 @@ public class BinaryHeap<T extends Comparable<T>> {
 			input = in.nextInt();
 			switch (input) {
 
-				case 1:
-					System.out.println("Enter no of elements to be inserted:");
-					int t = in.nextInt();
-					while (t-- > 0)
-						binaryHeap.insert(in.nextInt());
+			case 1:
+				System.out.println("Enter no of elements to be inserted:");
+				int t = in.nextInt();
+				while (t-- > 0)
+					binaryHeap.insert(in.nextInt());
 
-					System.out.println("Elements are inserted!");
-					break;
-				case 2:
-					System.out.println("Min Element: " + binaryHeap.extractMin());
-					break;
-				case 3:
-					System.out.println("Min element present in Heap: " + binaryHeap.getMin());
-					break;
-				case 4:
-					System.out.println("Enter the index & decreased value:");
-					binaryHeap.decreaseKey(in.nextInt(), in.nextInt());
-					break;
-				case 5:
-					System.out.println("Enter element needs to find: ");
-					System.out.println("Element present in the heap? " + binaryHeap.search(in.nextInt()));
-					break;
-				default:
-					System.out.println("Please enter the valid option!!!");
-					break;
+				System.out.println("Elements are inserted!");
+				break;
+			case 2:
+				System.out.println("Min Element: " + binaryHeap.extractMin());
+				break;
+			case 3:
+				System.out.println("Min element present in Heap: " + binaryHeap.getMin());
+				break;
+			case 4:
+				System.out.println("Enter the index & decreased value:");
+				binaryHeap.decreaseKey(in.nextInt(), in.nextInt());
+				break;
+			case 5:
+				System.out.println("Enter element needs to find: ");
+				System.out.println("Element present in the heap? " + binaryHeap.search(in.nextInt()));
+				break;
+			default:
+				System.out.println("Please enter the valid option!!!");
+				break;
 
 			}
 			System.out.println("\nDisplay:");

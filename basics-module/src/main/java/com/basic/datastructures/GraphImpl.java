@@ -105,7 +105,8 @@ interface Graph {
 }
 
 /**
- * Adjacency Matrix representation: A matrix indicating with each vertex associated with a row and column.
+ * Adjacency Matrix representation: A matrix indicating with each vertex associated with a row and
+ * column.
  */
 class GraphAdjMatrix implements Graph {
 	int N;
@@ -401,7 +402,8 @@ class GraphAdjMatrix implements Graph {
 }
 
 /**
- * Adjacency List representation:Container of vertices, and each vertex has a list of adjacent vertices
+ * Adjacency List representation:Container of vertices, and each vertex has a list of adjacent
+ * vertices
  */
 class GraphAdjList implements Graph {
 	int N;
@@ -598,7 +600,7 @@ class GraphAdjList implements Graph {
 				int data = iter.next();
 				if (--indegree[data] == 0)
 					queue.add(data); // 3.If in-degree of a neighboring nodes is reduced to zero,
-														// then add it to the queue.
+										// then add it to the queue.
 			}
 		}
 		// Step-4:If count of visited nodes is equal to the number of nodes in the graph then print the topological sort
@@ -646,7 +648,8 @@ class GraphAdjList implements Graph {
 			while (iter.hasNext()) {
 				GraphNode adjNode = iter.next();
 				if (!visited[adjNode.vertex]) {
-					edgeWeight[adjNode.vertex] = Math.min(edgeWeight[adjNode.vertex], edgeWeight[src.vertex] + adjNode.weight);
+					edgeWeight[adjNode.vertex] = Math.min(edgeWeight[adjNode.vertex],
+							edgeWeight[src.vertex] + adjNode.weight);
 					queue.add(new GraphNode(adjNode.vertex, edgeWeight[adjNode.vertex]));
 				}
 			}
@@ -685,7 +688,8 @@ class GraphAdjList implements Graph {
 			while (iter.hasNext()) {
 				GraphNode adjNode = iter.next();
 				if (!visited[adjNode.vertex]) {
-					edgeWeight[adjNode.vertex] = Math.min(edgeWeight[adjNode.vertex], edgeWeight[src.vertex] + adjNode.weight);
+					edgeWeight[adjNode.vertex] = Math.min(edgeWeight[adjNode.vertex],
+							edgeWeight[src.vertex] + adjNode.weight);
 					queue.add(new GraphNode(adjNode.vertex, edgeWeight[adjNode.vertex]));
 				}
 			}
@@ -1000,7 +1004,8 @@ class GraphAdjListUsingMap implements Graph {
 }
 
 /**
- * Edge List representation: Containers for vertices and edges. Vertices contain information only about the vertex.
+ * Edge List representation: Containers for vertices and edges. Vertices contain information only
+ * about the vertex.
  */
 class GraphEdgeList implements Graph {
 	// For Edge representation
@@ -1257,7 +1262,8 @@ class MockData {
 
 	public static int[][] mockAdjMatrixData4() {
 		int INF = Integer.MAX_VALUE;
-		int[][] matrix = new int[][] { { 0, 5, INF, 10 }, { INF, 0, 3, INF }, { INF, INF, 0, 1 }, { INF, INF, INF, 0 } };
+		int[][] matrix = new int[][] { { 0, 5, INF, 10 }, { INF, 0, 3, INF }, { INF, INF, 0, 1 },
+				{ INF, INF, INF, 0 } };
 		return matrix;
 	}
 

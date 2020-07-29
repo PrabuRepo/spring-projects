@@ -459,7 +459,7 @@ public class CollectionAPI {
 		set.add(2);
 		set.add(3);
 		set.add(6);
-		
+
 		//Check the value
 		set.contains(5);
 
@@ -475,10 +475,10 @@ public class CollectionAPI {
 	}
 
 	/**
-	 * Hash table and linked list implementation of the Set interface, with predictable iteration order. This
-	 * implementation differs from HashSet in that it maintains a doubly-linked list running through all of its entries.
-	 * This linked list defines the iteration ordering, which is the order in which elements were inserted into the set
-	 * insertion-order.
+	 * Hash table and linked list implementation of the Set interface, with predictable iteration order.
+	 * This implementation differs from HashSet in that it maintains a doubly-linked list running
+	 * through all of its entries. This linked list defines the iteration ordering, which is the order
+	 * in which elements were inserted into the set insertion-order.
 	 */
 	public void linkedHashSetAPI() {
 

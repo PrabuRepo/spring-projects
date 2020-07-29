@@ -17,9 +17,9 @@ public class MyHashMap<K, V> {
 	remove() : removes the key, value pair
 	isEmpty() : returns true if size is zero
 	*/
-	ArrayList<HashNode<K, V>>	bucketArray;
-	int							capacity;
-	int							size;
+	ArrayList<HashNode<K, V>> bucketArray;
+	int capacity;
+	int size;
 
 	public MyHashMap() {
 		bucketArray = new ArrayList<>();
@@ -112,26 +112,26 @@ public class MyHashMap<K, V> {
 			input = in.nextInt();
 			switch (input) {
 
-				case 1:
-					System.out.println("Enter no of Key-Value pair to be inserted:");
-					int t = in.nextInt();
-					while (t-- > 0) {
-						map.add(in.nextInt(), in.nextInt());
-					}
-					System.out.println("Elements are inserted!");
-					break;
-				case 2:
-					System.out.println("Enter key needs to be deleted:");
-					System.out.println("Element has deleted? " + map.remove(in.nextInt()));
-					break;
-				case 3:
-					System.out.println("Enter elements needs to be find:");
-					// System.out.println("Element is present in the list? " +
-					// list.find(in.nextInt()));
-					break;
-				default:
-					System.out.println("Please enter the valid option!!!");
-					break;
+			case 1:
+				System.out.println("Enter no of Key-Value pair to be inserted:");
+				int t = in.nextInt();
+				while (t-- > 0) {
+					map.add(in.nextInt(), in.nextInt());
+				}
+				System.out.println("Elements are inserted!");
+				break;
+			case 2:
+				System.out.println("Enter key needs to be deleted:");
+				System.out.println("Element has deleted? " + map.remove(in.nextInt()));
+				break;
+			case 3:
+				System.out.println("Enter elements needs to be find:");
+				// System.out.println("Element is present in the list? " +
+				// list.find(in.nextInt()));
+				break;
+			default:
+				System.out.println("Please enter the valid option!!!");
+				break;
 
 			}
 			System.out.println("\nDisplay:");
@@ -147,9 +147,9 @@ public class MyHashMap<K, V> {
 }
 
 class HashNode<K, V> {
-	K				key;
-	V				value;
-	HashNode<K, V>	next;
+	K key;
+	V value;
+	HashNode<K, V> next;
 
 	public HashNode(K key, V value) {
 		this.key = key;

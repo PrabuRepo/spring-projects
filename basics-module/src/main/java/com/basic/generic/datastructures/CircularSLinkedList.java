@@ -3,8 +3,8 @@ package com.basic.generic.datastructures;
 import java.util.Scanner;
 
 class CLNode<T> {
-	T			data;
-	CLNode<T>	next;
+	T data;
+	CLNode<T> next;
 
 	public CLNode(T data) {
 		this.data = data;

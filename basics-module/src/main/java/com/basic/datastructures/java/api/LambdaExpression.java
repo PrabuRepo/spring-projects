@@ -117,12 +117,14 @@ public class LambdaExpression {
 		PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
 		// Priority Queue for Map:
 		// Sort based on Key
-		PriorityQueue<Map.Entry<String, Integer>> pqMap1 = new PriorityQueue<>((a, b) -> a.getKey().compareTo(b.getKey()));
+		PriorityQueue<Map.Entry<String, Integer>> pqMap1 = new PriorityQueue<>(
+				(a, b) -> a.getKey().compareTo(b.getKey()));
 		// Sort based on value
 		PriorityQueue<Map.Entry<String, Integer>> pqMap2 = new PriorityQueue<>((a, b) -> a.getValue() - b.getValue());
 		// Sort based on both
 		PriorityQueue<Map.Entry<String, Integer>> pqMap3 = new PriorityQueue<>(
-				(a, b) -> a.getValue().equals(b.getValue()) ? a.getKey().compareTo(b.getKey()) : a.getValue() - b.getValue());
+				(a, b) -> a.getValue().equals(b.getValue()) ? a.getKey().compareTo(b.getKey())
+						: a.getValue() - b.getValue());
 
 		// Priority Queue for Custom Objects:
 		Queue<Person> queue1 = new PriorityQueue<>((a, b) -> a.getAge() - b.getAge());

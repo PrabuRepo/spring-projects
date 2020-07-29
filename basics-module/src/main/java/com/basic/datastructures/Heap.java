@@ -11,9 +11,9 @@ public class Heap {
 }
 
 class MaxBinaryHeap {
-	int			heapSize;
-	int			capacity;
-	Integer[]	data;
+	int heapSize;
+	int capacity;
+	Integer[] data;
 
 	public MaxBinaryHeap(int capacity) {
 		this.heapSize = 0;
@@ -29,10 +29,8 @@ class MaxBinaryHeap {
 			data[heapSize++] = x;
 		} else {
 			data[heapSize] = x;
-			for (int i = heapSize; i > 0; i = parent(
-					i)) {
-				if (data[parent(i)] != null
-						&& data[parent(i)] < x) {
+			for (int i = heapSize; i > 0; i = parent(i)) {
+				if (data[parent(i)] != null && data[parent(i)] < x) {
 					swap(i, parent(i));
 				} else {
 					break;
@@ -64,18 +62,15 @@ class MaxBinaryHeap {
 	}
 
 	// Time Complexity: O(logn)
-	public void increaseKey(int index,
-			Integer increasedValue) {
+	public void increaseKey(int index, Integer increasedValue) {
 		if (index < heapSize) {
 			data[index] = increasedValue;
-			while (index > 0 && data[parent(
-					index)] < data[index]) {
+			while (index > 0 && data[parent(index)] < data[index]) {
 				swap(index, parent(index));
 				index = parent(index);
 			}
 		} else {
-			System.out.println(
-					"Not a valid position");
+			System.out.println("Not a valid position");
 		}
 	}
 
@@ -104,15 +99,14 @@ class MaxBinaryHeap {
 			right = right(i);
 			maxIndex = i;
 
-			if (left < heapSize
-					&& data[left] > data[maxIndex])
+			if (left < heapSize && data[left] > data[maxIndex])
 				maxIndex = left;
 
-			if (right < heapSize
-					&& data[right] > data[maxIndex])
+			if (right < heapSize && data[right] > data[maxIndex])
 				maxIndex = right;
 
-			if (maxIndex == i) break;
+			if (maxIndex == i)
+				break;
 			swap(i, maxIndex);
 			i = maxIndex;
 		}
@@ -125,12 +119,10 @@ class MaxBinaryHeap {
 		int right = right(i);
 		int maxIndex = i;
 
-		if (left < heapSize
-				&& data[left] > data[maxIndex])
+		if (left < heapSize && data[left] > data[maxIndex])
 			maxIndex = left;
 
-		if (right < heapSize
-				&& data[right] > data[maxIndex])
+		if (right < heapSize && data[right] > data[maxIndex])
 			maxIndex = right;
 
 		if (i != maxIndex) {
@@ -169,11 +161,9 @@ class MaxBinaryHeap {
 		Scanner in = new Scanner(System.in);
 		char ch;
 		int input;
-		MaxBinaryHeap binaryHeap = new MaxBinaryHeap(
-				20);
+		MaxBinaryHeap binaryHeap = new MaxBinaryHeap(20);
 		do {
-			System.out.println(
-					"Maximum Binary Heap Operations:");
+			System.out.println("Maximum Binary Heap Operations:");
 			System.out.println("1.Insert");
 			System.out.println("2.Delete");
 			System.out.println("3.getMaximum");
@@ -182,56 +172,37 @@ class MaxBinaryHeap {
 			System.out.print("Enter option:");
 			input = in.nextInt();
 			switch (input) {
-				case 1:
-					System.out.println(
-							"Enter no of data to be inserted:");
-					int t = in.nextInt();
-					while (t-- > 0)
-						binaryHeap.insert(
-								in.nextInt());
+			case 1:
+				System.out.println("Enter no of data to be inserted:");
+				int t = in.nextInt();
+				while (t-- > 0)
+					binaryHeap.insert(in.nextInt());
 
-					System.out.println(
-							"Elements are inserted!");
-					break;
-				case 2:
-					System.out.println(
-							"Max Element: "
-									+ binaryHeap
-											.extractMax());
-					break;
-				case 3:
-					System.out.println(
-							"Max element present in Heap: "
-									+ binaryHeap
-											.getMax());
-					break;
-				case 4:
-					System.out.println(
-							"Enter the index & increased value:");
-					binaryHeap.increaseKey(
-							in.nextInt(),
-							in.nextInt());
-					break;
-				case 6:
-					System.out.println(
-							"Enter element needs to find: ");
-					System.out.println(
-							"Element present in the heap? "
-									+ binaryHeap
-											.search(in
-													.nextInt()));
-					break;
-				default:
-					System.out.println(
-							"Please enter the valid option!!!");
-					break;
+				System.out.println("Elements are inserted!");
+				break;
+			case 2:
+				System.out.println("Max Element: " + binaryHeap.extractMax());
+				break;
+			case 3:
+				System.out.println("Max element present in Heap: " + binaryHeap.getMax());
+				break;
+			case 4:
+				System.out.println("Enter the index & increased value:");
+				binaryHeap.increaseKey(in.nextInt(), in.nextInt());
+				break;
+			case 6:
+				System.out.println("Enter element needs to find: ");
+				System.out.println("Element present in the heap? " + binaryHeap.search(in.nextInt()));
+				break;
+			default:
+				System.out.println("Please enter the valid option!!!");
+				break;
 
 			}
 			System.out.println("\nDisplay:");
 			binaryHeap.display();
 
-			System.out.println(
-					"\nDo you want to continue(y/n):");
+			System.out.println("\nDo you want to continue(y/n):");
 			ch = in.next().charAt(0);
 		} while (ch == 'y' || ch == 'Y');
 		System.out.println("****Thank You******");
@@ -240,9 +211,9 @@ class MaxBinaryHeap {
 }
 
 class MinBinaryHeap {
-	Integer[]	elements;
-	int			capacity;
-	int			currSize;
+	Integer[] elements;
+	int capacity;
+	int currSize;
 
 	public MinBinaryHeap(int max) {
 		this.elements = new Integer[max];
@@ -254,16 +225,12 @@ class MinBinaryHeap {
 	public void insert(int data) {
 		if (!isFull()) {
 			elements[currSize] = data;
-			for (int i = currSize; (i > 0
-					&& elements[parent(
-							i)] > elements[i]); i = parent(
-									i))
+			for (int i = currSize; (i > 0 && elements[parent(i)] > elements[i]); i = parent(i))
 				swap(parent(i), i);
 
 			currSize++;
 		} else {
-			System.out.println(
-					"Overflow: heap full!");
+			System.out.println("Overflow: heap full!");
 		}
 	}
 
@@ -287,8 +254,7 @@ class MinBinaryHeap {
 				elements[0] = null;
 				currSize--;
 			} else {
-				elements[0] = elements[currSize
-						- 1]; // assign last element in the heap
+				elements[0] = elements[currSize - 1]; // assign last element in the heap
 				elements[currSize - 1] = null;
 				currSize--;
 				// minHeapify(0);
@@ -305,12 +271,10 @@ class MinBinaryHeap {
 			right = rightChild(i);
 			minIndex = i;
 
-			if (left < currSize
-					&& elements[left] < elements[minIndex]) {
+			if (left < currSize && elements[left] < elements[minIndex]) {
 				minIndex = left;
 			}
-			if (right < currSize
-					&& elements[right] < elements[minIndex]) {
+			if (right < currSize && elements[right] < elements[minIndex]) {
 				minIndex = right;
 			}
 			if (i != minIndex) {
@@ -329,12 +293,10 @@ class MinBinaryHeap {
 		int right = rightChild(index);
 		int smallest = index;
 
-		if (left < currSize
-				&& elements[left] < elements[smallest])
+		if (left < currSize && elements[left] < elements[smallest])
 			smallest = left;
 
-		if (right < currSize
-				&& elements[right] < elements[smallest])
+		if (right < currSize && elements[right] < elements[smallest])
 			smallest = right;
 
 		if (smallest != index) {
@@ -344,14 +306,10 @@ class MinBinaryHeap {
 	}
 
 	// Time Complexity: O(logn)
-	public void decreaseKey(int index,
-			int newValue) {
+	public void decreaseKey(int index, int newValue) {
 		if (index < currSize) {
 			elements[index] = newValue;
-			for (int i = index; (i > 0
-					&& elements[parent(
-							i)] > elements[i]); i = parent(
-									i))
+			for (int i = index; (i > 0 && elements[parent(i)] > elements[i]); i = parent(i))
 				swap(parent(i), i);
 		}
 
@@ -360,8 +318,7 @@ class MinBinaryHeap {
 	// Time Complexity: O(logn)
 	public void removeKey(int index) {
 		if (index < currSize) {
-			elements[index] = elements[currSize
-					- 1];
+			elements[index] = elements[currSize - 1];
 			elements[currSize - 1] = null;
 			currSize--;
 			minHeapify(index);
@@ -371,16 +328,14 @@ class MinBinaryHeap {
 	public void display() {
 		if (currSize > 0) {
 			for (int i = 0; i < currSize; i++)
-				System.out
-						.print(elements[i] + " ");
+				System.out.print(elements[i] + " ");
 		} else {
 			System.out.println("Heap is Empty!");
 		}
 	}
 
 	private boolean isFull() {
-		return (currSize == capacity) ? true
-				: false;
+		return (currSize == capacity) ? true : false;
 	}
 
 	private boolean isEmpty() {
@@ -421,14 +376,11 @@ class MinBinaryHeap {
 		Scanner in = new Scanner(System.in);
 		char ch;
 		int input;
-		MinBinaryHeap binaryHeap = new MinBinaryHeap(
-				20);
+		MinBinaryHeap binaryHeap = new MinBinaryHeap(20);
 		do {
-			System.out.println(
-					"Minimum Binary Heap Operations:");
+			System.out.println("Minimum Binary Heap Operations:");
 			System.out.println("1.Insert");
-			System.out.println(
-					"2.Delete/extractMin");
+			System.out.println("2.Delete/extractMin");
 			System.out.println("3.getMinimum");
 			System.out.println("4.Decrease Key");
 			System.out.println("5.Find/Search");
@@ -436,56 +388,37 @@ class MinBinaryHeap {
 			input = in.nextInt();
 			switch (input) {
 
-				case 1:
-					System.out.println(
-							"Enter no of elements to be inserted:");
-					int t = in.nextInt();
-					while (t-- > 0)
-						binaryHeap.insert(
-								in.nextInt());
+			case 1:
+				System.out.println("Enter no of elements to be inserted:");
+				int t = in.nextInt();
+				while (t-- > 0)
+					binaryHeap.insert(in.nextInt());
 
-					System.out.println(
-							"Elements are inserted!");
-					break;
-				case 2:
-					System.out.println(
-							"Deleted min Element in the heap: "
-									+ binaryHeap
-											.extractMin());
-					break;
-				case 3:
-					System.out.println(
-							"Min element present in Heap: "
-									+ binaryHeap
-											.getMin());
-					break;
-				case 4:
-					System.out.println(
-							"Enter the index & decreased value:");
-					binaryHeap.decreaseKey(
-							in.nextInt(),
-							in.nextInt());
-					break;
-				case 5:
-					System.out.println(
-							"Enter element needs to find: ");
-					System.out.println(
-							"Element present in the heap? "
-									+ binaryHeap
-											.search(in
-													.nextInt()));
-					break;
-				default:
-					System.out.println(
-							"Please enter the valid option!!!");
-					break;
+				System.out.println("Elements are inserted!");
+				break;
+			case 2:
+				System.out.println("Deleted min Element in the heap: " + binaryHeap.extractMin());
+				break;
+			case 3:
+				System.out.println("Min element present in Heap: " + binaryHeap.getMin());
+				break;
+			case 4:
+				System.out.println("Enter the index & decreased value:");
+				binaryHeap.decreaseKey(in.nextInt(), in.nextInt());
+				break;
+			case 5:
+				System.out.println("Enter element needs to find: ");
+				System.out.println("Element present in the heap? " + binaryHeap.search(in.nextInt()));
+				break;
+			default:
+				System.out.println("Please enter the valid option!!!");
+				break;
 
 			}
 			System.out.println("\nDisplay:");
 			binaryHeap.display();
 
-			System.out.println(
-					"\nDo you want to continue(y/n):");
+			System.out.println("\nDo you want to continue(y/n):");
 			ch = in.next().charAt(0);
 		} while (ch == 'y' || ch == 'Y');
 		System.out.println("****Thank You******");
@@ -495,9 +428,9 @@ class MinBinaryHeap {
 
 class PriorityQueue {
 
-	int[]	elements;
-	int		currSize;
-	int		maxSize;
+	int[] elements;
+	int currSize;
+	int maxSize;
 
 	public PriorityQueue(int max) {
 		this.maxSize = max;
@@ -509,13 +442,10 @@ class PriorityQueue {
 	// Add the elements
 	public void enQueue(int data) {
 		if (currSize == maxSize) {
-			System.out.println(
-					"Overflow: Queue is full.");
+			System.out.println("Overflow: Queue is full.");
 		} else {
 			elements[currSize] = data;
-			for (int i = currSize; i >= 0
-					&& elements[i] < elements[parent(
-							i)]; i = parent(i))
+			for (int i = currSize; i >= 0 && elements[i] < elements[parent(i)]; i = parent(i))
 				swap(elements, i, parent(i));
 		}
 		currSize++;
@@ -530,8 +460,7 @@ class PriorityQueue {
 				elements[0] = -1;
 				currSize--;
 			} else {
-				elements[0] = elements[currSize
-						- 1];
+				elements[0] = elements[currSize - 1];
 				elements[currSize - 1] = -1;
 				currSize--; // Current size should be reduced before invoking the heapify
 				// Rebuild the heap data structure
@@ -552,31 +481,25 @@ class PriorityQueue {
 	public void display() {
 		if (!isEmpty()) {
 			for (int i = 0; i < currSize; i++)
-				System.out
-						.print(elements[i] + " ");
+				System.out.print(elements[i] + " ");
 		}
 	}
 
 	/* Heapify - It is used to build the heap property array. It does from any element to leaf*/
-	private void heapify(int[] a,
-			int startIndex) {
+	private void heapify(int[] a, int startIndex) {
 		if (startIndex < currSize) {
 			int leftChild = leftChild(startIndex);
-			int rightChild = rightChild(
-					startIndex);
+			int rightChild = rightChild(startIndex);
 			int minIndex = startIndex;
 
-			if (leftChild < currSize
-					&& a[leftChild] < a[minIndex])
+			if (leftChild < currSize && a[leftChild] < a[minIndex])
 				minIndex = leftChild;
 
-			if (rightChild < currSize
-					&& a[rightChild] < a[minIndex])
+			if (rightChild < currSize && a[rightChild] < a[minIndex])
 				minIndex = rightChild;
 
 			if (startIndex != minIndex) {
-				swap(elements, startIndex,
-						minIndex);
+				swap(elements, startIndex, minIndex);
 				heapify(a, minIndex);
 			}
 		}
@@ -604,50 +527,38 @@ class PriorityQueue {
 		Scanner in = new Scanner(System.in);
 		char ch;
 		int input;
-		PriorityQueue queue = new PriorityQueue(
-				10);
+		PriorityQueue queue = new PriorityQueue(10);
 		do {
-			System.out
-					.println("Queue Operations:");
+			System.out.println("Queue Operations:");
 			System.out.println("1.EnQueue");
-			System.out.println(
-					"2.Dequeue(highest Priority)");
+			System.out.println("2.Dequeue(highest Priority)");
 			System.out.println("3.Peek");
 			System.out.print("Enter option:");
 			input = in.nextInt();
 			switch (input) {
-				case 1:
-					System.out.println(
-							"Enter no of elements to be inserted:");
-					int t = in.nextInt();
-					while (t-- > 0) {
-						queue.enQueue(
-								in.nextInt());
-					}
-					System.out.println(
-							"Elements are inserted!");
-					break;
-				case 2:
-					System.out.println(
-							"Dequeue operation: "
-									+ queue.deQueue());
-					break;
-				case 3:
-					System.out.println(
-							"Top element in the Queue: "
-									+ queue.peek());
-					break;
-				default:
-					System.out.println(
-							"Please enter the valid option!!!");
-					break;
+			case 1:
+				System.out.println("Enter no of elements to be inserted:");
+				int t = in.nextInt();
+				while (t-- > 0) {
+					queue.enQueue(in.nextInt());
+				}
+				System.out.println("Elements are inserted!");
+				break;
+			case 2:
+				System.out.println("Dequeue operation: " + queue.deQueue());
+				break;
+			case 3:
+				System.out.println("Top element in the Queue: " + queue.peek());
+				break;
+			default:
+				System.out.println("Please enter the valid option!!!");
+				break;
 			}
 
 			System.out.println("\nDisplay:");
 			queue.display();
 
-			System.out.println(
-					"\nDo you want to continue(y/n):");
+			System.out.println("\nDo you want to continue(y/n):");
 			ch = in.next().charAt(0);
 		} while (ch == 'y' || ch == 'Y');
 		System.out.println("****Thank You******");

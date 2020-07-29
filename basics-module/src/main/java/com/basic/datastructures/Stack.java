@@ -13,18 +13,15 @@ public class Stack {
 		System.out.println("Stack Operations: ");
 		Stack ob = new Stack();
 
-		System.out
-				.println("Stack - Array Impl: ");
+		System.out.println("Stack - Array Impl: ");
 		ob.testStackArrayImpl();
 
-		System.out.println(
-				"Stack - LinkedList Impl: ");
+		System.out.println("Stack - LinkedList Impl: ");
 		ob.testStackLinkedListImpl();
 	}
 
 	public void testStackArrayImpl() {
-		StackArrayImpl stack = new StackArrayImpl(
-				5);
+		StackArrayImpl stack = new StackArrayImpl(5);
 		System.out.println("Stack Operations:");
 		System.out.println("Push");
 		stack.push(1);
@@ -32,10 +29,8 @@ public class Stack {
 		stack.push(3);
 		System.out.println("Display:");
 		stack.display();
-		System.out
-				.println("\npop: " + stack.pop());
-		System.out
-				.println("peek: " + stack.peek());
+		System.out.println("\npop: " + stack.pop());
+		System.out.println("peek: " + stack.peek());
 	}
 
 	public void testStackLinkedListImpl() {
@@ -47,18 +42,16 @@ public class Stack {
 		stack.push(3);
 		System.out.println("Display:");
 		stack.display();
-		System.out
-				.println("\npop: " + stack.pop());
-		System.out
-				.println("peek: " + stack.peek());
+		System.out.println("\npop: " + stack.pop());
+		System.out.println("peek: " + stack.peek());
 	}
 }
 
 class StackArrayImpl {
 
-	int[]	stack;
-	int		top;
-	int		maxSize;
+	int[] stack;
+	int top;
+	int maxSize;
 
 	public StackArrayImpl(int size) {
 		this.maxSize = size;
@@ -68,8 +61,10 @@ class StackArrayImpl {
 	}
 
 	public void push(int data) {
-		if (!isFull()) stack[++top] = data;
-		else System.out.println("Stack is Full!");
+		if (!isFull())
+			stack[++top] = data;
+		else
+			System.out.println("Stack is Full!");
 
 	}
 
@@ -130,8 +125,7 @@ class StackLinkedListImpl {
 	public void display() {
 		ListNode temp = stack;
 		if (isEmpty()) {
-			System.out
-					.println("Stack is empty!!!");
+			System.out.println("Stack is empty!!!");
 		} else {
 			while (temp != null) {
 				System.out.print(temp.data + " ");

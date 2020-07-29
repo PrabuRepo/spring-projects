@@ -104,12 +104,18 @@ public class BitAlgorithms {
 		 * 2. 1's Complement + 1  
 		 */
 		System.out.println("Negative number/2's Complement of N:(binary representation):");
-		System.out.println("-1/2's Complement of 1: " + Integer.toBinaryString(-1) + " " + Integer.toBinaryString(~1 + 1));
-		System.out.println("-2/2's Complement of 2: " + Integer.toBinaryString(-2) + " " + Integer.toBinaryString(~2 + 1));
-		System.out.println("-3/2's Complement of 3: " + Integer.toBinaryString(-3) + " " + Integer.toBinaryString(~3 + 1));
-		System.out.println("-4/2's Complement of 4: " + Integer.toBinaryString(-4) + " " + Integer.toBinaryString(~4 + 1));
-		System.out.println("-5/2's Complement of 5: " + Integer.toBinaryString(-5) + " " + Integer.toBinaryString(~5 + 1));
-		System.out.println("-8/2's Complement of 6: " + Integer.toBinaryString(-8) + " " + Integer.toBinaryString(~8 + 1));
+		System.out.println(
+				"-1/2's Complement of 1: " + Integer.toBinaryString(-1) + " " + Integer.toBinaryString(~1 + 1));
+		System.out.println(
+				"-2/2's Complement of 2: " + Integer.toBinaryString(-2) + " " + Integer.toBinaryString(~2 + 1));
+		System.out.println(
+				"-3/2's Complement of 3: " + Integer.toBinaryString(-3) + " " + Integer.toBinaryString(~3 + 1));
+		System.out.println(
+				"-4/2's Complement of 4: " + Integer.toBinaryString(-4) + " " + Integer.toBinaryString(~4 + 1));
+		System.out.println(
+				"-5/2's Complement of 5: " + Integer.toBinaryString(-5) + " " + Integer.toBinaryString(~5 + 1));
+		System.out.println(
+				"-8/2's Complement of 6: " + Integer.toBinaryString(-8) + " " + Integer.toBinaryString(~8 + 1));
 
 		System.out.println("Negative number/2's Complement of N:(Decimal representation):");
 		System.out.println("-1/2's Complement of 1: " + (-1) + " " + (~1 + 1));
@@ -184,7 +190,8 @@ public class BitAlgorithms {
 		int twoPowN = (int) Math.ceil(Math.log(n) / Math.log(2)); // From some value to 2th power
 		double bytes = Math.pow(2, twoPowN);
 		double bits = 8 * bytes; // 1byte = 8bits
-		System.out.println("For the input n: " + n + "-> 2th Power: " + twoPowN + "; Bytes: " + bytes + "; Bits: " + bits);
+		System.out.println(
+				"For the input n: " + n + "-> 2th Power: " + twoPowN + "; Bytes: " + bytes + "; Bits: " + bits);
 	}
 
 	/************** Bit Manipulations - Simple tricks ******************/

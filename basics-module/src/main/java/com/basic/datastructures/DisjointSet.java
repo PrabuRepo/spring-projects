@@ -14,7 +14,7 @@ import java.util.Map;
  *  3. Path Compression (Modifications to find()) : It speeds up the data structure by compressing the height of the trees. It can be 
  *     achieved by inserting a small caching mechanism into the Find operation. 
  *     
- * Applications:
+ * Applications: 
  *   - Disjoint-set data structures model the partitioning of a set, for example to keep track of the connected components of an undirected graph.
  *   - This model can then be used to determine whether two vertices belong to the same component, or whether adding an edge between them would result in a cycle. 
  *   - This data structure is used by the Boost Graph Library to implement its Incremental Connected Components functionality.

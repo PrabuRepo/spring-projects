@@ -22,7 +22,7 @@ import java.util.Scanner;
  * handled using some collision handling technique. Following are the ways to handle collisions:
  * 
  * Separate Chaining:The idea is to make each cell of hash table point to a linked list of records that have same hash function value. Chaining 
- * is simple, but requires additional memory outside the table. 
+ * is simple, but requires additional memory outside the table.  
  * 
  * Open Addressing: In open addressing, all elements are stored in the hash table itself. Each table entry contains either a record or NIL. 
  * When searching for an element, we one by one examine table slots until the desired element is found or it is clear that the element is
@@ -31,9 +31,9 @@ import java.util.Scanner;
  */
 public class HashSeperateChaining<T extends Comparable<T>> {
 
-	LinkedList<T>[]	table;
-	int				hashSize;
-	int				capacity;
+	LinkedList<T>[] table;
+	int hashSize;
+	int capacity;
 
 	public HashSeperateChaining(int capacity) {
 		this.capacity = capacity;

@@ -23,9 +23,9 @@ public class CircularQueue {
 
 class CircularQueueArrayImpl {
 	int[] queue;
-	int   front;
-	int   rear;
-	int   maxSize;
+	int front;
+	int rear;
+	int maxSize;
 
 	public CircularQueueArrayImpl(int size) {
 		this.maxSize = size;
@@ -123,59 +123,52 @@ class CircularQueueArrayImpl {
 	}
 
 	public boolean isFull() {
-		return (front == 0 && rear == maxSize - 1)
-				|| (front == rear + 1);
+		return (front == 0 && rear == maxSize - 1) || (front == rear + 1);
 	}
 
 	public static void main(String[] args) {
 
 		Scanner in = new Scanner(System.in);
 		char ch;
-		CircularQueueArrayImpl queue = new CircularQueueArrayImpl(
-				6);
+		CircularQueueArrayImpl queue = new CircularQueueArrayImpl(6);
 		do {
-			System.out
-					.println("Circular Queue Operations:");
+			System.out.println("Circular Queue Operations:");
 			System.out.println("1.Enqueue");
 			System.out.println("2.Dequeue");
 			System.out.println("3.Front");
 			System.out.print("Enter option:");
 			switch (in.nextInt()) {
-				case 1:
-					System.out.println(
-							"Enter no of elements to be inserted:");
-					int t = in.nextInt();
-					while (t-- > 0) {
-						queue.enqueue(in.nextInt());
-					}
-					System.out.println(
-							"Elements are inserted!");
-					break;
-				case 2:
-					int data = queue.dequeue();
-					if (data != -1) System.out.println(
-							"Dequeued element is: " + data);
-					else System.out
-							.println("Queue is empty");
-					break;
-				case 3:
-					data = queue.getFront();
-					if (data != -1) System.out.println(
-							"Front element is: " + data);
-					else System.out
-							.println("Queue is empty");
-					break;
-				default:
-					System.out.println(
-							"Please enter the valid option!!!");
-					break;
+			case 1:
+				System.out.println("Enter no of elements to be inserted:");
+				int t = in.nextInt();
+				while (t-- > 0) {
+					queue.enqueue(in.nextInt());
+				}
+				System.out.println("Elements are inserted!");
+				break;
+			case 2:
+				int data = queue.dequeue();
+				if (data != -1)
+					System.out.println("Dequeued element is: " + data);
+				else
+					System.out.println("Queue is empty");
+				break;
+			case 3:
+				data = queue.getFront();
+				if (data != -1)
+					System.out.println("Front element is: " + data);
+				else
+					System.out.println("Queue is empty");
+				break;
+			default:
+				System.out.println("Please enter the valid option!!!");
+				break;
 
 			}
 
 			System.out.println("\nDisplay:");
 			queue.display();
-			System.out.println(
-					"\nDo you want to continue(y/n):");
+			System.out.println("\nDo you want to continue(y/n):");
 			ch = in.next().charAt(0);
 		} while (ch == 'y' || ch == 'Y');
 		System.out.println("****Thank You******");
@@ -184,7 +177,7 @@ class CircularQueueArrayImpl {
 }
 
 class MyCircularQueue {
-	private int   front, rear, currSize;
+	private int front, rear, currSize;
 	private int[] queue;
 
 	/** Initialize your data structure here. Set the size of the queue to be k. */
@@ -197,7 +190,8 @@ class MyCircularQueue {
 
 	/** Insert an element into the circular queue. Return true if the operation is successful. */
 	public boolean enQueue(int value) {
-		if (isFull()) return false;
+		if (isFull())
+			return false;
 
 		rear = (rear + 1) % queue.length;
 		queue[rear] = value;
@@ -207,7 +201,8 @@ class MyCircularQueue {
 
 	/** Delete an element from the circular queue. Return true if the operation is successful. */
 	public boolean deQueue() {
-		if (isEmpty()) return false;
+		if (isEmpty())
+			return false;
 
 		front = (front + 1) % queue.length;
 		currSize--;
@@ -288,47 +283,42 @@ class CircularQueueSLL {
 		char ch;
 		CircularQueueSLL queue = new CircularQueueSLL();
 		do {
-			System.out
-					.println("Circular Queue Operations:");
+			System.out.println("Circular Queue Operations:");
 			System.out.println("1.Enqueue");
 			System.out.println("2.Dequeue");
 			System.out.println("3.Front");
 			System.out.print("Enter option:");
 			switch (in.nextInt()) {
-				case 1:
-					System.out.println(
-							"Enter no of elements to be inserted:");
-					int t = in.nextInt();
-					while (t-- > 0) {
-						queue.enQueue(in.nextInt());
-					}
-					System.out.println(
-							"Elements are inserted!");
-					break;
-				case 2:
-					int data = queue.deQueue();
-					if (data != -1) System.out.println(
-							"Dequeued element is: " + data);
-					else System.out
-							.println("Queue is empty");
-					break;
-				case 3:
-					data = queue.getFront();
-					if (data != -1) System.out.println(
-							"Front element is: " + data);
-					else System.out
-							.println("Queue is empty");
-					break;
-				default:
-					System.out.println(
-							"Please enter the valid option!!!");
-					break;
+			case 1:
+				System.out.println("Enter no of elements to be inserted:");
+				int t = in.nextInt();
+				while (t-- > 0) {
+					queue.enQueue(in.nextInt());
+				}
+				System.out.println("Elements are inserted!");
+				break;
+			case 2:
+				int data = queue.deQueue();
+				if (data != -1)
+					System.out.println("Dequeued element is: " + data);
+				else
+					System.out.println("Queue is empty");
+				break;
+			case 3:
+				data = queue.getFront();
+				if (data != -1)
+					System.out.println("Front element is: " + data);
+				else
+					System.out.println("Queue is empty");
+				break;
+			default:
+				System.out.println("Please enter the valid option!!!");
+				break;
 			}
 
 			System.out.println("\nDisplay:");
 			queue.display();
-			System.out.println(
-					"\nDo you want to continue(y/n):");
+			System.out.println("\nDo you want to continue(y/n):");
 			ch = in.next().charAt(0);
 		} while (ch == 'y' || ch == 'Y');
 		System.out.println("****Thank You******");
@@ -391,47 +381,42 @@ class CircularDLinkedList {
 		char ch;
 		CircularDLinkedList queue = new CircularDLinkedList();
 		do {
-			System.out
-					.println("Circular Queue Operations:");
+			System.out.println("Circular Queue Operations:");
 			System.out.println("1.Enqueue");
 			System.out.println("2.Dequeue");
 			System.out.println("3.Front");
 			System.out.print("Enter option:");
 			switch (in.nextInt()) {
-				case 1:
-					System.out.println(
-							"Enter no of elements to be inserted:");
-					int t = in.nextInt();
-					while (t-- > 0) {
-						queue.enQueue(in.nextInt());
-					}
-					System.out.println(
-							"Elements are inserted!");
-					break;
-				case 2:
-					int data = queue.deQueue();
-					if (data != -1) System.out.println(
-							"Dequeued element is: " + data);
-					else System.out
-							.println("Queue is empty");
-					break;
-				case 3:
-					data = queue.getFront();
-					if (data != -1) System.out.println(
-							"Front element is: " + data);
-					else System.out
-							.println("Queue is empty");
-					break;
-				default:
-					System.out.println(
-							"Please enter the valid option!!!");
-					break;
+			case 1:
+				System.out.println("Enter no of elements to be inserted:");
+				int t = in.nextInt();
+				while (t-- > 0) {
+					queue.enQueue(in.nextInt());
+				}
+				System.out.println("Elements are inserted!");
+				break;
+			case 2:
+				int data = queue.deQueue();
+				if (data != -1)
+					System.out.println("Dequeued element is: " + data);
+				else
+					System.out.println("Queue is empty");
+				break;
+			case 3:
+				data = queue.getFront();
+				if (data != -1)
+					System.out.println("Front element is: " + data);
+				else
+					System.out.println("Queue is empty");
+				break;
+			default:
+				System.out.println("Please enter the valid option!!!");
+				break;
 			}
 
 			System.out.println("\nDisplay:");
 			queue.display();
-			System.out.println(
-					"\nDo you want to continue(y/n):");
+			System.out.println("\nDo you want to continue(y/n):");
 			ch = in.next().charAt(0);
 		} while (ch == 'y' || ch == 'Y');
 		System.out.println("****Thank You******");

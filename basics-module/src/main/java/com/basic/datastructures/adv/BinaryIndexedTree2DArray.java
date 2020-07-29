@@ -36,13 +36,14 @@ public class BinaryIndexedTree2DArray {
 		System.out.println("Sum Region: " + ob.sumRegion(2, 1, 4, 3));
 	}
 
-	int[][]	biTree;
-	int[][]	nums;
-	int		m;
-	int		n;
+	int[][] biTree;
+	int[][] nums;
+	int m;
+	int n;
 
 	public BinaryIndexedTree2DArray(int[][] matrix) {
-		if (matrix.length == 0 || matrix[0].length == 0) return;
+		if (matrix.length == 0 || matrix[0].length == 0)
+			return;
 		m = matrix.length;
 		n = matrix[0].length;
 		biTree = new int[m + 1][n + 1];
@@ -53,7 +54,8 @@ public class BinaryIndexedTree2DArray {
 	}
 
 	public void insert(int row, int col, int val) {
-		if (m == 0 || n == 0) return;
+		if (m == 0 || n == 0)
+			return;
 
 		for (int i = row + 1; i <= m; i += i & (-i)) {
 			// System.out.print(i + "- ");
@@ -68,7 +70,8 @@ public class BinaryIndexedTree2DArray {
 	}
 
 	public void update(int row, int col, int val) {
-		if (m == 0 || n == 0) return;
+		if (m == 0 || n == 0)
+			return;
 		int delta = val - nums[row][col];
 		nums[row][col] = val;
 		System.out.println(val + "-" + nums[row][col] + " " + delta);
@@ -76,7 +79,8 @@ public class BinaryIndexedTree2DArray {
 	}
 
 	public int sumRegion(int row1, int col1, int row2, int col2) {
-		if (m == 0 || n == 0) return 0;
+		if (m == 0 || n == 0)
+			return 0;
 		System.out.println("Calculate Sum of Regions: " + row1 + " " + col1 + " " + row2 + " " + col2);
 		return sum(row2 + 1, col2 + 1) + sum(row1, col1) - sum(row1, col2 + 1) - sum(row2 + 1, col1);
 	}

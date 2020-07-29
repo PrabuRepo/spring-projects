@@ -3,8 +3,8 @@ package com.basic.generic.datastructures;
 import java.util.Scanner;
 
 class ListNode<T> {
-	T			data;
-	ListNode<T>	next;
+	T data;
+	ListNode<T> next;
 
 	public ListNode(T data) {
 		this.data = data;

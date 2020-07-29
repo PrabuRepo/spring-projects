@@ -59,8 +59,7 @@ public class ArrayAPI {
 		Utils.reverse(a);
 
 		// Integer Object Arrays:
-		Integer[] integerArr = new Integer[] { 15, 11, 9,
-				55, 47, 18, 520, 1123, 366, 420 };
+		Integer[] integerArr = new Integer[] { 15, 11, 9, 55, 47, 18, 520, 1123, 366, 420 };
 		Arrays.sort(integerArr);
 		Arrays.sort(integerArr, Collections.reverseOrder());
 		Arrays.sort(integerArr, 2, 6);
@@ -76,16 +75,14 @@ public class ArrayAPI {
 	}
 
 	public void intArrayConversionsAPI() {
-		System.out.println(
-				"int/Integer: Array to list conversions: ");
-		/**1.1. Primitive array to List: */
+		System.out.println("int/Integer: Array to list conversions: ");
+		/** 1.1. Primitive array to List: */
 		// using boxed & collect in stream
 		int[] arr = { 1, 2, 3 };
-		List<Integer> list1 = Arrays.stream(arr).boxed()
-				.collect(Collectors.toList());
+		List<Integer> list1 = Arrays.stream(arr).boxed().collect(Collectors.toList());
 		list1.forEach(k -> System.out.print(k + " "));
 
-		/**1.2. Integer object array to list: */
+		/** 1.2. Integer object array to list: */
 		// using asList
 		Integer[] arr2 = { 1, 2, 3 };
 		// asList supports only object array's, not primitive
@@ -93,82 +90,54 @@ public class ArrayAPI {
 		list2.forEach(k -> System.out.print(k + " "));
 
 		System.out.println("\nList to Array Conversions: ");
-		/**2.1. List to Primitive array: */
+		/** 2.1. List to Primitive array: */
 		// using stream: mapToInt
-		int[] arr3 = list1.stream()
-				.mapToInt(i -> i.intValue()).toArray();
-		arr3 = list1.stream().mapToInt(Integer::intValue)
-				.toArray();
-		System.out.println("List to primitive array: "
-				+ Arrays.toString(arr3));
+		int[] arr3 = list1.stream().mapToInt(i -> i.intValue()).toArray();
+		arr3 = list1.stream().mapToInt(Integer::intValue).toArray();
+		System.out.println("List to primitive array: " + Arrays.toString(arr3));
 
-		/**2.2. List to Object array: */
-		Integer[] arr4 = list1
-				.toArray(new Integer[list1.size()]);
-		Integer[] arr5 = list1.stream()
-				.toArray(Integer[]::new);
-		System.out.println("List to Object array: "
-				+ Arrays.toString(arr5));
+		/** 2.2. List to Object array: */
+		Integer[] arr4 = list1.toArray(new Integer[list1.size()]);
+		Integer[] arr5 = list1.stream().toArray(Integer[]::new);
+		System.out.println("List to Object array: " + Arrays.toString(arr5));
 
-		/**List to Primitive conversion & filter out null values:*/
-		int[] primitive = list1.stream()
-				.mapToInt(i -> (i == null ? 0 : i))
-				.toArray();
+		/** List to Primitive conversion & filter out null values: */
+		int[] primitive = list1.stream().mapToInt(i -> (i == null ? 0 : i)).toArray();
 		// Same using method reference:
-		primitive = list1.stream().filter(Objects::nonNull)
-				.mapToInt(Integer::intValue).toArray();
-		primitive = list1.stream()
-				.map(i -> (i == null ? 0 : i))
-				.mapToInt(Integer::intValue).toArray();
+		primitive = list1.stream().filter(Objects::nonNull).mapToInt(Integer::intValue).toArray();
+		primitive = list1.stream().map(i -> (i == null ? 0 : i)).mapToInt(Integer::intValue).toArray();
 	}
 
 	public void stringArrayConversionsAPI() {
-		System.out.println(
-				"String: Array to list conversions: ");
-		/**1. String array to List: */
-		String[] strArr = new String[] { "abc", "def",
-				"ghi" };
+		System.out.println("String: Array to list conversions: ");
+		/** 1. String array to List: */
+		String[] strArr = new String[] { "abc", "def", "ghi" };
 		List<String> list = Arrays.asList(strArr);
 		list.forEach(k -> System.out.print(k + " "));
 
 		System.out.println("\nList to Array Conversions: ");
-		/**2. List to String array: */
-		String[] strArr2 = list
-				.toArray(new String[list.size()]);
-		String[] strArr3 = list.stream()
-				.toArray(String[]::new);
-		System.out.println("List to String array: "
-				+ Arrays.toString(strArr2));
-		System.out.println("List to String array: "
-				+ Arrays.toString(strArr3));
+		/** 2. List to String array: */
+		String[] strArr2 = list.toArray(new String[list.size()]);
+		String[] strArr3 = list.stream().toArray(String[]::new);
+		System.out.println("List to String array: " + Arrays.toString(strArr2));
+		System.out.println("List to String array: " + Arrays.toString(strArr3));
 	}
 
 	public void arrayBinarySearchAPI() {
 		int[] arr = { 1, 3, 5, 7, 9, 11 };
 		System.out.println(Arrays.toString(arr));
-		System.out.println(
-				"Binary Search API for the given value: ");
-		System.out.println("Exact Element: "
-				+ Arrays.binarySearch(arr, 5));
-		System.out.println("Before first element: "
-				+ Arrays.binarySearch(arr, 0));
-		System.out.println("Element b/w 2 elements: "
-				+ Arrays.binarySearch(arr, 4)); // Returns -ve val of next pos
-		System.out.println("After last element: "
-				+ Arrays.binarySearch(arr, 12));
+		System.out.println("Binary Search API for the given value: ");
+		System.out.println("Exact Element: " + Arrays.binarySearch(arr, 5));
+		System.out.println("Before first element: " + Arrays.binarySearch(arr, 0));
+		System.out.println("Element b/w 2 elements: " + Arrays.binarySearch(arr, 4)); // Returns -ve val of next pos
+		System.out.println("After last element: " + Arrays.binarySearch(arr, 12));
 
-		System.out.println(
-				"Binary Search API for the given ranges: ");
+		System.out.println("Binary Search API for the given ranges: ");
 		// arr, fromIndex, toIndex, Val
-		System.out.println("Exact Element: "
-				+ Arrays.binarySearch(arr, 0, 3, 5));
-		System.out.println("Before first element: " + Arrays
-				.binarySearch(arr, 0, arr.length - 1, 5));
-		System.out.println("Element b/w 2 elements: "
-				+ Arrays.binarySearch(arr, 0,
-						arr.length - 1, 4));
-		System.out.println("After last element: "
-				+ Arrays.binarySearch(arr, 2, 5, 12));
+		System.out.println("Exact Element: " + Arrays.binarySearch(arr, 0, 3, 5));
+		System.out.println("Before first element: " + Arrays.binarySearch(arr, 0, arr.length - 1, 5));
+		System.out.println("Element b/w 2 elements: " + Arrays.binarySearch(arr, 0, arr.length - 1, 4));
+		System.out.println("After last element: " + Arrays.binarySearch(arr, 2, 5, 12));
 	}
 
 	public void arrayOtherAPIs() {
@@ -182,11 +151,9 @@ public class ArrayAPI {
 
 		int[] a1 = { 5, 7, 8, 11, 4, 6, 2 };
 		int[] a2 = { 5, 7, 8, 11, 4, 6, 2 };
-		System.out.println(
-				"Equals: " + Arrays.equals(a1, a2));
+		System.out.println("Equals: " + Arrays.equals(a1, a2));
 
 		Arrays.fill(a, -1);
-		System.out
-				.println("Fill -1: " + Arrays.toString(a));
+		System.out.println("Fill -1: " + Arrays.toString(a));
 	}
 }

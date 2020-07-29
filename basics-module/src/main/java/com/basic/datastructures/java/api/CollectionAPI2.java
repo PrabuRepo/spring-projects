@@ -74,61 +74,61 @@ public class CollectionAPI2 {
 			System.out.println("34.TreeMap");
 			System.out.print("Enter option:");
 			switch (in.nextInt()) {
-				case 1:
-					System.out.println("***ArrayList***");
-					arrayListAPI();
-					break;
-				case 2:
-					System.out.println("***LinkedList***");
-					break;
-				case 3:
-					System.out.println("***Vector***");
-					break;
-				case 4:
-					System.out.println("***Stack***");
-					stackAPI();
-					break;
-				case 11:
-					System.out.println("***Queue***");
-					queueAPI();
-					break;
-				case 12:
-					break;
-				case 13:
-					System.out.println("***Deque***");
-					dequeAPI();
-					break;
-				case 21:
-					System.out.println("***HashSet***");
-					hashSetAPI();
-					break;
-				case 22:
-					System.out.println("***Linked HashSet***");
-					linkedHashSetAPI();
-					break;
-				case 23:
-					System.out.println("***Tree Set***");
-					treeSetAPI();
-					break;
-				case 31:
-					System.out.println("***Hash Map***");
-					hashMapAPI();
-					break;
-				case 32:
-					System.out.println("***Linked Map***");
-					linkedHashMapAPI();
-					break;
-				case 33:
-					System.out.println("***Hash Table***");
-					hashTableAPI();
-					break;
-				case 34:
-					System.out.println("***Tree Map***");
-					treeMapAPI();
-					break;
-				default:
-					System.out.println("Please enter the valid option!!!");
-					break;
+			case 1:
+				System.out.println("***ArrayList***");
+				arrayListAPI();
+				break;
+			case 2:
+				System.out.println("***LinkedList***");
+				break;
+			case 3:
+				System.out.println("***Vector***");
+				break;
+			case 4:
+				System.out.println("***Stack***");
+				stackAPI();
+				break;
+			case 11:
+				System.out.println("***Queue***");
+				queueAPI();
+				break;
+			case 12:
+				break;
+			case 13:
+				System.out.println("***Deque***");
+				dequeAPI();
+				break;
+			case 21:
+				System.out.println("***HashSet***");
+				hashSetAPI();
+				break;
+			case 22:
+				System.out.println("***Linked HashSet***");
+				linkedHashSetAPI();
+				break;
+			case 23:
+				System.out.println("***Tree Set***");
+				treeSetAPI();
+				break;
+			case 31:
+				System.out.println("***Hash Map***");
+				hashMapAPI();
+				break;
+			case 32:
+				System.out.println("***Linked Map***");
+				linkedHashMapAPI();
+				break;
+			case 33:
+				System.out.println("***Hash Table***");
+				hashTableAPI();
+				break;
+			case 34:
+				System.out.println("***Tree Map***");
+				treeMapAPI();
+				break;
+			default:
+				System.out.println("Please enter the valid option!!!");
+				break;
 			}
 
 			System.out.println("\nDo you want to continue(y/n):");
@@ -309,10 +309,10 @@ public class CollectionAPI2 {
 	}
 
 	/**
-	 * Hash table and linked list implementation of the Set interface, with predictable iteration order. This
-	 * implementation differs from HashSet in that it maintains a doubly-linked list running through all of its entries.
-	 * This linked list defines the iteration ordering, which is the order in which elements were inserted into the set
-	 * insertion-order.
+	 * Hash table and linked list implementation of the Set interface, with predictable iteration order.
+	 * This implementation differs from HashSet in that it maintains a doubly-linked list running
+	 * through all of its entries. This linked list defines the iteration ordering, which is the order
+	 * in which elements were inserted into the set insertion-order.
 	 */
 	public void linkedHashSetAPI() {
 
@@ -499,7 +499,8 @@ public class CollectionAPI2 {
 	int mostFreqElement(int[] arr) {
 		Map<Integer, Integer> map = new HashMap<>();
 		for (int val : arr) {
-			if (map.get(val) == null) map.put(val, 0);
+			if (map.get(val) == null)
+				map.put(val, 0);
 			map.put(val, map.get(val) + 1);
 		}
 

@@ -16,7 +16,7 @@ import com.common.utilities.Utils;
  *   - Base case is reached before the stack size limit exceeds.
  *   
  * When you hear a problem beginning with the following statements, it's often (though not always) a good candidate for recursion:
- *  - "Design an algorithm to compute the nth .. :; 
+ *  - "Design an algorithm to compute the nth .. :;  
  *  - "Write code to list the first n .. :; 
  *  - "Implement a method to compute all..:; and so on.
  *  
@@ -56,7 +56,8 @@ public class Recursion {
 
 	// Example1: Factorial of n
 	public long factRecursive(int n) {
-		if (n == 0 || n == 1) return 1;
+		if (n == 0 || n == 1)
+			return 1;
 		return n * factRecursive(n - 1);
 	}
 
@@ -72,7 +73,8 @@ public class Recursion {
 	// Example2: Decimal to Binary Conversion
 	public int decimalToBin(int n) {
 		String data = "";
-		if (n == 0 || n == 1) return n;
+		if (n == 0 || n == 1)
+			return n;
 
 		data += decimalToBin(n / 2);
 		data += n % 2;
@@ -89,14 +91,12 @@ public class Recursion {
 		// System.out.println("No of calls:" + count++);
 		count++;
 		if (n >= 1) {
-			System.out.println(
-					"t(" + (n - 1) + "): ");
+			System.out.println("t(" + (n - 1) + "): ");
 			headRecursiveCall(n - 1); // Head Recursion
 			// tailRecursiveCall(n - 1); // Tail Recursion
 
 			// System.out.println("Value:"+n);
-			System.out.println(
-					"t(" + (n - 1) + "): ");
+			System.out.println("t(" + (n - 1) + "): ");
 			headRecursiveCall(n - 1); // Head Recursion
 			// tailRecursiveCall(n - 1); // Tail Recursion
 		}
@@ -104,14 +104,15 @@ public class Recursion {
 
 	// Example1: Fibonacci Series
 	public long fibRecursive(int n) {
-		if (n <= 1) return n;
-		return fibRecursive(n - 1)
-				+ fibRecursive(n - 2);
+		if (n <= 1)
+			return n;
+		return fibRecursive(n - 1) + fibRecursive(n - 2);
 	}
 
 	// Fibonacci series: 0,1,1,2,3,5,8,13,21,34...
 	public long fibIterative(int n) {
-		if (n <= 1) return n;
+		if (n <= 1)
+			return n;
 		long f1 = 0, f2 = 1;
 		System.out.print("Fibonacci series: ");
 		System.out.print(f1 + " " + f2 + " ");
@@ -136,8 +137,7 @@ public class Recursion {
 		}
 	}
 
-	public static int partition(int[] a, int l,
-			int h) {
+	public static int partition(int[] a, int l, int h) {
 		int j = l, pivot = a[h];
 
 		for (int i = l; i <= h; i++) {
@@ -159,7 +159,8 @@ public class Recursion {
 
 	// Single Recursion
 	public void singleRecursion(int i, int n) {
-		if (i > n) return;
+		if (i > n)
+			return;
 		System.out.print(i + ", ");
 		singleRecursion(i + 1, n);
 	}
@@ -179,9 +180,9 @@ public class Recursion {
 		doubleRecursion(0, n);
 	}
 
-	private void doubleRecursion(int index,
-			int n) {
-		if (index >= n) return;
+	private void doubleRecursion(int index, int n) {
+		if (index >= n)
+			return;
 
 		dualRecursionCount++;
 		System.out.print(index + ", ");
@@ -198,9 +199,9 @@ public class Recursion {
 		oneIterAndRecursion2(n);
 	}
 
-	public void oneIterAndRecursion(int index,
-			int n) {
-		if (index >= n) return;
+	public void oneIterAndRecursion(int index, int n) {
+		if (index >= n)
+			return;
 		// System.out.print(i + ", ");
 		for (int j = index; j < n; j++) {
 			oneIterAndRecurCount++;
@@ -210,7 +211,8 @@ public class Recursion {
 	}
 
 	public void oneIterAndRecursion2(int n) {
-		if (n <= 0) return;
+		if (n <= 0)
+			return;
 		// System.out.print(i + ", ");
 		for (int i = 0; i < n; i++) {
 			oneIterAndRecurCount++;
@@ -227,8 +229,7 @@ public class Recursion {
 		sumOfSequences(1, 4, 0, seq);
 	}
 
-	public void sumOfSequences(int i, int n,
-			int sum) {
+	public void sumOfSequences(int i, int n, int sum) {
 		if (i > n) {
 			System.out.print(sum + ", ");
 			return;
@@ -240,11 +241,9 @@ public class Recursion {
 		sumOfSequences(i + 1, n, sum - i);
 	}
 
-	public void sumOfSequences(int i, int n,
-			int sum, List<Integer> seq) {
+	public void sumOfSequences(int i, int n, int sum, List<Integer> seq) {
 		if (i > n) {
-			seq.stream().forEach(k -> System.out
-					.print(k + ","));
+			seq.stream().forEach(k -> System.out.print(k + ","));
 			System.out.print("=" + sum + "; ");
 			return;
 		}
@@ -272,7 +271,8 @@ public class Recursion {
 
 	/*Three Recursion -> No of executions: PrevValue+3^(n-1); Series: 1,4,13,40,121,364....*/
 	public void tripleRecursion(int i, int n) {
-		if (i > n) return;
+		if (i > n)
+			return;
 
 		System.out.print(i + ", ");
 		tripleRecursionCount++;
@@ -281,7 +281,7 @@ public class Recursion {
 		tripleRecursion(i + 1, n);
 	}
 
-	/***************  Recursion ********************/
+	/*************** Recursion ********************/
 	public void combination1(int n) {
 		combination1(n, 0);
 	}
@@ -296,67 +296,54 @@ public class Recursion {
 		combination1(n, i + 1);
 	}
 
-	public int combinationSum41(int[] nums,
-			int target) {
-		if (target == 0) return 1;
+	public int combinationSum41(int[] nums, int target) {
+		if (target == 0)
+			return 1;
 
 		int count = 0;
 		for (int i = 0; i < nums.length; i++) {
 			//System.out.print(i + " ");
 			if (target >= nums[i])
-				count += combinationSum41(nums,
-						target - nums[i]);
+				count += combinationSum41(nums, target - nums[i]);
 		}
 		return count;
 	}
 
-	public int combinationSum42(int[] nums,
-			int target) {
-		return combinationSum4(nums, target,
-				nums.length - 1);
+	public int combinationSum42(int[] nums, int target) {
+		return combinationSum4(nums, target, nums.length - 1);
 	}
 
-	public int combinationSum4(int[] nums,
-			int target, int i) {
-		if (target == 0) return 1;
-		if (target < 0 || i < 0) return 0;
+	public int combinationSum4(int[] nums, int target, int i) {
+		if (target == 0)
+			return 1;
+		if (target < 0 || i < 0)
+			return 0;
 
-		return combinationSum4(nums,
-				target - nums[i], i)
-				+ combinationSum4(nums, target,
-						i - 1);
+		return combinationSum4(nums, target - nums[i], i) + combinationSum4(nums, target, i - 1);
 	}
 
 	//Recursive another approach:
-	public int coinChange(int[] coins,
-			int amount) {
-		int result = change(amount, coins,
-				coins.length - 1);
+	public int coinChange(int[] coins, int amount) {
+		int result = change(amount, coins, coins.length - 1);
 		System.out.println(count);
-		return result == Integer.MAX_VALUE ? -1
-				: result;
+		return result == Integer.MAX_VALUE ? -1 : result;
 	}
 
-	public int change(int amount, int[] coins,
-			int i) {
+	public int change(int amount, int[] coins, int i) {
 		if (amount == 0) {
 			count++;
 			return 0;
 		}
-		if (i < 0) return Integer.MAX_VALUE;
+		if (i < 0)
+			return Integer.MAX_VALUE;
 
 		if (amount < coins[i])
 			return change(amount, coins, i - 1);
 
-		int minVal = Math.min(
-				change(amount - coins[i], coins,
-						i),
-				change(amount, coins, i - 1));
+		int minVal = Math.min(change(amount - coins[i], coins, i), change(amount, coins, i - 1));
 		if (minVal != Integer.MAX_VALUE && i == 0)
 			System.out.println(minVal);
-		return minVal == Integer.MAX_VALUE
-				? minVal
-				: minVal + 1;
+		return minVal == Integer.MAX_VALUE ? minVal : minVal + 1;
 	}
 
 }

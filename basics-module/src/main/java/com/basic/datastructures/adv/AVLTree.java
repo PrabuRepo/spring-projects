@@ -1,8 +1,8 @@
 package com.basic.datastructures.adv;
 
 class AVLNode {
-	int		data, height;
-	AVLNode	left, right;
+	int data, height;
+	AVLNode left, right;
 
 	AVLNode(int d) {
 		data = d;

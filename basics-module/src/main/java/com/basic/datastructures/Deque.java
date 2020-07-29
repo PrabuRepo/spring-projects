@@ -20,9 +20,9 @@ public class Deque {
 
 class DequeArrayImpl {
 	int[] queue;
-	int   front, rear;
-	int   maxSize;
-	int   currSize;
+	int front, rear;
+	int maxSize;
+	int currSize;
 
 	public DequeArrayImpl(int maxSize) {
 		queue = new int[maxSize];
@@ -34,7 +34,8 @@ class DequeArrayImpl {
 	}
 
 	public void insertFront(int data) {
-		if (isFull2()) return;
+		if (isFull2())
+			return;
 		if (isEmpty()) { // When queue is empty
 			front++;
 			rear++;
@@ -48,7 +49,8 @@ class DequeArrayImpl {
 	}
 
 	public void insertRear(int data) {
-		if (isFull2()) return;
+		if (isFull2())
+			return;
 		if (isEmpty()) {// When queue is empty
 			front++;
 			rear++;
@@ -63,7 +65,8 @@ class DequeArrayImpl {
 	}
 
 	public int deleteFront() {
-		if (isEmpty()) return -1;
+		if (isEmpty())
+			return -1;
 		int element = queue[front];
 		queue[front] = -1;
 		if (front == rear) { // If both are same, only one data present in the queue
@@ -80,7 +83,8 @@ class DequeArrayImpl {
 	}
 
 	public int deleteRear() {
-		if (isEmpty()) return -1;
+		if (isEmpty())
+			return -1;
 		int element = queue[rear];
 		queue[rear] = -1;
 		if (front == rear) {// If both are same, only one data present in the queue
@@ -109,8 +113,7 @@ class DequeArrayImpl {
 
 	// without using currSize
 	public boolean isFull2() {
-		return ((front == rear + 1)
-				|| (front == 0 && rear == maxSize - 1));
+		return ((front == rear + 1) || (front == 0 && rear == maxSize - 1));
 	}
 
 	public boolean isEmpty() {
@@ -130,8 +133,7 @@ class DequeArrayImpl {
 		char ch;
 		DequeArrayImpl queue = new DequeArrayImpl(6);
 		do {
-			System.out.println(
-					"Double Ended Queue Operations:");
+			System.out.println("Double Ended Queue Operations:");
 			System.out.println("1.Insert Front");
 			System.out.println("2.Insert Rear");
 			System.out.println("3.Delete Front");
@@ -140,67 +142,59 @@ class DequeArrayImpl {
 			System.out.println("6.Rear element");
 			System.out.print("Enter option:");
 			switch (in.nextInt()) {
-				case 1:
-					System.out.println(
-							"Enter no of elements to be inserted:");
-					int t = in.nextInt();
+			case 1:
+				System.out.println("Enter no of elements to be inserted:");
+				int t = in.nextInt();
 
-					while (t-- > 0) {
-						queue.insertFront(in.nextInt());
-					}
-					System.out.println(
-							"Elements are inserted in front!");
-					break;
-				case 2:
-					System.out.println(
-							"Enter no of elements to be inserted:");
-					t = in.nextInt();
-					while (t-- > 0) {
-						queue.insertRear(in.nextInt());
-					}
-					System.out.println(
-							"Elements are inserted in rear!");
-					break;
-				case 3:
-					int data = queue.deleteFront();
-					if (data != -1) System.out.println(
-							"Dequeued front element is: "
-									+ data);
-					else System.out
-							.println("Queue is empty");
-					break;
-				case 4:
-					data = queue.deleteRear();
-					if (data != -1) System.out.println(
-							"Dequeued rear element is: "
-									+ data);
-					else System.out
-							.println("Queue is empty");
-					break;
-				case 5:
-					data = queue.getFront();
-					if (data != -1) System.out.println(
-							"Front element is: " + data);
-					else System.out
-							.println("Queue is empty");
-					break;
-				case 6:
-					data = queue.getRear();
-					if (data != -1) System.out.println(
-							"Rear element is: " + data);
-					else System.out
-							.println("Queue is empty");
-					break;
-				default:
-					System.out.println(
-							"Please enter the valid option!!!");
-					break;
+				while (t-- > 0) {
+					queue.insertFront(in.nextInt());
+				}
+				System.out.println("Elements are inserted in front!");
+				break;
+			case 2:
+				System.out.println("Enter no of elements to be inserted:");
+				t = in.nextInt();
+				while (t-- > 0) {
+					queue.insertRear(in.nextInt());
+				}
+				System.out.println("Elements are inserted in rear!");
+				break;
+			case 3:
+				int data = queue.deleteFront();
+				if (data != -1)
+					System.out.println("Dequeued front element is: " + data);
+				else
+					System.out.println("Queue is empty");
+				break;
+			case 4:
+				data = queue.deleteRear();
+				if (data != -1)
+					System.out.println("Dequeued rear element is: " + data);
+				else
+					System.out.println("Queue is empty");
+				break;
+			case 5:
+				data = queue.getFront();
+				if (data != -1)
+					System.out.println("Front element is: " + data);
+				else
+					System.out.println("Queue is empty");
+				break;
+			case 6:
+				data = queue.getRear();
+				if (data != -1)
+					System.out.println("Rear element is: " + data);
+				else
+					System.out.println("Queue is empty");
+				break;
+			default:
+				System.out.println("Please enter the valid option!!!");
+				break;
 			}
 
 			System.out.println("\nDisplay:");
 			queue.display();
-			System.out.println(
-					"\nDo you want to continue(y/n):");
+			System.out.println("\nDo you want to continue(y/n):");
 			ch = in.next().charAt(0);
 		} while (ch == 'y' || ch == 'Y');
 		System.out.println("****Thank You******");
@@ -288,8 +282,7 @@ class DequeDLLImpl {
 		char ch;
 		DequeDLLImpl queue = new DequeDLLImpl();
 		do {
-			System.out.println(
-					"Double Ended Queue Operations:");
+			System.out.println("Double Ended Queue Operations:");
 			System.out.println("1.Insert Front");
 			System.out.println("2.Insert Rear");
 			System.out.println("3.Delete Front");
@@ -298,66 +291,58 @@ class DequeDLLImpl {
 			System.out.println("6.Rear element");
 			System.out.print("Enter option:");
 			switch (in.nextInt()) {
-				case 1:
-					System.out.println(
-							"Enter no of elements to be inserted:");
-					int t = in.nextInt();
-					while (t-- > 0) {
-						queue.insertFront(in.nextInt());
-					}
-					System.out.println(
-							"Elements are inserted in front!");
-					break;
-				case 2:
-					System.out.println(
-							"Enter no of elements to be inserted:");
-					t = in.nextInt();
-					while (t-- > 0) {
-						queue.insertRear(in.nextInt());
-					}
-					System.out.println(
-							"Elements are inserted in rear!");
-					break;
-				case 3:
-					int data = queue.deleteFront();
-					if (data != -1) System.out.println(
-							"Dequeued front element is: "
-									+ data);
-					else System.out
-							.println("Queue is empty");
-					break;
-				case 4:
-					data = queue.deleteRear();
-					if (data != -1) System.out.println(
-							"Dequeued rear element is: "
-									+ data);
-					else System.out
-							.println("Queue is empty");
-					break;
-				case 5:
-					data = queue.getFront();
-					if (data != -1) System.out.println(
-							"Front element is: " + data);
-					else System.out
-							.println("Queue is empty");
-					break;
-				case 6:
-					data = queue.getRear();
-					if (data != -1) System.out.println(
-							"Rear element is: " + data);
-					else System.out
-							.println("Queue is empty");
-					break;
-				default:
-					System.out.println(
-							"Please enter the valid option!!!");
-					break;
+			case 1:
+				System.out.println("Enter no of elements to be inserted:");
+				int t = in.nextInt();
+				while (t-- > 0) {
+					queue.insertFront(in.nextInt());
+				}
+				System.out.println("Elements are inserted in front!");
+				break;
+			case 2:
+				System.out.println("Enter no of elements to be inserted:");
+				t = in.nextInt();
+				while (t-- > 0) {
+					queue.insertRear(in.nextInt());
+				}
+				System.out.println("Elements are inserted in rear!");
+				break;
+			case 3:
+				int data = queue.deleteFront();
+				if (data != -1)
+					System.out.println("Dequeued front element is: " + data);
+				else
+					System.out.println("Queue is empty");
+				break;
+			case 4:
+				data = queue.deleteRear();
+				if (data != -1)
+					System.out.println("Dequeued rear element is: " + data);
+				else
+					System.out.println("Queue is empty");
+				break;
+			case 5:
+				data = queue.getFront();
+				if (data != -1)
+					System.out.println("Front element is: " + data);
+				else
+					System.out.println("Queue is empty");
+				break;
+			case 6:
+				data = queue.getRear();
+				if (data != -1)
+					System.out.println("Rear element is: " + data);
+				else
+					System.out.println("Queue is empty");
+				break;
+			default:
+				System.out.println("Please enter the valid option!!!");
+				break;
 			}
 
 			System.out.println("\nDisplay:");
 			queue.display();
-			System.out.println(
-					"\nDo you want to continue(y/n):");
+			System.out.println("\nDo you want to continue(y/n):");
 			ch = in.next().charAt(0);
 		} while (ch == 'y' || ch == 'Y');
 		System.out.println("****Thank You******");

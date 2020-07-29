@@ -55,8 +55,7 @@ public class DataTypes {
 	public static void charConversions() {
 		char ch = ' ';
 
-		System.out.println(
-				"To find starting number of alphabet: ");
+		System.out.println("To find starting number of alphabet: ");
 		ch = 'a';
 		System.out.println((int) ch);
 
@@ -75,16 +74,14 @@ public class DataTypes {
 			System.out.print((char) i + " ");
 		}
 
-		System.out.println(
-				"\nLower to Uppercase conversion: ");
+		System.out.println("\nLower to Uppercase conversion: ");
 		lowerCase = 97;
 		for (int i = lowerCase; i <= lowerCase + 25; i++) {
 			ch = (char) (i - 32); // 97-65 = 32
 			System.out.print((char) ch + " ");
 		}
 
-		System.out.println(
-				"\nUpper to Lowercase conversion: ");
+		System.out.println("\nUpper to Lowercase conversion: ");
 		upperCase = 65;
 		for (int i = upperCase; i <= upperCase + 25; i++) {
 			ch = (char) (i + 32); // 65+32 = 97
@@ -98,8 +95,7 @@ public class DataTypes {
 		num = ch - '0';
 		System.out.println("After: " + num);
 
-		System.out.println(
-				"Reading number from Numeric String: ");
+		System.out.println("Reading number from Numeric String: ");
 		String str = "836212";
 		for (int i = 0; i < str.length(); i++) {
 			int val = str.charAt(i);
@@ -109,8 +105,7 @@ public class DataTypes {
 			System.out.print(val + " ");
 		}
 
-		System.out.println(
-				"\nSegregate number from Alphanumeric string: ");
+		System.out.println("\nSegregate number from Alphanumeric string: ");
 		str = "5dsa836d21-220";
 		int n = str.length();
 		for (int i = 0; i < n; i++) {
@@ -119,16 +114,13 @@ public class DataTypes {
 				continue;
 
 			int startIndex = i;
-			while (i + 1 < n
-					&& Character.isDigit(str.charAt(i + 1)))
+			while (i + 1 < n && Character.isDigit(str.charAt(i + 1)))
 				i++;
-			int val = Integer.valueOf(
-					str.substring(startIndex, i + 1));
+			int val = Integer.valueOf(str.substring(startIndex, i + 1));
 			System.out.print(val + ", ");
 		}
 
-		System.out.println(
-				"\nStore lowercase letter to int array: ");
+		System.out.println("\nStore lowercase letter to int array: ");
 		int[] arr = new int[26];
 		Arrays.fill(arr, 0);
 		str = "abcdefghijklmnopqrstuvwxyz";
@@ -138,8 +130,7 @@ public class DataTypes {
 		}
 		System.out.println(Arrays.toString(arr));
 
-		System.out.println(
-				"Store uppercase letter to int array: ");
+		System.out.println("Store uppercase letter to int array: ");
 		arr = new int[26];
 		Arrays.fill(arr, 0);
 		str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
