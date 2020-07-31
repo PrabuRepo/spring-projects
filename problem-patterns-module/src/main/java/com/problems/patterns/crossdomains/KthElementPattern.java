@@ -31,10 +31,8 @@ public class KthElementPattern {
 
 	// Approach2: Using Max Binary Heap: Time Complexity-O(nlogk)
 	// Same solution used in the Kth Largest Element in the Stream
-	public int kthSmallestElementInArray21(int[] arr,
-			int k) {
-		PriorityQueue<Integer> queue = new PriorityQueue<>(
-				Collections.reverseOrder());
+	public int kthSmallestElementInArray21(int[] arr, int k) {
+		PriorityQueue<Integer> queue = new PriorityQueue<>(Collections.reverseOrder());
 		for (int i = 0; i < arr.length; i++) {// O(nlogk) times
 			if (queue.isEmpty() || queue.size() < k) {
 				queue.add(arr[i]);
@@ -47,8 +45,7 @@ public class KthElementPattern {
 	}
 
 	// Approach3: Using Min Binary Heap: Time Complexity-O(n+klogn)
-	public int kthSmallestElementInArray22(int[] arr,
-			int k) {
+	public int kthSmallestElementInArray22(int[] arr, int k) {
 		PriorityQueue<Integer> queue = new PriorityQueue<>();
 		for (int i = 0; i < arr.length; i++) // O(n) Time to build the heap
 			queue.add(arr[i]);
@@ -71,18 +68,21 @@ public class KthElementPattern {
 	 *  T(n) = T(n - 1) + O(n) and T(n) = O(n^2).
 	 */
 	// This is simpler than kthSmallestElementInArray32
-	public int kthSmallestElementInArray31(int[] nums,
-			int k) {
-		if (nums.length == 0 || k == 0) return 0;
+	public int kthSmallestElementInArray31(int[] nums, int k) {
+		if (nums.length == 0 || k == 0)
+			return 0;
 
 		int l = 0, r = nums.length - 1;
 
 		while (l <= r) {
 			int index = partition(nums, l, r); // Here partition being invoked all the condition
 
-			if (index == k - 1) return nums[index];
-			else if (index < k - 1) l = index + 1;
-			else r = index - 1;
+			if (index == k - 1)
+				return nums[index];
+			else if (index < k - 1)
+				l = index + 1;
+			else
+				r = index - 1;
 		}
 
 		return -1;
@@ -117,7 +117,7 @@ public class KthElementPattern {
 	 * 	kthLargest.add(5);   // returns 5
 	 */
 	PriorityQueue<Integer> queue;
-	int                    k;
+	int k;
 
 	public void init(int k, int[] nums) {
 		this.queue = new PriorityQueue<>();
@@ -129,7 +129,8 @@ public class KthElementPattern {
 
 	public int add(int val) {
 		queue.add(val);
-		if (queue.size() > k) queue.poll();
+		if (queue.size() > k)
+			queue.poll();
 
 		return queue.size() < k ? -1 : queue.peek();
 	}
@@ -151,22 +152,23 @@ public class KthElementPattern {
 	 */
 	// Approach1: i.Using Inorder Traversal
 	public int kthSmallest11(TreeNode root, int k) {
-		if (root == null || k == 0) return 0;
+		if (root == null || k == 0)
+			return 0;
 		ArrayList<Integer> list = new ArrayList<>();
 		kthSmallest(root, list);
 		return list.get(k - 1);
 	}
 
-	public void kthSmallest(TreeNode root,
-			ArrayList<Integer> list) {
-		if (root == null) return;
+	public void kthSmallest(TreeNode root, ArrayList<Integer> list) {
+		if (root == null)
+			return;
 		kthSmallest(root.left, list);
 		list.add(root.data);
 		kthSmallest(root.right, list);
 	}
 
 	// ii.Inorder traversal Modification
-	int count  = 0;
+	int count = 0;
 	int result = Integer.MIN_VALUE;
 
 	public int kthSmallest12(TreeNode root, int k) {
@@ -175,7 +177,8 @@ public class KthElementPattern {
 	}
 
 	public void traverse(TreeNode root, int k) {
-		if (root == null) return;
+		if (root == null)
+			return;
 		traverse(root.left, k);
 		count++;
 		if (count == k) {
@@ -196,7 +199,8 @@ public class KthElementPattern {
 				p = p.left;
 			} else {
 				TreeNode node = stack.pop();
-				if (++count == k) return node.data;
+				if (++count == k)
+					return node.data;
 				p = node.right;
 			}
 		}
@@ -205,19 +209,19 @@ public class KthElementPattern {
 
 	// Approach2: Using Heap
 	public int kthSmallest2(TreeNode root, int k) {
-		if (root == null) return 0;
-		PriorityQueue<Integer> queue = new PriorityQueue<>(
-				Collections.reverseOrder());
+		if (root == null)
+			return 0;
+		PriorityQueue<Integer> queue = new PriorityQueue<>(Collections.reverseOrder());
 		kthSmallest(root, queue, k);
 		return queue.peek();
 	}
 
-	public void kthSmallest(TreeNode root,
-			PriorityQueue<Integer> queue, int k) {
-		if (root == null) return;
-		if (queue.isEmpty() || queue.size() < k
-				|| root.data < queue.peek()) {
-			if (queue.size() == k) queue.remove();
+	public void kthSmallest(TreeNode root, PriorityQueue<Integer> queue, int k) {
+		if (root == null)
+			return;
+		if (queue.isEmpty() || queue.size() < k || root.data < queue.peek()) {
+			if (queue.size() == k)
+				queue.remove();
 			queue.add(root.data);
 		}
 		kthSmallest(root.left, queue, k);
@@ -225,7 +229,7 @@ public class KthElementPattern {
 	}
 
 	/*
-	 * 'K' Closest Points to the Origin: ???
+	 * 'K' Closest Points to the Origin: 
 	 *  We have a list of points on the plane.  Find the K closest points to the origin (0, 0). (Here, the distance between two 
 	 *  points on a plane is the Euclidean distance.)
 	 *  You may return the answer in any order.  The answer is guaranteed to be unique (except for the order that it is in.)
@@ -236,20 +240,83 @@ public class KthElementPattern {
 	 *  Since sqrt(8) < sqrt(10), (-2, 2) is closer to the origin. We only want the closest K = 1 points from the origin, so the
 	 *  answer is just [[-2,2]].
 	 */
-	/*
-	Approach1: Using Simple Sorting: time complexity is O(NlogK)
-	*/
-	/*
-	Approach2: Using Max Heap: time complexity is O(NlogK)
-	*/
-	/*
-	Approach3: Using QuickSelect: Avg Time complexity: O(N) & Worst Case: O(N^2)
-	 Explanation: Ideally, in first iteration it will run n times, in the second iteration I will n/2 times, in the third iteration I will run n/4.... , therefore
-	   sum(n + n/2 + n/4 + ...) = O(n), here I have to do logN iterations.
-	But in worst case, 
-	sum(n + n - 1 + n - 2 +.... ) = O(n^2), here I have to do N iterations        
-	*/
-	public int[][] kClosest(int[][] points, int K) {
-		return null;
+
+	/* Note: Euclidean Distance Formula: Sqrt((x2-x1)^2 + (y2-y1)^2). But in this problem distance calculates from origin(0,0). 
+	 * Simplified formula formula will be: sqrt((x2)^2 + (y2)^2)    
+	 */
+
+	//Sort:  O(NlogN),
+	public int[][] kClosest1(int[][] points, int K) {
+		//Sort in ascending order
+		Arrays.sort(points, (p1, p2) -> (getDistance(p1) - getDistance(p2)));
+		return Arrays.copyOfRange(points, 0, K);
+	}
+
+	//Using Heap: Time: O(nlogk), space: O(k)
+	public int[][] kClosest2(int[][] points, int k) {
+		//Sort in descending order
+		PriorityQueue<int[]> queue = new PriorityQueue<>((p1, p2) -> (getDistance(p2)) - getDistance(p1));
+
+		for (int[] point : points) {
+			queue.add(point);
+			if (queue.size() > k)
+				queue.poll();
+		}
+		int[][] result = new int[k][2];
+
+		for (int i = 0; i < k; i++)
+			result[i] = queue.poll();
+		return result;
+	}
+
+	/* Approach3: Using QuickSelect: Avg Time complexity: O(N) & Worst Case: O(N^2)
+	 * Explanation: Ideally, in first iteration it will run n times, in the second iteration I will n/2 times, in the third iteration I will run n/4.... , therefore
+	 * sum(n + n/2 + n/4 + ...) = O(n), here I have to do logN iterations.
+	 * But in worst case, sum(n + n - 1 + n - 2 +.... ) = O(n^2), here I have to do N iterations
+	 */
+	public int[][] kClosest3(int[][] points, int K) {
+		int len = points.length, l = 0, r = len - 1;
+		while (l <= r) {
+			int mid = helper(points, l, r);
+			if (mid == K - 1)
+				break;
+			if (mid < K) {
+				l = mid + 1;
+			} else {
+				r = mid - 1;
+			}
+		}
+		return Arrays.copyOfRange(points, 0, K);
+	}
+
+	private int helper(int[][] A, int l, int r) {
+		int[] pivot = A[r];
+		int i = l, j = l;
+		while (j < r) {
+			if (compare(A[j], pivot) < 0) {
+				swap(A, i, j);
+				i++;
+			}
+			j++;
+		}
+		swap(A, i, r);
+
+		return i;
+	}
+
+	private int compare(int[] p1, int[] p2) {
+		return getDistance(p1) - getDistance(p2);
+	}
+
+	//Distance calculated from origin (0,0):
+	//(x2)^2 + (y2)^2 calculation; sqrt has been ignored
+	private int getDistance(int[] point) {
+		return point[0] * point[0] + point[1] * point[1];
+	}
+
+	private void swap(int[][] A, int i, int j) {
+		int[] temp = A[i];
+		A[i] = A[j];
+		A[j] = temp;
 	}
 }

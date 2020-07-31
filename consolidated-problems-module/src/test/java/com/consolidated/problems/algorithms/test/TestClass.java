@@ -1,37 +1,43 @@
 package com.consolidated.problems.algorithms.test;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Stack;
 import java.util.TreeSet;
 
-import com.consolidated.problems.datastructures.test.TestQueueProblems;
-
 public class TestClass {
 	public static void main(String[] args) {
-		TestQueueProblems ob = new TestQueueProblems();
-
-		/*	//long[] arr = { 6, 3, 5, 1, 12 };
-			long[] arr = { 1, 2, 3, 5, 1, 13, 3 };
-			//		System.out.println("Min Max Riddle: " + Arrays.toString(ob.riddle(arr)));
-		
-			int[] arr2 = { 10, 100, 300, 200, 1000, 20, 30 };
-			//		System.out.println("Min Max Riddle: " + ob.maxMin(3, arr2));
-		
-			System.out.println(decryptPassword(input()));
-		
-			short a = 10;
-			add(a, 10);
-			System.out.println(isBalanced("({)})"));*/
 
 		int[] A = { 2, 2, 2, 3, 3 };
 		int[][] B = { { 1, 3 }, { 5, 4 }, { 2, 4 } };
-		System.out.println(Arrays.toString(getMode(A, B)));
+		//System.out.println(Arrays.toString(getMode(A, B)));
 
-		test();
+		//test();
 
+		int[] arr = { 1, 2, 3, 4, 5 };
+		findClosestElements22(arr, 4, 3);
+	}
+
+	public static List<Integer> findClosestElements22(int[] arr, int k, int x) {
+		// maxHeap, sort descendingly according to diff to x
+		PriorityQueue<Integer> maxHeap = new PriorityQueue<>(
+				(a, b) -> Math.abs(x - b) == Math.abs(x - a) ? b - a : Math.abs(x - b) - Math.abs(x - a));
+		// each time, if we have better option, delete num with max diff from x, and insert the new num
+		for (int num : arr) {
+			maxHeap.offer(num);
+			if (maxHeap.size() >= k) {
+				maxHeap.poll();
+			}
+		}
+		// convert heap back to List<Integer> and sort them to get the original order
+		List<Integer> res = new ArrayList(maxHeap);
+		res.forEach(i -> System.out.println(i));
+		Collections.sort(res);
+		return res;
 	}
 
 	public static int[] getMode(int[] A, int[][] B) {

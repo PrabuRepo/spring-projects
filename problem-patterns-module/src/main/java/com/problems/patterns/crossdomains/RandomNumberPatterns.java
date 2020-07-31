@@ -12,10 +12,8 @@ public class RandomNumberPatterns {
 		int[] array2 = { 1, 0, 6, 2, 3, 9, 4, 5, 8, 7 };
 		for (int x : array2)
 			ob.insertInOrder(x);
-		System.out.println(
-				"Random Node: " + ob.getRandomNode().data);
-		System.out.println(
-				"Random Node: " + ob.getRandomNode().data);
+		System.out.println("Random Node: " + ob.getRandomNode().data);
+		System.out.println("Random Node: " + ob.getRandomNode().data);
 	}
 
 	//Random Number in Array: Simple Random.nextInt(n) API
@@ -29,10 +27,11 @@ public class RandomNumberPatterns {
 	 *  without using extra space?
 	 */
 	ListNode node;
-	Random   rand;
+	Random rand;
 
 	/**
-	 * The linked list's head. Note that the head is guaranteed to be not null, so it contains at least one node.
+	 * The linked list's head. Note that the head is guaranteed to be not null, so it contains at least
+	 * one node.
 	 */
 	public void init(ListNode head) {
 		node = head;
@@ -56,19 +55,22 @@ public class RandomNumberPatterns {
 	 * method getRandomNode() which returns a random node from the tree. All nodes should be equally likely to be chosen. Design
 	 * and implement an algorithm for getRandomNode, and explain how you would implement the rest of the methods.
 	 */
-	TreeNode root = null;
+	TreeNode1 root = null;
 
 	public void insertInOrder(int value) {
-		if (root == null) root = new TreeNode(value);
-		else root.insertInOrder(value);
+		if (root == null)
+			root = new TreeNode1(value);
+		else
+			root.insertInOrder(value);
 	}
 
 	public int size() {
 		return root == null ? 0 : root.size();
 	}
 
-	public TreeNode getRandomNode() {
-		if (root == null) return null;
+	public TreeNode1 getRandomNode() {
+		if (root == null)
+			return null;
 
 		Random random = new Random();
 		int i = random.nextInt(size());
@@ -88,24 +90,28 @@ public class RandomNumberPatterns {
 	 */
 }
 
-class TreeNode {
-	public int      data;
-	public TreeNode left;
-	public TreeNode right;
-	private int     size = 0;
+class TreeNode1 {
+	public int data;
+	public TreeNode1 left;
+	public TreeNode1 right;
+	private int size = 0;
 
-	public TreeNode(int d) {
+	public TreeNode1(int d) {
 		data = d;
 		size = 1;
 	}
 
 	public void insertInOrder(int d) {
 		if (d <= data) {
-			if (left == null) left = new TreeNode(d);
-			else left.insertInOrder(d);
+			if (left == null)
+				left = new TreeNode1(d);
+			else
+				left.insertInOrder(d);
 		} else {
-			if (right == null) right = new TreeNode(d);
-			else right.insertInOrder(d);
+			if (right == null)
+				right = new TreeNode1(d);
+			else
+				right.insertInOrder(d);
 		}
 		size++;
 	}
@@ -114,8 +120,9 @@ class TreeNode {
 		return size;
 	}
 
-	public TreeNode find(int d) {
-		if (d == data) return this;
+	public TreeNode1 find(int d) {
+		if (d == data)
+			return this;
 		else if (d <= data)
 			return left != null ? left.find(d) : null;
 		else if (d > data)
@@ -123,21 +130,27 @@ class TreeNode {
 		return null;
 	}
 
-	public TreeNode getRandomNode() {
+	public TreeNode1 getRandomNode() {
 		int leftSize = left == null ? 0 : left.size();
 		Random random = new Random();
 		int index = random.nextInt(size);
 
-		if (index < leftSize) return left.getRandomNode();
-		else if (index == leftSize) return this;
-		else return right.getRandomNode();
+		if (index < leftSize)
+			return left.getRandomNode();
+		else if (index == leftSize)
+			return this;
+		else
+			return right.getRandomNode();
 	}
 
-	public TreeNode getIthNode(int i) {
+	public TreeNode1 getIthNode(int i) {
 		int leftSize = left == null ? 0 : left.size();
 
-		if (i < leftSize) return left.getIthNode(i);
-		else if (i == leftSize) return this;
-		else return right.getIthNode(i - (leftSize + 1));
+		if (i < leftSize)
+			return left.getIthNode(i);
+		else if (i == leftSize)
+			return this;
+		else
+			return right.getIthNode(i - (leftSize + 1));
 	}
 }
