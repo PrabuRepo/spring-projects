@@ -6,242 +6,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.common.model.TreeNode;
 import com.common.utilities.Utils;
 
-/* Grokking Dynamic Programming Patterns for Coding Interviews:
- * All the problems will be solved using 3 approaches,
- *    - Recursion
- *    - DP: Top Down Approach or Memoization 
- *    - DP: Bottom Up Approach or Tabulation
+/* All the below problems are solved in 4 approaches such as,
+ *    1.Recursion -  Time: exponential time O(2^n), space complexity is O(n) which is used to store the recursion stack.
+ *    2.DP: Top Down Approach or Memoization - Time and space complexity is same as memoization array size.
+ *    3.DP: Bottom Up Approach or Tabulation - Time & space complexity is O(n^2) or O(n)
+ *    4.Memory Optimization - This will be same time as Bottom up approach, but space efficient. Eg: Two variable approach
  */
 public class DynamicProgrammingPatterns {
 
-	/***************************** Pattern 1: Simple Patterns *************************/
-
-	// Approach1: Using Recursion
-	public int numDecodings1(String s) {
-		if (s.length() == 0)
-			return 0;
-		return numDecodings(s, 0);
-	}
-
-	public int numDecodings(String s, int i) {
-		int n = s.length();
-		if (i == n)
-			return 1;
-		if (i > n || s.charAt(i) == '0')
-			return 0;
-		int sum = numDecodings(s, i + 1);
-		if (i + 1 < n)
-			if (s.charAt(i) == '1' || (s.charAt(i) == '2' && s.charAt(i + 1) <= '6'))
-				sum += numDecodings(s, i + 2);
-		return sum;
-	}
-
-	// Approach2: DP-Bottom up
-	/*I used a dp array of size n + 1 to save subproblem solutions. dp[0] means an empty string will have one way to decode,
-	 *  dp[1] means the way to decode a string of size 1. I then check one digit and two digit combination and save the results
-	 *   along the way. In the end, dp[n] will be the end result.*/
-	public int numDecodings3(String s) {
-		int n = s.length();
-		int[] dp = new int[n + 1];
-		dp[0] = 1;
-		dp[1] = s.charAt(0) != '0' ? 1 : 0;
-		for (int i = 2; i <= n; i++) {
-			int first = Integer.valueOf(s.substring(i - 1, i));
-			int second = Integer.valueOf(s.substring(i - 2, i));
-			if (first >= 1 && first <= 9) //if(first!=0)
-				dp[i] += dp[i - 1];
-			if (second >= 10 && second <= 26)
-				dp[i] += dp[i - 2];
-		}
-		return dp[n];
-	}
-
-	// Two variable approach:
-	/* I think we can use two variables to store the previous results.
-	 * Since we only use dp[i-1] and dp[i-2] to compute dp[i], why not 
-	 * just use two variable prev1, prev2 instead? This can reduce the 
-	 * space to O(1) */
-	public int numDecodings(String s) {
-		if (s.charAt(0) == '0')
-			return 0;
-		int p1 = 1, p2 = 1;
-		for (int i = 1; i < s.length(); i++) {
-			// if p1 & p2 are zero, we can jump 
-			//out of the loop earlier
-			if (p1 == 0 && p2 == 0)
-				return 0;
-			int tmp = p2;
-			if (s.charAt(i) == '0')
-				p2 = 0;
-			int num = Integer.valueOf(s.substring(i - 1, i + 1));
-			if (num >= 10 && num <= 26)
-				p2 += p1;
-			p1 = tmp;
-		}
-		return p2;
-	}
-
-	/* House Robber: 
-	 * You are a professional robber planning to rob houses along a street. Each house has a certain
-	 * amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have
-	 * security system connected and it will automatically contact the police if two adjacent houses were broken into on
-	 * the same night. Given a list of non-negative integers representing the amount of money of each house, determine
-	 * the maximum amount of money you can rob tonight without alerting the police.
-	 * 
-	 * Solution: 
-	 *   5 Different Approaches: 
-	 *     1.Recursion
-	 *     2.DP-Top Down Approach
-	 *     3.DP-Bottom Up Approach
-	 *     4.Bottom Up - 2 variable approach
-	 *     5.Bottom up - odd/even approach
-	 */
-	// 1.Recursion:
-	public int houseRob11(int[] nums) {
-		return rob1(nums, nums.length - 1);
-	}
-
-	private int rob1(int[] nums, int i) {
-		if (i < 0)
-			return 0;
-		return Math.max(rob1(nums, i - 2) + nums[i], rob1(nums, i - 1));
-	}
-
-	// 2.DP-Top Down Approach
-	int[] memo;
-
-	public int houseRob12(int[] nums) {
-		memo = new int[nums.length + 1];
-		Arrays.fill(memo, -1);
-		return rob2(nums, nums.length - 1);
-	}
-
-	private int rob2(int[] nums, int i) {
-		if (i < 0)
-			return 0;
-		if (memo[i] >= 0)
-			return memo[i];
-		int result = Math.max(rob2(nums, i - 2) + nums[i], rob2(nums, i - 1));
-		memo[i] = result;
-		return result;
-	}
-
-	/* Java Solution 3- Dynamic Programming The key is to find the relation dp[i]=Math.max(dp[i-1],dp[i-2]+nums[i]).
-	 */
-	public int houseRob13(int[] nums) {
-		if (nums == null || nums.length == 0)
-			return 0;
-		int n = nums.length;
-		if (n == 1)
-			return nums[0];
-		int[] dp = new int[n];
-		dp[0] = nums[0];
-		dp[1] = Math.max(nums[0], nums[1]);
-		for (int i = 2; i < n; i++) {
-			dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]);
-		}
-		return dp[n - 1];
-	}
-
-	// 4:Bottom Up: Two variable approach:
-	public int houseRob14(int[] nums) {
-		if (nums.length == 0)
-			return 0;
-		int p1 = 0, p2 = 0;
-		for (int i = 0; i < nums.length; i++) {
-			int tmp = p2;
-			p2 = Math.max(p2, nums[i] + p1);
-			p1 = tmp;
-		}
-		return p2;
-	}
-
-	/* Java Solution 5: We can use two variables, even and odd, to track the maximum value so far as iterating the
-	 * array.You can use the following example to walk through the code.
-	 */
-	public int houseRob15(int[] num) {
-		if (num == null || num.length == 0)
-			return 0;
-		int even = 0;
-		int odd = 0;
-		for (int i = 0; i < num.length; i++) {
-			if (i % 2 == 0) {
-				even += num[i];
-				even = even > odd ? even : odd;
-			} else {
-				odd += num[i];
-				odd = even > odd ? even : odd;
-			}
-		}
-		return even > odd ? even : odd;
-	}
-
-	/* House Robber II: 
-	 * After robbing those houses on that street, the thief has found himself a new place for his
-	 * thievery so that he will not get too much attention. This time, all houses at this place are arranged in a
-	 * circle. That means the first house is the neighbor of the last one.Meanwhile, the security system for these
-	 * houses remain the same as for those in the previous street. Given a list of non- negative integers representing
-	 * the amount of money of each house, determine the maximum amount of money you can rob tonight without alerting the
-	 * police.
-	 */
-
-	/* Analysis:
-	 * This is an extension of House Robber.There are two cases here 1)1 st element is included and last is not included
-	 * 2)1 st is not included and last is included.Therefore, we can use the similar dynamic programming approach to
-	 * scan the array twice and get the larger value.
-	 */
-
-	public int houseRob2(int[] nums) {
-		if (nums == null || nums.length == 0)
-			return 0;
-		if (nums.length == 1)
-			return nums[0];
-		int max1 = robHelper(nums, 0, nums.length - 2);
-		int max2 = robHelper(nums, 1, nums.length - 1);
-		return Math.max(max1, max2);
-	}
-
-	public int robHelper(int[] nums, int i, int j) {
-		if (i == j)
-			return nums[i];
-		int[] dp = new int[nums.length];
-		dp[i] = nums[i];
-		dp[i + 1] = Math.max(nums[i + 1], dp[i]);
-		for (int k = i + 2; k <= j; k++) {
-			dp[k] = Math.max(dp[k - 1], dp[k - 2] + nums[k]);
-		}
-		return dp[j];
-	}
-
-	/* House Robber III:
-	 * The houses form a binary tree. If the root is robbed, its left and right can not be robbed. 
-	 * 
-	 * Analysis: Traverse down the tree recursively. We can use an array to keep 2 values: the maximum money when a root is selected and
-	 * the maximum value when a root if NOT selected.
-	 */
-	public int houseRob3(TreeNode root) {
-		if (root == null)
-			return 0;
-		int[] result = helper(root);
-		return Math.max(result[0], result[1]);
-	}
-
-	public int[] helper(TreeNode root) {
-		if (root == null) {
-			int[] result = { 0, 0 };
-			return result;
-		}
-		int[] result = new int[2];
-		int[] left = helper(root.left);
-		int[] right = helper(root.right);
-		result[0] = root.data + left[1] + right[1];
-		result[1] = Math.max(left[0], left[1]) + Math.max(right[0], right[1]);
-		return result;
-	}
-
+	/***************************** Pattern 2: Pattern Name?? *************************/
 	/* Min cost to Paint House: 
 	 * There are a row of n houses, each house can be painted with one of the three colors: red, blue or green. The cost of painting 
 	 * each house with a certain color is different. You have to paint all the houses such that no two adjacent houses have the same color.
@@ -251,7 +26,7 @@ public class DynamicProgrammingPatterns {
 	 * Find the minimum cost to paint all houses.
 	 */
 
-	public int minCostToPaintHouse(int[][] costs) {
+	public int minCostToPaintHouse1(int[][] costs) {
 		if (costs == null || costs.length == 0)
 			return 0;
 		int n = costs.length;
@@ -261,6 +36,29 @@ public class DynamicProgrammingPatterns {
 			costs[i][2] += Math.min(costs[i - 1][0], costs[i - 1][1]);
 		}
 		return Utils.min(costs[n - 1][0], costs[n - 1][1], costs[n - 1][2]);
+	}
+
+	//Using additional space and not modifying the input:
+	public int minCostToPaintHouse2(int[][] costs) {
+		if (costs == null || costs.length == 0)
+			return 0;
+
+		int n = costs.length;
+		int[][] dp = new int[n][3];
+
+		for (int i = 0; i < n; i++) {
+			if (i == 0) {
+				dp[i][0] = costs[i][0];
+				dp[i][1] = costs[i][1];
+				dp[i][2] = costs[i][2];
+			} else {
+				dp[i][0] = Math.min(dp[i - 1][1], dp[i - 1][2]) + costs[i][0];
+				dp[i][1] = Math.min(dp[i - 1][0], dp[i - 1][2]) + costs[i][1];
+				dp[i][2] = Math.min(dp[i - 1][0], dp[i - 1][1]) + costs[i][2];
+			}
+		}
+
+		return Math.min(Math.min(dp[n - 1][0], dp[n - 1][1]), dp[n - 1][2]);
 	}
 
 	/*
@@ -286,16 +84,17 @@ public class DynamicProgrammingPatterns {
 
 		for (int i = 1; i < n; i++) {
 			for (int j = 0; j < k; j++) {
-				dp[i][j] = Integer.MAX_VALUE;
+				int min = Integer.MAX_VALUE;
 				//Find Min value
 				for (int m = 0; m < k; m++) {
 					if (m == j)
 						continue;
-					dp[i][j] = Math.min(dp[i - 1][m] + costs[i][j], dp[i][j]);
-
+					min = Math.min(min, dp[i - 1][m]);
 				}
+				dp[i][j] = min + costs[i][j];
 			}
 		}
+
 		int minCost = Integer.MAX_VALUE;
 		for (int i = 0; i < k; i++)
 			minCost = Math.min(minCost, dp[n - 1][i]);
@@ -310,35 +109,74 @@ public class DynamicProgrammingPatterns {
 		if (n == 1 && k == 1)
 			return costs[0][0];
 
-		int preMin = 0, preMinIndex = -1, preSecond = 0;
+		int prevMin1 = 0, prevMin2 = 0, preMinIndex = -1;
 		for (int i = 0; i < n; i++) {
-			int currMin = Integer.MAX_VALUE, currMinIndex = -1, currSecond = Integer.MAX_VALUE;
+			int currMin1 = Integer.MAX_VALUE, currMin2 = Integer.MAX_VALUE, currMinIndex = -1;
 			for (int j = 0; j < k; j++) {
 				//Add prev min 1st and 2nd in the curr cost 
 				if (j == preMinIndex)
-					costs[i][j] += preSecond;
+					costs[i][j] += prevMin2;
 				else
-					costs[i][j] += preMin;
+					costs[i][j] += prevMin1;
 
 				//Find min 1st and 2nd in every stage:
-				if (costs[i][j] < currMin) {
-					currSecond = currMin;
-					currMin = costs[i][j];
+				if (costs[i][j] < currMin1) {
+					currMin2 = currMin1;
+					currMin1 = costs[i][j];
 					currMinIndex = j;
-				} else if (costs[i][j] < currSecond) {
-					currSecond = costs[i][j];
+				} else if (costs[i][j] < currMin2) {
+					currMin2 = costs[i][j];
 				}
 			}
 			//Assign back the curr values
-			preMin = currMin;
+			prevMin1 = currMin1;
 			preMinIndex = currMinIndex;
-			preSecond = currSecond;
+			prevMin2 = currMin2;
 		}
 		//preMin already have min value for the last row 
-		return preMin;
+		return prevMin1;
 	}
 
-	/***************************** Pattern 2: 0/1 Knapsack *************************/
+	/*Paint Fence: 
+	 * 	There is a fence with n posts, each post can be painted with one of the k colors. You have to paint all the posts such that 
+	 * no more than two adjacent fence posts have the same color. Return the total number of ways you can paint the fence.
+	 */
+
+	/* Solution1:
+	 * The key to solve this problem is finding this relation.f(n)=(k-1)(f(n-1)+f(n-2)) Assuming there are 3 posts, if
+	 * the first one and the second one has the same color, then the third one has k-1 options. The first and second
+	 * together has k options. If the first and the second do not have same color, the total is k * (k-1), then the
+	 * third one has k options. Therefore, f(3) = (k-1)*k + k*(k-1)*k = (k-1)(k+k*k)
+	 */
+
+	public int paintFence1(int n, int k) {
+		int dp[] = { 0, k, k * k, 0 };
+		if (n <= 2)
+			return dp[n];
+		for (int i = 2; i < n; i++) {
+			dp[3] = (k - 1) * (dp[1] + dp[2]);
+			dp[1] = dp[2];
+			dp[2] = dp[3];
+		}
+		return dp[3];
+	}
+
+	public int paintFence2(int n, int k) {
+		if (n <= 0 || k <= 0)
+			return 0;
+		if (n == 1)
+			return k;
+		int preSame = 0, preDiff = k;
+		for (int i = 1; i < n; i++) {
+			int same = preDiff;
+			int diff = (k - 1) * (preSame + preDiff);
+			preSame = same;
+			preDiff = diff;
+		}
+		return preSame + preDiff;
+	}
+
+	/******************************** Pattern 3: 0/1 Knapsack *************************/
 	/*Note:
 	 * 	0/1 Knapsack: Combinations without repeating the same data 
 	 *  Unbounded Knapsack: Combination with repeating the same data
@@ -503,7 +341,7 @@ public class DynamicProgrammingPatterns {
 		return dp[sum];
 	}
 
-	/***************************** Pattern 3: Unbounded Knapsack *************************/
+	/***************************** Pattern 4: Unbounded Knapsack *************************/
 	// Unbounded Knapsack: 3 Approaches
 	// 1.Recursive Approach
 	public int unboundedKnapsack1(int val[], int wt[], int W) {
@@ -712,7 +550,7 @@ public class DynamicProgrammingPatterns {
 		return dp[target];
 	}
 
-	/********************* Pattern 4: String-Palindromic substring/subseq Probs ***********************/
+	/********************* Pattern 5: String-Palindromic substring/subseq Probs ***********************/
 	// Longest Palindromic Subsequence:
 	// 1.Recursion Approach
 	public int lps1(String str) {
@@ -889,7 +727,7 @@ public class DynamicProgrammingPatterns {
 		return result;
 	}
 
-	/************************** Pattern 5: String-Substring/Subsequence Probs *******************/
+	/************************** Pattern 6: String-Substring/Subsequence Probs *******************/
 	// Longest Common Substring:
 	// 1.Recursion Approach:
 	public int lcStr1(String s1, String s2) {
@@ -1100,7 +938,7 @@ public class DynamicProgrammingPatterns {
 		return dp[n1][n2];
 	}
 
-	/***************************** Pattern 6: Array-Subsequence Probs *******************************/
+	/***************************** Pattern 7: Array-Subsequence Probs *******************************/
 	// Longest Increasing Sequence:
 	// Approach1: Recursive APproach
 	// stores the LIS

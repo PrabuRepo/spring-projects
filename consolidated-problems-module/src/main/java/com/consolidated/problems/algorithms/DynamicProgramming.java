@@ -7,15 +7,28 @@ import java.util.List;
 import com.common.model.Box;
 import com.common.model.TreeNode;
 
-/* Grokking Dynamic Programming Patterns for Coding Interviews:
- * All the problems will be solved using 3 approaches,
- *    - Recursion
- *    - DP: Top Down Approach or Memoization 
- *    - DP: Bottom Up Approach or Tabulation
+/* All the below problems are solved in 4 approaches such as,
+ *    1.Recursion -  Time: exponential time O(2^n), space complexity is O(n) which is used to store the recursion stack.
+ *    2.DP: Top Down Approach or Memoization - Time and space complexity is same as memoization array size.
+ *    3.DP: Bottom Up Approach or Tabulation - Time & space complexity is O(n^2) or O(n)
+ *    4.Memory Optimization - This will be same time as Bottom up approach, but space efficient. Eg: Two variable approach
  */
 public class DynamicProgramming {
 
-	/***************************** Pattern 1: Simple Patterns *************************/
+	/***************************** Pattern 1: Rolling Array/Fibonacci Patterns *********************/
+	//TODO: Number factors
+	//TODO: Minimum jumps with fee
+
+	// Min Cost Climbing Stairs
+	public int minCostClimbingStairs(int[] cost) {
+		int curr = 0, prev = 0;
+		for (int i = 0; i < cost.length; i++) {
+			int tmp = curr;
+			curr = cost[i] + Math.min(curr, prev);
+			prev = tmp;
+		}
+		return Math.min(curr, prev);
+	}
 
 	//Unique Binary Search Trees I - DP
 	public int numTrees(int n) {
@@ -65,46 +78,9 @@ public class DynamicProgramming {
 		return node;
 	}
 
-	/*Paint Fence: 
-	 * 	There is a fence with n posts, each post can be painted with one of the k colors. You have to paint all the posts such that 
-	 * no more than two adjacent fence posts have the same color. Return the total number of ways you can paint the fence.
-	 */
+	/***************************** Pattern 2: Pattern Name?? *************************/
 
-	/* Solution1:
-	 * The key to solve this problem is finding this relation.f(n)=(k-1)(f(n-1)+f(n-2)) Assuming there are 3 posts, if
-	 * the first one and the second one has the same color, then the third one has k-1 options. The first and second
-	 * together has k options. If the first and the second do not have same color, the total is k * (k-1), then the
-	 * third one has k options. Therefore, f(3) = (k-1)*k + k*(k-1)*k = (k-1)(k+k*k)
-	 */
-
-	public int paintFence1(int n, int k) {
-		int dp[] = { 0, k, k * k, 0 };
-		if (n <= 2)
-			return dp[n];
-		for (int i = 2; i < n; i++) {
-			dp[3] = (k - 1) * (dp[1] + dp[2]);
-			dp[1] = dp[2];
-			dp[2] = dp[3];
-		}
-		return dp[3];
-	}
-
-	public int paintFence2(int n, int k) {
-		if (n <= 0 || k <= 0)
-			return 0;
-		if (n == 1)
-			return k;
-		int preSame = 0, preDiff = k;
-		for (int i = 1; i < n; i++) {
-			int same = preDiff;
-			int diff = (k - 1) * (preSame + preDiff);
-			preSame = same;
-			preDiff = diff;
-		}
-		return preSame + preDiff;
-	}
-
-	/***************************** Pattern 2: 0/1 Knapsack *************************/
+	/***************************** Pattern 3: 0/1 Knapsack *************************/
 
 	/* Partition Equal Subset Sum/Equal Subset Sum Partition/Partition problem: 
 	 * It's similar to Subset Sum Problem which asks us to find if there is a subset whose sum equals to target value. 
@@ -280,7 +256,7 @@ public class DynamicProgramming {
 		return dp[cap];
 	}
 
-	/***************************** Pattern 3: Unbounded Knapsack *************************/
+	/***************************** Pattern 4: Unbounded Knapsack *************************/
 
 	// Rod cutting
 	/*public int cutRod(int price[], int n) {
@@ -365,101 +341,7 @@ public class DynamicProgramming {
 		return result[n];
 	}
 
-	//TODO: Move Jump Game based problem patterns
-
-	/* Jump Game II: Minimum number of jumps to reach end. It can be solved using 
-	 *   1. Recursive Approach
-	 *   2. Linear Algorithm - Greedy Approach 
-	 *   3. DP Approach
-	 * 	 4. BFS Approach 
-	 */
-
-	// Minimum number of jumps to reach end -> Its similar to snake and ladder problems
-	public int minJumps(int arr[]) {
-		return minJumps(arr, 0, arr.length - 1);
-	}
-
-	// Returns minimum number of jumps to reach arr[h] from arr[l]
-	public int minJumps(int arr[], int index, int n) {
-		if (index >= n)
-			return 0;
-		if (arr[index] == 0)
-			return Integer.MAX_VALUE;
-		int minJumps = Integer.MAX_VALUE;
-		for (int i = index + 1; i <= n && i <= index + arr[index]; i++) {
-			int currJump = minJumps(arr, i, n);
-			if (currJump != Integer.MAX_VALUE && currJump + 1 < minJumps) {
-				minJumps = currJump + 1;
-			}
-		}
-		return minJumps;
-	}
-
-	// Approach3: DP - Bottom up Approach; Time: O(n^2); Space: O(n)
-	public int minJumps3(int[] nums) {
-		int n = nums.length;
-		int[] dp = new int[n];
-		Arrays.fill(dp, Integer.MAX_VALUE);
-		dp[0] = 0;
-		for (int i = 0; i < n - 1; i++)
-			for (int j = 1; j <= nums[i] && i + j < n; j++)
-				dp[i + j] = Math.min(dp[i + j], 1 + dp[i]);
-		return dp[n - 1];
-	}
-
-	// Efficient Approach: Greedy Algorithm- Linear Approach
-	public int minJumps4(int[] nums) {
-		int currMax = 0, currEnd = 0, jumps = 0;
-		int n = nums.length;
-
-		for (int i = 0; i < n - 1; i++) {
-			currMax = Math.max(currMax, i + nums[i]);
-			if (i == currEnd) {
-				//Edge case: if jumps are not reachable to last position
-				if (i >= currMax)
-					return Integer.MAX_VALUE;
-				jumps++;
-				currEnd = currMax;
-			}
-		}
-		return jumps;
-	}
-
-	//TODO: Check this solution later
-	public int minJumps41(int[] A) {
-		if (A == null || A.length == 0)
-			return -1;
-		int jumps = 0, currMax = 0, currEnd = 0;
-		for (int i = 0; i < A.length && i <= currEnd; i++) {
-			if (i > currMax) {
-				jumps++;
-				currMax = currEnd;
-			}
-			currEnd = Math.max(currEnd, i + A[i]);
-		}
-		if (currEnd < A.length - 1)
-			return -1;
-		return jumps;
-	}
-
-	/*
-	 * Jump Game I:Given an array of non-negative integers, you are initially positioned at the first index of the array. 
-	 * Each element in the array represents your maximum jump length at that position. Determine if you are able to reach 
-	 * the last index.
-	 * 
-	 */
-	public boolean canJump(int[] nums) {
-		int max = 0;
-		for (int i = 0; i < nums.length; i++) {
-			if (i > max)
-				return false;
-			max = Math.max(max, i + nums[i]);
-		}
-
-		return true;
-	}
-
-	/********************* Pattern 4: String-Palindromic substring/subseq Probs ***********************/
+	/********************* Pattern 5: String-Palindromic substring/subseq Probs ***********************/
 
 	/* Minimum number of deletions to make a string palindrome:
 	 * Given a string of size ‘n’. The task is to remove or delete minimum number of characters from the string so that
@@ -585,7 +467,7 @@ public class DynamicProgramming {
 		return true;
 	}
 
-	/************************** Pattern 5: String-Substring/Subsequence Probs *******************/
+	/************************** Pattern 6: String-Substring/Subsequence Probs *******************/
 	// Shortest Common Supersequence:
 	// Solution: Modification of LCS;
 	// 1.Recursion
@@ -708,6 +590,7 @@ public class DynamicProgramming {
 				dp[0][j] = dp[0][j - 1];
 		for (int i = 1; i <= m; i++) {
 			for (int j = 1; j <= n; j++) {
+				//Here i-1, j-1 are curr index
 				if (p.charAt(j - 1) == s.charAt(i - 1) || p.charAt(j - 1) == '?') {
 					dp[i][j] = dp[i - 1][j - 1];
 				} else if (p.charAt(j - 1) == '*') {
@@ -722,27 +605,29 @@ public class DynamicProgramming {
 	}
 
 	// Approach4: Linear Time Solution
-	public boolean wildCardMatch4(String s, String p) {
-		int i = 0, j = 0, star = -1, mark = -1;
-		while (i < s.length()) {
-			if (j < p.length() && (p.charAt(j) == '?' || p.charAt(j) == s.charAt(i))) {
+	public int isMatch(final String s, final String p) {
+		int m = s.length(), n = p.length();
+		int i = 0, j = 0, star = -1, mark = 0;
+		while (i < m) {
+			if (j < n && (p.charAt(j) == s.charAt(i) || p.charAt(j) == '?')) {
 				i++;
 				j++;
-			} else if (j < p.length() && p.charAt(j) == '*') {
+			} else if (j < n && p.charAt(j) == '*') {
 				star = j;
 				mark = i;
 				j++;
 			} else if (star != -1) {
 				j = star + 1;
-				mark++;
-				i = mark;
+				i = ++mark;
 			} else {
-				return false;
+				return 0;
 			}
 		}
-		while (j < p.length() && p.charAt(j) == '*')
+
+		while (j < n && p.charAt(j) == '*')
 			j++;
-		return j == p.length();
+
+		return j == n ? 1 : 0;
 	}
 
 	/*
@@ -758,16 +643,18 @@ public class DynamicProgramming {
 	public boolean regExMatch3(String s, String p) {
 		int m = s.length(), n = p.length();
 		boolean[][] dp = new boolean[m + 1][n + 1];
+		// Base case: For both s & p are empty
 		dp[0][0] = true;
 		for (int j = 2; j <= n; j++)
 			if (p.charAt(j - 1) == '*')
 				dp[0][j] = dp[0][j - 2];
 		for (int i = 1; i <= m; i++) {
 			for (int j = 1; j <= n; j++) {
+				// Note: Here i-1, j-1 is curr index, i-2, j-2 is prev index
 				if (p.charAt(j - 1) == s.charAt(i - 1) || p.charAt(j - 1) == '.') {
 					dp[i][j] = dp[i - 1][j - 1];
 				} else if (p.charAt(j - 1) == '*') {
-					dp[i][j] = dp[i][j - 2];
+					dp[i][j] = dp[i][j - 2]; //This is for 0 occurrence of the prev char
 					if (p.charAt(j - 2) == s.charAt(i - 1) || p.charAt(j - 2) == '.')
 						dp[i][j] = dp[i][j] || dp[i - 1][j];
 				} else {
@@ -778,7 +665,7 @@ public class DynamicProgramming {
 		return dp[m][n];
 	}
 
-	/***************************** Pattern 6: Array-Subsequence Probs *******************************/
+	/***************************** Pattern 7: Array-Subsequence Probs *******************************/
 
 	// Minimum number of deletions to make a sorted sequence:
 	/* Approach1: 
