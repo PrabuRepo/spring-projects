@@ -361,8 +361,8 @@ public class RollingArrayPatterns {
 	 *   3. DP Approach
 	 * 	 4. BFS Approach 
 	 */
-
-	// Minimum number of jumps to reach end -> Its similar to snake and ladder problems
+	// TODO: BFS Solution: https://leetcode.com/problems/jump-game-ii/discuss/18028/O(n)-BFS-solution
+	// Minimum number of jumps to reach end
 	public int minJumps(int arr[]) {
 		return minJumps(arr, 0, arr.length - 1);
 	}

@@ -1,6 +1,7 @@
 package com.consolidated.problems.algorithms.test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,8 @@ import java.util.TreeSet;
 public class TestClass {
 	public static void main(String[] args) {
 
+		TestClass ob = new TestClass();
+
 		int[] A = { 2, 2, 2, 3, 3 };
 		int[][] B = { { 1, 3 }, { 5, 4 }, { 2, 4 } };
 		//System.out.println(Arrays.toString(getMode(A, B)));
@@ -19,7 +22,42 @@ public class TestClass {
 		//test();
 
 		int[] arr = { 1, 2, 3, 4, 5 };
-		findClosestElements22(arr, 4, 3);
+		//findClosestElements22(arr, 4, 3);
+
+		//isMatch("mississippi", "mis*is*ip*.");
+
+	}
+
+	public static boolean isMatch(String s, String p) {
+		int m = s.length(), n = p.length();
+		boolean[][] dp = new boolean[m + 1][n + 1];
+		// Note: Here i-1, j-1 is curr index, i-2, j-2 is prev index
+		// Base case: For both s & p are empty
+		dp[0][0] = true;
+
+		// To handle the first row or empty string with whole pattern 'p'
+		for (int j = 2; j <= n; j++)
+			if (p.charAt(j - 1) == '*')
+				dp[0][j] = dp[0][j - 2];
+
+		for (int i = 1; i <= m; i++) {
+			for (int j = 1; j <= n; j++) {
+				if (p.charAt(j - 1) == s.charAt(i - 1) || p.charAt(j - 1) == '.') {
+					dp[i][j] = dp[i - 1][j - 1];
+				} else if (p.charAt(j - 1) == '*') {
+					dp[i][j] = dp[i][j - 2]; //This is for 0 occurrence of the prev char
+					if (p.charAt(j - 2) == s.charAt(i - 1) || p.charAt(j - 2) == '.')
+						dp[i][j] = dp[i][j - 2] || dp[i - 1][j];
+				} else {
+					dp[i][j] = false;
+				}
+			}
+		}
+
+		System.out.println(Arrays.deepToString(dp));
+
+		return dp[m][n];
+
 	}
 
 	public static List<Integer> findClosestElements22(int[] arr, int k, int x) {

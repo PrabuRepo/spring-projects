@@ -13,180 +13,40 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
-import com.common.model.EdgeNode;
-import com.common.model.UndirectedGraphNode;
-import com.common.utilities.DisjointSet;
+import com.problems.patterns.crossdomains.CloneProblems;
 import com.problems.patterns.crossdomains.WordProblems;
 
 public class GraphPatterns {
 
 	/*************************** Type1: Graph DS Problems *******************/
-	// Clone an Undirected Graph - DFS/BFS
-	// Using BFS traversal to clone the graph
-	public UndirectedGraphNode cloneGraph1(UndirectedGraphNode root) {
-		if (root == null)
-			return null;
-		Queue<UndirectedGraphNode> queue = new LinkedList<>();
-		// cloneMap: node, cloneNode
-		HashMap<UndirectedGraphNode, UndirectedGraphNode> cloneMap = new HashMap<>();
-		cloneMap.put(root, new UndirectedGraphNode(root.label));
-		queue.add(root);
-		while (!queue.isEmpty()) {
-			UndirectedGraphNode currCloneNode, neighborClone, currNode;
-			currNode = queue.poll();
-			currCloneNode = cloneMap.get(currNode);
-			for (UndirectedGraphNode neighbor : currNode.neighbors) {
-				neighborClone = cloneMap.get(neighbor);
-				if (neighborClone == null) {
-					neighborClone = new UndirectedGraphNode(neighbor.label);
-					cloneMap.put(neighbor, neighborClone);
-					queue.add(neighbor);
-				}
-				currCloneNode.neighbors.add(neighborClone);
-			}
-		}
-		return cloneMap.get(root);
-	}
-
-	// DFS traversal using stack & iterative
-	public UndirectedGraphNode cloneGraph2(UndirectedGraphNode node) {
-		if (node == null)
-			return null;
-
-		HashMap<UndirectedGraphNode, UndirectedGraphNode> hm = new HashMap<UndirectedGraphNode, UndirectedGraphNode>();
-		LinkedList<UndirectedGraphNode> stack = new LinkedList<UndirectedGraphNode>();
-		UndirectedGraphNode head = new UndirectedGraphNode(node.label);
-		hm.put(node, head);
-		stack.push(node);
-
-		while (!stack.isEmpty()) {
-			UndirectedGraphNode curnode = stack.pop();
-			for (UndirectedGraphNode aneighbor : curnode.neighbors) {// check each neighbor
-				if (!hm.containsKey(aneighbor)) {// if not visited,then push to stack
-					stack.push(aneighbor);
-					UndirectedGraphNode newneighbor = new UndirectedGraphNode(aneighbor.label);
-					hm.put(aneighbor, newneighbor);
-				}
-
-				hm.get(curnode).neighbors.add(hm.get(aneighbor));
-			}
-		}
-
-		return head;
-	}
-
-	// Using DFS traversal recursive
-	public UndirectedGraphNode cloneGraph3(UndirectedGraphNode root) {
-		if (root == null)
-			return root;
-		// CloneMap: node label, Clone node
-		HashMap<Integer, UndirectedGraphNode> cloneMap = new HashMap<>();
-		return cloneGraph(root, cloneMap);
-	}
-
-	public UndirectedGraphNode cloneGraph(UndirectedGraphNode root, HashMap<Integer, UndirectedGraphNode> cloneMap) {
-		UndirectedGraphNode clone = new UndirectedGraphNode(root.label);
-		cloneMap.put(root.label, clone);
-		for (UndirectedGraphNode neigbhor : root.neighbors) {
-			UndirectedGraphNode neighborClone = cloneMap.get(neigbhor.label);
-			if (neighborClone != null) {
-				clone.neighbors.add(neighborClone);
-			} else {
-				clone.neighbors.add(cloneGraph(neigbhor, cloneMap));
-			}
-		}
-		return clone;
+	public void cloneGraph() {
+		CloneProblems.cloneGraph1(null);
+		CloneProblems.cloneGraph2(null);
+		CloneProblems.cloneGraph3(null);
 	}
 
 	/*************************** Type2: Graph Cycle *******************/
-	//	Detect cycle in a directed graph  - DFS/BFS/UF
-	// Using DFS algorithm
-	public boolean hasCycleInDirectedGraph(LinkedList<Integer>[] adjList, int n) {
-		boolean[] visited = new boolean[n];
-		boolean[] recursionStack = new boolean[n];
-		for (int i = 0; i < n; i++) {
-			if (!visited[i]) {
-				if (hasCycleInDirectedGraphUtil(adjList, i, visited, recursionStack))
-					return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean hasCycleInDirectedGraphUtil(LinkedList<Integer>[] adjList, int vertex, boolean[] visited,
-			boolean[] recursionStack) {
-		if (recursionStack[vertex])
-			return true;
-		if (visited[vertex])
-			return false;
-		visited[vertex] = true;
-		recursionStack[vertex] = true;
-		if (adjList[vertex] != null) {
-			ListIterator<Integer> iter = adjList[vertex].listIterator();
-			while (iter.hasNext()) {
-				int adjVertex = iter.next();
-				if (hasCycleInDirectedGraphUtil(adjList, adjVertex, visited, recursionStack))
-					return true;
-			}
-		}
-		recursionStack[vertex] = false;
-		return false;
-	}
-
-	public boolean hasCycleInUndirectedGraph(LinkedList<Integer>[] adjList, int n) {
-		boolean[] visited = new boolean[n];
-		for (int i = 0; i < n; i++) {
-			if (!visited[i]) {
-				if (hasCycleInUndirectedGraphUtil(adjList, i, visited, -1))
-					return true;
-			}
-		}
-		return false;
-	}
-
-	// using DFS
-	private boolean hasCycleInUndirectedGraphUtil(LinkedList<Integer>[] adjList, int vertex, boolean[] visited,
-			int parent) {
-		visited[vertex] = true;
-		ListIterator<Integer> iter = adjList[vertex].listIterator();
-		while (iter.hasNext()) {
-			int adjVertex = iter.next();
-			if (!visited[adjVertex]) {
-				if (hasCycleInUndirectedGraphUtil(adjList, adjVertex, visited, vertex))
-					return true;
-			} else if (adjVertex != parent)
-				return true;
-		}
-		return false;
-	}
-
-	// Using DisjointSet: Union-Find Algorithm can be used to check whether an undirected graph contains cycle or no
-	public boolean hasCycleInUndirectedGraph(EdgeNode[] edges, int n, int e) {
-		DisjointSet ds = new DisjointSet(n);
-		for (int i = 0; i < n; i++)
-			ds.parent[i] = i;
-		for (int i = 0; i < e; i++) {
-			if (ds.union(edges[i].src, edges[i].src))
-				return true;
-		}
-		return false;
-	}
 
 	// Course Schedule I:
-	// Topo Sort - BFS Approach
-	public boolean canFinish(int courses, int[][] prerequisites) {
-		List<Integer>[] adjList = new LinkedList[courses];
+	//Topo Sort - BFS Approach - Using LinkedList array
+	public boolean canFinish11(int numCourses, int[][] prerequisites) {
+		List<Integer>[] adjList = new LinkedList[numCourses];
 		Queue<Integer> queue = new LinkedList<>();
-		int[] indegree = new int[courses];
-		for (int i = 0; i < courses; i++)
+		int[] indegree = new int[numCourses];
+
+		for (int i = 0; i < numCourses; i++)
 			adjList[i] = new LinkedList<>();
+
 		for (int[] pair : prerequisites) {
-			adjList[pair[0]].add(pair[1]);
-			indegree[pair[1]]++;
+			//src - pair[1], dest - pair[0]
+			adjList[pair[1]].add(pair[0]);
+			indegree[pair[0]]++;
 		}
+
 		for (int i = 0; i < indegree.length; i++)
 			if (indegree[i] == 0)
 				queue.offer(i);
+
 		int count = 0;
 		while (!queue.isEmpty()) {
 			int course = queue.poll();
@@ -195,161 +55,286 @@ public class GraphPatterns {
 				if (--indegree[adj] == 0)
 					queue.offer(adj);
 		}
-		return count == courses;
+
+		return count == numCourses;
 	}
 
-	// DFS Approach
-	public boolean canFinish2(int courses, int[][] preRequisites) {
-		if (courses == 0 || preRequisites.length == 0)
+	//Topo Sort - BFS Approach - using Map
+	public boolean canFinish12(int numCourses, int[][] prerequisites) {
+		Map<Integer, Set<Integer>> graph = new HashMap<>();
+		Queue<Integer> queue = new LinkedList<>();
+		int[] indegree = new int[numCourses]; //or use Map
+
+		for (int[] pair : prerequisites) {
+			graph.putIfAbsent(pair[1], new HashSet<Integer>());
+			graph.get(pair[1]).add(pair[0]);
+			indegree[pair[0]]++;
+		}
+
+		for (int i = 0; i < indegree.length; i++)
+			if (indegree[i] == 0)
+				queue.offer(i);
+
+		int count = 0;
+		while (!queue.isEmpty()) {
+			int course = queue.poll();
+			count++;
+			if (graph.get(course) == null)
+				continue;
+			for (int adj : graph.get(course))
+				if (--indegree[adj] == 0)
+					queue.offer(adj);
+		}
+
+		return count == numCourses;
+	}
+
+	//DFS Approach - Using LinkedList Array
+	public boolean canFinish21(int noOfcourses, int[][] prerequisites) {
+		// validation
+		if (noOfcourses == 0 || prerequisites.length == 0)
 			return true;
-		LinkedList<Integer>[] adjList = buildAdjListDirectedGraph(courses, preRequisites);
-		return !hasCycleInDirectedGraph(adjList, courses);
+
+		// build graph
+		LinkedList<Integer>[] graph = new LinkedList[noOfcourses];
+		buildGraph(graph, prerequisites);
+
+		// Check the graph has cycle using DFS
+		return !hasCycle(graph, noOfcourses);
 	}
 
-	public LinkedList<Integer>[] buildAdjListDirectedGraph(int n, int[][] edges) {
-		if (n == 0 || edges.length == 0)
-			return null;
-		LinkedList<Integer>[] adjList = new LinkedList[n];
-		for (int i = 0; i < n; i++)
-			adjList[i] = new LinkedList<>();
-		for (int i = 0; i < edges.length; i++)
-			adjList[edges[i][0]].add(edges[i][1]);
-		return adjList;
+	//DFS Approach - Using Map
+	public boolean canFinish22(int noOfcourses, int[][] preReq) {
+		// validation
+		if (noOfcourses == 0 || preReq.length == 0)
+			return true;
+
+		// build graph
+		Map<Integer, Set<Integer>> graph = new HashMap<>();
+		for (int[] edge : preReq) {
+			graph.putIfAbsent(edge[1], new HashSet<Integer>());
+			graph.get(edge[1]).add(edge[0]);
+		}
+
+		Set<Integer> visited = new HashSet<>();
+		Set<Integer> recStack = new HashSet<>();
+		for (int i = 0; i < noOfcourses; i++) {
+			if (!visited.contains(i)) {
+				if (hasCycle(graph, i, visited, recStack))
+					return false;
+			}
+		}
+
+		return true;
+	}
+
+	private boolean hasCycle(Map<Integer, Set<Integer>> graph, int v, Set<Integer> visited, Set<Integer> recStack) {
+		// If this condition satisfies, then graph contains cycle
+		if (recStack.contains(v))
+			return true;
+
+		if (visited.contains(v))
+			return false;
+
+		// Mark vertex as visited and set recursion stack
+		visited.add(v);
+		recStack.add(v);
+
+		if (graph.get(v) != null) {
+			for (int adjVertex : graph.get(v)) {
+				if (hasCycle(graph, adjVertex, visited, recStack))
+					return true;
+			}
+		}
+		// Reset the recursion stack 
+		recStack.remove(v);
+		return false;
+	}
+
+	private void buildGraph(LinkedList<Integer>[] graph, int[][] preReq) {
+		int noOfEdges = preReq.length, node;
+		for (int i = 0; i < noOfEdges; i++) {
+			node = preReq[i][0];
+			if (graph[node] == null)
+				graph[node] = new LinkedList<>();
+			graph[node].add(preReq[i][1]);
+		}
+	}
+
+	private boolean hasCycle(LinkedList<Integer>[] graph, int n) {
+		boolean[] visited = new boolean[n], recursionStack = new boolean[n];
+		for (int i = 0; i < n; i++) {
+			if (!visited[i]) {
+				if (hasCycle(graph, i, visited, recursionStack))
+					return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean hasCycle(LinkedList<Integer>[] adjList, int vertex, boolean[] visited, boolean[] recursionStack) {
+		// If this condition satisfies, then graph contains cycle
+		if (recursionStack[vertex])
+			return true;
+
+		if (visited[vertex])
+			return false;
+
+		// Mark vertex as visited and set recursion stack
+		visited[vertex] = true;
+		recursionStack[vertex] = true;
+
+		if (adjList[vertex] != null) {
+			ListIterator<Integer> iter = adjList[vertex].listIterator();
+			while (iter.hasNext()) {
+				int adjVertex = iter.next();
+				if (hasCycle(adjList, adjVertex, visited, recursionStack))
+					return true;
+			}
+		}
+		// Reset the recursion stack array
+		recursionStack[vertex] = false;
+		return false;
+
 	}
 
 	/*************************** Type3: Topo Sort(DFS/BFS(Kahn’s)) *******************/
 	//	Course Schedule II - Find course order - Using topo sort(reverse)
-	public int[] findOrder(int courses, int[][] preReq) {
-		if (courses == 0)
+	//BFS Solution: Time: O(V+E) and Space: O(V+E)
+	public int[] findOrder(int n, int[][] prereq) {
+		//n - no of courses
+		if (n == 0)
 			return null;
-		int indegree[] = new int[courses], order[] = new int[courses], index = 0;
-		for (int i = 0; i < preReq.length; i++)
-			indegree[preReq[i][0]]++;
+		Map<Integer, Set<Integer>> graph = new HashMap<>();
 		Queue<Integer> queue = new LinkedList<Integer>();
-		for (int i = 0; i < courses; i++)
+		int[] indegree = new int[n], order = new int[n];
+		int index = 0;
+
+		for (int[] edge : prereq) {
+			graph.putIfAbsent(edge[1], new HashSet<Integer>());
+			graph.get(edge[1]).add(edge[0]);
+			indegree[edge[0]]++;
+		}
+
+		for (int i = 0; i < n; i++) {
 			if (indegree[i] == 0) {
-				order[index++] = i;
-				queue.offer(i);
-			}
-		while (!queue.isEmpty()) {
-			int prerequisite = queue.poll();
-			for (int i = 0; i < preReq.length; i++) {
-				if (preReq[i][1] == prerequisite) {
-					indegree[preReq[i][0]]--;
-					if (indegree[preReq[i][0]] == 0) {
-						order[index++] = preReq[i][0];
-						queue.offer(preReq[i][0]);
-					}
-				}
+				// Add the course to the order because it has no prerequisites.
+				queue.add(i);
 			}
 		}
-		return (index == courses) ? order : new int[0];
+
+		while (!queue.isEmpty()) {
+			int v = queue.poll();
+			order[index++] = v;
+			if (graph.get(v) == null)
+				continue;
+			for (int adjVertex : graph.get(v)) {
+				if (--indegree[adjVertex] == 0)
+					queue.add(adjVertex);
+			}
+		}
+
+		return (index == n) ? order : new int[0];
 	}
 
-	//	Alien Dictionary
-	// Alien Dictionary
-	/*
+	// Reconstruct Itinerary - Map & Priority Queue & Topo Sort
+	public List<String> findItinerary(String[][] tickets) {
+		Map<String, PriorityQueue<String>> map = new HashMap<>();
+		for (String[] ticket : tickets) {
+			map.putIfAbsent(ticket[0], new PriorityQueue<>());
+			map.get(ticket[0]).add(ticket[1]);
+		}
+		LinkedList<String> result = new LinkedList<>();
+		reconstructItinerary("JFK", map, result);
+		return result;
+	}
+
+	// Using DFS, but remove the visted data from the priority queue
+	public void reconstructItinerary(String s, Map<String, PriorityQueue<String>> map, LinkedList<String> result) {
+		PriorityQueue<String> queue = map.get(s);
+		while (queue != null && !queue.isEmpty())
+			reconstructItinerary(queue.poll(), map, result);
+		result.addFirst(s);
+	}
+
+	/* Alien Dictionary:
 	 * Given a sorted dictionary of an alien language, find order of characters Given a sorted dictionary (array of words)
 	 * of an alien language, find order of characters in the language.
-	 * 
-	 * Solution using Topological Sort - Rewrite this
 	 */
-	public void alienDictionary(String[] words, int n) {
-		LinkedList<Integer>[] adjList = new LinkedList[n];
-		for (int i = 0; i < n; i++)
-			adjList[i] = new LinkedList<>();
-		for (int i = 0; i < words.length - 1; i++) {
-			String words1 = words[i];
-			String words2 = words[i + 1];
-			int j = 0;
-			while (j < Math.min(words1.length(), words2.length())) {
-				if (words1.charAt(j) != words2.charAt(j)) {
-					adjList[words1.charAt(j) - 'a'].add(words2.charAt(j) - 'a');
-					break;
-				}
-				j++;
-			}
-		}
-		// Topological sort
-		boolean[] visited = new boolean[n];
-		Stack<Integer> stack = new Stack<>();
-		for (int i = 0; i < n; i++)
-			if (!visited[i])
-				topoSortUtil(adjList, i, visited, stack);
-		while (!stack.isEmpty())
-			System.out.print((char) (stack.pop() + 'a') + "-");
+	//Alien Order using BFS algorithm	
+	public String alienOrder1(String[] words) {
+		Map<Character, Set<Character>> graph = new HashMap<>();
+		Map<Character, Integer> inDegree = new HashMap<>();
+
+		//Build Adjacent Graph using Map
+		build(graph, inDegree, words);
+
+		//Find order using topo sort DFS algorithm:
+		return topoSortBFS(graph, inDegree);
 	}
 
-	public String alienDictionary2(String[] words) {
-		Map<Character, List<Character>> adjMap = new HashMap<>();
+	private void build(Map<Character, Set<Character>> graph, Map<Character, Integer> inDegree, String[] words) {
+		for (String word : words) {
+			for (char ch : word.toCharArray()) {
+				graph.putIfAbsent(ch, new HashSet<>());
+				inDegree.putIfAbsent(ch, 0);
+			}
+		}
+
 		for (int i = 0; i < words.length - 1; i++) {
 			String words1 = words[i];
 			String words2 = words[i + 1];
 			int j = 0;
 			while (j < Math.min(words1.length(), words2.length())) {
-				if (words1.charAt(j) != words2.charAt(j)) {
-					if (adjMap.get(words1.charAt(j)) == null)
-						adjMap.put(words1.charAt(j), new ArrayList<>());
-					if (adjMap.get(words2.charAt(j)) == null)
-						adjMap.put(words2.charAt(j), new ArrayList<>());
-					adjMap.get(words1.charAt(j)).add(words2.charAt(j));
+				char ch1 = words1.charAt(j), ch2 = words2.charAt(j);
+				if (ch1 != ch2) {
+					graph.get(ch1).add(ch2);
+					inDegree.put(ch2, inDegree.get(ch2) + 1);
 					break;
-				} else {
-					if (adjMap.get(words1.charAt(j)) == null)
-						adjMap.put(words1.charAt(j), new ArrayList<>());
 				}
 				j++;
 			}
 		}
+	}
 
-		// Topological sort
-		Set<Character> visited = new HashSet<>();
-		Stack<Character> stack = new Stack<>();
-		// Start with first char:
-		topoSortUtil(adjMap, words[0].charAt(0), visited, stack);
-		for (Map.Entry<Character, List<Character>> entry : adjMap.entrySet()) {
-			if (!visited.contains(entry.getKey())) {
-				topoSortUtil(adjMap, entry.getKey(), visited, stack);
+	private String topoSortBFS(Map<Character, Set<Character>> graph, Map<Character, Integer> inDegree) {
+		Queue<Character> queue = new LinkedList<>();
+		for (char c : inDegree.keySet()) { // Build queue with item of inDegree==0: means no edge points towards it.
+			if (inDegree.get(c) == 0)
+				queue.offer(c);
+		}
+
+		StringBuffer sb = new StringBuffer();
+		while (!queue.isEmpty()) {
+			char c = queue.poll();
+			sb.append(c);
+			for (char edgeNode : graph.get(c)) { // reduce edge degrees count since node:graph.get(c) has been processed
+				inDegree.put(edgeNode, inDegree.get(edgeNode) - 1);
+				if (inDegree.get(edgeNode) == 0)
+					queue.offer(edgeNode);
 			}
 		}
 
-		StringBuilder sb = new StringBuilder();
-		while (!stack.isEmpty())
-			sb.append(stack.pop());
-
+		if (sb.length() != graph.size())
+			return "";
 		return sb.toString();
 	}
 
-	private void topoSortUtil(Map<Character, List<Character>> adjMap, char v, Set<Character> visited,
-			Stack<Character> stack) {
-		visited.add(v);
-		if (adjMap.get(v) != null) {
-			ListIterator<Character> listIterator = adjMap.get(v).listIterator();
-			while (listIterator.hasNext()) {
-				char next = listIterator.next();
-				if (!visited.contains(next))
-					topoSortUtil(adjMap, next, visited, stack);
-			}
-		}
-		stack.push(v);
-	}
-
-	// LintCode Problem:
-	Map<Character, List<Character>> graph = new HashMap<>();
-	Map<Character, Integer> visited = new HashMap<>();
-	StringBuffer sb = new StringBuffer();
-
-	public String alienOrder1(String[] words) {
-		if (words == null || words.length == 0) {
+	//Alien Order using DFS algorithm	
+	public String alienOrder2(String[] words) {
+		if (words == null || words.length == 0)
 			return "";
-		}
+
+		Map<Character, List<Character>> graph = new HashMap<>();
+		Map<Character, Integer> visited = new HashMap<>();
+		StringBuilder sb = new StringBuilder();
 
 		// Build graph, and visited map.
-		buildGraph(words);
+		buildGraph(graph, visited, words);
 
 		// Topological sort with dfs
 		for (char c : graph.keySet()) {
-			if (!dfs(c)) {
+			if (!dfs(graph, visited, sb, c)) {
 				return "";
 			}
 		}
@@ -357,7 +342,8 @@ public class GraphPatterns {
 		return sb.toString();
 	}
 
-	private boolean dfs(Character c) {
+	private boolean dfs(Map<Character, List<Character>> graph, Map<Character, Integer> visited, StringBuilder sb,
+			Character c) {
 		if (visited.get(c) == 1)
 			return true;
 		if (visited.get(c) == -1)
@@ -365,7 +351,7 @@ public class GraphPatterns {
 
 		visited.put(c, -1);
 		for (char edgeNode : graph.get(c)) {
-			if (!dfs(edgeNode)) {
+			if (!dfs(graph, visited, sb, edgeNode)) {
 				return false;
 			}
 		}
@@ -374,7 +360,7 @@ public class GraphPatterns {
 		return true;
 	}
 
-	private void buildGraph(String[] words) {
+	private void buildGraph(Map<Character, List<Character>> graph, Map<Character, Integer> visited, String[] words) {
 		// Create nodes
 		for (String word : words) {
 			for (char c : word.toCharArray()) {
@@ -398,91 +384,6 @@ public class GraphPatterns {
 				index++;
 			}
 		}
-	}
-
-	public String alienOrder(String[] words) {
-		if (words == null || words.length == 0)
-			return "";
-
-		// Build graph && indegree map
-		Map<Character, List<Character>> graph = new HashMap<>();
-		Map<Character, Integer> inDegree = new HashMap<>();
-		build(graph, inDegree, words);
-
-		// Topological sort with BFS
-		return topoSort(graph, inDegree);
-	}
-
-	private void build(Map<Character, List<Character>> graph, Map<Character, Integer> inDegree, String[] words) {
-		// Init graph, inDegree map
-		for (String word : words) {
-			for (char c : word.toCharArray()) {
-				graph.putIfAbsent(c, new ArrayList<>());
-				inDegree.putIfAbsent(c, 0);
-			}
-		}
-		// Build graph: find char diff between curr row and next row => build graph edge and increase inDegree
-		// relationship
-		// always compare same index on: words[i] -> words[i+1]
-		// if c1 != c2, build graph and inDegree map and break: later index does not have any more relationship.
-		for (int i = 0; i < words.length - 1; i++) {
-			int index = 0;
-			while (index < words[i].length() && index < words[i + 1].length()) {
-				char c1 = words[i].charAt(index);
-				char c2 = words[i + 1].charAt(index);
-				if (c1 != c2) {
-					graph.get(c1).add(c2);
-					inDegree.put(c2, inDegree.get(c2) + 1);
-					break;
-				}
-				index++;
-			}
-		}
-	}
-
-	private String topoSort(Map<Character, List<Character>> graph, Map<Character, Integer> inDegree) {
-		Queue<Character> queue = new LinkedList<>();
-		for (char c : inDegree.keySet()) { // Build queue with item of inDegree==0: means no edge points towards it.
-			if (inDegree.get(c) == 0)
-				queue.offer(c);
-		}
-
-		StringBuffer sb = new StringBuffer();
-		while (!queue.isEmpty()) {
-			char c = queue.poll();
-			sb.append(c);
-			for (char edgeNode : graph.get(c)) { // reduce edge degrees count since node:graph.get(c) has been processed
-				inDegree.put(edgeNode, inDegree.get(edgeNode) - 1);
-				if (inDegree.get(edgeNode) == 0)
-					queue.offer(edgeNode);
-			}
-		}
-
-		if (sb.length() != graph.size())
-			return "";
-		return sb.toString();
-	}
-
-	//	Reconstruct Itinerary - Map & Priority Queue & Topo Sort
-	// Reconstruct Itinerary
-	public List<String> findItinerary(String[][] tickets) {
-		Map<String, PriorityQueue<String>> map = new HashMap<>();
-		for (String[] ticket : tickets) {
-			if (map.get(ticket[0]) == null)
-				map.put(ticket[0], new PriorityQueue<>());
-			map.get(ticket[0]).add(ticket[1]);
-		}
-		LinkedList<String> result = new LinkedList<>();
-		reconstructItinerary("JFK", map, result);
-		return result;
-	}
-
-	// Using DFS, but remove the visted data from the priority queue
-	public void reconstructItinerary(String s, Map<String, PriorityQueue<String>> map, LinkedList<String> result) {
-		PriorityQueue<String> queue = map.get(s);
-		while (queue != null && !queue.isEmpty())
-			reconstructItinerary(queue.poll(), map, result);
-		result.addFirst(s);
 	}
 
 	/*************************** Type4: Graph Traversals(BFS/DFS/UF) *******************/
@@ -709,172 +610,4 @@ public class GraphPatterns {
 		WordProblems.wordLadderII(null, null, null);
 	}
 
-	//TODO: Move below code to consolidate module
-	// Topological Sort
-	/* Topological sorting for Directed Acyclic Graph (DAG) is a linear ordering of vertices such that for "every
-	 * directed edge uv, vertex u comes before v in the ordering". Topological Sorting for a graph is not possible if the
-	 * graph is not a DAG.
-	 * Fact: A DAG G has at least one vertex with in-degree 0 and one vertex with out-degree 0.
-	 *   Approach1: DFS Algorithm
-	 *   Approach2: BFS Algorithm (Kahn's Algorithm)
-	 */
-	// Topological Sort to order the graph
-	public void toplogicalSort1(int n, LinkedList<Integer>[] adjList) {
-		boolean[] visited = new boolean[n];
-		Stack<Integer> stack = new Stack<>();
-
-		for (int i = 0; i < n; i++)
-			if (!visited[i]) {
-				topoSortUtil(adjList, i, visited, stack);
-			}
-
-		while (!stack.isEmpty())
-			System.out.print(stack.pop() + "-");
-	}
-
-	private void topoSortUtil(LinkedList<Integer>[] adjList, int v, boolean[] visited, Stack<Integer> stack) {
-		visited[v] = true;
-		ListIterator<Integer> listIterator = adjList[v].listIterator();
-		while (listIterator.hasNext()) {
-			int next = listIterator.next();
-			if (!visited[next])
-				topoSortUtil(adjList, next, visited, stack);
-		}
-		stack.push(v);
-	}
-
-	/* BFS Algorithm (Kahn's Algorithm) for Topological Sorting:
-	 * A DAG G has at least one vertex with in-degree 0 and one vertex with out-degree 0.
-	 */
-	public void toplogicalSort2(int n, LinkedList<Integer>[] adjList) {
-		Queue<Integer> queue = new LinkedList<>();
-		ArrayList<Integer> linearOrder = new ArrayList<>();
-		int[] indegree;
-		int count = 0;
-
-		// Step-1: Compute in-degree
-		indegree = indegree(adjList, n);
-
-		// Step-2: Pick all the vertices with in-degree as 0 and add them into a queue
-		for (int i = 0; i < n; i++)
-			if (indegree[i] == 0)
-				queue.add(i);
-
-		// Step-3:Remove a vertex from the queue
-		while (!queue.isEmpty()) {
-			int vertex = queue.poll();
-			linearOrder.add(vertex);
-			// 1.Increment count of visited nodes by 1.
-			count++;
-
-			// 2.Decrease in-degree by 1 for all its neighboring nodes
-			ListIterator<Integer> iter = adjList[vertex].listIterator();
-			while (iter.hasNext()) {
-				int data = iter.next();
-				if (--indegree[data] == 0)
-					queue.add(data); // 3.If in-degree of a neighboring nodes is reduced to zero,
-										// then add it to the queue.
-			}
-		}
-		// Step-4:If count of visited nodes is equal to the number of nodes in the graph then print the topological sort
-		if (count == n) {
-			linearOrder.stream().forEach(i -> System.out.print(i + " "));
-		} else {
-			System.out.println("Graph is not an a DAG and also it contains a cycle.");
-		}
-	}
-
-	private int[] indegree(LinkedList<Integer>[] adjList, int n) {
-		int[] indegree = new int[n];
-
-		for (int i = 0; i < n; i++) {
-			if (adjList[i].size() > 0) {
-				ListIterator<Integer> iterator = adjList[i].listIterator();
-				while (iterator.hasNext())
-					indegree[iterator.next()]++;
-			}
-		}
-		return indegree;
-	}
-
-	// Tasks Scheduling
-	// Tasks Scheduling Order
-	// All Tasks Scheduling Orders
-
-	// Reconstructing a Sequence
-
-	/*
-	 * 7.Build Order: You are given a list of projects and a list of dependencies (which is a list of pairs of projects, where the 
-	 * second project is dependent on the first project). All of a project's dependencies must be built before the project is. 
-	 * Find a build order that will allow the projects to be built. If there is no valid build order, return an error.
-	 * EXAMPLE
-	 * Input:
-	 * projects: a, b, c, d, e, f -> n=6
-	 * dependencies: (a, d), (f, b), (b, d), (f, a), (d, c) -> {{0,3}, {5,1}, {1,3}, {5,0}, {3,2}}
-	 * Output: f, e, a, b, d, c
-	 */
-	public void buildOrder(char[] projects, char[][] dependencies) {
-		int n = projects.length;
-		LinkedList<Character>[] adjList = new LinkedList[n];
-		for (int i = 0; i < n; i++)
-			adjList[i] = new LinkedList<>();
-		for (int i = 0; i < dependencies.length; i++) {
-			int start = charToInt(dependencies[i][0]);
-			adjList[start].add(dependencies[i][1]);
-		}
-		topoSortUsingIndegree2(adjList, n);
-	}
-
-	// Kahn’s algorithm for Topological Sorting
-	/*	A DAG G has at least one vertex with in-degree 0 and one vertex with out-degree 0.
-		Proof: There’s a simple proof to the above fact is that a DAG does not contain a cycle which means that all paths will be of finite length.
-		       Now let S be the longest path from u(source) to v(destination). Since S is the longest path there can be no incoming edge to u and 
-		       no outgoing edge from v, if this situation had occurred then S would not have been the longest path
-		=> indegree(u) = 0 and outdegree(v) = 0*/
-	public void topoSortUsingIndegree2(LinkedList<Character>[] adjList, int n) {
-		Queue<Character> queue = new LinkedList<>();
-		ArrayList<Character> linearOrder = new ArrayList<>();
-		int[] indegree;
-		int count = 0;
-		indegree = indegree2(adjList, n);
-		for (int i = 0; i < n; i++)
-			if (indegree[i] == 0)
-				queue.add(intToChar(i));
-		while (!queue.isEmpty()) {
-			char vertex = queue.poll();
-			linearOrder.add(vertex);
-			count++;
-			ListIterator<Character> iter = adjList[charToInt(vertex)].listIterator();
-			while (iter.hasNext()) {
-				char data = iter.next();
-				if (--indegree[charToInt(data)] == 0)
-					queue.add(data);
-			}
-		}
-		if (count == n) {
-			linearOrder.stream().forEach(i -> System.out.print(i + "-"));
-		} else {
-			System.out.println("Not an a DAG and contains a cycle.");
-		}
-	}
-
-	private int[] indegree2(LinkedList<Character>[] adjList, int n) {
-		int[] indegree = new int[n];
-		for (int i = 0; i < n; i++) {
-			if (adjList[i].size() > 0) {
-				ListIterator<Character> iterator = adjList[i].listIterator();
-				while (iterator.hasNext())
-					indegree[charToInt(iterator.next())]++;
-			}
-		}
-		return indegree;
-	}
-
-	public int charToInt(char ch) {
-		return (int) (ch - 'a');
-	}
-
-	public char intToChar(int d) {
-		return (char) ('a' + d);
-	}
 }

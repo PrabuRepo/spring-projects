@@ -10,13 +10,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
-import com.common.model.EdgeNode;
-import com.common.model.UndirectedGraphNode;
 import com.common.utilities.DisjointSet;
 
 /*
@@ -31,201 +28,10 @@ import com.common.utilities.DisjointSet;
  */
 public class GraphProblems {
 	/******************************* Type1: Graph DS Problems *****************/
-	// Clone an Undirected Graph
-	// Using BFS traversal to clone the graph
-	public UndirectedGraphNode cloneGraph1(UndirectedGraphNode root) {
-		if (root == null)
-			return null;
-		Queue<UndirectedGraphNode> queue = new LinkedList<>();
-		UndirectedGraphNode rootNode, clonedNeighNode, curr;
-		HashMap<UndirectedGraphNode, UndirectedGraphNode> map = new HashMap<>();
-		map.put(root, new UndirectedGraphNode(root.label));
-		queue.add(root);
-		while (!queue.isEmpty()) {
-			curr = queue.poll();
-			rootNode = map.get(curr);
-			for (UndirectedGraphNode neighbor : curr.neighbors) {
-				clonedNeighNode = map.get(neighbor);
-				if (clonedNeighNode == null) {
-					clonedNeighNode = new UndirectedGraphNode(neighbor.label);
-					map.put(neighbor, clonedNeighNode);
-					queue.add(neighbor);
-				}
-				rootNode.neighbors.add(clonedNeighNode);
-			}
-		}
-		return map.get(root);
-	}
-
-	// Using DFS traversal to clone the graph
-	HashMap<Integer, UndirectedGraphNode> graphMap = new HashMap<>();
-
-	public UndirectedGraphNode cloneGraph(UndirectedGraphNode root) {
-		if (root == null)
-			return null;
-		if (graphMap.containsKey(root.label))
-			return graphMap.get(root.label);
-		UndirectedGraphNode clone = new UndirectedGraphNode(root.label);
-		graphMap.put(clone.label, clone);
-		for (UndirectedGraphNode neigbhor : root.neighbors) {
-			clone.neighbors.add(cloneGraph(neigbhor));
-		}
-		return clone;
-	}
 
 	/******************************* Type2: Graph Cycle *****************/
-	// Using DFS algorithm
-	public boolean hasCycleInDirectedGraph(LinkedList<Integer>[] adjList, int n) {
-		boolean[] visited = new boolean[n];
-		boolean[] recursionStack = new boolean[n];
-		for (int i = 0; i < n; i++) {
-			if (!visited[i]) {
-				if (hasCycleInDirectedGraphUtil(adjList, i, visited, recursionStack))
-					return true;
-			}
-		}
-		return false;
-	}
 
-	public boolean hasCycleInDirectedGraphUtil(LinkedList<Integer>[] adjList, int vertex, boolean[] visited,
-			boolean[] recursionStack) {
-		if (recursionStack[vertex])
-			return true;
-		if (visited[vertex])
-			return false;
-		visited[vertex] = true;
-		recursionStack[vertex] = true;
-		if (adjList[vertex] != null) {
-			ListIterator<Integer> iter = adjList[vertex].listIterator();
-			while (iter.hasNext()) {
-				int adjVertex = iter.next();
-				if (hasCycleInDirectedGraphUtil(adjList, adjVertex, visited, recursionStack))
-					return true;
-			}
-		}
-		recursionStack[vertex] = false;
-		return false;
-	}
-
-	public boolean hasCycleInUndirectedGraph(LinkedList<Integer>[] adjList, int n) {
-		boolean[] visited = new boolean[n];
-		for (int i = 0; i < n; i++) {
-			if (!visited[i]) {
-				if (hasCycleInUndirectedGraphUtil(adjList, i, visited, -1))
-					return true;
-			}
-		}
-		return false;
-	}
-
-	// using DFS
-	private boolean hasCycleInUndirectedGraphUtil(LinkedList<Integer>[] adjList, int vertex, boolean[] visited,
-			int parent) {
-		visited[vertex] = true;
-		ListIterator<Integer> iter = adjList[vertex].listIterator();
-		while (iter.hasNext()) {
-			int adjVertex = iter.next();
-			if (!visited[adjVertex]) {
-				if (hasCycleInUndirectedGraphUtil(adjList, adjVertex, visited, vertex))
-					return true;
-			} else if (adjVertex != parent)
-				return true;
-		}
-		return false;
-	}
-
-	// Using DisjointSet: Union-Find Algorithm can be used to check whether an undirected graph contains cycle or no
-	public boolean hasCycleInUndirectedGraph(EdgeNode[] edges, int n, int e) {
-		DisjointSet ds = new DisjointSet(n);
-		for (int i = 0; i < n; i++)
-			ds.parent[i] = i;
-		for (int i = 0; i < e; i++) {
-			if (ds.union(edges[i].src, edges[i].src))
-				return true;
-		}
-		return false;
-	}
-
-	// Course Schedule I:
-	// Topo Sort - BFS Approach
-	public boolean canFinish(int courses, int[][] prerequisites) {
-		List<Integer>[] adjList = new LinkedList[courses];
-		Queue<Integer> queue = new LinkedList<>();
-		int[] indegree = new int[courses];
-		for (int i = 0; i < courses; i++)
-			adjList[i] = new LinkedList<>();
-		for (int[] pair : prerequisites) {
-			adjList[pair[0]].add(pair[1]);
-			indegree[pair[1]]++;
-		}
-		for (int i = 0; i < indegree.length; i++)
-			if (indegree[i] == 0)
-				queue.offer(i);
-		int count = 0;
-		while (!queue.isEmpty()) {
-			int course = queue.poll();
-			count++;
-			for (int adj : adjList[course])
-				if (--indegree[adj] == 0)
-					queue.offer(adj);
-		}
-		return count == courses;
-	}
-
-	// DFS Approach
-	public boolean canFinish2(int courses, int[][] preRequisites) {
-		if (courses == 0 || preRequisites.length == 0)
-			return true;
-		LinkedList<Integer>[] adjList = buildAdjListDirectedGraph(courses, preRequisites);
-		return !hasCycleInDirectedGraph(adjList, courses);
-	}
-
-	public LinkedList<Integer>[] buildAdjListDirectedGraph(int n, int[][] edges) {
-		if (n == 0 || edges.length == 0)
-			return null;
-		LinkedList<Integer>[] adjList = new LinkedList[n];
-		for (int i = 0; i < n; i++)
-			adjList[i] = new LinkedList<>();
-		for (int i = 0; i < edges.length; i++)
-			adjList[edges[i][0]].add(edges[i][1]);
-		return adjList;
-	}
-
-	/* Graph Valid Tree: Check if a given graph is tree or not
-	 * An undirected graph is tree if it has following properties. 
-	 *  1) There is no cycle.
-	 *  2) The graph is connected.
-	 */
-	public boolean isTree(int n, int[][] edges) {
-		if (n == 0 || edges.length == 0)
-			return false;
-		LinkedList<Integer>[] adjList = buildAdjListUndirectedGraph(n, edges);
-		boolean[] visited = new boolean[n];
-		boolean isCycle = hasCycleInUndirectedGraphUtil(adjList, 0, visited, -1);
-		if (!isCycle) {
-			for (int i = 0; i < n; i++)
-				if (!visited[i])
-					return false;
-		}
-		return !isCycle;
-	}
-
-	// d.Build undirected graph from given input(edges); where n - No of vertices, edges - Edge list
-	public LinkedList<Integer>[] buildAdjListUndirectedGraph(int n, int[][] edges) {
-		if (n == 0 || edges.length == 0)
-			return null;
-		LinkedList<Integer>[] adjList = new LinkedList[n];
-		for (int i = 0; i < n; i++)
-			adjList[i] = new LinkedList<>();
-		for (int i = 0; i < edges.length; i++) {
-			adjList[edges[i][0]].add(edges[i][1]);
-			adjList[edges[i][1]].add(edges[i][0]);
-		}
-		return adjList;
-	}
-
-	// Function returns the minimum number of swaps
-	// required to sort the array
+	// Function returns the minimum number of swaps required to sort the array
 	// Approach1: Using Graph
 	public int minSwaps(int[] arr) {
 		int n = arr.length;
@@ -255,34 +61,6 @@ public class GraphProblems {
 
 	/************************** Type3: Topo Sort(DFS/BFS(Kahn’s)) *******************/
 
-	// Course Schedule II: Using topo sort(reverse)
-	public int[] findOrder(int courses, int[][] preReq) {
-		if (courses == 0)
-			return null;
-		int indegree[] = new int[courses], order[] = new int[courses], index = 0;
-		for (int i = 0; i < preReq.length; i++)
-			indegree[preReq[i][0]]++;
-		Queue<Integer> queue = new LinkedList<Integer>();
-		for (int i = 0; i < courses; i++)
-			if (indegree[i] == 0) {
-				order[index++] = i;
-				queue.offer(i);
-			}
-		while (!queue.isEmpty()) {
-			int prerequisite = queue.poll();
-			for (int i = 0; i < preReq.length; i++) {
-				if (preReq[i][1] == prerequisite) {
-					indegree[preReq[i][0]]--;
-					if (indegree[preReq[i][0]] == 0) {
-						order[index++] = preReq[i][0];
-						queue.offer(preReq[i][0]);
-					}
-				}
-			}
-		}
-		return (index == courses) ? order : new int[0];
-	}
-
 	/*
 	 * 7.Build Order: You are given a list of projects and a list of dependencies (which is a list of pairs of projects, where the 
 	 * second project is dependent on the first project). All of a project's dependencies must be built before the project is. 
@@ -306,11 +84,6 @@ public class GraphProblems {
 	}
 
 	// Kahn’s algorithm for Topological Sorting
-	/*	A DAG G has at least one vertex with in-degree 0 and one vertex with out-degree 0.
-		Proof: There’s a simple proof to the above fact is that a DAG does not contain a cycle which means that all paths will be of finite length.
-		       Now let S be the longest path from u(source) to v(destination). Since S is the longest path there can be no incoming edge to u and 
-		       no outgoing edge from v, if this situation had occurred then S would not have been the longest path
-		=> indegree(u) = 0 and outdegree(v) = 0*/
 	public void topoSortUsingIndegree2(LinkedList<Character>[] adjList, int n) {
 		Queue<Character> queue = new LinkedList<>();
 		ArrayList<Character> linearOrder = new ArrayList<>();
@@ -358,69 +131,11 @@ public class GraphProblems {
 		return (char) ('a' + d);
 	}
 
-	/*
-	 * Given a sorted dictionary of an alien language, find order of characters Given a sorted dictionary (array of words)
-	 * of an alien language, find order of characters in the language.
-	 * 
-	 * Solution using Topological Sort - Rewrite this
-	 */
-	public void alienDictionary(String[] words, int n) {
-		LinkedList<Integer>[] adjList = new LinkedList[n];
-		for (int i = 0; i < n; i++)
-			adjList[i] = new LinkedList<>();
-		for (int i = 0; i < words.length - 1; i++) {
-			String words1 = words[i];
-			String words2 = words[i + 1];
-			int j = 0;
-			while (j < Math.min(words1.length(), words2.length())) {
-				if (words1.charAt(j) != words2.charAt(j)) {
-					adjList[words1.charAt(j) - 'a'].add(words2.charAt(j) - 'a');
-					break;
-				}
-				j++;
-			}
-		}
-		// Topological sort
-		boolean[] visited = new boolean[n];
-		Stack<Integer> stack = new Stack<>();
-		for (int i = 0; i < n; i++)
-			if (!visited[i])
-				topoSortUtil(adjList, i, visited, stack);
-		while (!stack.isEmpty())
-			System.out.print((char) (stack.pop() + 'a') + "-");
-	}
+	// Tasks Scheduling
+	// Tasks Scheduling Order
+	// All Tasks Scheduling Orders
 
-	private void topoSortUtil(LinkedList<Integer>[] adjList, int v, boolean[] visited, Stack<Integer> stack) {
-		visited[v] = true;
-		ListIterator<Integer> listIterator = adjList[v].listIterator();
-		while (listIterator.hasNext()) {
-			int next = listIterator.next();
-			if (!visited[next])
-				topoSortUtil(adjList, next, visited, stack);
-		}
-		stack.push(v);
-	}
-
-	// Reconstruct Itinerary
-	public List<String> findItinerary(String[][] tickets) {
-		Map<String, PriorityQueue<String>> map = new HashMap<>();
-		for (String[] ticket : tickets) {
-			if (map.get(ticket[0]) == null)
-				map.put(ticket[0], new PriorityQueue<>());
-			map.get(ticket[0]).add(ticket[1]);
-		}
-		LinkedList<String> result = new LinkedList<>();
-		reconstructItinerary("JFK", map, result);
-		return result;
-	}
-
-	// Using DFS, but remove the visted data from the priority queue
-	public void reconstructItinerary(String s, Map<String, PriorityQueue<String>> map, LinkedList<String> result) {
-		PriorityQueue<String> queue = map.get(s);
-		while (queue != null && !queue.isEmpty())
-			reconstructItinerary(queue.poll(), map, result);
-		result.addFirst(s);
-	}
+	// Reconstructing a Sequence
 
 	/***************** Type4: Graph Traversals(BFS/DFS/UF) **************************/
 
@@ -469,6 +184,20 @@ public class GraphProblems {
 			leaves = newLeaves;
 		}
 		return leaves;
+	}
+
+	// d.Build undirected graph from given input(edges); where n - No of vertices, edges - Edge list
+	public LinkedList<Integer>[] buildAdjListUndirectedGraph(int n, int[][] edges) {
+		if (n == 0 || edges.length == 0)
+			return null;
+		LinkedList<Integer>[] adjList = new LinkedList[n];
+		for (int i = 0; i < n; i++)
+			adjList[i] = new LinkedList<>();
+		for (int i = 0; i < edges.length; i++) {
+			adjList[edges[i][0]].add(edges[i][1]);
+			adjList[edges[i][1]].add(edges[i][0]);
+		}
+		return adjList;
 	}
 
 	// Same Solution, but Graph represented using Set instead of array
