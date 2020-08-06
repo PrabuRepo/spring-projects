@@ -1,4 +1,4 @@
-package com.consolidated.problems.design;
+package com.consolidated.problems.design.sd;
 
 import java.util.HashSet;
 import java.util.LinkedList;

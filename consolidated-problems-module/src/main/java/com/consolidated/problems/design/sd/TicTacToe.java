@@ -1,4 +1,4 @@
-package com.consolidated.problems.design;
+package com.consolidated.problems.design.sd;
 
 /* Design Tic-Tac-Toe:
  * Design a Tic-tac-toe game that is played between two players on a n x n grid. You may assume the following rules: A

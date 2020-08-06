@@ -1,10 +1,7 @@
 package com.consolidated.problems.algorithms;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.PriorityQueue;
@@ -12,380 +9,12 @@ import java.util.Stack;
 import java.util.TreeMap;
 
 import com.common.model.HuffmanCode;
-import com.common.model.Interval;
-import com.common.utilities.Utils;
 
 public class GreedyAlgorithms {
 
-	/***************************************** Type1: Interval Problems **************************/
-	/* Activity Selection Problem:
-	 *  Select the maximum number of activities that can be performed by a single person, assuming that a person can only work
-	 *  on a single activity at a time.
-	 *  
-	 *  Time Complexity: O(nlogn)
-	 */
-	public int maxActivities(int[] start, int[] end) {
-		if (start.length == 0 || end.length == 0)
-			return 0;
-		int n = start.length;
-
-		// Construct Interval Object;
-		Interval[] intervals = new Interval[n];
-		for (int i = 0; i < n; i++)
-			intervals[i] = new Interval(start[i], end[i]);
-
-		// Sort based on end time
-		Arrays.sort(intervals, (a, b) -> (a.end - b.end));
-
-		int activityCount = 1, l = 0, r = 1;
-		while (r < n) {
-			if (intervals[l].end <= intervals[r].start) {
-				activityCount++;
-				l = r;
-			}
-			r++;
-		}
-
-		return activityCount;
-	}
-
-	/*
-	 * Max length chain/Maximum Length of Pair Chain: 
-	 * Time Complexity: O(nlogn)
-	 */
-	public int findLongestChain(int[][] pairs) {
-		int count = 1, i = 0, j = 1;
-		Arrays.sort(pairs, (a, b) -> a[0] - b[0]);
-		while (i < pairs.length && j < pairs.length) {
-			if (pairs[i][1] < pairs[j][0]) {
-				count++;
-				i = j;
-				j++;
-			} else {
-				if (pairs[i][1] > pairs[j][1])
-					i = j;
-				j++;
-			}
-		}
-
-		return count;
-	}
-
-	/*
-	 * N meetings in one room:
-	 *   There are n meetings in the form of (S [ i ], F [ i ]) where S [ i ] is start time of meeting i and F [ i ] is finish time 
-	 *  of meeting i.What is the maximum number of meetings that can be accommodated in the meeting room?
-	 *  
-	 */
-	// Similar to Activity Selection Problem -2
-	public void findMeetingsInOneRoom(int[] start, int[] end) {
-		if (start.length == 0 || end.length == 0)
-			return;
-		int n = start.length;
-		// Construct Interval Object;
-		Interval[] intervals = new Interval[n];
-		for (int i = 0; i < n; i++)
-			intervals[i] = new Interval(start[i], end[i], i + 1);
-
-		// Sort based on end time
-		Arrays.sort(intervals, (a, b) -> (a.end - b.end));
-
-		int l = 0, r = 1;
-		System.out.print(intervals[l].order + " ");
-		while (r < n) { // Starting Index
-			if (intervals[l].end <= intervals[r].start) {
-				System.out.print(intervals[r].order + " ");
-				l = r;
-			}
-			r++;
-		}
-
-	}
-
-	/* Meeting Rooms I: 
-	 * Given an array of meeting time intervals consisting of start and end times [[s1,e1],[s2,e2],...]
-	 * (si<ei), determine if a person could attend all meetings. For example, Given [[0, 30],[5, 10],[15, 20]], return
-	 * false.
-	 */
-	public boolean canAttendAllMeetings(Interval[] intervals) {
-		if (intervals.length <= 1)
-			return true;
-
-		Arrays.sort(intervals, (ob1, ob2) -> ob1.start - ob2.start);
-
-		for (int i = 0; i < intervals.length - 1; i++) {
-			if (intervals[i].end > intervals[i + 1].start)
-				return false;
-		}
-		return true;
-	}
-
-	/* Meeting Rooms II:
-	 * Given an array of meeting time intervals consisting of start and end times [[s1,e1],[s2,e2],...] find the minimum
-	 * number of conference rooms required.
-	 */
-	// Approach1: Greedy Algorithm:
-	public int minMeetingRooms1(Interval[] intervals) {
-		if (intervals == null || intervals.length == 0)
-			return 0;
-
-		int len = intervals.length;
-		int[] startTime = new int[len];
-		int[] endTime = new int[len];
-
-		for (int i = 0; i < len; i++) {
-			Interval curr = intervals[i];
-			startTime[i] = curr.start;
-			endTime[i] = curr.end;
-		}
-
-		// Sort the start and end time
-		Arrays.sort(startTime);
-		Arrays.sort(endTime);
-
-		int activeMeetings = 0, numMeetingRooms = 0, i = 0, j = 0;
-		while (i < len && j < len) {
-			if (startTime[i] < endTime[j]) {
-				activeMeetings++;
-				numMeetingRooms = Math.max(numMeetingRooms, activeMeetings);
-				i++;
-			} else {
-				activeMeetings--;
-				j++;
-			}
-		}
-		return numMeetingRooms;
-	}
-
-	// Approach2: Using Heap
-	public int minMeetingRooms2(Interval[] intervals) {
-		if (intervals == null || intervals.length == 0)
-			return 0;
-
-		Arrays.sort(intervals, (ob1, ob2) -> ob1.start - ob2.start);
-
-		PriorityQueue<Integer> queue = new PriorityQueue<>();
-		queue.add(intervals[0].end);
-		int count = 1;
-		for (int i = 1; i < intervals.length - 1; i++) {
-			if (intervals[i].start < queue.peek()) {
-				count++;
-			} else {
-				queue.poll();
-			}
-			queue.add(intervals[i].end);
-		}
-		return count;
-	}
-
-	// Approach2: Using TreeMap:
-	public int minMeetingRooms3(Interval[] intervals) {
-		if (intervals == null || intervals.length == 0) {
-			return 0;
-		}
-
-		TreeMap<Integer, Integer> timesMap = new TreeMap<>(); // Here treeMap sorts the time in asc order
-		for (Interval i : intervals) {
-			timesMap.put(i.start, timesMap.getOrDefault(i.start, 0) + 1);
-			timesMap.put(i.end, timesMap.getOrDefault(i.end, 0) - 1);
-		}
-
-		int count = 0, res = 0;
-		for (int c : timesMap.values()) {
-			count += c;
-			res = Math.max(res, count);
-		}
-
-		return res;
-	}
-
-	/* Minimum Platforms:
-	 * Given arrival and departure times of all trains that reach a railway station. Your task is to find the minimum
-	 * number of platforms required for the railway station so that no train waits. Note: Consider that all the trains
-	 * arrive on the same day and leave on the same day. Also, arrival and departure times must not be same for a train.
-	 */
-	// Using Simple Greedy Alg:
-	public int minPlatformRequired1(int[][] arr, int[][] dep) {
-		if (arr.length == 0)
-			return 0;
-
-		// arr, dep has 2 dim array, 0th index has time, 1st index has order/seq of the train
-		Arrays.sort(arr, (a, b) -> a[0] - b[0]);
-		Arrays.sort(dep, (a, b) -> a[0] - b[0]);
-
-		int platform = 1, i = 1, j = 0, result = 1;
-		// Merge
-		while (i < arr.length && j < dep.length) {
-			// Additional 'or' condition to handle the train arrives & departure at the same time
-			if (arr[i][0] < dep[j][0] || (arr[i][0] == dep[j][0] && arr[i][1] == dep[j][1])) {
-				platform++;
-				i++;
-				result = Math.max(result, platform);
-			} else {
-				platform--;
-				j++;
-			}
-		}
-
-		return result;
-	}
-
-	// Approach2: Using TreeMap
-	public static int minPlatformRequired2(int[] arrv, int[] dep) {
-		if (arrv.length == 0)
-			return 0;
-
-		TreeMap<Integer, Integer> map = new TreeMap<>();
-
-		for (int i = 0; i < arrv.length; i++) {
-			map.put(arrv[i], map.getOrDefault(arrv[i], 0) + 1);
-			map.put(dep[i], map.getOrDefault(dep[i], 0) - 1);
-		}
-
-		int noOfPlatform = 0, count = 0;
-		for (int key : map.keySet()) {
-			count += map.get(key);
-			noOfPlatform = Math.max(noOfPlatform, count);
-		}
-		return noOfPlatform;
-	}
-
-	/* Insert Interval:
-	 * Given a set of non-overlapping intervals, insert a new interval into the intervals (merge if necessary). You may
-	 * assume that the intervals were initially sorted according to their start times.
-	 * Example: Input: intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]
-	 *          Output: [[1,2],[3,10],[12,16]] Explanation: Because the new interval [4,8] overlaps with [3,5],[6,7],[8,10].
-	 */
-	// Approach1:
-	public List<Interval> insert1(List<Interval> intervals, Interval newInterval) {
-		List<Interval> result = new ArrayList<>();
-		// All the comments based on new Interval perspective
-		for (Interval interval : intervals) {
-			if (interval.end < newInterval.start) { // Right New Interval(No Overlap)->Eg:
-													// interval:(1,2),newInterval:(4,8)
-				result.add(interval);
-			} else if (interval.start > newInterval.end) { // Left New Interval(No Overlap) -> Eg:
-															// interval:(3,10),newInterval:(12,16)
-				result.add(newInterval);
-				newInterval = interval;
-			} else if (interval.start <= newInterval.end || interval.end >= newInterval.start) {
-				// Eg: RightOverLap->intl:(3,5),newIntl:(4,8) & LeftOverLap:intl:(6,8),newIntl:(4,7)
-				// Eg: TotalOverLap->intl:(6,7),newIntl:(3,8) & intl:(2,10),newIntl:(5,7)
-				newInterval = new Interval(Math.min(interval.start, newInterval.start),
-						Math.max(interval.end, newInterval.end));
-			}
-		}
-		result.add(newInterval);
-		return result;
-	}
-
-	// Approach2: Simplified Code: No need to use additional memory. In place solution with little bit change.
-	public List<Interval> insert(List<Interval> intervals, Interval newInterval) {
-		int i = 0;
-		while (i < intervals.size() && intervals.get(i).end < newInterval.start)
-			i++;
-		while (i < intervals.size() && intervals.get(i).start <= newInterval.end) {
-			newInterval = new Interval(Math.min(intervals.get(i).start, newInterval.start),
-					Math.max(intervals.get(i).end, newInterval.end));
-			intervals.remove(i);
-		}
-		intervals.add(i, newInterval);
-		return intervals;
-	}
-
-	// Approach3: Similar to Appraoch1; Binary Search:The best time is O(log(n)) and worst case time is O(n).
-	public List<Interval> insert3(List<Interval> intervals, Interval newInterval) {
-		List<Interval> result = new ArrayList<>();
-
-		if (intervals.size() == 0) {
-			result.add(newInterval);
-			return result;
-		}
-		// Binary Search is used to find the starting position to insert the interval
-		int startingIndex = binarySearch(intervals, newInterval);
-		// Add all the intervals before the startinIndex in the result list
-		result.addAll(intervals.subList(0, startingIndex));
-
-		for (int i = startingIndex; i < intervals.size(); i++) {
-			Interval interval = intervals.get(i);
-			if (interval.end < newInterval.start) {
-				result.add(interval);
-			} else if (interval.start > newInterval.end) {
-				result.add(newInterval);
-				newInterval = interval;
-			} else if (interval.end >= newInterval.start || interval.start <= newInterval.end) {
-				newInterval = new Interval(Math.min(interval.start, newInterval.start),
-						Math.max(newInterval.end, interval.end));
-			}
-		}
-
-		result.add(newInterval);
-
-		return result;
-	}
-
-	public int binarySearch(List<Interval> intervals, Interval newInterval) {
-		int low = 0;
-		int high = intervals.size() - 1;
-
-		while (low < high) {
-			int mid = low + (high - low) / 2;
-
-			if (newInterval.start <= intervals.get(mid).start) {
-				high = mid;
-			} else {
-				low = mid + 1;
-			}
-		}
-
-		return high == 0 ? 0 : high - 1;
-	}
-
-	/*
-	 * Merge Intervals:
-	 * Given a collection of intervals, merge all overlapping intervals.
-	 * Example 1: Input: [[1,3],[2,6],[8,10],[15,18]]; Output: [[1,6],[8,10],[15,18]]
-	 */
-	public List<Interval> merge(List<Interval> intervals) {
-		if (intervals.size() <= 1)
-			return intervals;
-
-		Collections.sort(intervals, Comparator.comparing(i -> i.start));
-
-		// Merge the overlapping intervals
-		List<Interval> result = new ArrayList<>();
-		Interval prevInterval = intervals.get(0);
-		for (int i = 1; i < intervals.size(); i++) {
-			Interval currInterval = intervals.get(i);
-			if (prevInterval.end >= currInterval.start) {
-				prevInterval.end = Math.max(currInterval.end, prevInterval.end);
-			} else {
-				result.add(prevInterval);
-				prevInterval = currInterval;
-			}
-		}
-		result.add(prevInterval);
-
-		return result;
-	}
-
-	/*
-	 * Non-overlapping Intervals
-	 * Given a collection of intervals, find the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
-	 * Input: [ [1,2], [2,3], [3,4], [1,3] ]	Output: 1
-	 * Explanation: [1,3] can be removed and the rest of intervals are non-overlapping.
-	 */
-	public int eraseOverlapIntervals(Interval[] intervals) {
-		Arrays.sort(intervals, Comparator.comparingInt(i -> i.end));
-		int max = 0, lastend = Integer.MIN_VALUE;
-		for (Interval in : intervals) {
-			if (lastend <= in.start) {
-				lastend = in.end;
-				max++;
-			}
-		}
-		return intervals.length - max;
-	}
+	/************************* Type1: Sweepline ***************************/
+	//TODO: Time Intersection
+	//TODO: Number of Airplanes in the Sky
 
 	/*************************** Type2: Optimal Solution Problem ******************/
 	/* Minimum number of Coins:
@@ -447,36 +76,29 @@ public class GreedyAlgorithms {
 		return minDiff;
 	}
 
-	/*************************** Type3: Possibilities ******************/
-	/*Largest Number: 
-	 * Given a list of non negative integers, arrange them such that they form the largest number.
-	 * Example 1: Input: [10,2]; Output: "210"; 
-	 * Example 2: Input: [3,30,34,5,9]; Output: "9534330"
+	/*
+	 * Max length chain/Maximum Length of Pair Chain: 
+	 * Time Complexity: O(nlogn)
 	 */
-	public String largestNumber(int[] nums) {
-		if (nums.length == 0)
-			return "0";
-
-		String[] arr = new String[nums.length];
-		for (int i = 0; i < nums.length; i++)
-			arr[i] = String.valueOf(nums[i]);
-
-		Arrays.sort(arr, new Comparator<String>() {
-			public int compare(String a, String b) {
-				return (b + a).compareTo(a + b);
+	public int findLongestChain(int[][] pairs) {
+		int count = 1, i = 0, j = 1;
+		Arrays.sort(pairs, (a, b) -> a[0] - b[0]);
+		while (i < pairs.length && j < pairs.length) {
+			if (pairs[i][1] < pairs[j][0]) {
+				count++;
+				i = j;
+				j++;
+			} else {
+				if (pairs[i][1] > pairs[j][1])
+					i = j;
+				j++;
 			}
-		});
+		}
 
-		StringBuilder sb = new StringBuilder();
-
-		for (int i = 0; i < arr.length; i++)
-			sb.append(arr[i]);
-
-		while (sb.charAt(0) == '0' && sb.length() > 1)
-			sb.deleteCharAt(0);
-
-		return sb.toString();
+		return count;
 	}
+
+	/****************************** Type3: Possibilities ****************************/
 
 	/*
 	 * Largest number possible:
@@ -514,9 +136,10 @@ public class GreedyAlgorithms {
 
 		int l = 0, h = 0, maxIndex = digits.length - 1;
 		for (int i = digits.length - 2; i >= 0; i--) {
-			if (digits[i] == digits[maxIndex]) {
+			if (digits[i] == digits[maxIndex])
 				continue;
-			} else if (digits[i] > digits[maxIndex]) {
+
+			if (digits[i] > digits[maxIndex]) {
 				maxIndex = i;
 			} else {
 				h = maxIndex;
@@ -531,30 +154,6 @@ public class GreedyAlgorithms {
 		}
 
 		return Integer.valueOf(new String(digits));
-	}
-
-	// Approach2:
-	public int maximumSwap2(int num) {
-		char[] chars = Integer.toString(num).toCharArray();
-		int maxIndex = chars.length - 1;
-		int x = 0, y = 0;
-		for (int i = chars.length - 2; i >= 0; i--) {
-			if (chars[maxIndex] == chars[i])
-				continue;
-
-			if (chars[maxIndex] < chars[i]) {
-				maxIndex = i;
-			} else {
-				x = maxIndex;
-				y = i;
-			}
-		}
-
-		char temp = chars[x];
-		chars[x] = chars[y];
-		chars[y] = temp;
-
-		return Integer.valueOf(new String(chars));
 	}
 
 	/* Create Maximum Number:
@@ -656,27 +255,6 @@ public class GreedyAlgorithms {
 		return sb.length() == 0 ? "0" : sb.toString();
 	}
 
-	/* Patching Array:
-	 * Given a sorted positive integer array nums and an integer n, add/patch elements to the array such that any number
-	 * in range [1, n] inclusive can be formed by the sum of some elements in the array. Return the minimum number of 
-	 * patches required.
-	 * Input: nums = [1,3], n = 6; Output: 1
-	 * Input: nums = [1,5,10], n = 20; Output: 2  
-	 */
-	public int minPatches(int[] nums, int n) {
-		int i = 0, count = 0;
-		long sum = 1;
-		while (sum <= n) {
-			if (i < nums.length && sum >= nums[i]) {
-				sum += nums[i++];
-			} else {
-				sum += sum; // or miss <<= 1;
-				count++; // Number of values added or patched
-			}
-		}
-		return count;
-	}
-
 	/*Find Permutation:
 	 * By now, you are given a secret signature consisting of character 'D' and 'I'. 'D' represents a decreasing
 	 * relationship between two numbers, 'I' represents an increasing relationship between two numbers. And our secret
@@ -751,42 +329,50 @@ public class GreedyAlgorithms {
 	 * 1,1,5 -> 1,5,1
 	 */
 
+	//Time: O(n), Space: O(1)
 	public void nextPermutation(int[] nums) {
-		// find two adjacent elements, n[i-1] < n[i]
+		if (nums.length <= 1)
+			return;
+
 		int i = nums.length - 1;
-		for (; i > 0; i--)
-			if (nums[i] > nums[i - 1])
+		//1.Find first increasing seq from the right
+		while (i > 0) {
+			if (nums[i - 1] < nums[i])
 				break;
+			i--;
+		}
 
-		if (i != 0) {
-			// swap (i-1, min), where min is index of the smallest number in [i, n)
-			int minIndex = nums.length - 1;
-			for (; minIndex >= i; minIndex--)
-				if (nums[minIndex] > nums[i - 1])
+		if (i > 0) {
+			//2.Find first max value which is greater than (i-1)th index value from the last index.
+			int maxIndex = nums.length - 1;
+			while (maxIndex >= i) {
+				if (nums[maxIndex] > nums[i - 1])
 					break;
-
-			Utils.swap(nums, i - 1, minIndex);
-		}
-		reverse(nums, i, nums.length - 1);
-	}
-
-	/*************************** Type4: Other Greedy Problems -Revisit this ******************/
-	/*
-	 * Queue Reconstruction by Height:
-	 */
-	//Ref: https://leetcode.com/problems/queue-reconstruction-by-height/discuss/672958/Problem-Explanation-or-Detailed-Steps-Solution-or-Simple-or-Using-Sorting
-	public int[][] reconstructQueue(int[][] people) {
-		// sort array using Arrays.sort with custom comparator
-		Arrays.sort(people, (p1, p2) -> p1[0] == p2[0] ? p1[1] - p2[1] : p2[0] - p1[0]);
-
-		List<int[]> list = new ArrayList<>();
-		for (int i = 0; i < people.length; i++) {
-			list.add(people[i][1], people[i]); // placing people based on the K value
+				maxIndex--;
+			}
+			swap(nums, i - 1, maxIndex);
 		}
 
-		return list.toArray(people); // convert list to array
+		//3.Reverse the values from index i to n-1;
+		reverse(nums, i);
 	}
 
+	private void swap(int[] arr, int i, int j) {
+		int tmp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = tmp;
+	}
+
+	private void reverse(int[] nums, int l) {
+		int h = nums.length - 1;
+		while (l < h) {
+			swap(nums, l, h);
+			l++;
+			h--;
+		}
+	}
+
+	/*************************** Type4: Other Greedy Problems ******************/
 	/*
 	 * Huffman Coding & Decoding:
 	 *    Huffman coding is a lossless data compression algorithm. The idea is to assign variable-length codes to input characters, 

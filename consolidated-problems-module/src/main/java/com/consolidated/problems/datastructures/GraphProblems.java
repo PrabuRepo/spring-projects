@@ -453,7 +453,7 @@ public class GraphProblems {
 	/* Find no of disconnected components in the graph. It can be solved using DFS, BFS & Union-Find
 	 * Number of Connected Components in an Undirected Graph (Java)
 	 */
-	// 1.i.Using DFS algorithm(Adjacency List)
+	// 1.Using DFS algorithm(Adjacency List)
 	public int disConnectedGraphDFS(LinkedList<Integer>[] adjList, int n, int s) {
 		boolean[] visited = new boolean[n];
 		int groups = 0;
@@ -479,33 +479,7 @@ public class GraphProblems {
 		}
 	}
 
-	// 1.ii.Using DFS algorithm(Adjacency Matrix)
-	public int disConnectedGraphDFS(int[][] adjMatrix, int n) {
-		if (adjMatrix.length == 0)
-			return 0;
-		int groups = 0;
-		boolean[] visited = new boolean[n];
-		for (int i = 0; i < n; i++) {
-			if (!visited[i]) {
-				groups++;
-				dfsUtil(adjMatrix, visited, i);
-			}
-		}
-		return groups;
-	}
-
-	public void dfsUtil(int[][] adjMatrix, boolean[] visited, int v) {
-		int n = adjMatrix.length;
-		visited[v] = true;
-		System.out.print(v + "-");
-		for (int j = 0; j < n; j++) {
-			if (!visited[j] && j != v && adjMatrix[v][j] == 1) {
-				dfsUtil(adjMatrix, visited, j);
-			}
-		}
-	}
-
-	// 2.i.Using BFS algorithm(Adjacency List)
+	// 2.Using BFS algorithm(Adjacency List)
 	public int disConnectedGraphBFS(LinkedList<Integer>[] adjList, int n, int s) {
 		boolean[] visited = new boolean[n];
 		int groups = 0;
@@ -533,36 +507,6 @@ public class GraphProblems {
 					visited[next] = true;
 					queue.add(next);
 				}
-			}
-		}
-	}
-
-	// 2.ii.Using BFS algorithm(Adjacency Matrix)
-	public int disConnectedGraphBFS(int[][] adjMatrix, int n) {
-		if (adjMatrix.length == 0)
-			return 0;
-		int groups = 0;
-		boolean[] visited = new boolean[n];
-		for (int i = 0; i < n; i++) {
-			if (!visited[i]) {
-				groups++;
-				bfsUtil(adjMatrix, visited, i);
-			}
-		}
-		return groups;
-	}
-
-	public void bfsUtil(int[][] adjMatrix, boolean[] visited, int v) {
-		int n = adjMatrix.length;
-		Queue<Integer> queue = new LinkedList<>();
-		queue.add(v);
-		while (!queue.isEmpty()) {
-			int top = queue.poll();
-			visited[top] = true;
-			System.out.print(top + "-");
-			for (int j = 0; j < n; j++) {
-				if (!visited[j] && j != v && adjMatrix[top][j] == 1)
-					queue.add(j);
 			}
 		}
 	}
@@ -618,11 +562,67 @@ public class GraphProblems {
 		if (M.length == 0 || M[0].length == 0)
 			return 0;
 		// DFS
-		return disConnectedGraphDFS(M, M.length);
+		//return disConnectedGraphDFS(M, M.length);
 		// BFS
-		// return disConnectedGraphBFS(M, M.length);
+		//return disConnectedGraphBFS(M, M.length);
 		// UF
-		// return disConnectedGraphUF(M);
+		return disConnectedGraphUF(M);
+	}
+
+	// 1.Using DFS algorithm(Adjacency Matrix)
+	public int disConnectedGraphDFS(int[][] adjMatrix, int n) {
+		if (adjMatrix.length == 0)
+			return 0;
+		int groups = 0;
+		boolean[] visited = new boolean[n];
+		for (int i = 0; i < n; i++) {
+			if (!visited[i]) {
+				groups++;
+				dfsUtil(adjMatrix, visited, i);
+			}
+		}
+		return groups;
+	}
+
+	public void dfsUtil(int[][] adjMatrix, boolean[] visited, int v) {
+		int n = adjMatrix.length;
+		visited[v] = true;
+		System.out.print(v + "-");
+		for (int j = 0; j < n; j++) {
+			if (!visited[j] && j != v && adjMatrix[v][j] == 1) {
+				dfsUtil(adjMatrix, visited, j);
+			}
+		}
+	}
+
+	// 2.ii.Using BFS algorithm(Adjacency Matrix)
+	public int disConnectedGraphBFS(int[][] adjMatrix, int n) {
+		if (adjMatrix.length == 0)
+			return 0;
+		int groups = 0;
+		boolean[] visited = new boolean[n];
+		for (int i = 0; i < n; i++) {
+			if (!visited[i]) {
+				groups++;
+				bfsUtil(adjMatrix, visited, i);
+			}
+		}
+		return groups;
+	}
+
+	public void bfsUtil(int[][] adjMatrix, boolean[] visited, int v) {
+		int n = adjMatrix.length;
+		Queue<Integer> queue = new LinkedList<>();
+		queue.add(v);
+		while (!queue.isEmpty()) {
+			int top = queue.poll();
+			visited[top] = true;
+			System.out.print(top + "-");
+			for (int j = 0; j < n; j++) {
+				if (!visited[j] && j != v && adjMatrix[top][j] == 1)
+					queue.add(j);
+			}
+		}
 	}
 
 	/* Roads and Libraries: 

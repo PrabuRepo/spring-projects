@@ -1,14 +1,17 @@
 package com.consolidated.problems.algorithms;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.TreeMap;
 
+import com.common.model.Interval;
 import com.common.utilities.Utils;
 
 public class SortingAlgorithms {
 
-	/**************************************
-	 * Type1: Basic Problems
-	 *******************************************/
+	/************************* Type1: Basic Sorting Problems ************************************/
 	/*
 	 * Merge Sorted Array:Given two sorted integer arrays nums1 and nums2, merge nums2 into nums1 as one sorted array.
 	 */
@@ -44,9 +47,38 @@ public class SortingAlgorithms {
 		// System.out.println(Arrays.toString(nums1));
 	}
 
-	/**************************************
-	 * Type2: Rearrangement Problems
-	 *******************************************/
+	/*Largest Number: 
+	 * Given a list of non negative integers, arrange them such that they form the largest number.
+	 * Example 1: Input: [10,2]; Output: "210"; 
+	 * Example 2: Input: [3,30,34,5,9]; Output: "9534330"
+	 */
+	//Time:  O(nklogn), Space:O(n); where n is length of array and k is average length of String;
+	//Then compare 2 strings will take O(k).
+	public String largestNumber(int[] nums) {
+		if (nums.length == 0)
+			return "0";
+
+		String[] arr = new String[nums.length];
+		for (int i = 0; i < nums.length; i++)
+			arr[i] = String.valueOf(nums[i]);
+
+		Arrays.sort(arr, (a, b) -> (b + a).compareTo(a + b));
+
+		//After sorting if first value is zero, then all elements will be zero.
+		if (arr[0].charAt(0) == '0')
+			return "0";
+
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < arr.length; i++)
+			sb.append(arr[i]);
+
+		return sb.toString();
+	}
+
+	//TODO: Maximum Gap - Bucket Sort/Radix Sort
+	//TODO: Sort Big File/External Sort - Study this
+
+	/*********************** Type2: Rearrangement Problems **************************************/
 	// Sort Colors/Sort an array of 0s, 1s and 2s
 	// 1.Using count array - With additional space
 	public int[] sort012Approach1(int[] a) {
@@ -318,13 +350,102 @@ public class SortingAlgorithms {
 
 	// Relative Sorting - Sorting based on another array
 
-	/*********************************
-	 * Type3: Min no of swap required to sort array
-	 ************************/
+	/****************** Type3: Min no of swap required to sort array ***********************/
 
-	/********************************* Type4: Sorting Alg applications ************************/
+	/********************************* Type4: Cyclic Sort/Marker Alg ************************/
 
-	/************************************** Others *******************************************/
+	/********************* Type1: Interval Patterns - Selection Problems **************************/
+	/*
+	 * Max length chain/Maximum Length of Pair Chain: 
+	 * Time Complexity: O(nlogn)
+	 */
+	public int findLongestChain(int[][] pairs) {
+		int count = 1, i = 0, j = 1;
+		Arrays.sort(pairs, (a, b) -> a[0] - b[0]);
+		while (i < pairs.length && j < pairs.length) {
+			if (pairs[i][1] < pairs[j][0]) {
+				count++;
+				i = j;
+				j++;
+			} else {
+				if (pairs[i][1] > pairs[j][1])
+					i = j;
+				j++;
+			}
+		}
+
+		return count;
+	}
+
+	/******************** Type1: Interval Patterns - Interval Manipulations ***********************/
+
+	/* Data Stream as Disjoint Intervals:
+	 * Given a data stream input of non-negative integers a1, a2, ..., an, ..., summarize the numbers seen so far as a list
+	 * of disjoint intervals. For example, suppose the integers from the data stream are 1, 3, 7, 2, 6, ..., then the
+	 * summary will be: 
+	 * [1, 1] 
+	 * [1, 1], [3, 3] 
+	 * [1, 1], [3, 3], [7, 7] 
+	 * [1, 3], [7, 7] 
+	 * [1, 3], [6, 7]
+	 */
+	/** Initialize your data structure here. */
+	LinkedList<Integer> list = new LinkedList<>();
+	TreeMap<Integer, Interval> tree = new TreeMap<>();
+
+	// Brute Force Approach
+	public void addNum1(int val) {
+		/*list.add(val);
+		Collections.sort(list);*/
+		int i = 0;
+		for (i = 0; i < list.size(); i++) {
+			if (val == list.get(i))
+				return;
+			if (val < list.get(i)) {
+				list.add(i, val);
+				break;
+			}
+		}
+		if (list.isEmpty() || list.size() == i)
+			list.add(val);
+	}
+
+	public List<Interval> getIntervals1() {
+		List<Interval> intervals = new ArrayList<>();
+		for (int i = 0; i < list.size(); i++) {
+			int s = i;
+			while (i < list.size() - 1 && (list.get(i) + 1 == list.get(i + 1) || list.get(i) == list.get(i + 1)))
+				i++;
+
+			intervals.add(new Interval(list.get(s), list.get(i)));
+		}
+		return intervals;
+	}
+
+	public void addNum2(int val) {
+		if (tree.containsKey(val))
+			return;
+		Integer l = tree.lowerKey(val);
+		Integer h = tree.higherKey(val);
+		if (l != null && h != null && tree.get(l).end + 1 == val && h == val + 1) {
+			tree.get(l).end = tree.get(h).end;
+			tree.remove(h);
+		} else if (l != null && tree.get(l).end + 1 >= val) {
+			tree.get(l).end = Math.max(tree.get(l).end, val);
+		} else if (h != null && h == val + 1) {
+			tree.put(val, new Interval(val, tree.get(h).end));
+			tree.remove(h);
+		} else {
+			tree.put(val, new Interval(val, val));
+		}
+	}
+
+	public List<Interval> getIntervals2() {
+		return new ArrayList<>(tree.values());
+	}
+
+	//TODO: Move below problems to appropriate category
+
 	/*
 	 * Triplet Sum: Given 3 arrays a,b,c of different sizes, find the number of distinct triplets(p,q,r) 
 	 * where p is an element of a, written as p->a,q->b and r->c, satisfying the criteria: p<=q && q>=r.

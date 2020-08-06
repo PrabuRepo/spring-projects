@@ -16,6 +16,12 @@ import java.util.Stack;
 import com.problems.patterns.crossdomains.CloneProblems;
 import com.problems.patterns.crossdomains.WordProblems;
 
+/* Imp Note for Graph Problems:
+ * Use AdjList for the problems which has nodes starts from 0 to n-1.
+ * 	 - LinkedList Array and boolean array to track the visited nodes
+ * Use Map for irregular nodes like any random no, alphabet and string.
+ *   - Map<Key, Set<Type> and hashset to track the visited nodes
+ */
 public class GraphPatterns {
 
 	/*************************** Type1: Graph DS Problems *******************/

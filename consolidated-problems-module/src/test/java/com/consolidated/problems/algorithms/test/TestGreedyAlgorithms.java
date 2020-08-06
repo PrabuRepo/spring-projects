@@ -18,7 +18,8 @@ public class TestGreedyAlgorithms extends GreedyAlgorithms {
 
 	public static List<String> commonChars(String[] A) {
 		List<String> result = new ArrayList<>();
-		if (A.length == 0) return result;
+		if (A.length == 0)
+			return result;
 
 		int n = A.length;
 		int[] count = new int[26];
@@ -29,7 +30,8 @@ public class TestGreedyAlgorithms extends GreedyAlgorithms {
 		for (int i = 1; i < n; i++) {
 			String s = A[i];
 			for (int j = 0; j < s.length(); j++) {
-				if (count[s.charAt(j) - 'a'] != 0) count[s.charAt(j) - 'a']++;
+				if (count[s.charAt(j) - 'a'] != 0)
+					count[s.charAt(j) - 'a']++;
 			}
 		}
 
@@ -49,16 +51,16 @@ public class TestGreedyAlgorithms extends GreedyAlgorithms {
 	public void testIntervalProblems() {
 		int s[] = { 1, 3, 0, 5, 8, 5 };
 		int f[] = { 2, 4, 6, 7, 9, 9 };
-		System.out.println("Activity Selection Problem(Max no of Activites):" + maxActivities(s, f));
-
+		/*System.out.println("Activity Selection Problem(Max no of Activites):" + maxActivities(s, f));
+		
 		System.out.println("N meetings in one room: ");
 		findMeetingsInOneRoom(s, f);
-
+		
 		System.out.println("\nMeeting Rooms I: " + canAttendAllMeetings(mockIntervals()));
 		System.out.println("Meeting Rooms II: " + minMeetingRooms1(mockIntervals()));
 		int[] arrv = { 900, 920, 920, 950, 1100, 1500, 1800 };
 		int[] dep = { 910, 930, 1200, 1120, 1130, 1900, 2000 };
-		System.out.println("Min no of platforms required: " + minPlatformRequired2(arrv, dep));
+		System.out.println("Min no of platforms required: " + minPlatformRequired2(arrv, dep));*/
 	}
 
 	private Interval[] mockIntervals() {
