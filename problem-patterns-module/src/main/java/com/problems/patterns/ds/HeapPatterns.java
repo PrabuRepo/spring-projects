@@ -1142,9 +1142,9 @@ public class HeapPatterns {
 			return true;
 
 		if (root.right == null)
-			return (root.data > root.left.data);
+			return (root.val > root.left.val);
 
-		return (root.data >= root.left.data && root.data >= root.right.data) && isMaxBinaryHeap(root.left)
+		return (root.val >= root.left.val && root.val >= root.right.val) && isMaxBinaryHeap(root.left)
 				&& isMaxBinaryHeap(root.right);
 	}
 

@@ -16,7 +16,7 @@ public class BSTPatterns {
 	// 1.Serialize:Uses Tree to List
 	public ArrayList<Integer> serialize1(ArrayList<Integer> result, TreeNode root) {
 		if (root != null) {
-			result.add(root.data);
+			result.add(root.val);
 			serialize1(result, root.left);
 			serialize1(result, root.right);
 		}
@@ -28,7 +28,7 @@ public class BSTPatterns {
 		if (low > high)
 			return null;
 		TreeNode root = new TreeNode(preOrder[low]);
-		int mid = findRight(preOrder, root.data, low, high);
+		int mid = findRight(preOrder, root.val, low, high);
 		root.left = deserialize1(preOrder, low + 1, mid - 1);
 		root.right = deserialize1(preOrder, mid, high);
 		return root;
@@ -56,7 +56,7 @@ public class BSTPatterns {
 	public void serialize2(TreeNode root, StringBuilder sb) {
 		if (root == null)
 			return;
-		sb.append(root.data + ",");
+		sb.append(root.val + ",");
 		serialize2(root.left, sb);
 		serialize2(root.right, sb);
 	}
@@ -73,7 +73,7 @@ public class BSTPatterns {
 		if (l > h)
 			return null;
 		TreeNode root = new TreeNode(Integer.valueOf(str[l]));
-		int m = findMid(str, l, h, root.data);
+		int m = findMid(str, l, h, root.val);
 		root.left = deserialize2(str, l + 1, m - 1);
 		root.right = deserialize2(str, m, h);
 		return root;
@@ -134,9 +134,9 @@ public class BSTPatterns {
 
 	public TreeNode lowestCommonAncestor(TreeNode root, int data1, int data2) {
 		if (root != null) {
-			if (data1 < root.data && data2 < root.data) {
+			if (data1 < root.val && data2 < root.val) {
 				return lowestCommonAncestor(root.left, data1, data2);
-			} else if (data1 > root.data && data2 > root.data) {
+			} else if (data1 > root.val && data2 > root.val) {
 				return lowestCommonAncestor(root.right, data1, data2);
 			} else {
 				return root;
@@ -149,22 +149,22 @@ public class BSTPatterns {
 		if (root == null)
 			return -1;
 
-		if (key == root.data) {
+		if (key == root.val) {
 			TreeNode leftSubTree = root.left;
 			if (leftSubTree != null) {
 				// Find the next node in the left subtree(Pred should be present in the left sub tree)
 				while (leftSubTree.right != null)// Keep moving to right side, to find the prev(successor) node in BST
 					leftSubTree = leftSubTree.right;
-				return leftSubTree.data;
+				return leftSubTree.val;
 			} else {
 				return -1;
 			}
-		} else if (key < root.data) {
+		} else if (key < root.val) {
 			return inOrderPredecessor(root.left, key);
 		} else {
 			int pred = inOrderPredecessor(root.right, key);
 			if (pred == -1) // If there is no element in leftSubtree, then root element should be previous element
-				pred = root.data;
+				pred = root.val;
 			return pred;
 		}
 	}
@@ -173,19 +173,19 @@ public class BSTPatterns {
 		if (root == null)
 			return -1;
 
-		if (key == root.data) {
+		if (key == root.val) {
 			// Find the next node in the right subtree
 			TreeNode rightSubTree = root.right;
 			if (rightSubTree != null) {
 				while (rightSubTree.left != null)// Keep moving to left side, to find the next(successor) node in BST
 					rightSubTree = rightSubTree.left;
-				return rightSubTree.data;
+				return rightSubTree.val;
 			}
 			return -1;
-		} else if (key < root.data) {
+		} else if (key < root.val) {
 			int successor = inOrderSuccessor(root.left, key);
 			if (successor == -1) // If there is no element in rightSubtree, then root element should be next element
-				successor = root.data;
+				successor = root.val;
 			return successor;
 		} else {
 			return inOrderSuccessor(root.right, key);
@@ -208,17 +208,17 @@ public class BSTPatterns {
 		if (root == null)
 			return;
 		inorderTraversal(root.left);
-		if (firstNode == null && prevNode.data >= root.data)
+		if (firstNode == null && prevNode.val >= root.val)
 			firstNode = prevNode;
-		if (firstNode != null && prevNode.data >= root.data)
+		if (firstNode != null && prevNode.val >= root.val)
 			secondNode = root;
 		prevNode = root;
 		inorderTraversal(root.right);
 	}
 
 	public void swap(TreeNode node1, TreeNode node2) {
-		int temp = node1.data;
-		node1.data = node2.data;
-		node2.data = temp;
+		int temp = node1.val;
+		node1.val = node2.val;
+		node2.val = temp;
 	}
 }

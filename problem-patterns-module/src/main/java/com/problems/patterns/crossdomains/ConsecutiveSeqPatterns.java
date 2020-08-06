@@ -110,15 +110,15 @@ public class ConsecutiveSeqPatterns {
 	public int longestConsecutive(TreeNode root) {
 		if (root == null)
 			return 0;
-		return lcs(root, root.data, 0);
+		return lcs(root, root.val, 0);
 	}
 
 	private int lcs(TreeNode node, int next, int count) {
 		if (node == null)
 			return count;
 
-		count = (node.data == next) ? count + 1 : 1;
-		return Math.max(count, Math.max(lcs(node.left, node.data + 1, count), lcs(node.right, node.data + 1, count)));
+		count = (node.val == next) ? count + 1 : 1;
+		return Math.max(count, Math.max(lcs(node.left, node.val + 1, count), lcs(node.right, node.val + 1, count)));
 	}
 
 	/*
@@ -150,16 +150,16 @@ public class ConsecutiveSeqPatterns {
 		int inr = 1, dcr = 1;
 		if (root.left != null) {
 			int[] l = longestPath(root.left);
-			if (root.left.data == root.data - 1)
+			if (root.left.val == root.val - 1)
 				dcr = l[1] + 1;
-			else if (root.left.data == root.data + 1)
+			else if (root.left.val == root.val + 1)
 				inr = l[0] + 1;
 		}
 		if (root.right != null) {
 			int[] r = longestPath(root.right);
-			if (root.right.data == root.data - 1)
+			if (root.right.val == root.val - 1)
 				dcr = Math.max(dcr, r[1] + 1);
-			else if (root.right.data == root.data + 1)
+			else if (root.right.val == root.val + 1)
 				inr = Math.max(inr, r[0] + 1);
 		}
 		maxVal = Math.max(maxVal, dcr + inr - 1);

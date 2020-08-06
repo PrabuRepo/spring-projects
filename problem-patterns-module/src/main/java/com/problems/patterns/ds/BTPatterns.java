@@ -96,7 +96,7 @@ public class BTPatterns {
 		if (root == null)
 			return null;
 
-		if (root.data == n1 || root.data == n2)
+		if (root.val == n1 || root.val == n2)
 			return root;
 
 		TreeNode left = lowestCommonAncestor1(root.left, n1, n2);
@@ -131,11 +131,11 @@ public class BTPatterns {
 		TreeNode left = lca(root.left, p, q);
 		TreeNode right = lca(root.right, p, q);
 
-		if (root.data == p.data)
+		if (root.val == p.val)
 			node1 = true;
-		if (root.data == q.data)
+		if (root.val == q.val)
 			node2 = true;
-		if (root.data == p.data || root.data == q.data)
+		if (root.val == p.val || root.val == q.val)
 			return root;
 
 		if (left != null && right != null)
@@ -150,11 +150,11 @@ public class BTPatterns {
 		TreeNode left = lca(root.left, p, q);
 		TreeNode right = lca(root.right, p, q);
 
-		if (root.data == p.data)
+		if (root.val == p.val)
 			flag[0] = true;
-		if (root.data == q.data)
+		if (root.val == q.val)
 			flag[1] = true;
-		if (root.data == p.data || root.data == q.data)
+		if (root.val == p.val || root.val == q.val)
 			return root;
 
 		if (left != null && right != null)
@@ -178,11 +178,11 @@ public class BTPatterns {
 		TreeNode left = lca2(root.left, p, q, flag);
 		TreeNode right = lca2(root.right, p, q, flag);
 
-		if (root.data == p.data)
+		if (root.val == p.val)
 			flag[0] = true;
-		if (root.data == q.data)
+		if (root.val == q.val)
 			flag[1] = true;
-		if (root.data == p.data || root.data == q.data)
+		if (root.val == p.val || root.val == q.val)
 			return root;
 
 		if (left != null && right != null)
@@ -218,8 +218,8 @@ public class BTPatterns {
 			return false;
 
 		// To find the path, first add the element in the list and check the data
-		path.add(root.data);
-		if (root.data == n)
+		path.add(root.val);
+		if (root.val == n)
 			return true;
 
 		boolean flag = findPathFromRootToAnyNode1(root.left, n, path);
@@ -242,7 +242,7 @@ public class BTPatterns {
 
 		int left = maxPathSumUtil(root.left);
 		int right = maxPathSumUtil(root.right);
-		return Math.max(left + right + root.data, Math.max(maxPathSum1(root.left), maxPathSum1(root.right)));
+		return Math.max(left + right + root.val, Math.max(maxPathSum1(root.left), maxPathSum1(root.right)));
 	}
 
 	private int maxPathSumUtil(TreeNode root) {
@@ -252,7 +252,7 @@ public class BTPatterns {
 		int right = maxPathSumUtil(root.right);
 
 		// Compare with zero to eliminate the -ve values
-		return Math.max(0, root.data + Math.max(left, right));
+		return Math.max(0, root.val + Math.max(left, right));
 	}
 
 	// Efficient Approach using class variable:
@@ -269,9 +269,9 @@ public class BTPatterns {
 			return 0;
 		int left = maxPathDown(node.left);
 		int right = maxPathDown(node.right);
-		maxValue = Math.max(maxValue, left + right + node.data);
+		maxValue = Math.max(maxValue, left + right + node.val);
 		// Compare with zero to eliminate the -ve values
-		return Math.max(0, node.data + Math.max(left, right));
+		return Math.max(0, node.val + Math.max(left, right));
 	}
 
 	// Efficient Approach using array variable:
@@ -287,9 +287,9 @@ public class BTPatterns {
 			return 0;
 		int left = maxPathDown(node.left, max);
 		int right = maxPathDown(node.right, max);
-		max[0] = Math.max(max[0], left + right + node.data);
+		max[0] = Math.max(max[0], left + right + node.val);
 		// Compare with zero to eliminate the -ve values
-		return Math.max(0, node.data + Math.max(left, right));
+		return Math.max(0, node.val + Math.max(left, right));
 	}
 
 	/****************************** 6.BT Construction, Conversion **********************************/
@@ -338,7 +338,7 @@ public class BTPatterns {
 			result.add(-1);
 			return;
 		}
-		result.add(root.data);
+		result.add(root.val);
 		serialize1(result, root.left);
 		serialize1(result, root.right);
 	}
@@ -382,7 +382,7 @@ public class BTPatterns {
 			sb.append("#,");
 			return;
 		}
-		sb.append(root.data + ",");
+		sb.append(root.val + ",");
 		serialize2(root.left, sb);
 		serialize2(root.right, sb);
 	}

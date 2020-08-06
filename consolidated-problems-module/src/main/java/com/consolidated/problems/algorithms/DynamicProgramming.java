@@ -72,7 +72,7 @@ public class DynamicProgramming {
 		if (n == null) {
 			return null;
 		}
-		TreeNode node = new TreeNode(n.data + offset);
+		TreeNode node = new TreeNode(n.val + offset);
 		node.left = clone(n.left, offset);
 		node.right = clone(n.right, offset);
 		return node;

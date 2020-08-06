@@ -267,7 +267,7 @@ public class RollingArrayPatterns {
 		int[] result = new int[2];
 		int[] left = helper(root.left);
 		int[] right = helper(root.right);
-		result[0] = root.data + left[1] + right[1];
+		result[0] = root.val + left[1] + right[1];
 		result[1] = Math.max(left[0], left[1]) + Math.max(right[0], right[1]);
 		return result;
 	}

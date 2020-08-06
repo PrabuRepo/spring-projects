@@ -163,7 +163,7 @@ public class KthElementPattern {
 		if (root == null)
 			return;
 		kthSmallest(root.left, list);
-		list.add(root.data);
+		list.add(root.val);
 		kthSmallest(root.right, list);
 	}
 
@@ -182,7 +182,7 @@ public class KthElementPattern {
 		traverse(root.left, k);
 		count++;
 		if (count == k) {
-			result = root.data;
+			result = root.val;
 			return;
 		}
 		traverse(root.right, k);
@@ -200,7 +200,7 @@ public class KthElementPattern {
 			} else {
 				TreeNode node = stack.pop();
 				if (++count == k)
-					return node.data;
+					return node.val;
 				p = node.right;
 			}
 		}
@@ -219,10 +219,10 @@ public class KthElementPattern {
 	public void kthSmallest(TreeNode root, PriorityQueue<Integer> queue, int k) {
 		if (root == null)
 			return;
-		if (queue.isEmpty() || queue.size() < k || root.data < queue.peek()) {
+		if (queue.isEmpty() || queue.size() < k || root.val < queue.peek()) {
 			if (queue.size() == k)
 				queue.remove();
-			queue.add(root.data);
+			queue.add(root.val);
 		}
 		kthSmallest(root.left, queue, k);
 		kthSmallest(root.right, queue, k);

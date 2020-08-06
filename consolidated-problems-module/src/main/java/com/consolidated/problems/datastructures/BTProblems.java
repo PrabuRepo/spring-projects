@@ -73,7 +73,7 @@ public class BTProblems {
 		if (root == null)
 			return -1;
 
-		if (root.data == data)
+		if (root.val == data)
 			return level;
 
 		int depth = depthOfNode(root.left, data, level + 1);
@@ -107,7 +107,7 @@ public class BTProblems {
 		if (root == null)
 			return 0;
 
-		if (root.data == data)
+		if (root.val == data)
 			return level;
 
 		int currentLevel = levelOfNode1(root.left, data, level + 1);
@@ -125,7 +125,7 @@ public class BTProblems {
 			Queue<TreeNode> queue = new LinkedList<>();
 			queue.add(root);
 			level++;
-			if (root.data == element)
+			if (root.val == element)
 				return level;
 			while (!queue.isEmpty()) {
 				count = queue.size();
@@ -133,12 +133,12 @@ public class BTProblems {
 				while (count-- > 0) {
 					curr = queue.remove();
 					if (curr.left != null) {
-						if (curr.left.data == element)
+						if (curr.left.val == element)
 							return level;
 						queue.add(curr.left);
 					}
 					if (curr.right != null) {
-						if (curr.right.data == element)
+						if (curr.right.val == element)
 							return level;
 						queue.add(curr.right);
 					}
@@ -233,7 +233,7 @@ public class BTProblems {
 			return;
 
 		if (root.left == null && root.right == null) {
-			System.out.print(root.data + " ");
+			System.out.print(root.val + " ");
 			return;
 		}
 
@@ -351,7 +351,7 @@ public class BTProblems {
 
 		if (result.size() <= currLevel)
 			result.add(new ArrayList<>());
-		result.get(currLevel).add(root.data);
+		result.get(currLevel).add(root.val);
 
 		return currLevel;
 	}
@@ -379,7 +379,7 @@ public class BTProblems {
 			double sum = 0;
 			for (int i = 0; i < n; i++) {
 				TreeNode curr = queue.poll();
-				sum += curr.data;
+				sum += curr.val;
 				if (curr.left != null)
 					queue.add(curr.left);
 				if (curr.right != null)
@@ -407,10 +407,10 @@ public class BTProblems {
 		if (curr == null)
 			return;
 		if (level < sum.size()) {
-			sum.set(level, sum.get(level) + curr.data);
+			sum.set(level, sum.get(level) + curr.val);
 			count.set(level, count.get(level) + 1);
 		} else {
-			sum.add(curr.data * 1.0);
+			sum.add(curr.val * 1.0);
 			count.add(1);
 		}
 		average(curr.left, level + 1, sum, count);
@@ -429,7 +429,7 @@ public class BTProblems {
 				queue.add(curr.left);
 			if (curr.right != null)
 				queue.add(curr.right);
-			if (curr.data == key.data)
+			if (curr.val == key.val)
 				break;
 		}
 		return queue.peek();
@@ -444,7 +444,7 @@ public class BTProblems {
 		TreeNode prev = null;
 		while (!queue.isEmpty()) {
 			TreeNode curr = queue.poll();
-			if (curr.data == key.data)
+			if (curr.val == key.val)
 				break;
 			else
 				prev = curr;
@@ -486,7 +486,7 @@ public class BTProblems {
 					queue.offer(queue.peek().left);
 				if (queue.peek().right != null)
 					queue.offer(queue.peek().right);
-				subList.add(queue.poll().data);
+				subList.add(queue.poll().val);
 			}
 			result.add(subList);
 		}
@@ -502,7 +502,7 @@ public class BTProblems {
 			while (!q1.isEmpty() || !q2.isEmpty()) {
 				while (!q1.isEmpty()) {
 					root = q1.remove();
-					System.out.print(root.data + " ");
+					System.out.print(root.val + " ");
 					if (root.left != null)
 						q2.add(root.left);
 					if (root.right != null)
@@ -511,7 +511,7 @@ public class BTProblems {
 				System.out.println();
 				while (!q2.isEmpty()) {
 					root = q2.poll();
-					System.out.print(root.data + " ");
+					System.out.print(root.val + " ");
 					if (root.left != null)
 						q1.add(root.left);
 					if (root.right != null)
@@ -539,7 +539,7 @@ public class BTProblems {
 			}
 
 			while (!stack.isEmpty())
-				System.out.print(stack.pop().data + " ");
+				System.out.print(stack.pop().val + " ");
 
 		}
 	}
@@ -562,7 +562,7 @@ public class BTProblems {
 					queue.offer(queue.peek().left);
 				if (queue.peek().right != null)
 					queue.offer(queue.peek().right);
-				subList.add(queue.poll().data);
+				subList.add(queue.poll().val);
 			}
 			result.add(0, subList);// Add the list in the Zeroth Position
 		}
@@ -586,7 +586,7 @@ public class BTProblems {
 		levelOrderBottom(root.left, result, level + 1);
 		levelOrderBottom(root.right, result, level + 1);
 
-		result.get(result.size() - level - 1).add(root.data); // Add the list into resultSize-level-1
+		result.get(result.size() - level - 1).add(root.val); // Add the list into resultSize-level-1
 	}
 
 	/* Binary Tree Zigzag /Spiral Level Order Traversal
@@ -603,7 +603,7 @@ public class BTProblems {
 			while (!s1.isEmpty() || !s2.isEmpty()) {
 				while (!s1.isEmpty()) {
 					root = s1.pop();
-					System.out.print(root.data + " ");
+					System.out.print(root.val + " ");
 					if (root.left != null)
 						s2.push(root.left);
 					if (root.right != null)
@@ -611,7 +611,7 @@ public class BTProblems {
 				}
 				while (!s2.isEmpty()) {
 					root = s2.pop();
-					System.out.print(root.data + " ");
+					System.out.print(root.val + " ");
 					if (root.right != null)
 						s1.push(root.right);
 					if (root.left != null)
@@ -657,7 +657,7 @@ public class BTProblems {
 		if (list == null)
 			list = new ArrayList<>();
 
-		list.add(root.data);
+		list.add(root.val);
 		map.put(hd, list);
 
 		verticalOrder(root.left, map, hd - 1);
@@ -682,7 +682,7 @@ public class BTProblems {
 			if (list == null)
 				list = new ArrayList<>();
 
-			list.add(curr.data);
+			list.add(curr.val);
 			map.put(hd, list);
 
 			if (curr.left != null)
@@ -711,10 +711,10 @@ public class BTProblems {
 			curr = queuePack.node;
 
 			/*
-			 * if (!set.contains(hd)) { set.add(hd); System.out.print(curr.data + " "); }
+			 * if (!set.contains(hd)) { set.add(hd); System.out.print(curr.val + " "); }
 			 */
 			if (!map.containsKey(hd))
-				map.put(hd, curr.data);
+				map.put(hd, curr.val);
 
 			if (curr.left != null)
 				queue.add(new QueuePack(hd - 1, curr.left));
@@ -741,7 +741,7 @@ public class BTProblems {
 			hd = queuePack.hd;
 			curr = queuePack.node;
 
-			map.put(hd, curr.data);
+			map.put(hd, curr.val);
 
 			if (curr.left != null)
 				queue.add(new QueuePack(hd - 1, curr.left));
@@ -773,7 +773,7 @@ public class BTProblems {
 		ArrayList<Integer> list = map.get(dist);
 		if (list == null)
 			list = new ArrayList<>();
-		list.add(root.data);
+		list.add(root.val);
 		map.put(dist, list);
 
 		diagonalTraversal(root.left, dist + 1, map);
@@ -802,7 +802,7 @@ public class BTProblems {
 			return;
 
 		if (maxLeftLevel < level) {
-			System.out.print(root.data + " ");
+			System.out.print(root.val + " ");
 			maxLeftLevel = level;
 		}
 
@@ -830,7 +830,7 @@ public class BTProblems {
 		if (root == null)
 			return;
 		if (maxRightLevel < level) {
-			System.out.print(root.data + " ");
+			System.out.print(root.val + " ");
 			maxRightLevel = level;
 		}
 
@@ -853,7 +853,7 @@ public class BTProblems {
 		if (root == null)
 			return;
 		if (level == result.size()) // Add one element per level
-			result.add(root.data);
+			result.add(root.val);
 
 		rightSideView(root.right, result, level + 1);
 		rightSideView(root.left, result, level + 1);
@@ -870,7 +870,7 @@ public class BTProblems {
 			return true;
 		if (p == null || q == null)
 			return false;
-		return (p.data == q.data && isSameTree(p.left, q.left) && isSameTree(p.right, q.right));
+		return (p.val == q.val && isSameTree(p.left, q.left) && isSameTree(p.right, q.right));
 	}
 
 	//	Check whether it is a mirror of itself/Symmetric Tree 
@@ -886,7 +886,7 @@ public class BTProblems {
 			return true;
 		if (node1 == null || node2 == null)
 			return false;
-		return node1.data == node2.data && isMirror(node1.left, node2.right) && isMirror(node1.right, node2.left);
+		return node1.val == node2.val && isMirror(node1.left, node2.right) && isMirror(node1.right, node2.left);
 	}
 
 	// Iterative Approach
@@ -906,9 +906,8 @@ public class BTProblems {
 		// Case 2: The subtrees rooted at these nodes have been "Flipped" (Similar to
 		// Mirror Tree comparison)
 		// Both of these subtrees have to be isomorphic, hence the &&
-		return node1.data == node2.data
-				&& ((isomorphism(node1.left, node2.left) && isomorphism(node1.right, node2.right))
-						|| (isomorphism(node1.left, node2.right) && isomorphism(node1.right, node2.left)));
+		return node1.val == node2.val && ((isomorphism(node1.left, node2.left) && isomorphism(node1.right, node2.right))
+				|| (isomorphism(node1.left, node2.right) && isomorphism(node1.right, node2.left)));
 	}
 
 	//	Invert or Flip Binary Tree
@@ -974,7 +973,7 @@ public class BTProblems {
 			return;
 		}
 
-		sb.append(root.data);
+		sb.append(root.val);
 		buildTree(root.left, sb);
 		buildTree(root.right, sb);
 	}
@@ -990,7 +989,7 @@ public class BTProblems {
 		if (root == null)
 			return;
 
-		path.add(root.data);
+		path.add(root.val);
 		if (root.left == null && root.right == null) {
 			path.stream().forEach(k -> System.out.print(k + "-"));
 			System.out.println();
@@ -1017,7 +1016,7 @@ public class BTProblems {
 	public void printPathFromRootToLeaf2(TreeNode root, List<String> result, String path) {
 		if (root == null)
 			return;
-		path += root.data;
+		path += root.val;
 		if (root.left == null && root.right == null)
 			result.add(path);
 		printPathFromRootToLeaf2(root.left, result, path + "->");
@@ -1040,8 +1039,8 @@ public class BTProblems {
 			return false;
 
 		// To find the path, first add the element in the list and check the data
-		path.add(root.data);
-		if (root.data == n)
+		path.add(root.val);
+		if (root.val == n)
 			return true;
 
 		boolean flag = findPathFromRootToAnyNode1(root.left, n, path);
@@ -1061,11 +1060,11 @@ public class BTProblems {
 		if (root == null)
 			return false;
 
-		if (root.data == element)
+		if (root.val == element)
 			return true;
 
 		if (findPathFromRootToAnyNode2(root.left, element) || findPathFromRootToAnyNode2(root.right, element)) {
-			System.out.print(root.data + " ");
+			System.out.print(root.val + " ");
 			return true;
 		}
 		return false;
@@ -1084,10 +1083,10 @@ public class BTProblems {
 		if (root == null)
 			return false;
 
-		if (sum == root.data && root.left == null && root.right == null)
+		if (sum == root.val && root.left == null && root.right == null)
 			return true;
 
-		return hasPathSum(root.left, sum - root.data) || hasPathSum(root.right, sum - root.data);
+		return hasPathSum(root.left, sum - root.val) || hasPathSum(root.right, sum - root.val);
 	}
 
 	/*
@@ -1105,11 +1104,11 @@ public class BTProblems {
 	public void pathSum(TreeNode root, List<List<Integer>> result, List<Integer> eachList, int sum) {
 		if (root == null)
 			return;
-		eachList.add(root.data);
-		if (root.data == sum && root.left == null && root.right == null)
+		eachList.add(root.val);
+		if (root.val == sum && root.left == null && root.right == null)
 			result.add(new ArrayList<>(eachList));
-		pathSum(root.left, result, eachList, sum - root.data);
-		pathSum(root.right, result, eachList, sum - root.data);
+		pathSum(root.left, result, eachList, sum - root.val);
+		pathSum(root.right, result, eachList, sum - root.val);
 		eachList.remove(eachList.size() - 1);
 	}
 
@@ -1132,8 +1131,8 @@ public class BTProblems {
 		if (root == null)
 			return 0;
 
-		return (sum == root.data ? 1 : 0) + pathSumFrom(root.left, sum - root.data)
-				+ pathSumFrom(root.right, sum - root.data);
+		return (sum == root.val ? 1 : 0) + pathSumFrom(root.left, sum - root.val)
+				+ pathSumFrom(root.right, sum - root.val);
 	}
 
 	// Prefix Sum Method: Time: O(n), Space:O(n)
@@ -1148,7 +1147,7 @@ public class BTProblems {
 			return 0;
 		}
 
-		currSum += root.data;
+		currSum += root.val;
 		int res = preSum.getOrDefault(currSum - target, 0);
 		preSum.put(currSum, preSum.getOrDefault(currSum, 0) + 1);
 
@@ -1173,21 +1172,21 @@ public class BTProblems {
 			return false;
 
 		if (root.left == null && root.right == null) {
-			if (sum == root.data) {
-				path.add(root.data);
+			if (sum == root.val) {
+				path.add(root.val);
 				return true;
 			} else {
 				return false;
 			}
 		}
 
-		if (rootToLeafUtil1(root.left, sum - root.data, path)) {
-			path.add(root.data);
+		if (rootToLeafUtil1(root.left, sum - root.val, path)) {
+			path.add(root.val);
 			return true;
 		}
 
-		if (rootToLeafUtil1(root.right, sum - root.data, path)) {
-			path.add(root.data);
+		if (rootToLeafUtil1(root.right, sum - root.val, path)) {
+			path.add(root.val);
 			return true;
 		}
 		return false;
@@ -1197,7 +1196,7 @@ public class BTProblems {
 		if (root == null)
 			return false;
 
-		currSum += root.data;
+		currSum += root.val;
 		if (root.left == null && root.right == null) {
 			if (currSum == sum)
 				return true;
@@ -1220,10 +1219,10 @@ public class BTProblems {
 	public boolean hasPathSumFromRootToLeaf(TreeNode root, int sum) {
 		if (root == null)
 			return false;
-		if (sum == root.data && root.left == null && root.right == null)
+		if (sum == root.val && root.left == null && root.right == null)
 			return true;
-		return hasPathSumFromRootToLeaf(root.left, sum - root.data)
-				|| hasPathSumFromRootToLeaf(root.right, sum - root.data);
+		return hasPathSumFromRootToLeaf(root.left, sum - root.val)
+				|| hasPathSumFromRootToLeaf(root.right, sum - root.val);
 	}
 
 	// Path Sum II: find all root-to-leaf paths where each path's sum equals the given sum
@@ -1238,13 +1237,13 @@ public class BTProblems {
 		if (root == null)
 			return;
 
-		eachList.add(root.data);
+		eachList.add(root.val);
 
-		if (root.data == sum && root.left == null && root.right == null)
+		if (root.val == sum && root.left == null && root.right == null)
 			result.add(new ArrayList<>(eachList));
 
-		sumPathFromRootToLeafAll(root.left, result, eachList, sum - root.data);
-		sumPathFromRootToLeafAll(root.right, result, eachList, sum - root.data);
+		sumPathFromRootToLeafAll(root.left, result, eachList, sum - root.val);
+		sumPathFromRootToLeafAll(root.right, result, eachList, sum - root.val);
 		eachList.remove(eachList.size() - 1);
 	}
 
@@ -1265,16 +1264,16 @@ public class BTProblems {
 		if (root == null)
 			return false;
 
-		if (sum == root.data && root.left == null && root.right == null) {
-			path.add(root.data);
+		if (sum == root.val && root.left == null && root.right == null) {
+			path.add(root.val);
 			return true;
 		}
-		if (sumPathFromRootToLeaf1(root.left, sum - root.data, path)) {
-			path.add(root.data);
+		if (sumPathFromRootToLeaf1(root.left, sum - root.val, path)) {
+			path.add(root.val);
 			return true;
 		}
-		if (sumPathFromRootToLeaf1(root.right, sum - root.data, path)) {
-			path.add(root.data);
+		if (sumPathFromRootToLeaf1(root.right, sum - root.val, path)) {
+			path.add(root.val);
 			return true;
 		}
 		return false;
@@ -1284,8 +1283,8 @@ public class BTProblems {
 		if (root == null)
 			return false;
 
-		currSum += root.data;
-		path.add(root.data);
+		currSum += root.val;
+		path.add(root.val);
 		if (root.left == null && root.right == null) {
 			if (currSum == sum)
 				return true;
@@ -1322,7 +1321,7 @@ public class BTProblems {
 	public int subTreeSum(TreeNode root, Map<Integer, Integer> map, int[] max) {
 		if (root == null)
 			return 0;
-		int sum = root.data;
+		int sum = root.val;
 
 		sum += subTreeSum(root.left, map, max);
 		sum += subTreeSum(root.right, map, max);

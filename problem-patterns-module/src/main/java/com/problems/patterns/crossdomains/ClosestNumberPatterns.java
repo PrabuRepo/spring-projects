@@ -190,12 +190,12 @@ public class ClosestNumberPatterns {
 		if (node == null)
 			return;
 
-		if (Math.abs(target - (double) node.data) <= minDiff) {
-			minDiff = Math.abs(target - (double) node.data);
-			closestValue = node.data;
+		if (Math.abs(target - (double) node.val) <= minDiff) {
+			minDiff = Math.abs(target - (double) node.val);
+			closestValue = node.val;
 		}
 
-		if (target <= node.data)
+		if (target <= node.val)
 			closestValue(node.left, target, minDiff);
 		else
 			closestValue(node.right, target, minDiff);
@@ -215,10 +215,10 @@ public class ClosestNumberPatterns {
 		inorder(node.left, target, k, list);
 
 		if (list.size() < k) {
-			list.add(node.data);
-		} else if (Math.abs(target - (double) node.data) < Math.abs(target - (double) list.peek())) {
+			list.add(node.val);
+		} else if (Math.abs(target - (double) node.val) < Math.abs(target - (double) list.peek())) {
 			list.poll();
-			list.add(node.data);
+			list.add(node.val);
 		}
 
 		inorder(node.right, target, k, list);
@@ -255,9 +255,9 @@ public class ClosestNumberPatterns {
 		if (root == null)
 			return;
 		getPredecessor(root.left, target, precedessor);
-		if (root.data > target)
+		if (root.val > target)
 			return;
-		precedessor.push(root.data);
+		precedessor.push(root.val);
 		getPredecessor(root.right, target, precedessor);
 	}
 
@@ -265,9 +265,9 @@ public class ClosestNumberPatterns {
 		if (root == null)
 			return;
 		getSuccessor(root.right, target, successor);
-		if (root.data <= target)
+		if (root.val <= target)
 			return;
-		successor.push(root.data);
+		successor.push(root.val);
 		getSuccessor(root.left, target, successor);
 	}
 

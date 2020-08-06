@@ -28,8 +28,8 @@ public class BSTProblems {
 
 		inorder(root.left);
 		if (prevVal != null)
-			min = Math.min(min, root.data - prevVal);
-		prevVal = root.data;
+			min = Math.min(min, root.val - prevVal);
+		prevVal = root.val;
 		inorder(root.right);
 	}
 
@@ -60,8 +60,8 @@ public class BSTProblems {
 		if (root == null)
 			return;
 
-		map.put(root.data, map.getOrDefault(root.data, 0) + 1);
-		max[0] = Math.max(max[0], map.get(root.data));
+		map.put(root.val, map.getOrDefault(root.val, 0) + 1);
+		max[0] = Math.max(max[0], map.get(root.val));
 
 		inorder(root.left, map, max);
 		inorder(root.right, map, max);
@@ -91,18 +91,18 @@ public class BSTProblems {
 		inorder(root.left, list);
 
 		if (prev != null) {
-			if (root.data == prev.data)
+			if (root.val == prev.val)
 				curCount++;
 			else
 				curCount = 1;
 		}
-		prev = new TreeNode(root.data);
+		prev = new TreeNode(root.val);
 		if (curCount > maxCount) {
 			maxCount = curCount;
 			list.clear();
-			list.add(root.data);
+			list.add(root.val);
 		} else if (curCount == maxCount)
-			list.add(root.data);
+			list.add(root.val);
 
 		inorder(root.right, list);
 	}

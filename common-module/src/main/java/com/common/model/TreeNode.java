@@ -4,19 +4,19 @@ package com.common.model;
  * Binary Tree Node
  */
 public class TreeNode {
-	public int		data;
-	public char		ch;
-	public TreeNode	left, right, next;
-	public int		count;
+	public int val;
+	public char ch;
+	public TreeNode left, right, next;
+	public int count;
 
-	public TreeNode(int data) {
-		this.data = data;
+	public TreeNode(int val) {
+		this.val = val;
 		this.left = this.right = null;
 		this.next = null;
 	}
 
-	public TreeNode(int data, int count) {
-		this.data = data;
+	public TreeNode(int val, int count) {
+		this.val = val;
 		this.count = count;
 	}
 

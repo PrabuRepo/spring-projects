@@ -83,7 +83,7 @@ class BinarySearchTree {
 	private TreeNode insertNode1(TreeNode root, int n) {
 		if (root == null) {
 			root = new TreeNode(n);
-		} else if (n <= root.data) {
+		} else if (n <= root.val) {
 			root.left = insertNode1(root.left, n);
 		} else {
 			root.right = insertNode1(root.right, n);
@@ -99,7 +99,7 @@ class BinarySearchTree {
 		else {
 			TreeNode curr = root;
 			while (curr != null) {
-				if (n <= curr.data) {
+				if (n <= curr.val) {
 					if (curr.left == null) {
 						curr.left = newNode;
 						break;
@@ -126,13 +126,13 @@ class BinarySearchTree {
 	private TreeNode deleteNode(TreeNode root, int n) {
 		if (root == null) {
 			System.out.println("Data not found");
-		} else if (n < root.data) {
+		} else if (n < root.val) {
 			root.left = deleteNode(root.left, n);
-		} else if (n > root.data) {
+		} else if (n > root.val) {
 			root.right = deleteNode(root.right, n);
 		} else if (root.left != null & root.right != null) {
 			int minElement = findMin(root.right);
-			root.data = minElement;
+			root.val = minElement;
 			root.right = deleteNode(root.right, minElement);
 		} else {
 			root = root.left != null ? root.left : root.right;
@@ -148,9 +148,9 @@ class BinarySearchTree {
 		if (node == null)
 			return null;
 
-		if (x == node.data)
+		if (x == node.val)
 			return node;
-		else if (x < node.data)
+		else if (x < node.val)
 			return search(node.left, x);
 		else
 			return search(node.right, x);
@@ -163,7 +163,7 @@ class BinarySearchTree {
 		while (node.left != null)
 			node = node.left;
 
-		return node.data;
+		return node.val;
 	}
 
 	public int findMax(TreeNode node) {
@@ -173,7 +173,7 @@ class BinarySearchTree {
 		while (node.right != null)
 			node = node.right;
 
-		return node.data;
+		return node.val;
 	}
 
 	/******************* Binary Tree Operations ************************/
@@ -192,7 +192,7 @@ class BinarySearchTree {
 		if (root == null)
 			return;
 
-		System.out.print(root.data + " ");
+		System.out.print(root.val + " ");
 		preOrder(root.left);
 		preOrder(root.right);
 	}
@@ -202,7 +202,7 @@ class BinarySearchTree {
 			return;
 
 		inOrder(root.left);
-		System.out.print(root.data + " ");
+		System.out.print(root.val + " ");
 		inOrder(root.right);
 	}
 
@@ -212,7 +212,7 @@ class BinarySearchTree {
 
 		postOrder(root.left);
 		postOrder(root.right);
-		System.out.print(root.data + " ");
+		System.out.print(root.val + " ");
 	}
 
 	/*
@@ -227,7 +227,7 @@ class BinarySearchTree {
 			stack.push(root);
 			while (!stack.isEmpty()) {
 				root = stack.pop();
-				System.out.print(root.data + " ");
+				System.out.print(root.val + " ");
 				if (root.right != null)
 					stack.push(root.right);
 				if (root.left != null)
@@ -247,7 +247,7 @@ class BinarySearchTree {
 					if (stack.isEmpty())
 						break;
 					root = stack.pop();
-					System.out.print(root.data + " ");
+					System.out.print(root.val + " ");
 					root = root.right;
 				}
 			}
@@ -262,7 +262,7 @@ class BinarySearchTree {
 			s1.push(root);
 			while (!s1.isEmpty()) {
 				root = s1.pop();
-				s2.push(root.data);
+				s2.push(root.val);
 				if (root.left != null)
 					s1.push(root.left);
 				if (root.right != null)
@@ -288,10 +288,10 @@ class BinarySearchTree {
 						current = rightNode;
 					} else {
 						topNode = stack.pop();
-						System.out.print(topNode.data + " ");
+						System.out.print(topNode.val + " ");
 						while (!stack.isEmpty() && topNode == stack.peek().right) {
 							topNode = stack.pop();
-							System.out.print(topNode.data + " ");
+							System.out.print(topNode.val + " ");
 						}
 					}
 				}
@@ -316,7 +316,7 @@ class BinarySearchTree {
 
 		if (result.size() <= level)
 			result.add(new ArrayList<>());
-		result.get(level).add(root.data);
+		result.get(level).add(root.val);
 
 		levelOrder(root.left, result, level + 1);
 		levelOrder(root.right, result, level + 1);
@@ -330,7 +330,7 @@ class BinarySearchTree {
 		queue.add(root);
 		while (!queue.isEmpty()) {
 			root = queue.remove();
-			System.out.print(root.data + " ");
+			System.out.print(root.val + " ");
 			if (root.left != null)
 				queue.add(root.left);
 			if (root.right != null)

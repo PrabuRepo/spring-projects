@@ -550,7 +550,7 @@ class BSTIterator {
 
 	public int next() {
 		TreeNode node = stack.pop();
-		int val = node.data;
+		int val = node.val;
 		if (node.right != null)
 			push(node.right);
 		return val;

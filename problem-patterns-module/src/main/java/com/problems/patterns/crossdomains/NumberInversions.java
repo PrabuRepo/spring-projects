@@ -169,11 +169,11 @@ public class NumberInversions {
 		if (root == null) {
 			root = new TreeNode(data, 0);
 			result[i] = currCount;
-		} else if (data < root.data) {
+		} else if (data < root.val) {
 			root.count++;
 			root.left = insert(root.left, data, result, i, currCount);
 		} else {
-			root.right = insert(root.right, data, result, i, currCount + root.count + (data > root.data ? 1 : 0));
+			root.right = insert(root.right, data, result, i, currCount + root.count + (data > root.val ? 1 : 0));
 		}
 		return root;
 	}

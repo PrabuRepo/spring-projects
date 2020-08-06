@@ -26,9 +26,9 @@ public class DesignProblems {
 }
 
 class LRUCache {
-	private HashMap<Integer, CacheNode>	map;
-	private DoubleLinkedList			dll;
-	private int							capacity;
+	private HashMap<Integer, CacheNode> map;
+	private DoubleLinkedList dll;
+	private int capacity;
 
 	public LRUCache(int capacity) {
 		this.capacity = capacity;
@@ -76,10 +76,14 @@ class DoubleLinkedList {
 	}
 
 	public void remove(CacheNode node) {
-		if (node.prev != null) node.prev.next = node.next;
-		else front = node.next;
-		if (node.next != null) node.next.prev = node.prev;
-		else rear = node.prev;
+		if (node.prev != null)
+			node.prev.next = node.next;
+		else
+			front = node.next;
+		if (node.next != null)
+			node.next.prev = node.prev;
+		else
+			rear = node.prev;
 	}
 
 	public void moveToRear(CacheNode node) {
@@ -95,9 +99,9 @@ class DoubleLinkedList {
 }
 
 class CacheNode {
-	int					value;
-	int					key;
-	public CacheNode	prev, next;
+	int value;
+	int key;
+	public CacheNode prev, next;
 
 	public CacheNode(int key, int val) {
 		this.key = key;
@@ -107,10 +111,10 @@ class CacheNode {
 }
 
 class LFUCache {
-	private LFUNode						head;
-	private int							cap;
-	private HashMap<Integer, Integer>	valueHash;
-	private HashMap<Integer, LFUNode>	nodeHash;
+	private LFUNode head;
+	private int cap;
+	private HashMap<Integer, Integer> valueHash;
+	private HashMap<Integer, LFUNode> nodeHash;
 
 	public LFUCache(int capacity) {
 		this.cap = capacity;
@@ -127,7 +131,8 @@ class LFUCache {
 	}
 
 	public void put(int key, int value) {
-		if (cap == 0) return;
+		if (cap == 0)
+			return;
 		if (valueHash.containsKey(key)) {
 			valueHash.put(key, value);
 		} else {
@@ -176,14 +181,17 @@ class LFUCache {
 			node.next = tmp;
 		}
 		nodeHash.put(key, node.next);
-		if (node.keys.size() == 0) remove(node);
+		if (node.keys.size() == 0)
+			remove(node);
 	}
 
 	private void removeOld() {
-		if (head == null) return;
+		if (head == null)
+			return;
 		int old = head.keys.iterator().next();
 		head.keys.remove(old);
-		if (head.keys.size() == 0) remove(head);
+		if (head.keys.size() == 0)
+			remove(head);
 		nodeHash.remove(old);
 		valueHash.remove(old);
 	}
@@ -201,9 +209,9 @@ class LFUCache {
 }
 
 class LFUNode {
-	public int						count;
-	public LinkedHashSet<Integer>	keys;
-	public LFUNode					prev, next;
+	public int count;
+	public LinkedHashSet<Integer> keys;
+	public LFUNode prev, next;
 
 	public LFUNode(int count) {
 		this.count = count;
@@ -213,8 +221,8 @@ class LFUNode {
 }
 
 class RandomizedSet {
-	HashMap<Integer, Integer>	map;
-	List<Integer>				list;
+	HashMap<Integer, Integer> map;
+	List<Integer> list;
 
 	public RandomizedSet() {
 		map = new HashMap<>(); // Val, Index of list
@@ -222,14 +230,16 @@ class RandomizedSet {
 	}
 
 	public boolean insert(int val) {
-		if (map.containsKey(val)) return false;
+		if (map.containsKey(val))
+			return false;
 		map.put(val, list.size());
 		list.add(val);
 		return true;
 	}
 
 	public boolean remove(int val) {
-		if (!map.containsKey(val)) return false;
+		if (!map.containsKey(val))
+			return false;
 		int index = map.get(val);
 		if (index < list.size() - 1) {
 			int lastElement = list.get(list.size() - 1);
@@ -249,8 +259,8 @@ class RandomizedSet {
 }
 
 class RandomizedCollection {
-	HashMap<Integer, LinkedHashSet<Integer>>	map;
-	List<Integer>								list;
+	HashMap<Integer, LinkedHashSet<Integer>> map;
+	List<Integer> list;
 
 	public RandomizedCollection() {
 		map = new HashMap<>();
@@ -259,14 +269,16 @@ class RandomizedCollection {
 
 	public boolean insert(int val) {
 		boolean contain = map.containsKey(val);
-		if (!contain) map.put(val, new LinkedHashSet<>());
+		if (!contain)
+			map.put(val, new LinkedHashSet<>());
 		map.get(val).add(list.size());
 		list.add(val);
 		return !contain;
 	}
 
 	public boolean remove(int val) {
-		if (!map.containsKey(val)) return false;
+		if (!map.containsKey(val))
+			return false;
 		int index = map.get(val).iterator().next();
 		map.get(val).remove(index);
 		if (index < list.size() - 1) {
@@ -277,7 +289,8 @@ class RandomizedCollection {
 			map.get(lastElement).add(index); // Add the removed element index
 		}
 		list.remove(list.size() - 1); // O(1) - To remove the last element in the arraylist
-		if (map.get(val).isEmpty()) map.remove(val);
+		if (map.get(val).isEmpty())
+			map.remove(val);
 		return true;
 	}
 
@@ -289,8 +302,8 @@ class RandomizedCollection {
 }
 
 class FrequentCollection {
-	HashMap<Integer, FreqNode>	map;
-	FreqNode					head, tail;
+	HashMap<Integer, FreqNode> map;
+	FreqNode head, tail;
 
 	public FrequentCollection() {
 		map = new HashMap<Integer, FreqNode>();
@@ -310,7 +323,8 @@ class FrequentCollection {
 				t.prev = n;
 				map.put(val, t);
 			}
-			if (head.next != null) head = head.next;
+			if (head.next != null)
+				head = head.next;
 		} else {
 			if (tail == null || head == null) {
 				FreqNode n = new FreqNode(1);
@@ -349,16 +363,18 @@ class FrequentCollection {
 	}
 
 	public int getMostFrequent() {
-		if (head == null) return -1;
-		else return head.set.iterator().next();
+		if (head == null)
+			return -1;
+		else
+			return head.set.iterator().next();
 	}
 }
 
 class FreqNode {
-	int					value;
-	FreqNode			prev;
-	FreqNode			next;
-	HashSet<Integer>	set;
+	int value;
+	FreqNode prev;
+	FreqNode next;
+	HashSet<Integer> set;
 
 	public FreqNode(int v) {
 		value = v;
@@ -373,8 +389,8 @@ class FreqNode {
  */
 // Approach1:
 class Flatten2DVector1 {
-	private List<List<Integer>>	vector;
-	private int					row, col;
+	private List<List<Integer>> vector;
+	private int row, col;
 
 	public Flatten2DVector1(List<List<Integer>> list) {
 		this.vector = list;
@@ -383,7 +399,8 @@ class Flatten2DVector1 {
 	}
 
 	public int next() {
-		if (!hasNext()) return -1;
+		if (!hasNext())
+			return -1;
 		int next = vector.get(row).get(col);
 		col++;
 		if (col == vector.get(row).size()) {
@@ -403,8 +420,8 @@ class Flatten2DVector1 {
 
 // Approach2:
 class Flatten2DVector2 {
-	private Iterator<List<Integer>>	outer;
-	private Iterator<Integer>		inner;
+	private Iterator<List<Integer>> outer;
+	private Iterator<Integer> inner;
 
 	public Flatten2DVector2(List<List<Integer>> vec2d) {
 		outer = vec2d.iterator();
@@ -412,13 +429,16 @@ class Flatten2DVector2 {
 	}
 
 	public int next() {
-		if (!hasNext()) return -1;
+		if (!hasNext())
+			return -1;
 		return inner.next();
 	}
 
 	public boolean hasNext() {
-		if (inner.hasNext()) return true;
-		if (!outer.hasNext()) return false;
+		if (inner.hasNext())
+			return true;
+		if (!outer.hasNext())
+			return false;
 		inner = outer.next().iterator();
 		while (!inner.hasNext() && outer.hasNext())
 			inner = outer.next().iterator();
@@ -442,7 +462,8 @@ class NestedIterator implements Iterator<Integer> {
 
 	@Override
 	public Integer next() {
-		if (!hasNext()) return null;
+		if (!hasNext())
+			return null;
 
 		return stack.pop().getInteger();
 	}
@@ -450,7 +471,8 @@ class NestedIterator implements Iterator<Integer> {
 	@Override
 	public boolean hasNext() {
 		while (!stack.isEmpty()) {
-			if (stack.peek().isInteger()) return true;
+			if (stack.peek().isInteger())
+				return true;
 			flattenList(stack.pop().getList());
 		}
 		return false;
@@ -465,9 +487,9 @@ class NestedIterator implements Iterator<Integer> {
 // Approach1: Brute Force Approach, Without
 // using any Java API
 class ZigZagIterator1 {
-	List<Integer>	list1, list2;
-	int				index;
-	boolean			flag;
+	List<Integer> list1, list2;
+	int index;
+	boolean flag;
 
 	public ZigZagIterator1(List<Integer> l1, List<Integer> l2) {
 		this.list1 = l1;
@@ -477,16 +499,20 @@ class ZigZagIterator1 {
 	}
 
 	public int next() {
-		if (!hasNext()) return -1;
+		if (!hasNext())
+			return -1;
 		int next = 0;
 		if (flag && index < list1.size()) {
 			next = list1.get(index);
-			if (index < list2.size()) flag = !flag;
-			else index++;
+			if (index < list2.size())
+				flag = !flag;
+			else
+				index++;
 		} else {
 			next = list2.get(index);
 			index++;
-			if (index < list1.size()) flag = !flag;
+			if (index < list1.size())
+				flag = !flag;
 		}
 		return next;
 	}
@@ -498,8 +524,8 @@ class ZigZagIterator1 {
 
 /* Approach2: Uses Java Iterator */
 class ZigZagIterator2 {
-	Iterator<Integer>	iter1, iter2;
-	int					count	= 0;
+	Iterator<Integer> iter1, iter2;
+	int count = 0;
 
 	public ZigZagIterator2(List<Integer> list1, List<Integer> list2) {
 		this.iter1 = list1.iterator();
@@ -508,10 +534,13 @@ class ZigZagIterator2 {
 	}
 
 	public int next() {
-		if (!hasNext()) return -1;
+		if (!hasNext())
+			return -1;
 		count++;
-		if ((count % 2 == 1 && iter1.hasNext()) || !iter2.hasNext()) return iter1.next();
-		else return iter2.next();
+		if ((count % 2 == 1 && iter1.hasNext()) || !iter2.hasNext())
+			return iter1.next();
+		else
+			return iter2.next();
 	}
 
 	public boolean hasNext() {
@@ -529,15 +558,19 @@ class ZigZagIterator3 {
 
 	public ZigZagIterator3(List<Integer> v1, List<Integer> v2) {
 		queue = new LinkedList<Iterator<Integer>>();
-		if (!v1.isEmpty()) queue.add(v1.iterator());
-		if (!v2.isEmpty()) queue.add(v2.iterator());
+		if (!v1.isEmpty())
+			queue.add(v1.iterator());
+		if (!v2.isEmpty())
+			queue.add(v2.iterator());
 	}
 
 	public int next() {
-		if (!hasNext()) return -1;
+		if (!hasNext())
+			return -1;
 		Iterator<Integer> poll = queue.remove();
 		int result = (Integer) poll.next();
-		if (poll.hasNext()) queue.add(poll);
+		if (poll.hasNext())
+			queue.add(poll);
 		return result;
 	}
 
@@ -556,8 +589,9 @@ class BSTIterator {
 
 	public int next() {
 		TreeNode node = stack.pop();
-		int val = node.data;
-		if (node.right != null) push(node.right);
+		int val = node.val;
+		if (node.right != null)
+			push(node.right);
 		return val;
 	}
 
@@ -577,8 +611,8 @@ class BSTIterator {
 // Approach1: method of get() is O(n),
 // check O(1) release O(1)
 class PhoneDirectory1 {
-	boolean[]	bitSet;
-	int			smallestFreeIndex;
+	boolean[] bitSet;
+	int smallestFreeIndex;
 
 	public PhoneDirectory1(int maxNumbers) {
 		this.bitSet = new boolean[maxNumbers];
@@ -586,7 +620,8 @@ class PhoneDirectory1 {
 	}
 
 	public int get() {
-		if (smallestFreeIndex == bitSet.length) return -1;
+		if (smallestFreeIndex == bitSet.length)
+			return -1;
 		int num = smallestFreeIndex;
 		bitSet[num] = true;
 		for (int i = smallestFreeIndex + 1; i < bitSet.length; i++) {
@@ -595,7 +630,8 @@ class PhoneDirectory1 {
 				break;
 			}
 		}
-		if (num == smallestFreeIndex) smallestFreeIndex = bitSet.length;
+		if (num == smallestFreeIndex)
+			smallestFreeIndex = bitSet.length;
 		return num;
 	}
 
@@ -604,17 +640,19 @@ class PhoneDirectory1 {
 	}
 
 	public void release(int number) {
-		if (bitSet[number] = false) return;
+		if (bitSet[number] = false)
+			return;
 		bitSet[number] = false;
-		if (number < smallestFreeIndex) smallestFreeIndex = number;
+		if (number < smallestFreeIndex)
+			smallestFreeIndex = number;
 	}
 }
 
 // Approach2: In the method that is all O(1)
 class PhoneDirectory2 {
-	Set<Integer>	used		= new HashSet<>();
-	Queue<Integer>	available	= new LinkedList<>();
-	int				maxNumbers;
+	Set<Integer> used = new HashSet<>();
+	Queue<Integer> available = new LinkedList<>();
+	int maxNumbers;
 
 	public PhoneDirectory2(int max) {
 		this.maxNumbers = max;
@@ -623,19 +661,22 @@ class PhoneDirectory2 {
 	}
 
 	public int get() {
-		if (available.isEmpty()) return -1;
+		if (available.isEmpty())
+			return -1;
 		int num = available.poll();
 		used.add(num);
 		return num;
 	}
 
 	public boolean check(int num) {
-		if (num < 0 || num >= maxNumbers) return false;
+		if (num < 0 || num >= maxNumbers)
+			return false;
 		return !used.contains(num);
 	}
 
 	public void release(int num) {
-		if (used.remove(num)) available.add(num);
+		if (used.remove(num))
+			available.add(num);
 	}
 }
 
@@ -644,8 +685,8 @@ class PhoneDirectory2 {
  */
 // Approach 1- Using simple counter
 class Codec1 {
-	Map<Integer, String>	map	= new HashMap<>();
-	int						i	= 0;
+	Map<Integer, String> map = new HashMap<>();
+	int i = 0;
 
 	public String encode(String longUrl) {
 		map.put(i, longUrl);
@@ -674,9 +715,9 @@ class Codec2 {
 
 // Approach 3- using random function
 class Codec3 {
-	Map<Integer, String>	map	= new HashMap<>();
-	Random					r	= new Random();
-	int						key	= r.nextInt(10000);
+	Map<Integer, String> map = new HashMap<>();
+	Random r = new Random();
+	int key = r.nextInt(10000);
 
 	public String encode(String longUrl) {
 		while (map.containsKey(key))
@@ -707,9 +748,9 @@ class Codec4 {
  * means it is 300s or 600s... ago and need to reset to 1.
  */
 class HitCounter1 {
-	private int[]	times;
-	private int[]	hits;
-	private int		interval;
+	private int[] times;
+	private int[] hits;
+	private int interval;
 
 	public HitCounter1(int interval) {
 		hits = new int[interval];
@@ -730,15 +771,16 @@ class HitCounter1 {
 	int getHits(int timestamp) {
 		int totalHits = 0;
 		for (int i = 0; i < interval; i++)
-			if (timestamp - times[i] < interval && hits[i] > 0) totalHits += hits[i];
+			if (timestamp - times[i] < interval && hits[i] > 0)
+				totalHits += hits[i];
 		return totalHits;
 	}
 }
 
 // Approach2: Using Queue
 class HitCounter2 {
-	private Queue<Integer>	queue;
-	private int				interval;	// Interval in seconds
+	private Queue<Integer> queue;
+	private int interval; // Interval in seconds
 
 	public HitCounter2(int interval) {
 		queue = new LinkedList<>();
@@ -783,7 +825,8 @@ class LoggerRateLimiter2 {
 	}
 
 	public boolean shouldPrintMessage(int timestamp, String message) {
-		if (timestamp < messageMap.getOrDefault(message, 0)) return false;
+		if (timestamp < messageMap.getOrDefault(message, 0))
+			return false;
 		messageMap.put(message, timestamp + 10);
 		return true;
 	}
@@ -792,9 +835,9 @@ class LoggerRateLimiter2 {
 // Design Twitter - Map/Heap
 
 class Twitter1 {
-	Map<Integer, Set<Integer>>			users;		// UserId, Followers
-	Map<Integer, Map<Integer, Integer>>	tweets;		// UserId, (timestamo, tweets)
-	private static int					timeStamp;
+	Map<Integer, Set<Integer>> users; // UserId, Followers
+	Map<Integer, Map<Integer, Integer>> tweets; // UserId, (timestamo, tweets)
+	private static int timeStamp;
 
 	public Twitter1() {
 		users = new HashMap<>();
@@ -812,7 +855,8 @@ class Twitter1 {
 
 	public List<Integer> getNewsFeed(int userId) {
 		List<Integer> newsFeed = new ArrayList<>();
-		if (!users.containsKey(userId)) return newsFeed;
+		if (!users.containsKey(userId))
+			return newsFeed;
 		Queue<Map.Entry<Integer, Integer>> queue = new PriorityQueue<>((a, b) -> (b.getKey() - a.getKey()));
 		for (Map.Entry<Integer, Integer> entry : tweets.get(userId).entrySet())
 			queue.add(entry);
@@ -825,7 +869,8 @@ class Twitter1 {
 	}
 
 	public void follow(int followerId, int followeeId) {
-		if (followerId == followeeId) return;
+		if (followerId == followeeId)
+			return;
 		if (!users.containsKey(followerId)) {
 			users.put(followerId, new HashSet<>());
 			tweets.put(followerId, new HashMap<>());
@@ -838,21 +883,23 @@ class Twitter1 {
 	}
 
 	public void unfollow(int followerId, int followeeId) {
-		if (followerId == followeeId) return;
-		if (users.get(followerId) == null || users.get(followeeId) == null) return;
+		if (followerId == followeeId)
+			return;
+		if (users.get(followerId) == null || users.get(followeeId) == null)
+			return;
 
 		users.get(followerId).remove(followeeId);
 	}
 }
 
 class Twitter2 {
-	private static int			timeStamp	= 0;
-	private Map<Integer, User>	userMap;
+	private static int timeStamp = 0;
+	private Map<Integer, User> userMap;
 
 	private class Tweet {
-		public int		id;
-		public int		time;
-		public Tweet	next;
+		public int id;
+		public int time;
+		public Tweet next;
 
 		public Tweet(int id) {
 			this.id = id;
@@ -862,9 +909,9 @@ class Twitter2 {
 	}
 
 	public class User {
-		public int			id;
-		public Set<Integer>	followed;
-		public Tweet		tweet_head;
+		public int id;
+		public Set<Integer> followed;
+		public Tweet tweet_head;
 
 		public User(int id) {
 			this.id = id;
@@ -913,7 +960,8 @@ class Twitter2 {
 	public List<Integer> getNewsFeed(int userId) {
 		List<Integer> res = new LinkedList<>();
 
-		if (!userMap.containsKey(userId)) return res;
+		if (!userMap.containsKey(userId))
+			return res;
 
 		Set<Integer> users = userMap.get(userId).followed;
 		PriorityQueue<Tweet> q = new PriorityQueue<Tweet>(users.size(), (a, b) -> (b.time - a.time));
@@ -929,7 +977,8 @@ class Twitter2 {
 			Tweet t = q.poll();
 			res.add(t.id);
 			n++;
-			if (t.next != null) q.add(t.next);
+			if (t.next != null)
+				q.add(t.next);
 		}
 
 		return res;
@@ -951,7 +1000,8 @@ class Twitter2 {
 
 	/** Follower unfollows a followee. If the operation is invalid, it should be a no-op. */
 	public void unfollow(int followerId, int followeeId) {
-		if (!userMap.containsKey(followerId) || followerId == followeeId) return;
+		if (!userMap.containsKey(followerId) || followerId == followeeId)
+			return;
 		userMap.get(followerId).unfollow(followeeId);
 	}
 }
@@ -966,10 +1016,10 @@ class Twitter2 {
  * anti_diagonal to record this row/column/diagonal .
  */
 class TicTacToe1 {
-	private int[]	rows;
-	private int[]	cols;
-	private int		diagonal;
-	private int		antiDiagonal;
+	private int[] rows;
+	private int[] cols;
+	private int diagonal;
+	private int antiDiagonal;
 
 	public TicTacToe1(int n) {
 		this.rows = new int[n];
@@ -981,8 +1031,10 @@ class TicTacToe1 {
 		int toAdd = (player) == 1 ? 1 : -1;
 		rows[i] += toAdd;
 		cols[i] += toAdd;
-		if (i == j) diagonal += toAdd;
-		if (i + j == size + 1) antiDiagonal += toAdd;
+		if (i == j)
+			diagonal += toAdd;
+		if (i + j == size + 1)
+			antiDiagonal += toAdd;
 		if (Math.abs(rows[i]) == size || Math.abs(cols[i]) == size || Math.abs(diagonal) == size
 				|| Math.abs(antiDiagonal) == size)
 			return player;
@@ -992,13 +1044,13 @@ class TicTacToe1 {
 
 // Design Snake Game - Matrix
 class SnakeGame1 {
-	HashSet<Integer>	set;
-	Deque<Integer>		body;
-	int					score;
-	int[][]				food;
-	int					foodIndex;
-	int					width;
-	int					height;
+	HashSet<Integer> set;
+	Deque<Integer> body;
+	int score;
+	int[][] food;
+	int foodIndex;
+	int width;
+	int height;
 
 	public SnakeGame1(int width, int height, int[][] food) {
 		this.width = width;
@@ -1011,22 +1063,24 @@ class SnakeGame1 {
 	}
 
 	public int move(String direction) {
-		if (score == -1) { return -1; }
+		if (score == -1) {
+			return -1;
+		}
 		int rowHead = body.peekFirst() / width;
 		int colHead = body.peekFirst() % width;
 		switch (direction) {
-			case "U":
-				rowHead--;
-				break;
-			case "D":
-				rowHead++;
-				break;
-			case "L":
-				colHead--;
-				break;
-			case "R":
-				colHead++;
-				break;
+		case "U":
+			rowHead--;
+			break;
+		case "D":
+			rowHead++;
+			break;
+		case "L":
+			colHead--;
+			break;
+		case "R":
+			colHead++;
+			break;
 		}
 		set.remove(body.peekLast());
 		int headPos = rowHead * width + colHead;
@@ -1061,7 +1115,8 @@ class SnakeAndLadder {
 		while (!queue.isEmpty()) {
 			curr = queue.poll();
 			int v = curr.vertex;
-			if (v == n - 1) return curr.weight;
+			if (v == n - 1)
+				return curr.weight;
 
 			for (int i = v + 1; (i <= v + 6 && i < n); i++) {
 				adjNode = new GraphNode();
@@ -1087,12 +1142,12 @@ class MovingAverage {
 	public Queue<Integer> queue;
 
 	// Variables for Approach-2
-	int[]	window;
-	int		count;
+	int[] window;
+	int count;
 	// Common for both
-	int	sum;
-	int	size;
-	int	i;
+	int sum;
+	int size;
+	int i;
 
 	public MovingAverage(int size) {
 		this.queue = new LinkedList<>();
@@ -1116,7 +1171,8 @@ class MovingAverage {
 
 	// Approach2:
 	public double next2(int val) {
-		if (count < size) count++;
+		if (count < size)
+			count++;
 		sum -= window[i];
 		sum += val;
 		window[i] = val; // It will override the from value in the array
