@@ -30,20 +30,85 @@ public class CollectionAPI {
 
 	public static void main(String[] args) {
 		CollectionAPI ob = new CollectionAPI();
-
 		ob.testCollectionAPIs();
+	}
 
-		System.out.println("TreeSet Asc Order -> ");
-		ob.treeSetAllAPIs(ob.mockTreeSet1(new TreeSet<>()));
+	private void collectionOverallIdeas() {
+		/*
+		 * Note: All the collection methods in this class follows this order:
+		 * General Operations in Collections:
+		 * 	1.Add:
+		 * 		Add (element at the end or start)
+		 * 		Insert (element at any given pos or index)
+		 * 		AddAll (Add all the given collection of objects)
+		 *  2.Update:
+		 *  	Update (element at any given position)
+		 *  3.Get:
+		 *     Get (Get any element based on key in map)
+		 *  	Contains (Check given element present in collection)
+		 *  	Index (Return the index of any given element)
+		 *  4.Remove:
+		 *  	Remove (element based on position or element)
+		 *  	RemoveAll (Remove all the given collection of elements)
+		 *  5.Sort:
+		 *  	Sort (list using Collections, both in asc and desc order)
+		 *  6.Other common operations:
+		 *  	size (returns the size of the collection)
+		 *  	IsEmpty (checks any element present in the collection)
+		 *  7.Print:
+		 *  	For (loop based on the index)
+		 *  	ForEach (Iterate object one by one)
+		 *  	Iterator (Iterate elements one by one)
+		 */
+	}
 
-		System.out.println("TreeSet Desc Order -> ");
-		ob.treeSetAllAPIs(ob.mockTreeSet1(new TreeSet<>(Collections.reverseOrder())));
+	/* Java Collection Interface methods: This is common for all the data structures
+	 * which implements Collection Interface
+	 */
+	private void collectionInterface() {
+		/*
+		 boolean add(E paramE);
+		 boolean addAll(Collection<? extends E> paramCollection);
+		  
+		 boolean remove(Object paramObject);
+		 boolean removeAll(Collection<?> paramCollection);
+		 void clear();
+		 
+		 boolean contains(Object paramObject);
+		 boolean containsAll(Collection<?> paramCollection);	
+		 
+		 int size();
+		 boolean isEmpty();
+		 Object[] toArray();
+		 stream()
+		 parallelStream()
+		 Iterator<E> iterator();
+		 boolean retainAll(Collection<?> paramCollection);
+		*/
+	}
 
-		System.out.println("TreeMap Asc Order -> ");
-		ob.treeMapAllAPIs(ob.mockTreeMap(new TreeMap<>()));
+	public void collectionsAPI(List<Integer> list, List<Integer>[] arrList) {
+		Collections.sort(list);
 
-		System.out.println("TreeMap Desc Order -> ");
-		ob.treeMapAllAPIs(ob.mockTreeMap(new TreeMap<>(Collections.reverseOrder())));
+		/*
+		Collections.addAll(c, elements);
+		
+		Collections.binarySearch(list, key, c)
+		
+		Collections.copy(dest, src);
+		
+		Collections.disjoint(c1, c2);
+		
+		Collections.fill(list, obj);
+		
+		Collections.max(coll)
+		
+		Collections.min(coll)
+		
+		Collections.reverseOrder();
+		
+		Collections.reverse(list);
+		*/
 	}
 
 	public void testCollectionAPIs() {
@@ -112,10 +177,22 @@ public class CollectionAPI {
 			case 23:
 				System.out.println("***Tree Set***");
 				treeSetAPI();
+
+				System.out.println("TreeSet Asc Order -> ");
+				treeSetAllAPIs(mockTreeSet1(new TreeSet<>()));
+
+				System.out.println("TreeSet Desc Order -> ");
+				treeSetAllAPIs(mockTreeSet1(new TreeSet<>(Collections.reverseOrder())));
 				break;
 			case 31:
 				System.out.println("***Hash Map***");
 				hashMapAPI();
+
+				System.out.println("TreeMap Asc Order -> ");
+				treeMapAllAPIs(mockTreeMap(new TreeMap<>()));
+
+				System.out.println("TreeMap Desc Order -> ");
+				treeMapAllAPIs(mockTreeMap(new TreeMap<>(Collections.reverseOrder())));
 				break;
 			case 32:
 				System.out.println("***Linked Map***");
@@ -142,115 +219,110 @@ public class CollectionAPI {
 
 	}
 
-	public void arrayListAPI() {
-		List<Integer> list = new ArrayList<>();
-
-		// Insert
+	public void listAPI(List<Integer> list) {
+		//1.Add: add, addAll
 		list.add(1);
 		list.add(2);
 		list.add(3);
 		list.add(4);
 		list.add(5);
+		//All the given list of objects
+		list.addAll(new ArrayList<>());
+		// Insert
+		list.add(2, 12);
 
-		// Display
-		listDisplay(list);
-
-		// Update
+		//2.Update: set
 		list.set(3, 6);
 		list.set(4, 7);
 
-		// Display
-		listDisplay(list);
-
-		// Remove
-		System.out.println("Remove based on Index:" + list.remove(1));
-		// Get an element based on Index
-		Integer element = list.get(3);
-		// Remove
-		System.out.println("Remove based on value(object):" + list.remove(element));
-
-		// Display
-		listDisplay(list);
-
-		// Search
+		//3.Get: indexOf, contains, containsAll
 		System.out.println("Index of an element:" + list.indexOf(3));
 		System.out.println("Check list conatains an element:" + list.contains(5));
+		list.containsAll(new ArrayList<>());
+
+		//4.Remove: remove, removeAll, clear
+		// Based on Index
+		System.out.println("Remove based on Index:" + list.remove(1));
+		// Based on element
+		Integer element = list.get(3);
+		System.out.println("Remove based on value(object):" + list.remove(element));
+		//Remove the given list of objects
+		list.removeAll(new ArrayList<>());
+		//list.clear();
+
+		//5.Sort: Collections.sort
+		Collections.sort(list);
+		Collections.sort(list, Collections.reverseOrder());
+
+		//6.Other common operations:
+		list.size();
+		list.isEmpty();
+		list.stream();
+		list.toArray();
+
+		//7.Print: for, foreach & iterator
+		listDisplay(list);
+		list.iterator();
+		list.listIterator();
+	}
+
+	public void arrayListAPI() {
+		//All the operations are same as ArrayList API for list instance using LinkedList class
+		List<Integer> list = new ArrayList<>();
+		listAPI(list);
 	}
 
 	public void linkedListAPI() {
-
+		//All the operations are same as ArrayList API for list instance using LinkedList class
 		List<Integer> list = new LinkedList<>();
+		listAPI(list);
 
-		// Insert
-		list.add(1);
-		list.add(2);
-		list.add(3);
-		list.add(4);
-		list.add(5);
+		//Below linkedList instance is different than list instance: 
+		//The below instance performs all the Deque(Stack+Queue) operations
+		//Refer: dequeAPI() method
+		LinkedList<Integer> linkedList = new LinkedList<>();
+		linkedList.addFirst(1);
+		linkedList.getFirst();
+		linkedList.removeFirst();
+		linkedList.addLast(2);
+		linkedList.getLast();
+		linkedList.removeLast();
 
-		// Display
-		listDisplay(list);
-
-		// Remove
-		System.out.println("Remove based on Index:" + list.remove(1));
-		// Get an element based on Index
-		Integer element = list.get(3);
-		// Remove
-		System.out.println("Remove based on value(object):" + list.remove(element));
-
-		// Display
-		listDisplay(list);
-
-		// Search
-		System.out.println("Index of an element:" + list.indexOf(3));
-		System.out.println("Check list conatains an element:" + list.contains(5));
 	}
 
 	public void vectorAPI() {
+		//All the operations are same as ArrayList API for list instance using Vector class 
+		Vector<Integer> list = new Vector<>();
+		listAPI(list);
 
-		List<Integer> list = new Vector<>();
-
-		// Insert
-		list.add(4);
-		list.add(3);
-		list.add(5);
-		list.add(2);
-		list.add(1);
-
-		// Display
-		listDisplay(list);
-
-		// Remove
-		System.out.println("Remove based on Index:" + list.remove(1));
-		// Get an element based on Index
-		Integer element = list.get(3);
-		// Remove
-		System.out.println("Remove based on value(object):" + list.remove(element));
-
-		// Display
-		listDisplay(list);
-
-		// Search
-		System.out.println("Index of an element:" + list.indexOf(3));
-		System.out.println("Check list conatains an element:" + list.contains(5));
-
+		//Below vector instance is different than list instance: 
+		Vector<Integer> vector = new Vector<>();
+		vector.addElement(1);
+		vector.addElement(2);
+		vector.insertElementAt(2, 3);
+		vector.firstElement();
+		vector.lastElement();
 	}
 
 	public void stackAPI() {
 		Stack<Integer> stack = new Stack<>();
 
-		// Push
+		//1.Add: Push
 		stack.push(1);
 		stack.push(2);
 		stack.push(3);
 		stack.push(4);
 		stack.push(5);
 
+		//2.Get: Peek or Top, Search
+		System.out.println("Remove based on value(object):" + stack.peek());
+		System.out.println("Search an element in the stack:" + stack.search(stack.get(3)));
+
+		//3.Remove: Pop
+		System.out.println("Popped element from the stack:" + stack.pop());
+
 		// Display
 		listDisplay(stack);
-
-		// Pop
-		System.out.println("Popped element from the stack:" + stack.pop());
 
 		// isEmpty
 		System.out.println("Is stack Empty:" + stack.isEmpty());
@@ -258,115 +330,56 @@ public class CollectionAPI {
 		// Display
 		listDisplay(stack);
 
-		// Peek or Top
-		System.out.println("Remove based on value(object):" + stack.peek());
-
-		// Search
-		System.out.println("Search an element in the stack:" + stack.search(stack.get(3)));
 	}
 
 	public void queueAPI() {
 		Queue<Integer> queue = new LinkedList<>();
 
-		System.out.println("Queue operation when its empty: ");
-		System.out.println("Peek: " + queue.peek());
-		System.out.println("Pop: " + queue.poll());
-
-		try {
-			System.out.println("Element: " + queue.element());
-		} catch (Exception e) {
-			System.out.println("Element: " + e.toString());
-		}
-		try {
-			System.out.println("remove: " + queue.remove());
-		} catch (Exception e) {
-			System.out.println("remove: " + e.toString());
-		}
-		// Enqueue or Insert
+		//1.Add: Enqueue or Insert
 		queue.add(1);
 		queue.add(2);
 		queue.add(3);
 		queue.add(4);
 		queue.add(5);
 
-		// Display
-		iteratorDisplay(queue.iterator());
-
-		// Peek or Top
+		//2.Get: Peek or Top, element
 		System.out.println("Front element in the Queue(peek):" + queue.peek());
 		System.out.println("Front element in the Queue(element):" + queue.element());
 
-		// Dequeue
+		//3.Remove: poll, remove
 		System.out.println("Dequeue element from Queue(poll):" + queue.poll());
-		iteratorDisplay(queue.iterator());
 		System.out.println("Dequeue element from Queue(remove):" + queue.remove());
+
+		//4.Display
 		iteratorDisplay(queue.iterator());
 
 	}
 
 	public void priorityQueueAPI() {
 
+		//Min Heap
 		PriorityQueue<Integer> queue = new PriorityQueue<>();
 
-		// Enqueue or Insert
+		//Max Heap
+		PriorityQueue<Integer> queueRevorder = new PriorityQueue<>(Collections.reverseOrder());
+
+		//1.Add: add, offer
 		queue.add(9);
 		queue.add(12);
 		queue.add(33);
 		queue.add(4);
 		queue.add(2);
+		queue.offer(13);
 
-		queue.offer(13); // Add
-
-		// Display
-		iteratorDisplay(queue.iterator());
-
-		// Peek or Top
+		//2.Get:Peek or Top
 		System.out.println("Front element in the Queue:" + queue.peek());
 
-		// Dequeue
+		//3.Remove: poll, remove
 		System.out.println("Dequeue element from Queue:" + queue.poll());
-
-		// Display
-		iteratorDisplay(queue.iterator());
-
-		// Remove
 		System.out.println("Remove element from Queue:" + queue.remove());
 		System.out.println("Remove the given element: " + queue.remove(12));
 
-		// Display
-		iteratorDisplay(queue.iterator());
-
-	}
-
-	public void priorityQueueAPI2() {
-
-		PriorityQueue<Integer> queue = new PriorityQueue<>(Collections.reverseOrder());
-
-		// Enqueue or Insert
-		queue.add(9);
-		queue.add(12);
-		queue.add(33);
-		queue.add(4);
-		queue.add(2);
-
-		queue.offer(13); // Add
-
-		// Display
-		iteratorDisplay(queue.iterator());
-
-		// Peek or Top
-		System.out.println("Front element in the Queue:" + queue.peek());
-
-		// Dequeue
-		System.out.println("Dequeue element from Queue:" + queue.poll());
-
-		// Display
-		iteratorDisplay(queue.iterator());
-
-		// Remove
-		System.out.println("Remove element from Queue:" + queue.remove());
-
-		// Display
+		//4.Display
 		iteratorDisplay(queue.iterator());
 
 	}
@@ -449,9 +462,8 @@ public class CollectionAPI {
 		iteratorDisplay(deque.iterator());
 	}
 
-	public void hashSetAPI() {
-		Set<Integer> set = new HashSet<>();
-		// Insert
+	public void setAPI(Set<Integer> set) {
+		// 1.Add: add
 		set.add(5);
 		set.add(4);
 		set.add(3);
@@ -460,18 +472,22 @@ public class CollectionAPI {
 		set.add(3);
 		set.add(6);
 
-		//Check the value
+		//2.Get: contains
 		set.contains(5);
 
-		// Display
-		iteratorDisplay(set.iterator());
-
-		// Remove
+		//3.Remove
 		set.remove(4);
+
+		//4.Display
+		iteratorDisplay(set.iterator());
 
 		System.out.println("After removing elements:");
 		iteratorDisplay(set.iterator());
+	}
 
+	public void hashSetAPI() {
+		Set<Integer> set = new HashSet<>();
+		setAPI(set);
 	}
 
 	/**
@@ -481,54 +497,59 @@ public class CollectionAPI {
 	 * in which elements were inserted into the set insertion-order.
 	 */
 	public void linkedHashSetAPI() {
-
 		Set<Integer> set = new LinkedHashSet<>();
-		// Insert
-		set.add(5);
-		set.add(4);
-		set.add(3);
-		set.add(1);
-		set.add(2);
-		set.add(3);
-		set.add(6);
-
-		// Display
-		iteratorDisplay(set.iterator());
-
-		// Remove
-		set.remove(4);
-
-		System.out.println("After removing elements:");
-		iteratorDisplay(set.iterator());
+		setAPI(set);
 	}
 
 	public void treeSetAPI() {
-
 		Set<Integer> set = new TreeSet<>();
-		// Insert
-		set.add(15);
-		set.add(42);
-		set.add(23);
-		set.add(11);
-		set.add(23);
-		set.add(8);
-		set.add(36);
+		setAPI(set);
+	}
 
-		// Display
-		iteratorDisplay(set.iterator());
+	public void treeSetAllAPIs(TreeSet<Integer> set) {
+		// First & Last values of the set
+		System.out.println("First: " + set.first());
+		System.out.println("Last: " + set.last());
 
-		// Remove
-		set.remove(11);
+		System.out.println("Poll First: " + set.pollFirst());
+		System.out.println("Poll Last: " + set.pollLast());
 
-		System.out.println("After removing elements:");
-		iteratorDisplay(set.iterator());
+		// Ceiling & Floor Value - Return exact value if present or nearest values:
+		System.out.println("Ceiling & Floor Value: ");
+		System.out.println("1.Mid Element in the array: ");
+		System.out.println("Floor Value: " + set.floor(15));
+		System.out.println("Ceiling Value: " + set.ceiling(15));
+		System.out.println("2.First & Last Element in the array: ");
+		System.out.println("Floor Value: " + set.floor(8));
+		System.out.println("Ceiling Value: " + set.ceiling(42));
+
+		// Higher & Lower Value - Return nearest values:
+		System.out.println("Higher & Lower Value: ");
+		System.out.println("1.Mid Element in the array: ");
+		System.out.println("Lower Value: " + set.lower(15));
+		System.out.println("Higher Value: " + set.higher(15));
+		System.out.println("2.First & Last Element in the array: ");
+		System.out.println("Lower Value: " + set.lower(8));
+		System.out.println("Higher Value: " + set.higher(42));
+
+		/* Lower Vs Floor:*/
+		// Find the highest number which is lower than 25
+		System.out.println(set.lower(25));// 5
+
+		// Find the highest number which is lower than or equal to 25
+		System.out.println(set.floor(25));// 25
+
+		/* Higher Vs Ceiling*/
+		// Find the lowest number higher than 25
+		System.out.println(set.higher(25));// 35
+
+		// Find the lowest number higher than or equal to 25
+		System.out.println(set.ceiling(25));// 25
 
 	}
 
-	public void hashMapAPI() {
-		Map<Integer, String> map = new HashMap<>();
-
-		// Insert the element
+	public void mapAPI(Map<Integer, String> map) {
+		// 1.Add: put, putIfAbsent, putAll
 		map.put(5, "aaaa");
 		map.put(3, "wuek");
 		map.put(7, "eiii");
@@ -539,7 +560,9 @@ public class CollectionAPI {
 		// It adds only if key doesnt present
 		map.putIfAbsent(7, "add new");
 		map.putIfAbsent(8, "add new");
+		map.putAll(new HashMap<>());
 
+		//2.Get: get, getOrDefault, containsKey, containsValue, entrySet, keySet, values
 		System.out.println("Get: " + map.get(5));
 		System.out.println("Get of Default: " + map.getOrDefault(4, "Null"));
 		System.out.println("Contains Key: " + map.containsKey(9));
@@ -548,94 +571,82 @@ public class CollectionAPI {
 		System.out.println("Key Set: " + map.keySet()); // To get all the keys
 		System.out.println("Map Values: " + map.values()); // To get all the values
 
-		// Display
-		mapDisplay(map);
+		/* 3.Update: 
+		 * 	compute - add/update
+		 *  computeIfPresent - update only if key present
+		 *  computeIfAbsent - add only if key not present 
+		 */
+		map.compute(1, (k, v) -> v + " Compute"); //1 is not present, so add this new entry
+		map.compute(3, (k, v) -> v + " Compute"); //3 is present, so update the existing entry 
+		map.computeIfPresent(11, (k, v) -> "Present");
+		map.computeIfAbsent(3, (v) -> "Absent");
 
-		// Remove
+		//4.Remove: remove
 		map.remove(3);
 
-		// Display
+		//7.Display
 		System.out.println("Remove the element from Map");
 		mapDisplay(map);
+	}
+
+	public void hashMapAPI() {
+		Map<Integer, String> map = new HashMap<>();
+		mapAPI(map);
 	}
 
 	public void linkedHashMapAPI() {
 		Map<Integer, String> map = new LinkedHashMap<>();
-
-		// Insert the element
-		map.put(5, "aaaa");
-		map.put(3, "wuek");
-		map.put(7, "eiii");
-		map.put(2, "iwoe");
-		map.put(9, "fdhd");
-		map.put(null, null);
-		map.put(10, null);
-		// It adds only if key doesnt present
-		map.putIfAbsent(7, "add new");
-		map.putIfAbsent(8, "add new");
-
-		// Display
-		mapDisplay(map);
-
-		// Remove
-		map.remove(3);
-
-		// Display
-		System.out.println("Remove the element from Map");
-		mapDisplay(map);
+		mapAPI(map);
 	}
 
 	public void hashTableAPI() {
-		Hashtable<Integer, String> map = new Hashtable<>();
-
-		// Insert the element
-		map.put(5, "aaaa");
-		map.put(3, "wuek");
-		map.put(7, "eiii");
-		map.put(2, "iwoe");
-		map.put(9, "fdhd");
-		// map.put(null, null); //It throws null pointer exception
-		// map.put(10, null);
-		// It adds only if key doesnt present
-		map.putIfAbsent(7, "add new");
-		map.putIfAbsent(8, "add new");
-
-		// Display
-		mapDisplay(map);
-
-		// Remove
-		map.remove(3);
-
-		// Display
-		System.out.println("Remove the element from Map");
-		mapDisplay(map);
+		Map<Integer, String> map = new Hashtable<>();
+		mapAPI(map);
 	}
 
 	public void treeMapAPI() {
 		Map<Integer, String> map = new TreeMap<>();
+		mapAPI(map);
+	}
 
-		// Insert the element
-		map.put(5, "aaaa");
-		map.put(3, "wuek");
-		map.put(7, "eiii");
-		map.put(2, "iwoe");
-		map.put(9, "fdhd");
-		// map.put(null, null); // It throws null pointer exception
-		map.put(10, null);
-		// It adds only if key doesnt present
-		map.putIfAbsent(7, "add new");
-		map.putIfAbsent(8, "add new");
+	public void treeMapAllAPIs(TreeMap<String, Integer> treeMap) {
+		// Displaying the TreeMap
+		System.out.println("Initial Mappings are: " + treeMap);
 
-		// Display
-		mapDisplay(map);
+		System.out.println("First Entry: " + treeMap.firstEntry());
+		System.out.println("First Key: " + treeMap.firstKey());
 
-		// Remove
-		map.remove(3);
+		System.out.println("Last Entry: " + treeMap.lastEntry());
+		System.out.println("First Key: " + treeMap.lastKey());
 
-		// Display
-		System.out.println("Remove the element from Map");
-		mapDisplay(map);
+		System.out.println("Poll First Entry: " + treeMap.pollFirstEntry());
+		System.out.println("Poll First Entry: " + treeMap.pollLastEntry());
 
+		System.out.println("Floor Entry: " + treeMap.floorEntry("Geeks"));
+		System.out.println("Floor Key: " + treeMap.floorKey("Geeks"));
+
+		System.out.println("Ceiling Entry: " + treeMap.ceilingEntry("Geeks"));
+		System.out.println("Ceiling Key: " + treeMap.ceilingKey("Geeks"));
+
+		System.out.println("Lower Entry: " + treeMap.lowerEntry("Welcomes"));
+		System.out.println("Lower Key: " + treeMap.lowerKey("Welcomes"));
+
+		System.out.println("Higher Entry: " + treeMap.higherEntry("Welcomes"));
+		System.out.println("Higher Key: " + treeMap.higherKey("Welcomes"));
+
+		/* LowerKey Vs Floor & HigherKey Vs Ceiling */
+		TreeMap<Integer, Integer> treeMap2 = new TreeMap<>();
+		// Find the highest key which is lower than 25
+		System.out.println(treeMap2.lowerKey(25));// 5
+
+		// Find the highest key which is lower than or equal to 25
+		System.out.println(treeMap2.floorKey(25));// 25
+
+		// Find the lowest key higher than 25
+		System.out.println(treeMap2.higherKey(25));// 35
+
+		// Find the lowest key higher than or equal to 25
+		System.out.println(treeMap2.ceilingKey(25));// 25
 	}
 
 	void iteratorDisplay(Iterator<Integer> iterator) {
@@ -740,90 +751,6 @@ public class CollectionAPI {
 		map.forEach((k, v) -> System.out.println("Key:" + k + "/Value:" + v));
 	}
 
-	public void treeSetAllAPIs(TreeSet<Integer> set) {
-		// First & Last values of the set
-		System.out.println("First: " + set.first());
-		System.out.println("Last: " + set.last());
-
-		System.out.println("Poll First: " + set.pollFirst());
-		System.out.println("Poll Last: " + set.pollLast());
-
-		// Ceiling & Floor Value - Return exact value if present or nearest values:
-		System.out.println("Ceiling & Floor Value: ");
-		System.out.println("1.Mid Element in the array: ");
-		System.out.println("Floor Value: " + set.floor(15));
-		System.out.println("Ceiling Value: " + set.ceiling(15));
-		System.out.println("2.First & Last Element in the array: ");
-		System.out.println("Floor Value: " + set.floor(8));
-		System.out.println("Ceiling Value: " + set.ceiling(42));
-
-		// Higher & Lower Value - Return nearest values:
-		System.out.println("Higher & Lower Value: ");
-		System.out.println("1.Mid Element in the array: ");
-		System.out.println("Lower Value: " + set.lower(15));
-		System.out.println("Higher Value: " + set.higher(15));
-		System.out.println("2.First & Last Element in the array: ");
-		System.out.println("Lower Value: " + set.lower(8));
-		System.out.println("Higher Value: " + set.higher(42));
-
-		/* Lower Vs Floor:*/
-		// Find the highest number which is lower than 25
-		System.out.println(set.lower(25));// 5
-
-		// Find the highest number which is lower than or equal to 25
-		System.out.println(set.floor(25));// 25
-
-		/* Higher Vs Ceiling*/
-		// Find the lowest number higher than 25
-		System.out.println(set.higher(25));// 35
-
-		// Find the lowest number higher than or equal to 25
-		System.out.println(set.ceiling(25));// 25
-
-	}
-
-	public void treeMapAllAPIs(TreeMap<String, Integer> treeMap) {
-
-		// Displaying the TreeMap
-		System.out.println("Initial Mappings are: " + treeMap);
-
-		System.out.println("First Entry: " + treeMap.firstEntry());
-		System.out.println("First Key: " + treeMap.firstKey());
-
-		System.out.println("Last Entry: " + treeMap.lastEntry());
-		System.out.println("First Key: " + treeMap.lastKey());
-
-		System.out.println("Poll First Entry: " + treeMap.pollFirstEntry());
-		System.out.println("Poll First Entry: " + treeMap.pollLastEntry());
-
-		System.out.println("Floor Entry: " + treeMap.floorEntry("Geeks"));
-		System.out.println("Floor Key: " + treeMap.floorKey("Geeks"));
-
-		System.out.println("Ceiling Entry: " + treeMap.ceilingEntry("Geeks"));
-		System.out.println("Ceiling Key: " + treeMap.ceilingKey("Geeks"));
-
-		System.out.println("Lower Entry: " + treeMap.lowerEntry("Welcomes"));
-		System.out.println("Lower Key: " + treeMap.lowerKey("Welcomes"));
-
-		System.out.println("Higher Entry: " + treeMap.higherEntry("Welcomes"));
-		System.out.println("Higher Key: " + treeMap.higherKey("Welcomes"));
-
-		/* LowerKey Vs Floor & HigherKey Vs Ceiling */
-		TreeMap<Integer, Integer> treeMap2 = new TreeMap<>();
-		// Find the highest key which is lower than 25
-		System.out.println(treeMap2.lowerKey(25));// 5
-
-		// Find the highest key which is lower than or equal to 25
-		System.out.println(treeMap2.floorKey(25));// 25
-
-		// Find the lowest key higher than 25
-		System.out.println(treeMap2.higherKey(25));// 35
-
-		// Find the lowest key higher than or equal to 25
-		System.out.println(treeMap2.ceilingKey(25));// 25
-
-	}
-
 	public TreeSet<Integer> mockTreeSet1(TreeSet<Integer> set) {
 		set.add(15);
 		set.add(42);
@@ -846,28 +773,6 @@ public class CollectionAPI {
 		return treeMap;
 	}
 
-	public void collectionsAPI(List<Integer> list, List<Integer>[] arrList) {
-		Collections.sort(list);
-
-		/*
-		Collections.addAll(c, elements);
-		
-		Collections.binarySearch(list, key, c)
-		
-		Collections.copy(dest, src);
-		
-		Collections.disjoint(c1, c2);
-		
-		Collections.fill(list, obj);
-		
-		Collections.max(coll)
-		
-		Collections.min(coll)
-		
-		Collections.reverseOrder();
-		
-		Collections.reverse(list);
-		*/}
 }
 
 /*DEQUE

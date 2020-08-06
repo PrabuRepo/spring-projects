@@ -27,6 +27,43 @@ public class ArrayAPI {
 		//		ob.arrayAPI();
 	}
 
+	private void overallAPIs() {
+		/*
+		 * Java Class Level API's:
+		 * 	1.Character API's
+		 *  2.String API's
+		 *  3.StringBuilder/StringBuffer API's
+		 *  4.Integer API's
+		 *  5.Arrays API's
+		 *  6.Collections API's
+		 */
+	}
+
+	private void arraysConcepts() {
+		/*
+		 * Arrays:
+		 * 	1.Primitive Arrays
+		 *  2.Object Arrays
+		 *  
+		 * Sorting:- (Asc/Desc)
+		 * 	1.Arrays:
+		 * 		Primitive Array Sorting
+		 * 		2D Primitive Array Sorting
+		 *  	Object Array Sorting
+		 *  2.Collections:
+		 * 		Primitive Object(Wrapper Class) Sorting
+		 *  	Object Collection Sorting
+		 *  
+		 * Conversions:
+		 * 	1.Arrays to List
+		 * 		Primitive array to list
+		 * 		Object array to list
+		 *  2.List to Arrays
+		 * 		List to primitive array
+		 * 		List to Object array
+		 */
+	}
+
 	/*
 	 * Overall APIs in the Arrays.java
 	 */
