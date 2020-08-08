@@ -5,15 +5,29 @@ import com.basic.datastructures.operations.SLLOperations;
 import com.common.model.ListNode;
 
 /*
+ * Like arrays, Linked List is a linear data structure. Unlike arrays, linked list elements are not stored at a contiguous location;
+ * the elements are linked using pointers.
+ * Why Linked List?
+ * Arrays can be used to store linear data of similar types, but arrays have the following limitations.
+ * 1) The size of the arrays is fixed: So we must know the upper limit on the number of elements in advance. Also, generally, the 
+ *    allocated memory is equal to the upper limit irrespective of the usage.
+ * 2) Inserting a new element in an array of elements is expensive because the room has to be created for the new elements and to 
+ *    create room existing elements have to be shifted.
+ * Adv of Linked List:
+ * 	1) Dynamic size
+ * 	2) Ease of insertion/deletion
+ * Disadv of Linked List:
+ * 	1) Random access is not allowed. We have to access elements sequentially starting from the first node. So we cannot do binary
+ *     search with linked lists efficiently with its default implementation.
+ *  2) Extra memory space for a pointer is required with each element of the list.
+ *  3) Not cache friendly. Since array elements are contiguous locations, there is locality of reference which is not there in case 
+ *     of linked lists.
  * Linked List Implementation: 
  *   1. Singly Linked List
  *   2. Doubly Linked List
  *   3. Circular Singly Linked List
  *   
- *  Note: Consider below for all the LL operations:
- *  	1.Front End
- *  	2.Tail End
- *  	3.Middle
+ *  Note: Consider below for all the LL operations:  1.Front End; 2.Tail End; 3.Middle
  */
 public class LinkedList {
 	public static void main(String[] args) {
@@ -21,13 +35,13 @@ public class LinkedList {
 		LinkedList ob = new LinkedList();
 
 		System.out.println("1. Singly Linked List");
-		ob.testSinglyLinkedList();
+		//ob.testSinglyLinkedList();
 
 		System.out.println("\n2. Doubly Linked List");
 		ob.testDoublyLinkedList();
 
 		System.out.println("\n3. Circular Singly Linked List");
-		ob.testCircularSLinkedList();
+		//ob.testCircularSLinkedList();
 	}
 
 	public void testSinglyLinkedList() {
@@ -56,9 +70,27 @@ public class LinkedList {
 		list.add(3);
 		System.out.println("Display:");
 		list.print();
+		System.out.println("\nInsert After:");
+		list.insertAfter(1, 11);
+		list.insertAfter(2, 22);
+		list.insertAfter(3, 33);
+		list.print();
+		System.out.println("\nInsert Before:");
+		list.insertBefore(1, 111);
+		list.insertBefore(2, 222);
+		list.insertBefore(33, 333);
+		list.print();
+		System.out.println("\nInsert:");
+		list.insert(1, -1);
+		list.insert(3, -2);
+		list.insert(11, -3);
+		list.print();
+		System.out.println("\nPrint Reverse:");
+		list.printReverse();
 		System.out.println("\nDelete: ");
-		list.remove(1);
-		System.out.println("Find: " + list.contains(3));
+		list.remove(22);
+		list.print();
+		System.out.println("\nFind: " + list.contains(3));
 	}
 
 	public void testCircularSLinkedList() {
@@ -176,9 +208,21 @@ class SinglyLinkedList implements SLLOperations {
 			curr = curr.next;
 		}
 	}
-
 }
 
+/*
+ * A Doubly Linked List (DLL) contains an extra pointer, typically called previous pointer, together with next pointer and data which are 
+ * there in singly linked list.
+ * Advantages over singly linked list: 
+ * 	1) A DLL can be traversed in both forward and backward direction.
+ * 	2) The delete operation in DLL is more efficient if pointer to the node to be deleted is given. (In SLL, to delete a node, pointer to 
+ *     the prev node is needed. To get this prev node, sometimes the list is traversed. In DLL, we can get the prev node using previous pointer.)
+ * 	3) We can quickly insert a new node before a given node.
+ * Disadvantages over singly linked list:
+ * 	1) Every node of DLL Require extra space for an previous pointer. It is possible to implement DLL with single pointer though.
+ * 	2) All operations require an extra pointer previous to be maintained. For example, in insertion, we need to modify previous pointers together
+ * 	   with next pointers.
+ */
 class DoublyLinkedList implements DLLOperations {
 
 	ListNode head;
@@ -244,21 +288,74 @@ class DoublyLinkedList implements DLLOperations {
 		return head == null ? true : false;
 	}
 
+	//It may be similar to insertBefore logic
 	@Override
 	public void insert(int index, int data) {
-		// TODO Auto-generated method stub
+		ListNode newNode = new ListNode(data);
+
+		if (isEmpty() && index == 1) {
+			head = newNode;
+			return;
+		}
+
+		//Get the node based on the index
+		ListNode curr = get2(index);
+
+		if (curr == null)
+			return;
+
+		//Handle newNode's prev pointer & related links
+		newNode.prev = curr.prev;
+		if (curr.prev != null)
+			curr.prev.next = newNode;
+		else
+			head = newNode;
+
+		//Handle newNode's next pointer & related links
+		newNode.next = curr;
+		curr.prev = newNode;
 	}
 
 	@Override
 	public void insertBefore(int data, int newData) {
-		// TODO Auto-generated method stub
+		//Get the node based on the data
+		ListNode curr = get(data);
 
+		if (curr == null)
+			return;
+
+		ListNode newNode = new ListNode(newData);
+
+		//Handle newNode's prev pointer & related links
+		newNode.prev = curr.prev;
+		if (curr.prev != null)
+			curr.prev.next = newNode;
+		else
+			head = newNode;
+
+		//Handle newNode's next pointer & related links
+		newNode.next = curr;
+		curr.prev = newNode;
 	}
 
 	@Override
 	public void insertAfter(int data, int newData) {
-		// TODO Auto-generated method stub
+		//Get the node based on the data
+		ListNode curr = get(data);
 
+		if (curr == null)
+			return;
+
+		ListNode newNode = new ListNode(newData);
+
+		//Handle newNode's next pointer & related links
+		newNode.next = curr.next;
+		if (curr.next != null)
+			curr.next.prev = newNode;
+
+		//Handle newNode's prev pointer & related links
+		newNode.prev = curr;
+		curr.next = newNode;
 	}
 
 	@Override
@@ -276,9 +373,37 @@ class DoublyLinkedList implements DLLOperations {
 	}
 
 	@Override
-	public void print() {
-		// TODO Auto-generated method stub
+	public ListNode get2(int index) {
+		if (isEmpty())
+			return null;
 
+		ListNode curr = head;
+		while (--index >= 1 && curr != null) {
+			curr = curr.next;
+		}
+		return curr;
+	}
+
+	@Override
+	public void print() {
+		ListNode curr = head;
+		while (curr != null) {
+			System.out.print(curr.data + " ");
+			curr = curr.next;
+		}
+	}
+
+	@Override
+	public void printReverse() {
+		ListNode curr = head;
+		//Move to last node
+		while (curr.next != null)
+			curr = curr.next;
+
+		while (curr != null) {
+			System.out.print(curr.data + " ");
+			curr = curr.prev;
+		}
 	}
 }
 
@@ -466,6 +591,18 @@ class CircularDLinkedList implements DLLOperations {
 
 	@Override
 	public void print() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public ListNode get2(int index) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void printReverse() {
 		// TODO Auto-generated method stub
 
 	}

@@ -36,7 +36,7 @@ public class Queue {
 	}
 
 	public void testQueueLinkedListImpl() {
-		QueueLinkedListImpl queue = new QueueLinkedListImpl();
+		QueueSLinkedListImpl queue = new QueueSLinkedListImpl();
 		System.out.println("Stack Operations:");
 		System.out.println("EnQueue");
 		queue.add(1);
@@ -136,7 +136,7 @@ class QueueArrayImpl implements QueueOperations {
 
 }
 
-class QueueLinkedListImpl implements QueueOperations {
+class QueueSLinkedListImpl implements QueueOperations {
 
 	ListNode front, rear;
 
@@ -211,4 +211,11 @@ class QueueLinkedListImpl implements QueueOperations {
 			curr = curr.next;
 		}
 	}
+}
+
+class QueueDLinkedListImpl {
+	/*
+	 * Queue can be implemented using DLL, but it doesnt give much improvement when comparing to SLL.
+	 * Because Queue implementation using SLL gives O(1) time for all the operations.
+	 */
 }

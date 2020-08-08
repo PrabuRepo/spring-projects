@@ -12,8 +12,8 @@ import com.common.model.ListNode;
  * Why Circular Queue?
  * In a normal Queue, we can insert elements until queue becomes full. But once queue becomes full, we can not insert the next element even 
  * if there is a space in front of queue.
- * Note: Circular Queue saves space only in array implementation. In case of linked list implementation, a queue can be easily implemented 
- * without being circular.
+ * Note: In case of linked list implementation, a queue can be easily implemented without being circular. However, in the case of array 
+ * implementation, we need a circular queue to save space.
  * 
  * Circular Queue can be implemented using,
  * 	1.Array - Concentrate on array implementation
@@ -28,7 +28,6 @@ public class CircularQueue {
 		System.out.println("\n2. Circular Queue Singly Linked List Impl");
 
 		System.out.println("\n3. Circular Queue Doubly Linked List Impl");
-
 	}
 }
 
@@ -93,6 +92,11 @@ class CircularQueueArrayImpl implements QueueOperations {
 	@Override
 	public int peek() {
 		return front == -1 ? -1 : queue[front];
+	}
+
+	//TODO: Implement this
+	public int getRear() {
+		return -1;
 	}
 
 	@Override
@@ -229,7 +233,7 @@ class CircularQueueArrayImpl2 implements QueueOperations {
 		return isEmpty() ? -1 : queue[front];
 	}
 
-	public int Rear() {
+	public int getRear() {
 		return isEmpty() ? -1 : queue[rear];
 	}
 
@@ -397,132 +401,12 @@ class CircularQueueSLLImpl implements QueueOperations {
 
 }
 
-class CircularQueueDLLImpl implements QueueOperations {
+class CircularQueueDLLImpl {
 	ListNode front, rear;
 
-	@Override
-	public void add(int data) {
-		ListNode newNode = new ListNode(data);
-		if (isEmpty()) {
-			rear = front = newNode;
-		} else {
-			newNode.prev = rear;
-			rear.next = newNode;
-			rear = newNode;
-		}
-		front.prev = rear;
-		rear.next = front;
-	}
+	/* 
+	 * Circular Queue can be implemented using DLL, but it doesn't give much improvement when comparing to SLL.
+	 * Because Circular Queue implementation using SLL gives O(1) time for all the operations.
+	 */
 
-	@Override
-	public int poll() {
-		if (isEmpty())
-			return -1;
-
-		int element = front.data;
-		if (front == rear) {
-			front = rear = null;
-		} else {
-			front = front.next;
-			front.prev = rear;
-			rear.next = front;
-		}
-
-		return element;
-	}
-
-	@Override
-	public int peek() {
-		return isEmpty() ? -1 : front.data;
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return (front == null && rear == null);
-	}
-
-	@Override
-	public void print() {
-		if (isEmpty())
-			return;
-		ListNode temp = front;
-		do {
-			System.out.print(temp.data + " ");
-			temp = temp.next;
-		} while (temp != front);
-
-	}
-
-	@Override
-	public void set(int index, int data) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean contains(int data) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean remove(int data) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public static void main(String[] args) {
-
-		Scanner in = new Scanner(System.in);
-		char ch;
-		CircularQueueDLLImpl queue = new CircularQueueDLLImpl();
-		do {
-			System.out.println("Circular Queue Operations:");
-			System.out.println("1.Enqueue");
-			System.out.println("2.Dequeue");
-			System.out.println("3.Front");
-			System.out.print("Enter option:");
-			switch (in.nextInt()) {
-			case 1:
-				System.out.println("Enter no of elements to be inserted:");
-				int t = in.nextInt();
-				while (t-- > 0) {
-					queue.add(in.nextInt());
-				}
-				System.out.println("Elements are inserted!");
-				break;
-			case 2:
-				int data = queue.poll();
-				if (data != -1)
-					System.out.println("Dequeued element is: " + data);
-				else
-					System.out.println("Queue is empty");
-				break;
-			case 3:
-				data = queue.peek();
-				if (data != -1)
-					System.out.println("Front element is: " + data);
-				else
-					System.out.println("Queue is empty");
-				break;
-			default:
-				System.out.println("Please enter the valid option!!!");
-				break;
-			}
-
-			System.out.println("\nDisplay:");
-			queue.print();
-			System.out.println("\nDo you want to continue(y/n):");
-			ch = in.next().charAt(0);
-		} while (ch == 'y' || ch == 'Y');
-		System.out.println("****Thank You******");
-		in.close();
-
-	}
 }

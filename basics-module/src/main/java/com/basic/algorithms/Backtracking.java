@@ -83,7 +83,9 @@ public class Backtracking {
 		}
 	}
 
-	// Combinations:
+	/* Combinations:
+	 *  Formula: n!/k!(n-k)!
+	 */
 	public List<List<Integer>> combine(int n, int k) {
 		List<List<Integer>> res = new ArrayList<>();
 		backtrack3(n, k, 1, new ArrayList<>(), res);

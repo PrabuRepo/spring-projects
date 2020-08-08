@@ -35,7 +35,7 @@ public class Stack {
 	}
 
 	public void testStackLinkedListImpl() {
-		StackLinkedListImpl stack = new StackLinkedListImpl();
+		StackSLinkedListImpl stack = new StackSLinkedListImpl();
 		System.out.println("Stack Operations:");
 		System.out.println("Push");
 		stack.push(1);
@@ -125,7 +125,7 @@ class StackArrayImpl implements StackOperations {
 	}
 }
 
-class StackLinkedListImpl implements StackOperations {
+class StackSLinkedListImpl implements StackOperations {
 	ListNode stack;
 
 	@Override
@@ -200,4 +200,11 @@ class StackLinkedListImpl implements StackOperations {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+}
+
+class StackDLinkedListImpl {
+	/*
+	 * Stack can be implemented using DLL, but it doesnt give much improvement when comparing to SLL.
+	 * Because Stack implementation using SLL gives O(1) time for all the operations.
+	 */
 }

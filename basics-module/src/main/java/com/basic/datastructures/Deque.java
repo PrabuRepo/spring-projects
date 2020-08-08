@@ -240,6 +240,15 @@ class DequeArrayImpl implements DequeOperations {
 
 }
 
+class DequeSLLImpl {
+	ListNode front, rear;
+	/* addFirst, addLast & removeFirst operations are easy to implement in SLL, but removeLast is difficult 
+	 * to implement using SLL.
+	 * It is possible to implement removeLast using SLL, but it will take O(n) time. We have to traverse from
+	 * front pointer to till prev node of rear end to delete the last node.
+	 */
+}
+
 class DequeDLLImpl implements DequeOperations {
 	ListNode front, rear;
 

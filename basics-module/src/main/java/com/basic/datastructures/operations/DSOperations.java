@@ -5,7 +5,6 @@ public interface DSOperations {
 	//Add: Add given element in the data structure
 	public void add(int data);
 
-	//TODO: Revisit and remove if doesnt make sense
 	//Update: Update element in the given index 
 	public void set(int index, int data);
 
