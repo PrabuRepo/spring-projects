@@ -19,16 +19,16 @@ public interface Sorting {
 
 	public void mergeSort(int[] a);
 
-	public void mergeSort(ListNode head);
+	public ListNode mergeSort(ListNode head);
 
 	public void quickSort(int[] a);
 
 	public void heapSort(int[] a);
 
-	public void countingSort(int[] a);
+	public void countingSort(int[] a, int capacity);
 
 	public void radixSort(int[] a);
 
-	public void bucketSort(int[] a);
+	public void bucketSort(float[] a);
 
 }

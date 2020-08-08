@@ -1,9 +1,12 @@
 package com.basic.algorithms;
 
-public class SearchingAlgorithms {
+import com.basic.datastructures.operations.Searching;
+
+public class SearchingAlgorithms implements Searching {
 
 	// Time complexity: O(n)
-	public static int linearSearch(int[] a, int x) {
+	@Override
+	public int linearSearch(int[] a, int x) {
 		for (int i = 0; i < a.length; i++) {
 			if (a[i] == x) {
 				return i;
@@ -13,7 +16,8 @@ public class SearchingAlgorithms {
 	}
 
 	// Iterative Approach: Time complexity: O(logn)
-	public static int binarySearch1(int[] a, int x) {
+	@Override
+	public int binarySearch1(int[] a, int x) {
 		int mid, l = 0, h = a.length - 1;
 		while (l <= h) {
 			mid = (l + h) / 2;
@@ -29,11 +33,12 @@ public class SearchingAlgorithms {
 	}
 
 	// Recursive Approach: Time complexity: O(logn)
-	public static int binarySearch2(int[] a, int x) {
+	@Override
+	public int binarySearch2(int[] a, int x) {
 		return binarySearch(a, 0, a.length - 1, 610);
 	}
 
-	private static int binarySearch(int[] a, int l, int h, int x) {
+	private int binarySearch(int[] a, int l, int h, int x) {
 		int index = -1;
 		if (l > h)
 			return index;
@@ -145,7 +150,8 @@ public class SearchingAlgorithms {
 	}
 
 	// Time Complexity: O(log3n)
-	public static int ternarySearch1(int[] a, int x) {
+	@Override
+	public int ternarySearch1(int[] a, int x) {
 		int n = a.length;
 		int left = 0, right = n - 1, mid1, mid2;
 
@@ -171,11 +177,12 @@ public class SearchingAlgorithms {
 		return -1;
 	}
 
-	public static int ternarySearch2(int[] a, int x) {
+	@Override
+	public int ternarySearch2(int[] a, int x) {
 		return ternarySearch(a, 0, a.length - 1, x);
 	}
 
-	public static int ternarySearch(int[] a, int l, int h, int x) {
+	public int ternarySearch(int[] a, int l, int h, int x) {
 		if (l > h)
 			return -1;
 
@@ -194,7 +201,8 @@ public class SearchingAlgorithms {
 	}
 
 	// Time complexity: O(sqrt(n))
-	public static int jumpSearch(int[] a, int x) {
+	@Override
+	public int jumpSearch(int[] a, int x) {
 		int block, step;
 		double n = a.length;
 
@@ -236,7 +244,8 @@ public class SearchingAlgorithms {
 	 *  
 	 *  Time complexity: a(log(log(n)))
 	 */
-	public static int interpolationSearch(int[] a, int x) {
+	@Override
+	public int interpolationSearch(int[] a, int x) {
 		int index = -1;
 		int l = 0, h = a.length - 1, pos;
 
@@ -262,7 +271,8 @@ public class SearchingAlgorithms {
 	/* Exponential Search: The idea is to start with subarray size 1 compare its last element with x, then try size 2, 
 	 * then 4 and so on until last element of a subarray is not greater. Time Complexity: O(Log n)
 	 */
-	public static int exponentialSearch(int[] a, int x) {
+	@Override
+	public int exponentialSearch(int[] a, int x) {
 		int i, n = a.length - 1;
 
 		for (i = 1; i <= n && a[i] <= x; i = i * 2)
@@ -271,7 +281,9 @@ public class SearchingAlgorithms {
 	}
 
 	/* Returns index of x if present, else returns -1 */
-	public static int fibonacciSearch(int arr[], int x, int n) {
+	@Override
+	public int fibonacciSearch(int arr[], int x) {
+		int n = arr.length;
 		/* Initialize fibonacci numbers */
 		int fibMMm2 = 0; // (m-2)'th Fibonacci No.
 		int fibMMm1 = 1; // (m-1)'th Fibonacci No.
@@ -326,7 +338,8 @@ public class SearchingAlgorithms {
 		return -1;
 	}
 
-	public static int ubiquitousBinarySearch(int[] a, int x) {
+	@Override
+	public int ubiquitousBinarySearch(int[] a, int x) {
 		int index = -1;
 
 		/*Write a logic here*/

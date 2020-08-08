@@ -6,10 +6,11 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Scanner;
 
+import com.basic.datastructures.operations.Sorting;
 import com.common.model.ListNode;
 import com.common.utilities.Utils;
 
-public class SortingAlgorithms {
+public class SortingAlgorithms implements Sorting {
 
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
@@ -57,7 +58,7 @@ public class SortingAlgorithms {
 				ListNode head = null;
 				for (int i = 0; i < t; i++)
 					head = sort.insertLL(head, in.nextInt());
-				head = sort.mergeSortForLL(head);
+				head = sort.mergeSort(head);
 				sort.displayLL(head);
 				break;
 			case 6:
@@ -174,7 +175,7 @@ public class SortingAlgorithms {
 	 *           b) Call flip(arr, mi) 
 	 *           c) Call flip(arr, curr_size-1)
 	 */
-	public int[] pancakeSort(int[] arr) {
+	public void pancakeSort(int[] arr) {
 		int n = arr.length;
 		for (int i = n - 1; i > 0; i--) {
 			int maxIndex = findMax(arr, i);
@@ -183,7 +184,6 @@ public class SortingAlgorithms {
 			flip(arr, maxIndex);
 			flip(arr, i);
 		}
-		return arr;
 	}
 
 	public int findMax(int[] arr, int end) {
@@ -247,6 +247,12 @@ public class SortingAlgorithms {
 		}
 		a[j] = lastElement;
 	}
+
+	@Override
+	public void insertionSort(ListNode head) {
+		// TODO Auto-generated method stub
+
+	}
 	// Insertion - end
 
 	// Merge sort - start
@@ -254,6 +260,16 @@ public class SortingAlgorithms {
 	 * Merge sort is a divide-and-conquer algorithm based on the idea of breaking down a list into several sub-lists until each sublist
 	 * consists of a single element and merging those sublists in a manner that results into a sorted list.
 	 */
+	@Override
+	public void mergeSort(int[] a) {
+		//Approach 1: 
+		mergeSort1(a);
+
+		//Approach 2:
+		mergeSort2(a);
+
+	}
+
 	public void mergeSort1(int[] a) {
 		divide(a, 0, a.length - 1);
 	}
@@ -342,7 +358,8 @@ public class SortingAlgorithms {
 	/*
 	 * Merge Sort: Merge sort for Linked List data structure
 	 */
-	public ListNode mergeSortForLL(ListNode head) {
+	@Override
+	public ListNode mergeSort(ListNode head) {
 		return divideLL(head);
 	}
 
@@ -515,8 +532,7 @@ public class SortingAlgorithms {
 	 *  The array arr[] is traversed in n time and the resulting sorted array is also computed in O(n) time.  count array is traversed 
 	 *  in O(k) time. Therefore, the overall time complexity of counting sort algorithm is O(n+k).	
 	 */
-
-	public int[] countingSort(int[] arr, int capacity) {
+	public void countingSort(int[] arr, int capacity) {
 		int[] countArray = new int[capacity]; // Here you can find the max vaue initialize the array using that value
 		int count;
 		// Count the elements int the array and set into new array; O(n) time
@@ -531,7 +547,6 @@ public class SortingAlgorithms {
 				arr[index++] = countArray[i];
 		}
 
-		return arr;
 	}
 
 	static char[] countingSort(char[] arr) {
@@ -615,6 +630,7 @@ public class SortingAlgorithms {
 	 * The average time complexity for Bucket Sort is O(n + k). The worst time complexity is O(n^2). 
 	 * The space complexity for Bucket Sort is O(n+k).
 	 */
+	@Override
 	public void bucketSort(float[] arr) {
 		int n = arr.length;
 		LinkedList<Float>[] buckets = new LinkedList[n];
@@ -681,4 +697,5 @@ public class SortingAlgorithms {
 			System.out.print(arr[i] + " ");
 		return arr[n / 2];
 	}
+
 }

@@ -1,8 +1,11 @@
 package com.basic.algorithms;
 
-public class PatternSearching {
+import com.basic.datastructures.operations.PatternSearching;
+
+public class PatternSearchingAlgorithms implements PatternSearching {
 
 	// Naive Pattern Searching; Time complexity:O(mn) = Exactly O(m(n-m))
+	@Override
 	public void naivePatternSearching(String str, String pattern) {
 		int j;
 		int n = str.length(); // String Length
@@ -20,6 +23,7 @@ public class PatternSearching {
 	}
 
 	// KMP(Knuth Morris Pratt) Algorithm
+	@Override
 	public void KMPAlgorithm(String text, String pattern) {
 		int m = pattern.length(), n = text.length();
 		int[] lps = computeLPSArray(pattern);
@@ -65,6 +69,7 @@ public class PatternSearching {
 	}
 
 	// Rabin-Karp Algorithm
+	@Override
 	public void rabinKarpAlgorithm(String text, String pattern) {
 		int prime = 101;
 		long textHash = 0, patternHash = 0;
@@ -98,12 +103,14 @@ public class PatternSearching {
 		}
 	}
 
-	// Finite Automata
-	public void finiteAutomata() {
+	@Override
+	public void finiteAutomata(String str, String pattern) {
+		// TODO Auto-generated method stub
 
 	}
 
 	// Z Algorithm
+	@Override
 	public void zAlgorithm(String text, String pattern) {
 		int zArrayLength = text.length() + pattern.length() + 1;
 		String zString = pattern + "$" + text;
@@ -149,4 +156,5 @@ public class PatternSearching {
 		}
 		return zArray;
 	}
+
 }
