@@ -3,34 +3,40 @@ package com.basic.datastructures;
 import java.util.Arrays;
 import java.util.Scanner;
 
-/**
- * Heap Implementation - Max Binary Heap, Min Binary Heap & Priority Queue Impl using Heap
+import com.basic.datastructures.operations.QueueOperations;
+
+/*
+ * Priority Queue Impl using Heap:
+ * - Max Binary Heap
+ * - Min Binary Heap 
  */
 public class Heap {
 
 }
 
-class MaxBinaryHeap {
+class MaxBinaryHeap implements QueueOperations {
+
 	int heapSize;
 	int capacity;
-	Integer[] data;
+	Integer[] elements;
 
 	public MaxBinaryHeap(int capacity) {
 		this.heapSize = 0;
 		this.capacity = capacity;
-		this.data = new Integer[capacity];
+		this.elements = new Integer[capacity];
 	}
 
 	// Time Complexity: O(logn)
-	public void insert(int x) {
+	@Override
+	public void add(int data) {
 		if (isHeapFull()) {
 			System.out.println("Heap Full!");
 		} else if (heapSize == 0) {
-			data[heapSize++] = x;
+			elements[heapSize++] = data;
 		} else {
-			data[heapSize] = x;
+			elements[heapSize] = data;
 			for (int i = heapSize; i > 0; i = parent(i)) {
-				if (data[parent(i)] != null && data[parent(i)] < x) {
+				if (elements[parent(i)] != null && elements[parent(i)] < data) {
 					swap(i, parent(i));
 				} else {
 					break;
@@ -40,32 +46,48 @@ class MaxBinaryHeap {
 		}
 	}
 
-	// Time Complexity:O(1)
-	public Integer getMax() {
-		return isHeapEmpty() ? null : data[0];
+	// Search/Access element: Time Complexity: O(n)
+	@Override
+	public boolean contains(int data) {
+		boolean flag = false;
+		for (int i = 0; i < heapSize; i++) {
+			if (elements[i] == data) {
+				flag = true;
+				break;
+			}
+		}
+		return flag;
 	}
 
 	// Time Complexity: O(logn)
-	public Integer extractMax() {
+	@Override
+	public int poll() {
 		Integer value = null;
 		if (!isHeapEmpty()) {
-			value = data[0];
+			value = elements[0];
 			if (heapSize == 1) {
 				heapSize--;
 			} else {
-				data[0] = data[heapSize - 1]; // Last element assigned to root
-				data[heapSize--] = null; // Last element set it as null & reduce the heap size
+				elements[0] = elements[heapSize - 1]; // Last element assigned to root
+				elements[heapSize--] = null; // Last element set it as null & reduce the heap size
 				maxHeapify(0);
 			}
 		}
 		return value;
 	}
 
-	// Time Complexity: O(logn)
-	public void increaseKey(int index, Integer increasedValue) {
+	// Time Complexity:O(1)
+	@Override
+	public int peek() {
+		return isHeapEmpty() ? null : elements[0];
+	}
+
+	//Update the value: Time Complexity: O(logn)
+	@Override
+	public void set(int index, int increasedValue) {
 		if (index < heapSize) {
-			data[index] = increasedValue;
-			while (index > 0 && data[parent(index)] < data[index]) {
+			elements[index] = increasedValue;
+			while (index > 0 && elements[parent(index)] < elements[index]) {
 				swap(index, parent(index));
 				index = parent(index);
 			}
@@ -74,21 +96,28 @@ class MaxBinaryHeap {
 		}
 	}
 
-	// Search/Access element: Time Complexity: O(n)
-	public boolean search(int n) {
-		boolean flag = false;
-		for (int i = 0; i < heapSize; i++) {
-			if (data[i] == n) {
-				flag = true;
-				break;
-			}
-		}
-		return flag;
+	@Override
+	public void print() {
+		for (int i = 0; i < heapSize; i++)
+			System.out.print(elements[i] + " ");
 	}
 
-	public void display() {
-		for (int i = 0; i < heapSize; i++)
-			System.out.print(data[i] + " ");
+	@Override
+	public boolean remove(int data) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int size() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	// Time Complexity: O(logn)
@@ -99,10 +128,10 @@ class MaxBinaryHeap {
 			right = right(i);
 			maxIndex = i;
 
-			if (left < heapSize && data[left] > data[maxIndex])
+			if (left < heapSize && elements[left] > elements[maxIndex])
 				maxIndex = left;
 
-			if (right < heapSize && data[right] > data[maxIndex])
+			if (right < heapSize && elements[right] > elements[maxIndex])
 				maxIndex = right;
 
 			if (maxIndex == i)
@@ -119,10 +148,10 @@ class MaxBinaryHeap {
 		int right = right(i);
 		int maxIndex = i;
 
-		if (left < heapSize && data[left] > data[maxIndex])
+		if (left < heapSize && elements[left] > elements[maxIndex])
 			maxIndex = left;
 
-		if (right < heapSize && data[right] > data[maxIndex])
+		if (right < heapSize && elements[right] > elements[maxIndex])
 			maxIndex = right;
 
 		if (i != maxIndex) {
@@ -152,9 +181,9 @@ class MaxBinaryHeap {
 	}
 
 	private void swap(int pos1, int pos2) {
-		int temp = data[pos1];
-		data[pos1] = data[pos2];
-		data[pos2] = temp;
+		int temp = elements[pos1];
+		elements[pos1] = elements[pos2];
+		elements[pos2] = temp;
 	}
 
 	public static void main(String[] args) {
@@ -176,23 +205,23 @@ class MaxBinaryHeap {
 				System.out.println("Enter no of data to be inserted:");
 				int t = in.nextInt();
 				while (t-- > 0)
-					binaryHeap.insert(in.nextInt());
+					binaryHeap.add(in.nextInt());
 
 				System.out.println("Elements are inserted!");
 				break;
 			case 2:
-				System.out.println("Max Element: " + binaryHeap.extractMax());
+				System.out.println("Max Element: " + binaryHeap.poll());
 				break;
 			case 3:
-				System.out.println("Max element present in Heap: " + binaryHeap.getMax());
+				System.out.println("Max element present in Heap: " + binaryHeap.peek());
 				break;
 			case 4:
 				System.out.println("Enter the index & increased value:");
-				binaryHeap.increaseKey(in.nextInt(), in.nextInt());
+				binaryHeap.set(in.nextInt(), in.nextInt());
 				break;
 			case 6:
 				System.out.println("Enter element needs to find: ");
-				System.out.println("Element present in the heap? " + binaryHeap.search(in.nextInt()));
+				System.out.println("Element present in the heap? " + binaryHeap.contains(in.nextInt()));
 				break;
 			default:
 				System.out.println("Please enter the valid option!!!");
@@ -200,7 +229,7 @@ class MaxBinaryHeap {
 
 			}
 			System.out.println("\nDisplay:");
-			binaryHeap.display();
+			binaryHeap.print();
 
 			System.out.println("\nDo you want to continue(y/n):");
 			ch = in.next().charAt(0);
@@ -208,9 +237,10 @@ class MaxBinaryHeap {
 		System.out.println("****Thank You******");
 		in.close();
 	}
+
 }
 
-class MinBinaryHeap {
+class MinBinaryHeap implements QueueOperations {
 	Integer[] elements;
 	int capacity;
 	int currSize;
@@ -221,8 +251,8 @@ class MinBinaryHeap {
 		this.currSize = 0;
 	}
 
-	// Time Complexity: O(logn)
-	public void insert(int data) {
+	@Override
+	public void add(int data) {
 		if (!isFull()) {
 			elements[currSize] = data;
 			for (int i = currSize; (i > 0 && elements[parent(i)] > elements[i]); i = parent(i))
@@ -234,34 +264,77 @@ class MinBinaryHeap {
 		}
 	}
 
-	// TODO: Delete Operation - Time Complexity - ???
-	public void delete() {
+	// Search/Access element: Time Complexity: O(n)
+	@Override
+	public boolean contains(int data) {
+		for (int i = 0; i < currSize; i++) {
+			if (elements[i] == data)
+				return true;
+		}
+		return false;
+	}
 
+	@Override
+	public boolean isEmpty() {
+		return currSize <= 0;
+	}
+
+	// Time Complexity: O(logn)
+	@Override
+	public int poll() {
+		if (isEmpty())
+			return -1;
+		// Get the min element from 0th position
+		Integer element = elements[0];
+		if (currSize == 1) {
+			elements[0] = null;
+			currSize--;
+		} else {
+			elements[0] = elements[currSize - 1]; // assign last element in the heap
+			elements[currSize - 1] = null;
+			currSize--;
+			// minHeapify(0);
+			minHeapifyIterative(0);
+		}
+		return element;
 	}
 
 	// Time Complexity:O(1)
-	public Integer getMin() {
+	@Override
+	public int peek() {
 		return currSize > 0 ? elements[0] : null;
 	}
 
 	// Time Complexity: O(logn)
-	public Integer extractMin() {
-		Integer element = null;
-		if (!isEmpty()) {
-			// Get the min element from 0th position
-			element = elements[0];
-			if (currSize == 1) {
-				elements[0] = null;
-				currSize--;
-			} else {
-				elements[0] = elements[currSize - 1]; // assign last element in the heap
-				elements[currSize - 1] = null;
-				currSize--;
-				// minHeapify(0);
-				minHeapifyIterative(0);
-			}
+	@Override
+	public void set(int index, int decreasedValue) {
+		if (index < currSize) {
+			elements[index] = decreasedValue;
+			for (int i = index; (i > 0 && elements[parent(i)] > elements[i]); i = parent(i))
+				swap(parent(i), i);
 		}
-		return element;
+	}
+
+	@Override
+	public void print() {
+		if (currSize > 0) {
+			for (int i = 0; i < currSize; i++)
+				System.out.print(elements[i] + " ");
+		} else {
+			System.out.println("Heap is Empty!");
+		}
+	}
+
+	@Override
+	public boolean remove(int data) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int size() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	private void minHeapifyIterative(int i) {
@@ -284,7 +357,6 @@ class MinBinaryHeap {
 				break;
 			}
 		}
-
 	}
 
 	// Time Complexity: O(logn)
@@ -305,41 +377,8 @@ class MinBinaryHeap {
 		}
 	}
 
-	// Time Complexity: O(logn)
-	public void decreaseKey(int index, int newValue) {
-		if (index < currSize) {
-			elements[index] = newValue;
-			for (int i = index; (i > 0 && elements[parent(i)] > elements[i]); i = parent(i))
-				swap(parent(i), i);
-		}
-
-	}
-
-	// Time Complexity: O(logn)
-	public void removeKey(int index) {
-		if (index < currSize) {
-			elements[index] = elements[currSize - 1];
-			elements[currSize - 1] = null;
-			currSize--;
-			minHeapify(index);
-		}
-	}
-
-	public void display() {
-		if (currSize > 0) {
-			for (int i = 0; i < currSize; i++)
-				System.out.print(elements[i] + " ");
-		} else {
-			System.out.println("Heap is Empty!");
-		}
-	}
-
 	private boolean isFull() {
 		return (currSize == capacity) ? true : false;
-	}
-
-	private boolean isEmpty() {
-		return currSize <= 0;
 	}
 
 	private int parent(int i) {
@@ -360,16 +399,15 @@ class MinBinaryHeap {
 		elements[pos2] = temp;
 	}
 
-	// Search/Access element: Time Complexity: O(n)
-	public boolean search(int n) {
-		boolean flag = false;
-		for (int i = 0; i < currSize; i++) {
-			if (elements[i] == n) {
-				flag = true;
-				break;
-			}
+	//TODO: Check what this method does?
+	// Time Complexity: O(logn)
+	public void removeKey(int index) {
+		if (index < currSize) {
+			elements[index] = elements[currSize - 1];
+			elements[currSize - 1] = null;
+			currSize--;
+			minHeapify(index);
 		}
-		return flag;
 	}
 
 	public static void main(String[] args) {
@@ -392,23 +430,23 @@ class MinBinaryHeap {
 				System.out.println("Enter no of elements to be inserted:");
 				int t = in.nextInt();
 				while (t-- > 0)
-					binaryHeap.insert(in.nextInt());
+					binaryHeap.add(in.nextInt());
 
 				System.out.println("Elements are inserted!");
 				break;
 			case 2:
-				System.out.println("Deleted min Element in the heap: " + binaryHeap.extractMin());
+				System.out.println("Deleted min Element in the heap: " + binaryHeap.poll());
 				break;
 			case 3:
-				System.out.println("Min element present in Heap: " + binaryHeap.getMin());
+				System.out.println("Min element present in Heap: " + binaryHeap.peek());
 				break;
 			case 4:
 				System.out.println("Enter the index & decreased value:");
-				binaryHeap.decreaseKey(in.nextInt(), in.nextInt());
+				binaryHeap.set(in.nextInt(), in.nextInt());
 				break;
 			case 5:
 				System.out.println("Enter element needs to find: ");
-				System.out.println("Element present in the heap? " + binaryHeap.search(in.nextInt()));
+				System.out.println("Element present in the heap? " + binaryHeap.contains(in.nextInt()));
 				break;
 			default:
 				System.out.println("Please enter the valid option!!!");
@@ -416,7 +454,7 @@ class MinBinaryHeap {
 
 			}
 			System.out.println("\nDisplay:");
-			binaryHeap.display();
+			binaryHeap.print();
 
 			System.out.println("\nDo you want to continue(y/n):");
 			ch = in.next().charAt(0);

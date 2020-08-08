@@ -2,6 +2,7 @@ package com.basic.datastructures;
 
 import java.util.Arrays;
 
+import com.basic.datastructures.operations.StackOperations;
 import com.common.model.ListNode;
 
 /**
@@ -28,7 +29,7 @@ public class Stack {
 		stack.push(2);
 		stack.push(3);
 		System.out.println("Display:");
-		stack.display();
+		stack.print();
 		System.out.println("\npop: " + stack.pop());
 		System.out.println("peek: " + stack.peek());
 	}
@@ -41,14 +42,13 @@ public class Stack {
 		stack.push(2);
 		stack.push(3);
 		System.out.println("Display:");
-		stack.display();
+		stack.print();
 		System.out.println("\npop: " + stack.pop());
 		System.out.println("peek: " + stack.peek());
 	}
 }
 
-class StackArrayImpl {
-
+class StackArrayImpl implements StackOperations {
 	int[] stack;
 	int top;
 	int maxSize;
@@ -60,41 +60,75 @@ class StackArrayImpl {
 		Arrays.fill(stack, -1);
 	}
 
+	@Override
 	public void push(int data) {
-		if (!isFull())
-			stack[++top] = data;
-		else
-			System.out.println("Stack is Full!");
-
+		if (isFull())
+			return;
+		stack[++top] = data;
 	}
 
+	@Override
 	public int pop() {
 		return isEmpty() ? -1 : stack[top--];
 	}
 
+	@Override
 	public int peek() {
 		return isEmpty() ? -1 : stack[top];
 	}
 
+	@Override
 	public boolean isEmpty() {
 		return top == -1;
 	}
 
-	public boolean isFull() {
+	private boolean isFull() {
 		return top == maxSize - 1;
 	}
 
-	public void display() {
-		if (!isEmpty()) {
-			for (int i = 0; i <= top; i++)
-				System.out.print(stack[i] + " ");
-		}
+	@Override
+	public void set(int index, int data) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean contains(int data) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean remove(int data) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int size() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void add(int data) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void print() {
+		if (isEmpty())
+			return;
+
+		for (int i = 0; i <= top; i++)
+			System.out.print(stack[i] + " ");
 	}
 }
 
-class StackLinkedListImpl {
+class StackLinkedListImpl implements StackOperations {
 	ListNode stack;
 
+	@Override
 	public void push(int data) {
 		ListNode newNode = new ListNode(data);
 		if (stack == null) {
@@ -105,32 +139,65 @@ class StackLinkedListImpl {
 		}
 	}
 
-	public boolean isEmpty() {
-		return stack == null ? true : false;
-	}
-
+	@Override
 	public int pop() {
-		int data = -1;
-		if (!isEmpty()) {
-			data = stack.data;
-			stack = stack.next;
-		}
+		if (!isEmpty())
+			return -1;
+
+		int data = stack.data;
+		stack = stack.next;
 		return data;
 	}
 
+	@Override
 	public int peek() {
 		return stack != null ? stack.data : null;
 	}
 
-	public void display() {
-		ListNode temp = stack;
-		if (isEmpty()) {
-			System.out.println("Stack is empty!!!");
-		} else {
-			while (temp != null) {
-				System.out.print(temp.data + " ");
-				temp = temp.next;
-			}
+	@Override
+	public boolean isEmpty() {
+		return stack == null ? true : false;
+	}
+
+	@Override
+	public void print() {
+		if (isEmpty())
+			return;
+
+		ListNode curr = stack;
+		while (curr != null) {
+			System.out.print(curr.data + " ");
+			curr = curr.next;
 		}
+	}
+
+	@Override
+	public void add(int data) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void set(int index, int data) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean contains(int data) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean remove(int data) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int size() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

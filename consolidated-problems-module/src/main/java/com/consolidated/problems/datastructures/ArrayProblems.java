@@ -148,8 +148,7 @@ public class ArrayProblems {
 	}
 
 	// Contains Duplicate II
-	public boolean containsNearbyDuplicate(int[] nums,
-			int k) {
+	public boolean containsNearbyDuplicate(int[] nums, int k) {
 		Set<Integer> set = new HashSet<Integer>();
 		for (int i = 0; i < nums.length; i++) {
 			if (i > k)
@@ -319,8 +318,7 @@ public class ArrayProblems {
 		Arrays.sort(arr);
 		int minDiff = Integer.MAX_VALUE;
 		for (int i = 0; i <= arr.length - m; i++)
-			minDiff = Math.min(minDiff,
-					arr[i + m - 1] - arr[i]);
+			minDiff = Math.min(minDiff, arr[i + m - 1] - arr[i]);
 		return minDiff;
 	}
 
@@ -349,8 +347,8 @@ public class ArrayProblems {
 	}
 
 	// Shuffle an Array
-	int[]  original;
-	int[]  shuffled;
+	int[] original;
+	int[] shuffled;
 	Random random;
 
 	public void init(int[] nums) {
@@ -396,8 +394,7 @@ public class ArrayProblems {
 			rightMin[i] = Math.min(arr[i], rightMin[i + 1]);
 		// System.out.println(Arrays.toString(rightMin));
 		for (int i = 1; i < n - 1; i++) {
-			if (arr[i] == leftMax[i]
-					&& arr[i] == rightMin[i])
+			if (arr[i] == leftMax[i] && arr[i] == rightMin[i])
 				return arr[i];
 		}
 		return -1;
@@ -439,8 +436,7 @@ public class ArrayProblems {
 	}
 
 	public static void leadersInArray(int[] arr) {
-		PriorityQueue<Integer> queue = new PriorityQueue<>(
-				Collections.reverseOrder());
+		PriorityQueue<Integer> queue = new PriorityQueue<>(Collections.reverseOrder());
 		for (int i = 0; i < arr.length; i++)
 			queue.add(arr[i]);
 		for (int i = 0; i < arr.length; i++) {
@@ -491,48 +487,46 @@ public class ArrayProblems {
 	/* Find Majority Element in an Array/Majority Element I, II
 	 * Given an array of size n, find the majority element. The majority element is the element that appears more than n/2 times.
 	 */
-	// Using Sorting:
-	public int majorityElement(int[] nums) {
+	//Using Sorting:
+	public int majorityElement1(int[] nums) {
 		Arrays.sort(nums);
-		int n = nums.length;
-		int count = 1, maxCount = 1, majElement = nums[0];
-		for (int i = 0; i < n; i++) {
-			if (i < n - 1 && nums[i] == nums[i + 1]) {
-				count++;
-			} else {
-				if (count > maxCount) {
-					majElement = nums[i - 1];
-					maxCount = count;
-				}
-				count = 1;
-			}
-		}
-		return (maxCount >= n / 2) ? majElement : 0;
+		return nums[nums.length / 2];
 	}
 
-	// Using Moore’s Voting Algorithm: Time Complexity:O(n)
+	// Hashtable 
 	public int majorityElement2(int[] nums) {
-		// Find the Majority Element
-		int count = 1, majElement = nums[0];
-		for (int i = 1; i < nums.length; i++) {
-			if (nums[i] == majElement)
+		Map<Integer, Integer> map = new HashMap<>();
+		int ret = 0;
+		for (int num : nums) {
+			if (!map.containsKey(num))
+				map.put(num, 1);
+			else
+				map.put(num, map.get(num) + 1);
+			if (map.get(num) > nums.length / 2) {
+				ret = num;
+				break;
+			}
+		}
+		return ret;
+	}
+
+	/* Using Moore’s Voting Algorithm: Time Complexity:O(n)
+	 * The algorithm for the first phase that works in O(n) is known as Moore’s Voting Algorithm. Basic idea of the algorithm 
+	 * is that if each occurrence of an element e can be cancelled with all the other elements that are different from e then
+	 * e will exist till end if it is a majority element.
+	*/
+	public int majorityElement3(int[] nums) {
+		int count = 0, element = 0;
+		for (int num : nums) {
+			if (count == 0)
+				element = num;
+
+			if (num == element)
 				count++;
 			else
 				count--;
-			if (count == 0) {
-				majElement = nums[i];
-				count = 1;
-			}
 		}
-		// Validate the Majority element which you found in prev step
-		System.out
-				.println("Majority Element: " + majElement);
-		count = 0;
-		for (int i = 0; i < nums.length; i++)
-			if (nums[i] == majElement)
-				count++;
-
-		return (count >= nums.length / 2) ? majElement : 0;
+		return element;
 	}
 
 	/* Third Maximum Number
@@ -542,8 +536,7 @@ public class ArrayProblems {
 	public int thirdMax(int[] nums) {
 		Integer first = null, second = null, third = null;
 		for (Integer num : nums) {
-			if (num.equals(first) || num.equals(second)
-					|| num.equals(third))
+			if (num.equals(first) || num.equals(second) || num.equals(third))
 				continue;
 			if (first == null || first <= num) {
 				third = second;
@@ -639,8 +632,7 @@ public class ArrayProblems {
 	 * missing ranges. 
 	 * For example, given [0, 1, 3, 50, 75], lower = 0 and upper = 99, return ["2", "4->49", "51->74", "76->99"].
 	 */
-	public List<String> findMissingRanges(int[] nums,
-			int lower, int upper) {
+	public List<String> findMissingRanges(int[] nums, int lower, int upper) {
 
 		List<String> result = new ArrayList<>();
 		int n = nums.length;
@@ -654,14 +646,12 @@ public class ArrayProblems {
 			if (prev + 2 == curr)
 				result.add(String.valueOf(prev + 1));
 			else if (prev + 2 < curr)
-				result.add(String.valueOf(prev + 1) + "->"
-						+ String.valueOf(curr - 1));
+				result.add(String.valueOf(prev + 1) + "->" + String.valueOf(curr - 1));
 
 			prev = curr;
 		}
 
-		result.stream()
-				.forEach(k -> System.out.print(k + " "));
+		result.stream().forEach(k -> System.out.print(k + " "));
 		return result;
 	}
 
@@ -682,8 +672,7 @@ public class ArrayProblems {
 	/* Solution: For each update, increment the start index by inc, decrement the end index + 1 by inc. Then do a moving sum at 
 	 * last. Time Complexity:O(k+n)
 	 */
-	public int[] getModifiedArray(int length,
-			int[][] updates) {
+	public int[] getModifiedArray(int length, int[][] updates) {
 		int[] result = new int[length];
 
 		int si, ei, val;
@@ -797,18 +786,12 @@ public class ArrayProblems {
 			int left = i + 1;
 			int right = nums.length - 1;
 			while (left < right) {
-				long sum = (long) nums[i]
-						+ (long) nums[left]
-						+ (long) nums[right];
+				long sum = (long) nums[i] + (long) nums[left] + (long) nums[right];
 				if (sum == 0) {
-					res.add(new int[] { nums[i], nums[left],
-							nums[right] });
-					while (left < right
-							&& nums[left] == nums[left + 1])
+					res.add(new int[] { nums[i], nums[left], nums[right] });
+					while (left < right && nums[left] == nums[left + 1])
 						left++;
-					while (left < right
-							&& nums[right] == nums[right
-									- 1])
+					while (left < right && nums[right] == nums[right - 1])
 						right--;
 				}
 				if (sum > 0)
@@ -821,8 +804,7 @@ public class ArrayProblems {
 	}
 
 	// Using List:
-	public ArrayList<ArrayList<Integer>> threeSumZero(
-			ArrayList<Integer> A) {
+	public ArrayList<ArrayList<Integer>> threeSumZero(ArrayList<Integer> A) {
 		ArrayList<ArrayList<Integer>> result = new ArrayList<>();
 		if (A == null || A.size() <= 2)
 			return result;
@@ -835,8 +817,7 @@ public class ArrayProblems {
 			int l = i + 1, h = A.size() - 1;
 			while (l < h) {
 				// System.out.println(A.get(i)+ ", " + A.get(l) +", "+A.get(h));
-				long sum = (long) A.get(i) + (long) A.get(l)
-						+ (long) A.get(h);
+				long sum = (long) A.get(i) + (long) A.get(l) + (long) A.get(h);
 				if (sum == 0) {
 					// System.out.println("Sum: "+sum);
 					temp = new ArrayList<>();
@@ -846,11 +827,9 @@ public class ArrayProblems {
 					result.add(temp);
 
 					// Skip the duplicate
-					while (l < h && A.get(l)
-							.equals(A.get(l + 1)))
+					while (l < h && A.get(l).equals(A.get(l + 1)))
 						l++;
-					while (l < h && A.get(h)
-							.equals(A.get(h - 1)))
+					while (l < h && A.get(h).equals(A.get(h - 1)))
 						h--;
 				}
 				if (sum <= 0)
@@ -876,10 +855,8 @@ public class ArrayProblems {
 				b = arr[j] * arr[j];
 				for (int k = j + 1; k < n; k++) {
 					c = arr[k] * arr[k];
-					if (a + b == c || a + c == b
-							|| a == b + c) {
-						System.out.println(arr[i] + " "
-								+ arr[j] + " " + arr[k]);
+					if (a + b == c || a + c == b || a == b + c) {
+						System.out.println(arr[i] + " " + arr[j] + " " + arr[k]);
 						return true;
 					}
 				}
@@ -906,15 +883,12 @@ public class ArrayProblems {
 	}
 
 	// Using 2 ptr approach
-	public boolean sumPresent1(int[] nums, int l, int h,
-			int firstValue, int target) {
+	public boolean sumPresent1(int[] nums, int l, int h, int firstValue, int target) {
 		// target -= firstValue; // Remove first value from the target, two find the remaining two values
 
 		while (l < h) {
 			if (nums[l] + nums[h] == target) {
-				System.out.println("The Triplet is: "
-						+ firstValue + ", " + nums[l] + ", "
-						+ nums[h]);
+				System.out.println("The Triplet is: " + firstValue + ", " + nums[l] + ", " + nums[h]);
 				return true;
 			} else if (nums[l] + nums[h] > target) {
 				h--;
@@ -941,8 +915,7 @@ public class ArrayProblems {
 			for (int j = i + 1; j < n; j++) {
 				b = arr[j] * arr[j];
 				if (set.contains(a + b)) {
-					System.out.println(arr[i] + " " + arr[j]
-							+ " " + (int) Math.sqrt(a + b));
+					System.out.println(arr[i] + " " + arr[j] + " " + (int) Math.sqrt(a + b));
 					return true;
 				}
 			}
@@ -952,8 +925,7 @@ public class ArrayProblems {
 
 	// 4Sum I:
 	// Brute Force Approach
-	public List<List<Integer>> fourSum(int[] nums,
-			int target) {
+	public List<List<Integer>> fourSum(int[] nums, int target) {
 		int n = nums.length;
 		List<List<Integer>> result = new ArrayList<>();
 		List<Integer> eachList = new ArrayList<>();
@@ -965,10 +937,8 @@ public class ArrayProblems {
 					target -= nums[k];
 					for (int l = 0; l < n; l++) {
 						target -= nums[k];
-						if (target == 0 && !result
-								.contains(eachList))
-							result.add(new ArrayList<>(
-									eachList));
+						if (target == 0 && !result.contains(eachList))
+							result.add(new ArrayList<>(eachList));
 					}
 				}
 			}
@@ -977,8 +947,7 @@ public class ArrayProblems {
 	}
 
 	// Approach2: Two Ptr Approach: Time Complexity-O(n^3)
-	public List<List<Integer>> fourSum2(int[] nums,
-			int target) {
+	public List<List<Integer>> fourSum2(int[] nums, int target) {
 		int n = nums.length;
 		Arrays.sort(nums); // Sort the array to remove the duplicate order
 		List<List<Integer>> result = new ArrayList<>();
@@ -988,12 +957,9 @@ public class ArrayProblems {
 				int l = j + 1;
 				int h = n - 1;
 				while (l < h) {
-					int sum = nums[i] + nums[j] + nums[l]
-							+ nums[h];
+					int sum = nums[i] + nums[j] + nums[l] + nums[h];
 					if (sum == target) {
-						List<Integer> eachList = Arrays
-								.asList(nums[i], nums[j],
-										nums[l], nums[h]);
+						List<Integer> eachList = Arrays.asList(nums[i], nums[j], nums[l], nums[h]);
 						if (!result.contains(eachList))
 							result.add(eachList);
 						l++;
@@ -1015,8 +981,7 @@ public class ArrayProblems {
 	 *  A[i] + B[j] + C[k] + D[l] is zero.
 	 */
 	// Approach1: BruteForce Approach: Time Complexity-O(n^4)
-	public int fourSumCount1(int[] A, int[] B, int[] C,
-			int[] D) {
+	public int fourSumCount1(int[] A, int[] B, int[] C, int[] D) {
 		int n = A.length, count = 0;
 		for (int i = 0; i < n; i++)
 			for (int j = 0; j < n; j++)
@@ -1028,8 +993,7 @@ public class ArrayProblems {
 	}
 
 	// Approach2: Efficient Approach: Time Complexity-O(n^2), Space Complexity-O(n^2)
-	public int fourSumCount(int[] A, int[] B, int[] C,
-			int[] D) {
+	public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
 		int n = A.length, count = 0;
 		Map<Integer, Integer> map = new HashMap<>();
 		for (int i = 0; i < n; i++)
@@ -1068,8 +1032,7 @@ public class ArrayProblems {
 
 		// 3.Divide each element by n
 		for (int i = 0; i < n; i++)
-			System.out
-					.println(i + 1 + " - " + (arr[i] / n));
+			System.out.println(i + 1 + " - " + (arr[i] / n));
 	}
 
 	// Repeat and Missing Number Array: Time: O(n)
@@ -1182,8 +1145,7 @@ public class ArrayProblems {
 		return low;
 	}
 
-	public List<Integer> findDisappearedNumbers(
-			int[] nums) {
+	public List<Integer> findDisappearedNumbers(int[] nums) {
 		List<Integer> result = new ArrayList<>();
 		if (nums.length <= 1)
 			return result;

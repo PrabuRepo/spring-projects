@@ -1,5 +1,7 @@
 package com.basic.datastructures;
 
+import com.basic.datastructures.operations.DLLOperations;
+import com.basic.datastructures.operations.SLLOperations;
 import com.common.model.ListNode;
 
 /*
@@ -37,47 +39,46 @@ public class LinkedList {
 		list.add(5);
 		list.add(7);
 		System.out.println("\nDisplay:");
-		list.display();
+		list.print();
 		list.insert(4, 4);
 		list.insert(7, 8);
 		System.out.println("\nDisplay:");
-		list.display();
+		list.print();
 		System.out.println("\nDelete: " + list.remove(1));
 		System.out.println("Find: " + list.contains(3));
 	}
 
 	public void testDoublyLinkedList() {
-		CircularSLinkedList list = new CircularSLinkedList();
+		DoublyLinkedList list = new DoublyLinkedList();
 		System.out.println("Insert");
-		list.insert(1);
-		list.insert(2);
-		list.insert(3);
+		list.add(1);
+		list.add(2);
+		list.add(3);
 		System.out.println("Display:");
-		list.display();
+		list.print();
 		System.out.println("\nDelete: ");
-		list.delete(1);
-		System.out.println("Find: " + list.search(3));
-
+		list.remove(1);
+		System.out.println("Find: " + list.contains(3));
 	}
 
 	public void testCircularSLinkedList() {
 		CircularSLinkedList list = new CircularSLinkedList();
 		System.out.println("Insert");
-		list.insert(1);
-		list.insert(2);
-		list.insert(3);
+		list.add(1);
+		list.add(2);
+		list.add(3);
 		System.out.println("Display:");
-		list.display();
+		list.print();
 		System.out.println("\nDelete: ");
-		list.delete(1);
-		System.out.println("Find: " + list.search(3));
+		list.remove(1);
+		System.out.println("Find: " + list.contains(3));
 	}
 }
 
-class SinglyLinkedList {
-
+class SinglyLinkedList implements SLLOperations {
 	ListNode head;
 
+	@Override
 	public void add(int data) {
 		ListNode newNode = new ListNode(data);
 		if (head == null) {
@@ -90,9 +91,60 @@ class SinglyLinkedList {
 		}
 	}
 
-	public void insert(int pos, int data) {
+	@Override
+	public void set(int index, int data) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public boolean contains(int data) {
+		return get(data) != null ? true : false;
+	}
+
+	@Override
+	public boolean remove(int data) {
+		if (isEmpty())
+			return false;
+
+		if (head.data == data) {
+			head = head.next;
+			return true;
+		} else {
+			ListNode curr = head;
+			while (curr != null && curr.next != null) {
+				if (curr.next.data == data) {
+					curr.next = curr.next.next;
+					return true;
+				} else {
+					curr = curr.next;
+				}
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public int size() {
+		if (isEmpty())
+			return 0;
+		int count = 0;
 		ListNode curr = head;
-		while (--pos > 1)// Move to prev node
+		while (curr != null) {
+			count++;
+			curr = curr.next;
+		}
+		return count;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return head == null ? true : false;
+	}
+
+	@Override
+	public void insert(int index, int data) {
+		ListNode curr = head;
+		while (--index > 1)// Move to prev node
 			curr = curr.next;
 
 		ListNode newNode = new ListNode(data);
@@ -102,38 +154,22 @@ class SinglyLinkedList {
 		}
 	}
 
-	public boolean contains(int data) {
+	@Override
+	public ListNode get(int data) {
+		if (isEmpty())
+			return null;
+
 		ListNode curr = head;
 		while (curr != null) {
 			if (curr.data == data)
-				return true;
-			else
-				curr = curr.next;
+				return curr;
+			curr = curr.next;
 		}
-		return false;
+		return null;
 	}
 
-	public boolean remove(int data) {
-		boolean flag = false;
-		if (head != null && head.data == data) {
-			head = head.next;
-			flag = true;
-		} else {
-			ListNode curr = head;
-			while (curr != null && curr.next != null) {
-				if (curr.next.data == data) {
-					curr.next = curr.next.next;
-					flag = true;
-					break;
-				} else {
-					curr = curr.next;
-				}
-			}
-		}
-		return flag;
-	}
-
-	public void display() {
+	@Override
+	public void print() {
 		ListNode curr = head;
 		while (curr != null) {
 			System.out.print(curr.data + " ");
@@ -141,59 +177,13 @@ class SinglyLinkedList {
 		}
 	}
 
-	//TODO: Move this
-	public ListNode middleNode() {
-		ListNode slowPtr = head, fastPtr = head;
-		while (fastPtr.next.next != null) {
-			slowPtr = slowPtr.next;
-			fastPtr = fastPtr.next.next;
-		}
-		return slowPtr;
-	}
-
-	public boolean isPalindrome() {
-		boolean flag = true;
-		ListNode middle;
-		ListNode slowPtr = head, fastPtr = head;
-		while (fastPtr.next != null && fastPtr.next.next != null) {
-			slowPtr = slowPtr.next;
-			fastPtr = fastPtr.next.next;
-		}
-		// To handle odd and even nodes
-		middle = fastPtr.next != null ? slowPtr.next : slowPtr;
-
-		ListNode temp = head;
-		ListNode reverse = reverse(middle);
-		while (reverse != null) {
-			if (reverse.data == temp.data) {
-				reverse = reverse.next;
-				temp = temp.next;
-			} else {
-				flag = false;
-				break;
-			}
-		}
-		return flag;
-	}
-
-	public ListNode reverse(ListNode headNode) {
-		ListNode prev = null, next = null, current = headNode;
-		while (current != null) {
-			next = current.next;
-			current.next = prev;
-			prev = current;
-			current = next;
-		}
-		headNode = prev;
-		return headNode;
-	}
-
 }
 
-class DoublyLinkedList {
+class DoublyLinkedList implements DLLOperations {
 
 	ListNode head;
 
+	@Override
 	public void add(int data) {
 		ListNode newNode = new ListNode(data);
 		if (head == null) {
@@ -207,86 +197,102 @@ class DoublyLinkedList {
 		}
 	}
 
-	public void delete1(int data) {
-		if (head == null) {
-			System.out.println("List is empty");
-		} else if (head.data == data) {
-			head = head.next;
-			if (head != null)
-				head.prev = null;
-		} else {
-			ListNode curr = head;
-			while (curr.next != null) {
-				if (curr.next.data == data) {
-					ListNode next = curr.next.next;
-					curr.next = next;
-					if (next != null)
-						next.prev = curr.next;
-					break;
-				} else {
-					curr = curr.next;
-				}
-			}
-
-		}
+	@Override
+	public void set(int index, int data) {
+		// TODO Auto-generated method stub
 	}
 
-	public void delete(int data) {
-		if (head == null) {
-			System.out.println("List is empty");
-		} else {
-			ListNode curr = head;
-			// Find the Node
-			while (curr != null) {
-				if (curr.data == data)
-					break;
-				curr = curr.next;
-			}
-			// Delete the node
-			if (curr != null) {
-				ListNode prev = curr.prev;
-				if (prev != null) {
-					prev.next = curr.next;
-				} else {
-					curr = curr.next;
-					if (curr != null) // Need this check for only head node in the list
-						curr.prev = null;
-					head = curr;
-				}
-			} else {
-				System.out.println("Data is not found!");
-			}
-		}
+	@Override
+	public boolean contains(int data) {
+		return get(data) != null ? true : false;
 	}
 
-	public boolean search(int data) {
-		if (head == null)
+	@Override
+	public boolean remove(int data) {
+		ListNode delNode = get(data);
+
+		if (delNode == null)
 			return false;
+
+		if (head == delNode)
+			head = head.next;
+
+		if (delNode.prev != null)
+			delNode.prev.next = delNode.next;
+
+		if (delNode.next != null)
+			delNode.next.prev = delNode.prev;
+
+		return true;
+	}
+
+	@Override
+	public int size() {
+		if (isEmpty())
+			return 0;
+		int count = 0;
+		ListNode curr = head;
+		while (curr != null) {
+			count++;
+			curr = curr.next;
+		}
+		return count;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return head == null ? true : false;
+	}
+
+	@Override
+	public void insert(int index, int data) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void insertBefore(int data, int newData) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void insertAfter(int data, int newData) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public ListNode get(int data) {
+		if (isEmpty())
+			return null;
+
 		ListNode curr = head;
 		while (curr != null) {
 			if (curr.data == data)
-				return true;
+				return curr;
 			curr = curr.next;
 		}
-		return false;
+		return null;
 	}
 
-	public void display() {
-		ListNode curr = head;
-		while (curr != null) {
-			System.out.print(curr.data + " ");
-			curr = curr.next;
-		}
-	}
+	@Override
+	public void print() {
+		// TODO Auto-generated method stub
 
+	}
 }
 
-// This implementation using single pointer, if we use 2 pointers, all the operations complexity will be O(1) or
-// Constant time.
-class CircularSLinkedList {
+/*
+ * Circular Linked List can be implemented using,
+ * 	1.SLL
+ *  2.DLL
+ */
+//1.Circular (Singly) Linked List Implementation:  using only one pointer 'next'
+class CircularSLinkedList implements SLLOperations {
 	ListNode head;
 
-	public void insert(int data) {
+	@Override
+	public void add(int data) {
 		ListNode newNode = new ListNode(data);
 		if (head == null) {
 			head = newNode;
@@ -305,20 +311,46 @@ class CircularSLinkedList {
 		}
 	}
 
-	public boolean search(int data) {
+	@Override
+	public void set(int index, int data) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean contains(int data) {
+		return get(data) != null ? true : false;
+	}
+
+	@Override
+	public boolean remove(int data) {
+		if (isEmpty())
+			return false;
+
 		ListNode curr = head;
-		if (curr != null) {
+		if (curr.data == data && curr.next == head) {
+			head = null;
+		} else if (curr.data == data) {
+			curr.data = curr.next.data;
+			curr.next = curr.next.next;
+		} else {
 			do {
-				if (curr.data == data)
+				if (curr.next.data == data) {
+					curr.next = curr.next.next;
 					return true;
-				curr = curr.next;
+				} else {
+					curr = curr.next;
+				}
 			} while (curr != head);
 		}
-
 		return false;
 	}
 
-	public int countNodes() {
+	@Override
+	public int size() {
+		if (isEmpty())
+			return 0;
+
 		ListNode curr = head;
 		int count = 0;
 		if (curr != null) {
@@ -330,39 +362,111 @@ class CircularSLinkedList {
 		return count;
 	}
 
-	public void delete(int data) {
-		ListNode curr = head;
-		if (curr != null) {
-			if (curr.data == data && curr.next == head) {
-				head = null;
-			} else if (curr.data == data) {
-				curr.data = curr.next.data;
-				curr.next = curr.next.next;
-			} else {
-				do {
-					if (curr.next.data == data) {
-						curr.next = curr.next.next;
-						break;
-					} else {
-						curr = curr.next;
-					}
-				} while (curr != head);
-			}
-		} else {
-			System.out.println("List is empty");
-		}
+	@Override
+	public boolean isEmpty() {
+		return head == null ? true : false;
 	}
 
-	public void display() {
-		ListNode temp = head;
-		if (temp != null) {
+	@Override
+	public void insert(int index, int data) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public ListNode get(int data) {
+		ListNode curr = head;
+		if (curr != null) {
 			do {
-				System.out.print(temp.data + " ");
-				temp = temp.next;
-			} while (temp != head);
-		} else {
-			System.out.println("List is empty");
+				if (curr.data == data)
+					return curr;
+				curr = curr.next;
+			} while (curr != head);
 		}
+		return null;
+	}
+
+	@Override
+	public void print() {
+		if (isEmpty())
+			return;
+
+		ListNode curr = head;
+		do {
+			System.out.print(curr.data + " ");
+			curr = curr.next;
+		} while (curr != head);
+	}
+}
+
+//2.Circular (Doubly) Linked List Implementation - using two pointers front, rear
+class CircularDLinkedList implements DLLOperations {
+
+	ListNode head;
+
+	@Override
+	public void add(int data) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void set(int index, int data) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean contains(int data) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean remove(int data) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int size() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void insert(int index, int data) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void insertBefore(int data, int newData) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void insertAfter(int data, int newData) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public ListNode get(int data) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void print() {
+		// TODO Auto-generated method stub
 
 	}
 }

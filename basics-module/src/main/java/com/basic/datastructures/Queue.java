@@ -2,6 +2,7 @@ package com.basic.datastructures;
 
 import java.util.Arrays;
 
+import com.basic.datastructures.operations.QueueOperations;
 import com.common.model.ListNode;
 
 /**
@@ -24,13 +25,13 @@ public class Queue {
 		QueueArrayImpl queue = new QueueArrayImpl(5);
 		System.out.println("Stack Operations:");
 		System.out.println("EnQueue");
-		queue.enQueue(1);
-		queue.enQueue(2);
-		queue.enQueue(3);
+		queue.add(1);
+		queue.add(2);
+		queue.add(3);
 		System.out.println("Display:");
-		queue.display();
-		System.out.println("\nDequeue: " + queue.deQueue());
-		System.out.println("Front: " + queue.getFront());
+		queue.print();
+		System.out.println("\nDequeue: " + queue.poll());
+		System.out.println("Front: " + queue.peek());
 		System.out.println("Rear: " + queue.getRear());
 	}
 
@@ -38,19 +39,19 @@ public class Queue {
 		QueueLinkedListImpl queue = new QueueLinkedListImpl();
 		System.out.println("Stack Operations:");
 		System.out.println("EnQueue");
-		queue.enQueue(1);
-		queue.enQueue(2);
-		queue.enQueue(3);
+		queue.add(1);
+		queue.add(2);
+		queue.add(3);
 		System.out.println("Display:");
-		queue.display();
-		System.out.println("\nDequeue: " + queue.deQueue());
-		System.out.println("Front: " + queue.getFront());
+		queue.print();
+		System.out.println("\nDequeue: " + queue.poll());
+		System.out.println("Front: " + queue.peek());
 		System.out.println("Rear: " + queue.getRear());
 	}
 
 }
 
-class QueueArrayImpl {
+class QueueArrayImpl implements QueueOperations {
 	int[] queue;
 	int front, rear;
 	int maxSize;
@@ -62,17 +63,18 @@ class QueueArrayImpl {
 		Arrays.fill(queue, -1);
 	}
 
-	public void enQueue(int data) {
-		if (!isFull()) {
-			if (isEmpty()) // When Queue is empty; both front & rear will be increased zero.
-				front++;
-			queue[++rear] = data; // Normal case: Simply insert the data in the rear end
-		} else {
-			System.out.println("Queue is Full!");
-		}
+	//Add the element in the rear end
+	@Override
+	public void add(int data) {
+		if (isFull())
+			return;
+		if (isEmpty()) // When Queue is empty; both front & rear will be increased zero.
+			front++;
+		queue[++rear] = data; // Normal case: Simply insert the data in the rear end
 	}
 
-	public int deQueue() {
+	@Override
+	public int poll() {
 		if (isEmpty())
 			return -1;
 		int element = queue[front];
@@ -83,15 +85,17 @@ class QueueArrayImpl {
 		return element;
 	}
 
+	@Override
 	public boolean isEmpty() {
 		return front == -1;
 	}
 
-	public boolean isFull() {
+	private boolean isFull() {
 		return rear == maxSize - 1;
 	}
 
-	public int getFront() {
+	@Override
+	public int peek() {
 		return isEmpty() ? -1 : queue[front];
 	}
 
@@ -99,19 +103,46 @@ class QueueArrayImpl {
 		return isEmpty() ? -1 : queue[rear];
 	}
 
-	public void display() {
-		if (!isEmpty()) {
-			for (int i = front; i <= rear; i++)
-				System.out.print(queue[i] + " ");
-		}
+	@Override
+	public void print() {
+		if (isEmpty())
+			return;
+
+		for (int i = front; i <= rear; i++)
+			System.out.print(queue[i] + " ");
 	}
+
+	@Override
+	public void set(int index, int data) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public boolean contains(int data) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean remove(int data) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int size() {
+		return 0;
+	}
+
 }
 
-class QueueLinkedListImpl {
+class QueueLinkedListImpl implements QueueOperations {
+
 	ListNode front, rear;
 
-	public void enQueue(int n) {
-		ListNode newNode = new ListNode(n);
+	@Override
+	public void add(int data) {
+		ListNode newNode = new ListNode(data);
 		if (isEmpty()) {
 			front = rear = newNode;
 		} else {
@@ -120,7 +151,8 @@ class QueueLinkedListImpl {
 		}
 	}
 
-	public int deQueue() {
+	@Override
+	public int poll() {
 		if (isEmpty())
 			return -1;
 		int data = front.data;
@@ -132,11 +164,8 @@ class QueueLinkedListImpl {
 		return data;
 	}
 
-	public boolean isEmpty() {
-		return (front == null && rear == null);
-	}
-
-	public int getFront() {
+	@Override
+	public int peek() {
 		return !isEmpty() ? front.data : null;
 	}
 
@@ -144,16 +173,42 @@ class QueueLinkedListImpl {
 		return !isEmpty() ? rear.data : null;
 	}
 
-	public void display() {
-		if (isEmpty()) {
-			System.out.print("Queue is Empty!!!");
-		} else {
-			ListNode curr = front;
-			while (curr != null) {
-				System.out.print(curr.data + " ");
-				curr = curr.next;
-			}
-		}
+	@Override
+	public int size() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
+	@Override
+	public boolean isEmpty() {
+		return (front == null && rear == null);
+	}
+
+	@Override
+	public void set(int index, int data) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public boolean contains(int data) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean remove(int data) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void print() {
+		if (isEmpty())
+			return;
+		ListNode curr = front;
+		while (curr != null) {
+			System.out.print(curr.data + " ");
+			curr = curr.next;
+		}
+	}
 }

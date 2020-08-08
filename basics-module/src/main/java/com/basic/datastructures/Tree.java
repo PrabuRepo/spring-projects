@@ -1,12 +1,10 @@
 package com.basic.datastructures;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Scanner;
-import java.util.Stack;
 
+import com.basic.datastructures.operations.TreeOperations;
 import com.common.model.TreeNode;
 
 public class Tree {
@@ -30,15 +28,15 @@ public class Tree {
 				System.out.println("Enter no of elements to be inserted:");
 				int t = in.nextInt();
 				while (t-- > 0)
-					bst.insert(in.nextInt());
+					bst.add(in.nextInt());
 				break;
 			case 2:
 				System.out.println("Element needs to be removed in tree:");
-				bst.delete(in.nextInt());
+				bst.remove(in.nextInt());
 				break;
 			case 3:
 				System.out.println("Enter elements to search:");
-				System.out.println("Element present in BST? " + bst.search(in.nextInt()));
+				System.out.println("Element present in BST? " + bst.contains(in.nextInt()));
 				break;
 			case 4:
 				System.out.println("Minmum element in BST:" + bst.findMin(bst.root));
@@ -52,13 +50,13 @@ public class Tree {
 			}
 			System.out.println("\nDisplay:");
 			System.out.println("In Order Traversal:");
-			bst.inOrderTraversal();
+			bst.inorder(bst.root);
 			System.out.println("\nPre Order Traversal:");
-			bst.preOrderTraversal();
+			bst.preorder(bst.root);
 			System.out.println("\nPost Order Traversal:");
-			bst.postOrderTraversal();
+			bst.postorder(bst.root);
 			System.out.println("\nLevel Order Traaversal:");
-			bst.levelOrderTraversal();
+			bst.levelorder(bst.root);
 
 			System.out.println("\nDo you want to continue(y/n):");
 			ch = in.next().charAt(0);
@@ -68,38 +66,36 @@ public class Tree {
 	}
 }
 
-class BinarySearchTree {
+class BinarySearchTree implements TreeOperations {
 	TreeNode root;
 
-	/******************* Binary Search Tree Operations ************************/
-	public void insert(int n) {
-		// Recursive
-		root = insertNode1(root, n);
-
-		// Iterative
-		// root = insertNode2(n);
+	// Recursive
+	@Override
+	public void add(int data) {
+		root = add(root, data);
 	}
 
-	private TreeNode insertNode1(TreeNode root, int n) {
+	private TreeNode add(TreeNode root, int n) {
 		if (root == null) {
 			root = new TreeNode(n);
 		} else if (n <= root.val) {
-			root.left = insertNode1(root.left, n);
+			root.left = add(root.left, n);
 		} else {
-			root.right = insertNode1(root.right, n);
+			root.right = add(root.right, n);
 		}
 		return root;
 	}
 
-	public TreeNode insertNode2(int n) {
-		TreeNode newNode = new TreeNode(n);
+	@Override
+	public void addIterative(int data) {
+		TreeNode newNode = new TreeNode(data);
 		if (root == null)
 			root = newNode;
 
 		else {
 			TreeNode curr = root;
 			while (curr != null) {
-				if (n <= curr.val) {
+				if (data <= curr.val) {
 					if (curr.left == null) {
 						curr.left = newNode;
 						break;
@@ -116,11 +112,12 @@ class BinarySearchTree {
 				}
 			}
 		}
-		return root;
 	}
 
-	public void delete(int n) {
-		root = deleteNode(root, n);
+	@Override
+	public boolean remove(int data) {
+		root = deleteNode(root, data);
+		return true;
 	}
 
 	private TreeNode deleteNode(TreeNode root, int n) {
@@ -140,7 +137,8 @@ class BinarySearchTree {
 		return root;
 	}
 
-	public boolean search(int data) {
+	@Override
+	public boolean contains(int data) {
 		return search(root, data) != null ? true : false;
 	}
 
@@ -156,6 +154,19 @@ class BinarySearchTree {
 			return search(node.right, x);
 	}
 
+	@Override
+	public int size() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
 	public int findMin(TreeNode node) {
 		if (node == null)
 			return -1;
@@ -166,6 +177,7 @@ class BinarySearchTree {
 		return node.val;
 	}
 
+	@Override
 	public int findMax(TreeNode node) {
 		if (node == null)
 			return -1;
@@ -176,138 +188,129 @@ class BinarySearchTree {
 		return node.val;
 	}
 
-	/******************* Binary Tree Operations ************************/
-	//TODO: Insert, Search, Update, Delete operations
-
-	/************************ Type2: BT Traversals ************************/
-	/* BT-DFS Traversals - Recursive & Iterative
-	 * 1.Recursive Approach - Preorder/Inorder/Postorder 
-	 * 2.Iterative Approach:
-	 * 	 - PreOrder - Stack 
-	 * 	 - InOrder - Stack 
-	 *   - PostOrder - 2 Stack or single stack
-	 */
-	//1.DFS Traversals - Recursive
-	public void preOrder(TreeNode root) {
+	@Override
+	public void preorder(TreeNode root) {
 		if (root == null)
 			return;
 
 		System.out.print(root.val + " ");
-		preOrder(root.left);
-		preOrder(root.right);
+		preorder(root.left);
+		preorder(root.right);
 	}
 
-	public void inOrder(TreeNode root) {
+	@Override
+	public void inorder(TreeNode root) {
 		if (root == null)
 			return;
 
-		inOrder(root.left);
+		inorder(root.left);
 		System.out.print(root.val + " ");
-		inOrder(root.right);
+		inorder(root.right);
 	}
 
-	public void postOrder(TreeNode root) {
+	@Override
+	public void postorder(TreeNode root) {
 		if (root == null)
 			return;
 
-		postOrder(root.left);
-		postOrder(root.right);
+		postorder(root.left);
+		postorder(root.right);
 		System.out.print(root.val + " ");
 	}
 
-	/*
-	 * 2.DFS Traversals Iterative approach overview: 
-	 * 		PreOrder  - Stack
-	 * 		InOrder - Stack
-	 * 		PostOrder - 2 Stack or single stack
-	 */
-	public void preOrderIterative(TreeNode root) {
-		if (root != null) {
-			Stack<TreeNode> stack = new Stack<>();
-			stack.push(root);
-			while (!stack.isEmpty()) {
+	@Override
+	public void preorderIterative(TreeNode root) {
+		if (root == null)
+			return;
+		java.util.Stack<TreeNode> stack = new java.util.Stack<>();
+		stack.push(root);
+		while (!stack.isEmpty()) {
+			root = stack.pop();
+			System.out.print(root.val + " ");
+			if (root.right != null)
+				stack.push(root.right);
+			if (root.left != null)
+				stack.push(root.left);
+		}
+	}
+
+	@Override
+	public void inorderIterative(TreeNode root) {
+		if (root == null)
+			return;
+		java.util.Stack<TreeNode> stack = new java.util.Stack<>();
+		while (true) {
+			if (root != null) {
+				stack.push(root);
+				root = root.left;
+			} else {
+				if (stack.isEmpty())
+					break;
 				root = stack.pop();
 				System.out.print(root.val + " ");
-				if (root.right != null)
-					stack.push(root.right);
-				if (root.left != null)
-					stack.push(root.left);
+				root = root.right;
 			}
 		}
 	}
 
-	public void inOrderIterative(TreeNode root) {
-		if (root != null) {
-			Stack<TreeNode> stack = new Stack<>();
-			while (true) {
-				if (root != null) {
-					stack.push(root);
-					root = root.left;
-				} else {
-					if (stack.isEmpty())
-						break;
-					root = stack.pop();
-					System.out.print(root.val + " ");
-					root = root.right;
-				}
-			}
-		}
+	@Override
+	public void postorderIterative(TreeNode root) {
+		postOrderUsing2Stack(root);
+
+		postOrderUsingStack(root);
 	}
 
 	// Reverse logic of Preorder iterative approach
-	public void postOrderUsing2Stack(TreeNode root) {
-		if (root != null) {
-			Stack<TreeNode> s1 = new Stack<>();
-			Stack<Integer> s2 = new Stack<>();
-			s1.push(root);
-			while (!s1.isEmpty()) {
-				root = s1.pop();
-				s2.push(root.val);
-				if (root.left != null)
-					s1.push(root.left);
-				if (root.right != null)
-					s1.push(root.right);
-			}
-
-			while (!s2.isEmpty())
-				System.out.print(s2.pop() + " ");
+	private void postOrderUsing2Stack(TreeNode root) {
+		if (root == null)
+			return;
+		java.util.Stack<TreeNode> s1 = new java.util.Stack<>();
+		java.util.Stack<Integer> s2 = new java.util.Stack<>();
+		s1.push(root);
+		while (!s1.isEmpty()) {
+			root = s1.pop();
+			s2.push(root.val);
+			if (root.left != null)
+				s1.push(root.left);
+			if (root.right != null)
+				s1.push(root.right);
 		}
+
+		while (!s2.isEmpty())
+			System.out.print(s2.pop() + " ");
 	}
 
-	public void postOrderUsingStack(TreeNode root) {
-		if (root != null) {
-			TreeNode current = root, rightNode, topNode;
-			Stack<TreeNode> stack = new Stack<>();
-			while (current != null || !stack.isEmpty()) {
-				if (current != null) {
-					stack.push(current);
-					current = current.left;
+	private void postOrderUsingStack(TreeNode root) {
+		if (root == null)
+			return;
+		TreeNode current = root, rightNode, topNode;
+		java.util.Stack<TreeNode> stack = new java.util.Stack<>();
+		while (current != null || !stack.isEmpty()) {
+			if (current != null) {
+				stack.push(current);
+				current = current.left;
+			} else {
+				rightNode = stack.peek().right;
+				if (rightNode != null) {
+					current = rightNode;
 				} else {
-					rightNode = stack.peek().right;
-					if (rightNode != null) {
-						current = rightNode;
-					} else {
+					topNode = stack.pop();
+					System.out.print(topNode.val + " ");
+					while (!stack.isEmpty() && topNode == stack.peek().right) {
 						topNode = stack.pop();
 						System.out.print(topNode.val + " ");
-						while (!stack.isEmpty() && topNode == stack.peek().right) {
-							topNode = stack.pop();
-							System.out.print(topNode.val + " ");
-						}
 					}
 				}
 			}
 		}
 	}
 
-	/* BT-BFS Traversals - Recursive & Iterative
-	 * 1.Recursive Approach - Level Order
-	 * 2.Iterative Approach - Level Order
-	 */
-	// 1.Recursive Approach:(LevelOrder)
-	public List<List<Integer>> levelByLevelOrderRecursive(TreeNode root) {
-		List<List<Integer>> result = new LinkedList<>();
+	//Recursive
+	@Override
+	public void levelorder(TreeNode root) {
+		List<List<Integer>> result = new java.util.LinkedList<>();
 		levelOrder(root, result, 0);
-		return result;
+		result.forEach(k -> System.out.println(k));
 	}
 
 	public void levelOrder(TreeNode root, List<List<Integer>> result, int level) {
@@ -322,11 +325,11 @@ class BinarySearchTree {
 		levelOrder(root.right, result, level + 1);
 	}
 
-	// 2.Iterative Approach using Queue:
-	public void levelOrder(TreeNode root) {
+	@Override
+	public void levelorderIterative(TreeNode root) {
 		if (root == null)
 			return;
-		Queue<TreeNode> queue = new LinkedList<>();
+		java.util.Queue<TreeNode> queue = new java.util.LinkedList<>();
 		queue.add(root);
 		while (!queue.isEmpty()) {
 			root = queue.remove();
@@ -336,23 +339,13 @@ class BinarySearchTree {
 			if (root.right != null)
 				queue.add(root.right);
 		}
+
 	}
 
-	// Tree Traversals:
-	public void inOrderTraversal() {
-		inOrder(root);
-	}
+	@Override
+	public void set(int index, int data) {
+		// TODO Auto-generated method stub
 
-	public void preOrderTraversal() {
-		preOrder(root);
-	}
-
-	public void postOrderTraversal() {
-		postOrder(root);
-	}
-
-	public void levelOrderTraversal() {
-		levelOrder(root);
 	}
 
 }

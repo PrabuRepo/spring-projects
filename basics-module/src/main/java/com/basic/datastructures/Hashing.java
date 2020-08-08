@@ -3,7 +3,7 @@ package com.basic.datastructures;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import com.common.utilities.LinkedList;
+import com.basic.datastructures.operations.HashingOperations;
 
 /*
  * Hashing: Hashing is a technique that is used to uniquely identify a specific object from a group of similar objects. 
@@ -67,7 +67,8 @@ public class Hashing {
  *    	Here index -> First HashFunction; indexH = second hash function
  *    
  */
-class HashOpenAddressing {
+class HashOpenAddressing implements HashingOperations {
+
 	Integer[] array;
 	int currSize;
 	int maxSize;
@@ -81,36 +82,67 @@ class HashOpenAddressing {
 		// Arrays.fill(array, -1);
 	}
 
-	// Insert Operation
-	public void insert(int input) {
+	@Override
+	public void add(int data) {
 		if (!isHashFull()) {
 			// int key = findKey1(input); // Linear Probing
-			int key = findKey2(input); // Quadratic Probing
+			int key = findKey2(data); // Quadratic Probing
 			// int key = findKey3(input); // Double Hashing
-			array[key] = input;
+			array[key] = data;
 			currSize++;
 		} else {
 			System.out.println("Hash full, increase the size.");
 		}
 	}
 
-	// Search Operation
-	public Integer search(int element) {
-		// return findValue1(element); //Linear Probing
-		// return findValue2(element); // Quadratic Probing
-		return findValue3(element); // Double Hashing
+	@Override
+	public int get(int data) {
+		// return findValue1(data); //Linear Probing
+		// return findValue2(data); // Quadratic Probing
+		return findValue3(data); // Double Hashing
 	}
 
-	// Delete Operation
-	public void delete(Integer n) {
-		// int key = findValue1(n); //Linear Probing
-		// int key = findValue2(n); // Quadratic Probing
-		int key = findValue3(n); // Double Hashing
+	@Override
+	public boolean contains(int data) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean remove(int data) {
+		// int key = findValue1(data); //Linear Probing
+		// int key = findValue2(data); // Quadratic Probing
+		int key = findValue3(data); // Double Hashing
 		if (key >= 0) {
 			array[key] = null;
 			currSize--;
-		} else {
-			System.out.println("Data not found!!");
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void set(int index, int data) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public int size() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void print() {
+		for (int i = 0; i < maxSize; i++) {
+			System.out.print(i + " - " + array[i] + "; ");
 		}
 	}
 
@@ -204,13 +236,6 @@ class HashOpenAddressing {
 		return -1;
 	}
 
-	// Display
-	public void display() {
-		for (int i = 0; i < maxSize; i++) {
-			System.out.print(i + " - " + array[i] + "; ");
-		}
-	}
-
 	private boolean isHashFull() {
 		return (currSize == maxSize);
 	}
@@ -268,87 +293,115 @@ class HashOpenAddressing {
 				System.out.println("Enter no of elements to be inserted:");
 				int t = in.nextInt();
 				while (t-- > 0) {
-					hashTable.insert(in.nextInt());
+					hashTable.add(in.nextInt());
 				}
 				System.out.println("Elements are inserted!");
 				break;
 			case 2:
 				System.out.println("Enter element needs to be deleted:");
-				hashTable.delete(in.nextInt());
+				hashTable.remove(in.nextInt());
 				break;
 			case 3:
 				System.out.println("Enter elements needs to be find:");
-				System.out.println("Element present at index: " + hashTable.search(in.nextInt()));
+				System.out.println("Element present at index: " + hashTable.get(in.nextInt()));
 				break;
 			default:
 				System.out.println("Please enter the valid option!!!");
 				break;
 			}
 			System.out.println("\nDisplay:");
-			hashTable.display();
+			hashTable.print();
 			System.out.println("\nDo you want to continue(y/n):");
 			ch = in.next().charAt(0);
 		} while (ch == 'y' || ch == 'Y');
 		System.out.println("****Thank You******");
 		in.close();
 	}
+
 }
 
 /* Separate Chaining:The idea is to make each cell of hash table point to a linked list of records that have same hash function value. Chaining
  * is simple, but requires additional memory outside the table.
  */
-class HashSeperateChaining {
+class HashSeperateChaining implements HashingOperations {
 
-	LinkedList[] table;
+	java.util.LinkedList[] table;
 	int hashSize;
 	int capacity;
 
 	public HashSeperateChaining(int capacity) {
 		this.capacity = capacity;
-		this.table = new LinkedList[capacity];
+		this.table = new java.util.LinkedList[capacity];
 	}
 
-	private int hash(int n) {
-		return (Integer) n % capacity;
-	}
-
-	public void insert(int t) {
-		int pos = hash(t);
+	@Override
+	public void add(int data) {
+		int pos = hash(data);
 		if (table[pos] == null)
-			table[pos] = new LinkedList();
+			table[pos] = new java.util.LinkedList();
 		hashSize++;
-		table[pos].add(t);
+		table[pos].add(data);
 	}
 
-	public void delete(int t) {
-		int pos = hash(t);
-		if (table[pos] != null) {
-			if (table[pos].remove(t))
-				hashSize--;
-			else
-				System.out.println("Data not found!");
-		} else {
-			System.out.println("Data not found!");
-		}
-	}
-
-	public boolean search(int t) {
-		int pos = hash(t);
+	@Override
+	public boolean contains(int data) {
+		int pos = hash(data);
 		boolean flag = false;
 		if (table[pos] != null) {
-			if (table[pos].contains(t))
+			if (table[pos].contains(data))
 				flag = true;
 		}
 		return flag;
 	}
 
-	public void display() {
+	@Override
+	public boolean remove(int data) {
+		int pos = hash(data);
+		if (table[pos] != null) {
+			if (table[pos].remove((Integer) data)) {
+				hashSize--;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public int size() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int get(int data) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void set(int index, int data) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void print() {
 		for (int i = 0; i < capacity; i++) {
 			if (table[i] != null) {
 				System.out.println("\ni=" + i + "->");
-				table[i].display();
+				table[i].forEach(k -> System.out.print(k + " "));
 			}
 		}
+	}
+
+	private int hash(int n) {
+		return (Integer) n % capacity;
 	}
 
 	public static void main(String[] args) {
@@ -369,24 +422,24 @@ class HashSeperateChaining {
 				System.out.println("Enter no of elements to be inserted:");
 				int t = in.nextInt();
 				while (t-- > 0) {
-					hashTable.insert(in.nextInt());
+					hashTable.add(in.nextInt());
 				}
 				System.out.println("Elements are inserted!");
 				break;
 			case 2:
 				System.out.println("Enter element needs to be deleted:");
-				hashTable.delete(in.nextInt());
+				hashTable.remove(in.nextInt());
 				break;
 			case 3:
 				System.out.println("Enter elements needs to be find:");
-				System.out.println("Element is present in the list? " + hashTable.search(in.nextInt()));
+				System.out.println("Element is present in the list? " + hashTable.get(in.nextInt()));
 				break;
 			default:
 				System.out.println("Please enter the valid option!!!");
 				break;
 			}
 			System.out.println("\nDisplay:");
-			hashTable.display();
+			hashTable.print();
 			System.out.println("\nDo you want to continue(y/n):");
 			ch = in.next().charAt(0);
 		} while (ch == 'y' || ch == 'Y');
@@ -394,7 +447,6 @@ class HashSeperateChaining {
 		in.close();
 
 	}
-
 }
 
 class MyHashSet {
