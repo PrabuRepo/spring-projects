@@ -110,12 +110,10 @@ public class DataTypes {
 		int n = str.length();
 		for (int i = 0; i < n; i++) {
 			ch = str.charAt(i);
-			if (!Character.isDigit(ch))
-				continue;
+			if (!Character.isDigit(ch)) continue;
 
 			int startIndex = i;
-			while (i + 1 < n && Character.isDigit(str.charAt(i + 1)))
-				i++;
+			while (i + 1 < n && Character.isDigit(str.charAt(i + 1))) i++;
 			int val = Integer.valueOf(str.substring(startIndex, i + 1));
 			System.out.print(val + ", ");
 		}

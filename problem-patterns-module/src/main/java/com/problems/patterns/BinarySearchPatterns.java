@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 /*
  * Binary Search Patterns:
- * 
+ *  
  * Note: 
  * 	Mostly l=m+1, h=m -> This condition allows to move the index
  *  But l=m, h=m-1 -> This condition doesnt move and loop runs without exit. 
@@ -19,12 +19,9 @@ public class BinarySearchPatterns {
 		int l = 0, h = nums.length - 1, m = 0;
 		while (l <= h) {
 			m = l + (h - l) / 2;
-			if (nums[m] == target)
-				return m;
-			else if (nums[m] < target)
-				l = m + 1;
-			else
-				h = m - 1;
+			if (nums[m] == target) return m;
+			else if (nums[m] < target) l = m + 1;
+			else h = m - 1;
 		}
 		return l;
 	}
@@ -51,8 +48,8 @@ public class BinarySearchPatterns {
 	// Approach1:
 	public int[] searchRange1(int[] nums, int target) {
 		int left = findIndex(nums, target, true);
-		if (left == -1)
-			return new int[] { -1, -1 };
+		if (left == -1) return new int[] { -1, -1 };
+
 		int right = findIndex(nums, target, false);
 		return new int[] { left, right };
 	}
@@ -82,31 +79,25 @@ public class BinarySearchPatterns {
 		int[] range = { -1, -1 };
 		int leftIndex = binarySearch(nums, target, true);
 
-		if (leftIndex == nums.length
-				|| nums[leftIndex] != target)
-			return range;
+		if (leftIndex == nums.length || nums[leftIndex] != target) return range;
 
 		// Modification: use rightIndex-1
-		int rightIndex = binarySearch(nums, target, false)
-				- 1;
+		int rightIndex = binarySearch(nums, target, false) - 1;
 		range[0] = leftIndex;
 		range[1] = rightIndex;
 
 		return range;
 	}
 
-	public int binarySearch(int[] nums, int x,
-			boolean left) {
+	public int binarySearch(int[] nums, int x, boolean left) {
 		// Modification: use h = nums.length
 		int l = 0, h = nums.length, m = 0;
 		while (l < h) {
 			m = l + (h - l) / 2;
 			// Modification
 			if (nums[m] == x) {
-				if (left)
-					h = m;
-				else
-					l = m + 1;
+				if (left) h = m;
+				else l = m + 1;
 			} else if (x < nums[m]) {
 				h = m;
 			} else {
@@ -123,10 +114,8 @@ public class BinarySearchPatterns {
 		while (l < h) {
 			m = l + (h - l) / 2;
 
-			if (nums[m] > nums[h])
-				l = m + 1;
-			else
-				h = m;
+			if (nums[m] > nums[h]) l = m + 1;
+			else h = m;
 		}
 		return nums[h];
 	}
@@ -138,24 +127,19 @@ public class BinarySearchPatterns {
 		while (l < h) {
 			m = l + (h - l) / 2;
 
-			if (nums[m] > nums[h])
-				l = m + 1;
-			else if (nums[m] < nums[h])
-				h = m;
-			else
-				h--;
+			if (nums[m] > nums[h]) l = m + 1;
+			else if (nums[m] < nums[h]) h = m;
+			else h--;
 		}
 		return nums[h]; // nums[l]
 	}
 
 	// Search in Rotated Sorted Array
-	public int searchRotatedSortedArray1(int[] nums,
-			int target) {
+	public int searchRotatedSortedArray1(int[] nums, int target) {
 		int l = 0, h = nums.length - 1, m = 0;
 		while (l <= h) {
 			m = l + (h - l) / 2;
-			if (nums[m] == target)
-				return m;
+			if (nums[m] == target) return m;
 
 			if (nums[m] < nums[h]) { // right part is sorted
 				if (target > nums[m] && target <= nums[h]) { // Check target between m to h, if so l = m+1
@@ -175,14 +159,12 @@ public class BinarySearchPatterns {
 	}
 
 	// Search in Rotated Sorted Array II
-	public boolean searchRotatedSortedArray2(int[] nums,
-			int target) {
+	public boolean searchRotatedSortedArray2(int[] nums, int target) {
 
 		int l = 0, h = nums.length - 1, m = 0;
 		while (l <= h) {
 			m = l + (h - l) / 2;
-			if (nums[m] == target)
-				return true;
+			if (nums[m] == target) return true;
 
 			if (nums[m] < nums[h]) {
 				if (target > nums[m] && target <= nums[h]) { // Check target between m to h, if so l = m+1
@@ -203,7 +185,7 @@ public class BinarySearchPatterns {
 		return false;
 	}
 
-	/********BS Problems - Good to have***************/
+	/******** BS Problems - Good to have ***************/
 
 	/*
 	 * Single Element in a Sorted Array:
@@ -216,12 +198,8 @@ public class BinarySearchPatterns {
 		while (l < h) {
 			int m = (l + h) / 2;
 			// Non duplicate present in second half
-			if ((m % 2 == 0 && nums[m] == nums[m + 1])
-					|| (m % 2 == 1
-							&& nums[m - 1] == nums[m]))
-				l = m + 1;
-			else
-				h = m; // Non duplicate present in first half
+			if ((m % 2 == 0 && nums[m] == nums[m + 1]) || (m % 2 == 1 && nums[m - 1] == nums[m])) l = m + 1;
+			else h = m; // Non duplicate present in first half
 		}
 
 		return nums[l];
@@ -235,10 +213,8 @@ public class BinarySearchPatterns {
 		int n = nums.length, lo = 0, hi = n / 2;
 		while (lo < hi) {
 			int m = (lo + hi) / 2;
-			if (nums[2 * m] != nums[2 * m + 1])
-				hi = m;
-			else
-				lo = m + 1;
+			if (nums[2 * m] != nums[2 * m + 1]) hi = m;
+			else lo = m + 1;
 		}
 		return nums[2 * lo];
 	}
@@ -251,10 +227,8 @@ public class BinarySearchPatterns {
 		while (l < h) {
 			m = (l + h) / 2;
 			// Modification: Compare mth index with m element.
-			if (nums[m] > m)
-				h = m;
-			else
-				l = m + 1;
+			if (nums[m] > m) h = m;
+			else l = m + 1;
 		}
 		return l;
 	}
@@ -267,13 +241,10 @@ public class BinarySearchPatterns {
 			int mid = (int) (low + (high - low) * 0.5);
 			int cnt = 0;
 			for (int a : nums) {
-				if (a <= mid)
-					++cnt;
+				if (a <= mid) ++cnt;
 			}
-			if (cnt <= mid)
-				low = mid + 1;
-			else
-				high = mid - 1;
+			if (cnt <= mid) low = mid + 1;
+			else high = mid - 1;
 		}
 		return low;
 	}
@@ -283,13 +254,9 @@ public class BinarySearchPatterns {
 		int l = 0, h = nums.length - 1, m = 0;
 		while (l <= h) {
 			m = l + (h - l) / 2;
-			if (m > 0 && nums[m - 1] > nums[m])
-				h = m - 1;
-			else if (m < nums.length - 1
-					&& nums[m] < nums[m + 1])
-				l = m + 1;
-			else
-				return m;
+			if (m > 0 && nums[m - 1] > nums[m]) h = m - 1;
+			else if (m < nums.length - 1 && nums[m] < nums[m + 1]) l = m + 1;
+			else return m;
 		}
 		return 0;
 	}
@@ -306,14 +273,11 @@ class BinarySearch2 {
 	public int[] searchRange1(int[] nums, int target) {
 		int[] range = { -1, -1 };
 
-		int leftIndex = binarySearch1(nums, target, 0,
-				nums.length - 1, true);
+		int leftIndex = binarySearch1(nums, target, 0, nums.length - 1, true);
 
-		if (leftIndex == -1)
-			return range;
+		if (leftIndex == -1) return range;
 
-		int rightIndex = binarySearch1(nums, target,
-				leftIndex, nums.length - 1, false);
+		int rightIndex = binarySearch1(nums, target, leftIndex, nums.length - 1, false);
 		range[0] = leftIndex;
 		range[1] = rightIndex;
 
@@ -321,20 +285,18 @@ class BinarySearch2 {
 	}
 
 	// Binary Search to find the extreme left & right based on the flag
-	public int binarySearch1(int[] nums, int x, int l,
-			int h, boolean leftFlag) {
+	public int binarySearch1(int[] nums, int x, int l, int h, boolean leftFlag) {
 		int m = 0;
 		while (l <= h) {
 			m = l + (h - l) / 2;
 			if (nums[m] == x) { // Modification
 				if (leftFlag && m > 0 && nums[m - 1] == x) {
 					h = m - 1;
-				} else if (!leftFlag && m < nums.length - 1
-						&& nums[m + 1] == x) {
-							l = m + 1;
-						} else {
-							return m;
-						}
+				} else if (!leftFlag && m < nums.length - 1 && nums[m + 1] == x) {
+					l = m + 1;
+				} else {
+					return m;
+				}
 			} else if (x < nums[m]) {
 				h = m - 1;
 			} else {
@@ -356,20 +318,16 @@ class BinarySearch2 {
 	 */
 	public int[] searchRange2(int[] nums, int target) {
 		int[] range = { -1, -1 };
-		if (nums.length == 0)
-			return range;
+		if (nums.length == 0) return range;
 		int l = 0, h = nums.length - 1, m = 0;
 		// Search Left:
 		while (l < h) {
 			m = l + (h - l) / 2;
-			if (target > nums[m])
-				l = m + 1;
-			else
-				h = m;
+			if (target > nums[m]) l = m + 1;
+			else h = m;
 		}
 
-		if (nums[l] != target)
-			return range;
+		if (nums[l] != target) return range;
 
 		range[0] = l; // or h
 
@@ -378,10 +336,8 @@ class BinarySearch2 {
 		while (l < h) {
 			// Modification: Make mid biased to the right
 			m = l + (h - l) / 2 + 1;
-			if (target < nums[m])
-				h = m - 1;
-			else
-				l = m;
+			if (target < nums[m]) h = m - 1;
+			else l = m;
 		}
 
 		range[1] = l; // or h
@@ -392,14 +348,11 @@ class BinarySearch2 {
 	public int[] searchRange21(int[] nums, int target) {
 		int[] range = { -1, -1 };
 
-		int leftIndex = binarySearch1(nums, target, 0,
-				nums.length - 1, true);
+		int leftIndex = binarySearch1(nums, target, 0, nums.length - 1, true);
 
-		if (leftIndex == -1)
-			return range;
+		if (leftIndex == -1) return range;
 
-		int rightIndex = binarySearch1(nums, target,
-				leftIndex, nums.length - 1, false);
+		int rightIndex = binarySearch1(nums, target, leftIndex, nums.length - 1, false);
 		range[0] = leftIndex;
 		range[1] = rightIndex;
 
@@ -410,12 +363,10 @@ class BinarySearch2 {
 	public int[] searchRange4(int[] A, int target) {
 		int start = firstGreaterEqual(A, target);
 
-		if (start == A.length || A[start] != target)
-			return new int[] { -1, -1 };
+		if (start == A.length || A[start] != target) return new int[] { -1, -1 };
 
 		// Modification Here: Check target+1
-		return new int[] { start,
-				firstGreaterEqual(A, target + 1) - 1 };
+		return new int[] { start, firstGreaterEqual(A, target + 1) - 1 };
 	}
 
 	private int firstGreaterEqual(int[] A, int target) {

@@ -488,7 +488,7 @@ public class Backtracking {
 			for (int j = 0; j < n; j++) {
 				if (Character.isLetter(arr[j]) && (i >> j & 1) == 1)
 					arr[j] = (char) (arr[j] - 32); // or
-													// Character.toUpperCase(arr[j]);
+																										// Character.toUpperCase(arr[j]);
 			}
 			set.add(String.valueOf(arr));
 		}
@@ -571,6 +571,7 @@ public class Backtracking {
 	 * Given n and k, return the kth permutation sequence. 
 	 * Example 1: Input: n = 3, k = 3; Output: "213";
 	 * Time Complexity: O(n)
+	 * Ref: https://leetcode.com/problems/permutation-sequence/discuss/22507/%22Explain-like-I'm-five%22-Java-Solution-in-O(n)
 	 */
 	public String getPermutation(int n, int k) {
 		if (n == 0 || k == 0)

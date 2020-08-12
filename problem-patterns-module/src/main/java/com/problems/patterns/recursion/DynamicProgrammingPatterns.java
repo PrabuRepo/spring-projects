@@ -1,9 +1,7 @@
 package com.problems.patterns.recursion;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.common.utilities.Utils;
@@ -687,44 +685,6 @@ public class DynamicProgrammingPatterns {
 			}
 		}
 		return cut[n - 1];
-	}
-
-	/*
-	 * Palindrome PartitioningI:
-	 * Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome
-	 *  partitioning of s.
-	 *  [["aa","b"], ["a","a","b"]] 
-	 *  
-	 *  Note: This solution doesnt give expected result. Below method gives ["aa", "a", "a", "b"]
-	 */
-	public List<List<String>> palindromicPartioningI(String str) {
-		int n = str.length();
-		List<List<String>> result = new ArrayList<>();
-		List<String> eachList = new ArrayList<>();
-		if (n == 1) {
-			eachList.add(str);
-			result.add(eachList);
-			return result;
-		}
-		int j;
-		int[][] a = new int[n][n];
-		for (int range = 1; range <= n; range++) {
-			eachList = new ArrayList<>();
-			for (int i = 0; i < n; i++) {
-				j = i + range - 1;
-				if (str.charAt(i) == str.charAt(j)) {
-					if (range == 1 || range == 2)
-						a[i][j] = 1;
-					else
-						a[i][j] = a[i + 1][j - 1];
-
-					if (a[i][j] == 1)
-						eachList.add(str.substring(i, j + 1));
-				}
-			}
-			result.add(eachList);
-		}
-		return result;
 	}
 
 	/************************** Pattern 6: String-Substring/Subsequence Probs *******************/

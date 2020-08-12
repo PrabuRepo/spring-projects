@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Stack;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class TestClass {
 	public static void main(String[] args) {
@@ -26,6 +27,28 @@ public class TestClass {
 
 		//isMatch("mississippi", "mis*is*ip*.");
 
+		ob.cellCompete(new int[] { 1, 1, 1, 0, 1, 1, 1, 1 }, 2).forEach(k -> System.out.print(k + ","));
+
+	}
+
+	public List<Integer> cellCompete(int[] states, int days) {
+		int n = states.length;
+		while (days-- > 0) {
+			int[] temp = new int[n];
+			for (int i = 0; i < n; i++) {
+				if (i == 0) {
+					temp[i] = states[i + 1];
+				} else if (i == n - 1) {
+					temp[i] = states[i - 1];
+				} else {
+					temp[i] = states[i - 1] ^ states[i + 1];
+				}
+			}
+			//System.out.println(Arrays.toString(temp));
+			states = temp;
+		}
+
+		return Arrays.stream(states).boxed().collect(Collectors.toList());
 	}
 
 	public static boolean isMatch(String s, String p) {
@@ -37,8 +60,7 @@ public class TestClass {
 
 		// To handle the first row or empty string with whole pattern 'p'
 		for (int j = 2; j <= n; j++)
-			if (p.charAt(j - 1) == '*')
-				dp[0][j] = dp[0][j - 2];
+			if (p.charAt(j - 1) == '*') dp[0][j] = dp[0][j - 2];
 
 		for (int i = 1; i <= m; i++) {
 			for (int j = 1; j <= n; j++) {
@@ -79,8 +101,7 @@ public class TestClass {
 	}
 
 	public static int[] getMode(int[] A, int[][] B) {
-		if (B.length == 0)
-			return new int[] {};
+		if (B.length == 0) return new int[] {};
 		int n = B.length;
 		int[] result = new int[n];
 		PriorityQueue<Node> queue = new PriorityQueue<>(
@@ -88,8 +109,7 @@ public class TestClass {
 		Map<Integer, Node> map = new HashMap<>();
 
 		for (int val : A) {
-			if (map.get(val) == null)
-				map.put(val, new Node(val, 0));
+			if (map.get(val) == null) map.put(val, new Node(val, 0));
 			map.get(val).count += 1;
 		}
 
@@ -147,8 +167,7 @@ public class TestClass {
 	}
 
 	public static boolean isBalanced(String str) {
-		if (str == null || str.length() == 0)
-			return true;
+		if (str == null || str.length() == 0) return true;
 		Stack<Character> st = new Stack<>();
 		for (int i = 0; i < str.length(); i++) {
 			char ch = str.charAt(i);
@@ -163,20 +182,16 @@ public class TestClass {
 	}
 
 	public static String decryptPassword(String s) {
-		if (s == null || s.length() <= 1)
-			return s;
+		if (s == null || s.length() <= 1) return s;
 		int n = s.length();
 		StringBuilder sb = new StringBuilder(s);
 		//Replace 0 with numbers
 		int l = 0, h = n - 1;
 
 		while (l < h) {
-			if (!Character.isDigit(sb.charAt(l)))
-				break;
-			while (l <= h && sb.charAt(h) != '0')
-				h--;
-			if (l >= h)
-				break;
+			if (!Character.isDigit(sb.charAt(l))) break;
+			while (l <= h && sb.charAt(h) != '0') h--;
+			if (l >= h) break;
 			sb.setCharAt(h, sb.charAt(l));
 			sb.deleteCharAt(l);
 		}

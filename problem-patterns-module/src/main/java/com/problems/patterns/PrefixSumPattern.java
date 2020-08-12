@@ -2,26 +2,24 @@ package com.problems.patterns;
 
 public class PrefixSumPattern {
 
-	/* Prefix Sum Array: Given an array arr[] of size n, its prefix sum 
-	 * array is another array prefixSum[] of same size such that the 
-	 * value of prefixSum[i] is arr[0] + arr[1] + arr[2] … arr[i].
+	/*
+	 * Prefix Sum Array: Given an array arr[] of size n, its prefix sum array is
+	 * another array prefixSum[] of same size such that the value of
+	 * prefixSum[i] is arr[0] + arr[1] + arr[2] … arr[i].
 	 */
 
-	public void fillPrefixSum(int arr[], int n,
-			int prefixSum[]) {
+	public void fillPrefixSum(int arr[], int n, int prefixSum[]) {
 		prefixSum[0] = arr[0];
-		// Adding present element with previous element
+		// Adding present element with previous element 
 		for (int i = 1; i < n; ++i)
 			prefixSum[i] = prefixSum[i - 1] + arr[i];
 	}
 
-	/* Range Sum Query - Immutable -> Use Prefix Sum
-	 * Given an integer array nums, find the sum of the
-	 * elements between indices i and j (i <= j), inclusive.
-	 * Example:	Given nums = [-2, 0, 3, -5, 2, -1]
-	 * 	sumRange(0, 2) -> 1
-	 * 	sumRange(2, 5) -> -1
-	 * 	sumRange(0, 5) -> -3
+	/*
+	 * Range Sum Query - Immutable -> Use Prefix Sum Given an integer array
+	 * nums, find the sum of the elements between indices i and j (i <= j),
+	 * inclusive. Example: Given nums = [-2, 0, 3, -5, 2, -1] sumRange(0, 2) ->
+	 * 1 sumRange(2, 5) -> -1 sumRange(0, 5) -> -3
 	 */
 	private int[] sum;
 
@@ -32,28 +30,25 @@ public class PrefixSumPattern {
 	}
 
 	public int sumRange(int i, int j) {
-		if (i == 0)
-			return sum[j];
+		if (i == 0) return sum[j];
 
 		return sum[j] - sum[i - 1];
 	}
 
-	/* Range Sum Query 2D - Immutable
-	 * Given a 2D matrix matrix, find the sum of the elements 
-	 * inside the rectangle defined by its upper left corner 
-	 * (row1, col1) and lower right corner (row2, col2).
+	/*
+	 * Range Sum Query 2D - Immutable Given a 2D matrix matrix, find the sum of
+	 * the elements inside the rectangle defined by its upper left corner (row1,
+	 * col1) and lower right corner (row2, col2).
 	 */
 	private int[][] lookup, matrix;
 
 	public void init3(int[][] matrix) {
-		if (matrix == null || matrix.length == 0)
-			return;
+		if (matrix == null || matrix.length == 0) return;
 		populateLookup(matrix);
 	}
 
 	// Approach1: Brute force approach
-	public int sumRegion1(int row1, int col1, int row2,
-			int col2) {
+	public int sumRegion1(int row1, int col1, int row2, int col2) {
 		int sum = 0;
 		for (int i = row1; i <= row2; i++) {
 			for (int j = col1; j <= col2; j++) {
@@ -63,38 +58,65 @@ public class PrefixSumPattern {
 		return sum;
 	}
 
-	public int sumRegion(int row1, int col1, int row2,
-			int col2) {
-		if (lookup.length == 0)
-			return 0;
-		return lookup[row2 + 1][col2 + 1]
-				- lookup[row2 + 1][col1]
-				- lookup[row1][col2 + 1]
-				+ lookup[row1][col1];
+	public int sumRegion(int row1, int col1, int row2, int col2) {
+		if (lookup.length == 0) return 0;
+		return lookup[row2 + 1][col2 + 1] - lookup[row2 + 1][col1] - lookup[row1][col2 + 1] + lookup[row1][col1];
 	}
 
 	public void populateLookup(int[][] matrix) {
-		int rowLen = matrix.length,
-				colLen = matrix[0].length;
+		int rowLen = matrix.length, colLen = matrix[0].length;
 		lookup = new int[rowLen + 1][colLen + 1];
 		for (int i = 1; i <= rowLen; i++)
 			for (int j = 1; j <= colLen; j++)
-				lookup[i][j] = lookup[i][j - 1]
-						+ lookup[i - 1][j]
-						+ matrix[i - 1][j - 1]
-						- lookup[i - 1][j - 1];
+				lookup[i][j] = lookup[i][j - 1] + lookup[i - 1][j] + matrix[i - 1][j - 1] - lookup[i - 1][j - 1];
 	}
 
-	/*Product of Array Except Self:
-	 * Given an array nums of n integers where n > 1,  return 
-	 * an array output such that output[i] is equal to the
-	 *  product of all the elements of nums except nums[i].
-	 *  	Example: Input:  [1,2,3,4] Output: [24,12,8,6]
+	/* Equilibrium point/Find Pivot Index
+	 * Equilibrium position in an array is a position such that the sum 
+	 * of elements before it is equal to the sum of elements after it.
 	 */
-	/*  Solution without using Divison
-	Time Complexity: O(n)
-	Space Complexity: O(n)
-	Auxiliary Space: O(n)*/
+	//Brute Force Approach:
+	public int equilibriumPoint1(int[] a) {
+		int leftSum, rightSum;
+		if (a.length == 1) return 1;
+		for (int i = 1; i < a.length; i++) {
+			leftSum = 0;
+			// Left Sum:
+			for (int j = 0; j < i; j++)
+				leftSum += a[j];
+			// Right sum
+			rightSum = 0;
+			for (int k = i + 1; k < a.length; k++)
+				rightSum += a[k];
+			if (leftSum == rightSum) return (i + 1); // Problem expects to return position(not index)
+		}
+		return -1;
+	}
+
+	//Using Prefix Sum
+	public int equilibriumPoint2(int[] a) {
+		int leftSum = 0, sum = 0;
+		if (a.length == 1) return 1;
+		for (int i = 0; i < a.length; i++)
+			sum += a[i];
+		for (int j = 0; j < a.length; j++) {
+			sum -= a[j];
+			if (leftSum == sum) return j + 1;
+			leftSum += a[j];
+		}
+		return -1;
+	}
+
+	/*
+	 * Product of Array Except Self: Given an array nums of n integers where n >
+	 * 1, return an array output such that output[i] is equal to the product of
+	 * all the elements of nums except nums[i]. Example: Input: [1,2,3,4]
+	 * Output: [24,12,8,6]
+	 */
+	/*
+	 * Solution without using Divison Time Complexity: O(n) Space Complexity:
+	 * O(n) Auxiliary Space: O(n)
+	 */
 	public int[] productExceptSelf1(int[] nums) {
 		int n = nums.length;
 		int[] left = new int[n];

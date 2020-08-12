@@ -3,6 +3,7 @@ package com.consolidated.problems.datastructures;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -1077,7 +1078,20 @@ public class StringProblems {
 	 *   Output: True (permutations:"taco cat'; "atco cta'; etc.)
 	 */
 	// Using Hashing - It handles lower case, upper case & special char's-> Time Complexity: O(n)
-	public boolean isPalindrome(String str) {
+	public boolean canPermutePalindrome1(String s) {
+		HashSet<Character> app = new HashSet<Character>();
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (app.contains(c)) {
+				app.remove(c);
+			} else {
+				app.add(c);
+			}
+		}
+		return app.size() <= 1;
+	}
+
+	public boolean canPermutePalindrome2(String str) {
 		int[] charCount = new int[26];
 		for (int i = 0; i < str.length(); i++) {
 			char ch = upperToLowerCase(str.charAt(i));

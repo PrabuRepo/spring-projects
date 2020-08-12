@@ -53,8 +53,7 @@ public class ArrayProblems {
 	*/
 	public void rotate(int[] nums, int k) {
 		int n = nums.length;
-		if (n > 0 && k >= n)
-			k = k % n;
+		if (n > 0 && k >= n) k = k % n;
 		if (n > 1 && k > 0) {
 			Utils.reverse(nums, 0, n - 1);
 			Utils.reverse(nums, 0, k - 1);
@@ -66,8 +65,7 @@ public class ArrayProblems {
 	public int removeDuplicatesI(int[] nums) {
 		int i = 0;
 		for (int n : nums)
-			if (i == 0 || n > nums[i - 1])
-				nums[i++] = n;
+			if (i == 0 || n > nums[i - 1]) nums[i++] = n;
 		return i;
 	}
 
@@ -75,19 +73,16 @@ public class ArrayProblems {
 	public int removeDuplicatesII(int[] nums) {
 		int i = 0;
 		for (int n : nums)
-			if (i < 2 || n > nums[i - 2])
-				nums[i++] = n;
+			if (i < 2 || n > nums[i - 2]) nums[i++] = n;
 		return i;
 	}
 
 	// Remove Element
 	public int removeElement(int[] nums, int val) {
-		if (nums == null || nums.length == 0)
-			return 0;
+		if (nums == null || nums.length == 0) return 0;
 		int i = 0;
 		for (int n : nums) {
-			if (n != val)
-				nums[i++] = n;
+			if (n != val) nums[i++] = n;
 		}
 		return i;
 	}
@@ -100,14 +95,12 @@ public class ArrayProblems {
 			if (num != 0) {
 				nums[i++] = num;
 			}
-		while (i < nums.length)
-			nums[i++] = 0;
+		while (i < nums.length) nums[i++] = 0;
 	}
 
 	// Approach-2: Single Traversal - 2 pointers
 	public void moveZeroes2(int[] nums) {
-		if (nums.length <= 1)
-			return;
+		if (nums.length <= 1) return;
 		int l = 0, r = 0;
 		while (r < nums.length) {
 			if (nums[r] != 0) {
@@ -130,8 +123,7 @@ public class ArrayProblems {
 	public boolean containsDuplicateI1(int[] nums) {
 		HashSet<Integer> set = new HashSet<>();
 		for (int i = 0; i < nums.length; i++) {
-			if (set.contains(nums[i]))
-				return true;
+			if (set.contains(nums[i])) return true;
 			set.add(nums[i]);
 		}
 		return false;
@@ -141,8 +133,7 @@ public class ArrayProblems {
 	public boolean containsDuplicateI2(int[] nums) {
 		Arrays.sort(nums);
 		for (int i = 1; i < nums.length; i++) {
-			if (nums[i - 1] == nums[i])
-				return true;
+			if (nums[i - 1] == nums[i]) return true;
 		}
 		return false;
 	}
@@ -151,10 +142,8 @@ public class ArrayProblems {
 	public boolean containsNearbyDuplicate(int[] nums, int k) {
 		Set<Integer> set = new HashSet<Integer>();
 		for (int i = 0; i < nums.length; i++) {
-			if (i > k)
-				set.remove(nums[i - k - 1]);
-			if (!set.add(nums[i]))
-				return true;
+			if (i > k) set.remove(nums[i - k - 1]);
+			if (!set.add(nums[i])) return true;
 		}
 		return false;
 	}
@@ -284,8 +273,7 @@ public class ArrayProblems {
 		for (int i = 0; i < nums1.length; i++)
 			set.add(nums1[i]);
 		for (int i = 0; i < nums2.length; i++) {
-			if (set.contains(nums2[i]))
-				list.add(nums2[i]);
+			if (set.contains(nums2[i])) list.add(nums2[i]);
 		}
 		int[] result = new int[list.size()];
 		for (int i = 0; i < list.size(); i++)
@@ -304,13 +292,10 @@ public class ArrayProblems {
 				break;
 			} else {
 				int l = a[r] - 2 > 0 ? a[r] - 2 : 0;
-				while (l < r)
-					if (a[l++] > a[r])
-						count++;
+				while (l < r) if (a[l++] > a[r]) count++;
 			}
 		}
-		if (flag)
-			System.out.println(count);
+		if (flag) System.out.println(count);
 	}
 
 	// Chocolate Distribution Problem
@@ -331,17 +316,14 @@ public class ArrayProblems {
 		long pCount = 0, rCount = 0, total = 0;
 		for (int q = 0; q < b.length; q++) {
 			while (p < a.length && a[p] <= b[q]) {
-				if (p == 0 || a[p - 1] != a[p])
-					pCount++;
+				if (p == 0 || a[p - 1] != a[p]) pCount++;
 				p++;
 			}
 			while (r < c.length && c[r] <= b[q]) {
-				if (r == 0 || c[r - 1] != c[r])
-					rCount++;
+				if (r == 0 || c[r - 1] != c[r]) rCount++;
 				r++;
 			}
-			if (q == 0 || b[q - 1] != b[q])
-				total += pCount * rCount;
+			if (q == 0 || b[q - 1] != b[q]) total += pCount * rCount;
 		}
 		return total;
 	}
@@ -394,8 +376,7 @@ public class ArrayProblems {
 			rightMin[i] = Math.min(arr[i], rightMin[i + 1]);
 		// System.out.println(Arrays.toString(rightMin));
 		for (int i = 1; i < n - 1; i++) {
-			if (arr[i] == leftMax[i] && arr[i] == rightMin[i])
-				return arr[i];
+			if (arr[i] == leftMax[i] && arr[i] == rightMin[i]) return arr[i];
 		}
 		return -1;
 	}
@@ -407,8 +388,7 @@ public class ArrayProblems {
 		for (int i = 1; i < n; i++) {
 			if (arr[i] >= m) {
 				m = arr[i];
-				if (ans == -1 && i < n - 1)
-					ans = m;
+				if (ans == -1 && i < n - 1) ans = m;
 			} else if (arr[i] < ans) {
 				ans = -1;
 			}
@@ -441,47 +421,8 @@ public class ArrayProblems {
 			queue.add(arr[i]);
 		for (int i = 0; i < arr.length; i++) {
 			queue.remove(arr[i]);
-			if (queue.isEmpty() || arr[i] > queue.peek())
-				System.out.print(arr[i] + " ");
+			if (queue.isEmpty() || arr[i] > queue.peek()) System.out.print(arr[i] + " ");
 		}
-	}
-
-	/* Equilibrium point/Find Pivot Index - Use Prefix Sum
-	 * Equilibrium position in an array is a position such that the sum 
-	 * of elements before it is equal to the sum of elements after it.
-	 */
-	public static int equilibriumPoint2(int[] a) {
-		int leftSum = 0, sum = 0;
-		if (a.length == 1)
-			return 1;
-		for (int i = 0; i < a.length; i++)
-			sum += a[i];
-		for (int j = 0; j < a.length; j++) {
-			sum -= a[j];
-			if (leftSum == sum)
-				return j + 1;
-			leftSum += a[j];
-		}
-		return -1;
-	}
-
-	public static int equilibriumPoint1(int[] a) {
-		int leftSum, rightSum;
-		if (a.length == 1)
-			return 1;
-		for (int i = 1; i < a.length; i++) {
-			leftSum = 0;
-			// Left Sum:
-			for (int j = 0; j < i; j++)
-				leftSum += a[j];
-			// Right sum
-			rightSum = 0;
-			for (int k = i + 1; k < a.length; k++)
-				rightSum += a[k];
-			if (leftSum == rightSum)
-				return (i + 1); // Problem expects to return position(not index)
-		}
-		return -1;
 	}
 
 	/* Find Majority Element in an Array/Majority Element I, II
@@ -498,10 +439,8 @@ public class ArrayProblems {
 		Map<Integer, Integer> map = new HashMap<>();
 		int ret = 0;
 		for (int num : nums) {
-			if (!map.containsKey(num))
-				map.put(num, 1);
-			else
-				map.put(num, map.get(num) + 1);
+			if (!map.containsKey(num)) map.put(num, 1);
+			else map.put(num, map.get(num) + 1);
 			if (map.get(num) > nums.length / 2) {
 				ret = num;
 				break;
@@ -518,13 +457,10 @@ public class ArrayProblems {
 	public int majorityElement3(int[] nums) {
 		int count = 0, element = 0;
 		for (int num : nums) {
-			if (count == 0)
-				element = num;
+			if (count == 0) element = num;
 
-			if (num == element)
-				count++;
-			else
-				count--;
+			if (num == element) count++;
+			else count--;
 		}
 		return element;
 	}
@@ -536,8 +472,7 @@ public class ArrayProblems {
 	public int thirdMax(int[] nums) {
 		Integer first = null, second = null, third = null;
 		for (Integer num : nums) {
-			if (num.equals(first) || num.equals(second) || num.equals(third))
-				continue;
+			if (num.equals(first) || num.equals(second) || num.equals(third)) continue;
 			if (first == null || first <= num) {
 				third = second;
 				second = first;
@@ -562,12 +497,9 @@ public class ArrayProblems {
 		int first = Integer.MAX_VALUE;
 		int second = Integer.MAX_VALUE;
 		for (int i = 0; i < nums.length; i++) {
-			if (first >= nums[i])
-				first = nums[i];// update first to be a smaller value
-			else if (second >= nums[i])
-				second = nums[i]; // update second to be a smaller value
-			else
-				return true;
+			if (first >= nums[i]) first = nums[i];// update first to be a smaller value
+			else if (second >= nums[i]) second = nums[i]; // update second to be a smaller value
+			else return true;
 		}
 		return false;
 	}
@@ -583,15 +515,12 @@ public class ArrayProblems {
 	public List<String> summaryRanges(int[] nums) {
 		List<String> result = new ArrayList<>();
 		int n = nums.length;
-		if (n == 0)
-			return result;
+		if (n == 0) return result;
 		String start;
 		for (int i = 0; i < n; i++) {
 			start = String.valueOf(nums[i]);
-			while (i + 1 < n && nums[i] + 1 == nums[i + 1])
-				i++;
-			if (!start.equals(String.valueOf(nums[i])))
-				start += "->" + String.valueOf(nums[i]);
+			while (i + 1 < n && nums[i] + 1 == nums[i + 1]) i++;
+			if (!start.equals(String.valueOf(nums[i]))) start += "->" + String.valueOf(nums[i]);
 			result.add(start);
 		}
 		return result;
@@ -601,8 +530,7 @@ public class ArrayProblems {
 	public List<String> summaryRanges2(int[] nums) {
 		List<String> result = new ArrayList<>();
 		int n = nums.length;
-		if (n == 0)
-			return result;
+		if (n == 0) return result;
 		if (n == 1) {
 			result.add(String.valueOf(nums[0]));
 			return result;
@@ -613,17 +541,13 @@ public class ArrayProblems {
 			if (nums[i - 1] + 1 == nums[i]) {
 				end = nums[i];
 			} else {
-				if (start == end)
-					result.add(String.valueOf(start));
-				else
-					result.add(start + "->" + end);
+				if (start == end) result.add(String.valueOf(start));
+				else result.add(start + "->" + end);
 				start = end = nums[i];
 			}
 		}
-		if (start == end)
-			result.add(String.valueOf(start));
-		else
-			result.add(start + "->" + end);
+		if (start == end) result.add(String.valueOf(start));
+		else result.add(start + "->" + end);
 		return result;
 	}
 
@@ -636,17 +560,14 @@ public class ArrayProblems {
 
 		List<String> result = new ArrayList<>();
 		int n = nums.length;
-		if (n == 0)
-			return result;
+		if (n == 0) return result;
 
 		int prev = lower - 1;
 		for (int i = 0; i <= n; i++) {
 			int curr = i == n ? upper : nums[i];
 
-			if (prev + 2 == curr)
-				result.add(String.valueOf(prev + 1));
-			else if (prev + 2 < curr)
-				result.add(String.valueOf(prev + 1) + "->" + String.valueOf(curr - 1));
+			if (prev + 2 == curr) result.add(String.valueOf(prev + 1));
+			else if (prev + 2 < curr) result.add(String.valueOf(prev + 1) + "->" + String.valueOf(curr - 1));
 
 			prev = curr;
 		}
@@ -681,8 +602,7 @@ public class ArrayProblems {
 			ei = update[1];
 			val = update[2];
 			result[si] += val;
-			if (ei + 1 < length)
-				result[ei + 1] -= val;
+			if (ei + 1 < length) result[ei + 1] -= val;
 		}
 
 		// Sum the result indices
@@ -711,8 +631,7 @@ public class ArrayProblems {
 		int count = 0;
 		for (int i = 0; i < arr.length; i++) {
 			for (int j = i + 1; j < arr.length; j++) {
-				if (Math.abs(arr[i] - arr[j]) == k)
-					count++;
+				if (Math.abs(arr[i] - arr[j]) == k) count++;
 			}
 		}
 
@@ -749,8 +668,7 @@ public class ArrayProblems {
 			set.add(arr[i]);
 
 		for (int i = 0; i < arr.length; i++)
-			if (set.contains(arr[i] + k))
-				count++;
+			if (set.contains(arr[i] + k)) count++;
 
 		return count;
 	}
@@ -765,10 +683,8 @@ public class ArrayProblems {
 			set = new HashSet<>();
 			for (int j = i + 1; j < arr.size(); j++) {
 				System.out.println(target - arr.get(j));
-				if (set.contains(arr.get(j)))
-					count++;
-				else
-					set.add(target - arr.get(j));
+				if (set.contains(arr.get(j))) count++;
+				else set.add(target - arr.get(j));
 			}
 		}
 
@@ -779,25 +695,19 @@ public class ArrayProblems {
 		Arrays.sort(nums);
 		List<int[]> res = new ArrayList<>();
 		for (int i = 0; i < nums.length - 2; i++) {
-			if (i > 0 && nums[i - 1] == nums[i])
-				continue;
-			if (nums[i] > 0)
-				break;
+			if (i > 0 && nums[i - 1] == nums[i]) continue;
+			if (nums[i] > 0) break;
 			int left = i + 1;
 			int right = nums.length - 1;
 			while (left < right) {
 				long sum = (long) nums[i] + (long) nums[left] + (long) nums[right];
 				if (sum == 0) {
 					res.add(new int[] { nums[i], nums[left], nums[right] });
-					while (left < right && nums[left] == nums[left + 1])
-						left++;
-					while (left < right && nums[right] == nums[right - 1])
-						right--;
+					while (left < right && nums[left] == nums[left + 1]) left++;
+					while (left < right && nums[right] == nums[right - 1]) right--;
 				}
-				if (sum > 0)
-					right--;
-				else
-					left++;
+				if (sum > 0) right--;
+				else left++;
 			}
 		}
 		return res.toArray(new int[res.size()][]);
@@ -806,14 +716,12 @@ public class ArrayProblems {
 	// Using List:
 	public ArrayList<ArrayList<Integer>> threeSumZero(ArrayList<Integer> A) {
 		ArrayList<ArrayList<Integer>> result = new ArrayList<>();
-		if (A == null || A.size() <= 2)
-			return result;
+		if (A == null || A.size() <= 2) return result;
 		Collections.sort(A);
 		// System.out.println(A.toString());
 		ArrayList<Integer> temp = null;
 		for (int i = 0; i < A.size(); i++) {
-			if (i > 0 && A.get(i - 1).equals(A.get(i)))
-				continue;
+			if (i > 0 && A.get(i - 1).equals(A.get(i))) continue;
 			int l = i + 1, h = A.size() - 1;
 			while (l < h) {
 				// System.out.println(A.get(i)+ ", " + A.get(l) +", "+A.get(h));
@@ -827,15 +735,11 @@ public class ArrayProblems {
 					result.add(temp);
 
 					// Skip the duplicate
-					while (l < h && A.get(l).equals(A.get(l + 1)))
-						l++;
-					while (l < h && A.get(h).equals(A.get(h - 1)))
-						h--;
+					while (l < h && A.get(l).equals(A.get(l + 1))) l++;
+					while (l < h && A.get(h).equals(A.get(h - 1))) h--;
 				}
-				if (sum <= 0)
-					l++;
-				else
-					h--;
+				if (sum <= 0) l++;
+				else h--;
 			}
 		}
 		return result;
@@ -876,8 +780,7 @@ public class ArrayProblems {
 		Arrays.sort(arr);
 
 		for (int i = n - 1; i > 1; i--) {
-			if (sumPresent1(arr, 0, i - 1, arr[i], arr[i]))
-				return true;
+			if (sumPresent1(arr, 0, i - 1, arr[i], arr[i])) return true;
 		}
 		return false;
 	}
@@ -937,8 +840,7 @@ public class ArrayProblems {
 					target -= nums[k];
 					for (int l = 0; l < n; l++) {
 						target -= nums[k];
-						if (target == 0 && !result.contains(eachList))
-							result.add(new ArrayList<>(eachList));
+						if (target == 0 && !result.contains(eachList)) result.add(new ArrayList<>(eachList));
 					}
 				}
 			}
@@ -960,8 +862,7 @@ public class ArrayProblems {
 					int sum = nums[i] + nums[j] + nums[l] + nums[h];
 					if (sum == target) {
 						List<Integer> eachList = Arrays.asList(nums[i], nums[j], nums[l], nums[h]);
-						if (!result.contains(eachList))
-							result.add(eachList);
+						if (!result.contains(eachList)) result.add(eachList);
 						l++;
 						h--;
 					} else if (sum < target) {
@@ -987,8 +888,7 @@ public class ArrayProblems {
 			for (int j = 0; j < n; j++)
 				for (int k = 0; k < n; k++)
 					for (int l = 0; l < n; l++)
-						if (0 == A[i] + B[j] + C[k] + D[l])
-							count++;
+						if (0 == A[i] + B[j] + C[k] + D[l]) count++;
 		return count;
 	}
 
@@ -1039,8 +939,7 @@ public class ArrayProblems {
 	public int[] repeatedNumber(final int[] A) {
 		int[] result = new int[2];
 		int n = A.length;
-		if (n == 0)
-			return result;
+		if (n == 0) return result;
 
 		// 1.Find Repeating no:
 		for (int i = 0; i < n; i++) {
@@ -1070,20 +969,16 @@ public class ArrayProblems {
 	public int firstMissingPositive(int[] nums) {
 		int n = nums.length;
 		for (int i = 0; i < n; i++)
-			if (nums[i] <= 0 || nums[i] > n)
-				nums[i] = n + 1;
+			if (nums[i] <= 0 || nums[i] > n) nums[i] = n + 1;
 		for (int i = 0; i < n; i++) {
 			int num = Math.abs(nums[i]);
-			if (num > n)
-				continue;
+			if (num > n) continue;
 			num--;
-			if (nums[num] > 0)
-				nums[num] = -nums[num]; // num-1 for array index
+			if (nums[num] > 0) nums[num] = -nums[num]; // num-1 for array index
 		}
 		// System.out.println(Arrays.toString(nums));
 		for (int i = 0; i < n; i++)
-			if (nums[i] >= 0)
-				return i + 1;
+			if (nums[i] >= 0) return i + 1;
 		return n + 1;
 	}
 
@@ -1092,8 +987,7 @@ public class ArrayProblems {
 	public int findDuplicate1(int[] nums) {
 		Arrays.sort(nums);
 		for (int i = 1; i < nums.length; i++)
-			if (nums[i] == nums[i - 1])
-				return nums[i];
+			if (nums[i] == nums[i - 1]) return nums[i];
 		return -1;
 	}
 
@@ -1101,8 +995,7 @@ public class ArrayProblems {
 	public int findDuplicate2(int[] nums) {
 		HashSet<Integer> set = new HashSet<>();
 		for (int i = 0; i < nums.length; i++) {
-			if (set.contains(nums[i]))
-				return nums[i];
+			if (set.contains(nums[i])) return nums[i];
 			set.add(nums[i]);
 		}
 		return -1;
@@ -1134,33 +1027,27 @@ public class ArrayProblems {
 			int mid = (int) (low + (high - low) * 0.5);
 			int cnt = 0;
 			for (int a : nums) {
-				if (a <= mid)
-					++cnt;
+				if (a <= mid) ++cnt;
 			}
-			if (cnt <= mid)
-				low = mid + 1;
-			else
-				high = mid - 1;
+			if (cnt <= mid) low = mid + 1;
+			else high = mid - 1;
 		}
 		return low;
 	}
 
 	public List<Integer> findDisappearedNumbers(int[] nums) {
 		List<Integer> result = new ArrayList<>();
-		if (nums.length <= 1)
-			return result;
+		if (nums.length <= 1) return result;
 
 		for (int i = 0; i < nums.length; i++) {
 			int valIndex = Math.abs(nums[i]) - 1;
-			if (nums[valIndex] < 0)
-				continue;
+			if (nums[valIndex] < 0) continue;
 
 			nums[valIndex] = -nums[valIndex];
 		}
 
 		for (int i = 0; i < nums.length; i++)
-			if (nums[i] > 0)
-				result.add(i + 1);
+			if (nums[i] > 0) result.add(i + 1);
 
 		return result;
 	}
@@ -1172,8 +1059,7 @@ public class ArrayProblems {
 	int minimumSwaps(int[] arr) {
 		int count = 0, n = arr.length;
 		for (int i = 0; i < n; i++) {
-			if (arr[i] == i + 1)
-				continue;
+			if (arr[i] == i + 1) continue;
 			Utils.swap(arr, i, arr[i] - 1);
 			count++;
 			i--;
@@ -1192,11 +1078,9 @@ public class ArrayProblems {
 	public int findMaxConsecutiveOnes1(int[] nums) {
 		int count = 0, zeros = 0, k = 1; // flip at most k zero
 		for (int l = 0, h = 0; h < nums.length; h++) {
-			if (nums[h] == 0)
-				zeros++;
+			if (nums[h] == 0) zeros++;
 			while (zeros > k) {
-				if (nums[l++] == 0)
-					zeros--;
+				if (nums[l++] == 0) zeros--;
 			}
 
 			count = Math.max(count, h - l + 1);
@@ -1214,11 +1098,9 @@ public class ArrayProblems {
 		int count = 0, k = 1; // flip at most k zero
 		Queue<Integer> zeroIndex = new LinkedList<>();
 		for (int l = 0, h = 0; h < nums.length; h++) {
-			if (nums[h] == 0)
-				zeroIndex.add(h);
+			if (nums[h] == 0) zeroIndex.add(h);
 
-			if (zeroIndex.size() > k)
-				l = zeroIndex.poll() + 1;
+			if (zeroIndex.size() > k) l = zeroIndex.poll() + 1;
 
 			count = Math.max(count, h - l + 1);
 		}

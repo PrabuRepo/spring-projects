@@ -4,7 +4,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Stack;
+
+import com.problems.patterns.ds.StackPatterns;
 
 public class TwoPointerPatterns {
 
@@ -46,18 +47,17 @@ public class TwoPointerPatterns {
 		return result;
 	}
 
-	// 3.Two Ptr Approach: Time Complexity: O(n) for sorted array; o(nlogn) for unsorted array;
+	// 3.Two Ptr Approach: Time Complexity: O(nlogn) for both sorted and unsorted array;
 	public int[] twoSum3(int[] arr, int k) {
 		Arrays.sort(arr);
 		int[] result = new int[2];
 		for (int i = 0; i < arr.length; i++) {
-			int siblingIndex = Arrays.binarySearch(arr, k - arr[i]);
-			if (siblingIndex >= 0) { // Found it!
+			int index = Arrays.binarySearch(arr, k - arr[i]);
+			if (index >= 0) {
 				/* If this points at us, then the pair exists only if there is another copy of the element. Look ahead of us and behind us. */
-				if (siblingIndex != i || (i > 0 && arr[i - 1] == arr[i])
-						|| (i < arr.length - 1 && arr[i + 1] == arr[i])) {
+				if (index != i || (i > 0 && arr[i - 1] == arr[i]) || (i < arr.length - 1 && arr[i + 1] == arr[i])) {
 					result[0] = i;
-					result[1] = siblingIndex;
+					result[1] = index;
 					return result;
 				}
 			}
@@ -110,8 +110,7 @@ public class TwoPointerPatterns {
 		// 2. Take element one by one from 0th the index
 		for (int i = 0; i < n - 2; i++) {
 			// 3. Find remaining two elements using two ptr alg
-			if (sumPresent1(a, i + 1, n - 1, a[i], sum - a[i]))
-				return true;
+			if (sumPresent1(a, i + 1, n - 1, a[i], sum - a[i])) return true;
 		}
 
 		return false;
@@ -124,8 +123,7 @@ public class TwoPointerPatterns {
 		// 1. Take element one by one from 0th the index
 		for (int i = 0; i < n - 2; i++) {
 			// 3. Find remaining two elements using hash DS
-			if (sumPresent2(a, i + 1, n - 1, a[i], sum - a[i]))
-				return true;
+			if (sumPresent2(a, i + 1, n - 1, a[i], sum - a[i])) return true;
 		}
 
 		return false;
@@ -179,8 +177,7 @@ public class TwoPointerPatterns {
 				int sum = nums[i] + nums[l] + nums[h];
 				int diff = Math.abs(sum - target);
 
-				if (diff == 0)
-					return sum;
+				if (diff == 0) return sum;
 
 				if (diff < minDiff) {
 					minDiff = diff;
@@ -236,19 +233,15 @@ public class TwoPointerPatterns {
 			if (a[l] < a[h]) {
 				// If current index is less than tallest left bar then add in the sum, otherwise keep updating the
 				// tallestLeft
-				if (a[l] > tallestLeft)
-					tallestLeft = a[l];
-				else
-					sum += tallestLeft - a[l];
+				if (a[l] > tallestLeft) tallestLeft = a[l];
+				else sum += tallestLeft - a[l];
 
 				l++;
 			} else {
 				// If current index is less than tallest right bar then add in the sum, otherwise keep updating the
 				// tallestRight
-				if (a[h] > tallestRight)
-					tallestRight = a[h]; // Update the max right
-				else
-					sum += tallestRight - a[h];
+				if (a[h] > tallestRight) tallestRight = a[h]; // Update the max right
+				else sum += tallestRight - a[h];
 
 				h--;
 			}
@@ -256,26 +249,10 @@ public class TwoPointerPatterns {
 		return sum;
 	}
 
-	//Using Stack 
+	//Using Stack - Monotonic Stack Pattern
 	public int trap(int[] height) {
-		if (height.length <= 1)
-			return 0;
-
-		Stack<Integer> stack = new Stack<>();
-		int n = height.length, water = 0;
-
-		for (int i = 0; i < n; i++) {
-			while (!stack.isEmpty() && height[stack.peek()] < height[i]) {
-				int prev = stack.pop();
-				if (stack.isEmpty())
-					break;
-				int minHeight = Math.min(height[stack.peek()], height[i]);
-				water += (minHeight - height[prev]) * (i - stack.peek() - 1);
-			}
-			stack.push(i);
-		}
-
-		return water;
+		StackPatterns ob = new StackPatterns();
+		return ob.trappingRainWater(height);
 	}
 
 	/* Container With Most Water: 
@@ -284,17 +261,14 @@ public class TwoPointerPatterns {
 	 * with x-axis forms a container, such that the container contains the most water.
 	 */
 	public int maxArea(int[] height) {
-		if (height.length <= 1)
-			return 0;
+		if (height.length <= 1) return 0;
 
 		int l = 0, h = height.length - 1, max = 0, minHeight = 0;
 		while (l < h) {
 			minHeight = Math.min(height[l], height[h]);
 			max = Math.max(max, minHeight * (h - l));
-			if (height[l] < height[h])
-				l++;
-			else
-				h--;
+			if (height[l] < height[h]) l++;
+			else h--;
 		}
 		return max;
 	}

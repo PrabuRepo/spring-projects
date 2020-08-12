@@ -19,18 +19,14 @@ public class BacktrackingPatterns {
 		backtrack5(res, new ArrayList<>(), nums, target, 0);
 		res.stream().forEach(k -> System.out.print(k + ", "));
 		return res;
-
 	}
 
 	private void backtrack5(List<List<Integer>> res, List<Integer> tmp, int[] nums, int target, int start) {
-		if (target < 0)
-			return;
-		else if (target == 0)
-			res.add(new ArrayList<>(tmp));
+		if (target < 0) return;
+		else if (target == 0) res.add(new ArrayList<>(tmp));
 		else {
 			for (int i = start; i < nums.length; i++) {
-				if (i > start && nums[i] == nums[i - 1])
-					continue;
+				if (i > start && nums[i] == nums[i - 1]) continue;
 				tmp.add(nums[i]);
 				backtrack5(res, tmp, nums, target - nums[i], i + 1);
 				tmp.remove(tmp.size() - 1);
@@ -47,10 +43,8 @@ public class BacktrackingPatterns {
 	}
 
 	public void backtrack6(int sum, int k, int start, List<Integer> list, List<List<Integer>> res) {
-		if (list.size() == k && sum == 0)
-			res.add(new ArrayList<>(list));
-		else if (list.size() >= k || sum < 0)
-			return;
+		if (list.size() == k && sum == 0) res.add(new ArrayList<>(list));
+		else if (list.size() >= k || sum < 0) return;
 		else {
 			for (int i = start; i <= 9; i++) {
 				list.add(i);
@@ -70,17 +64,13 @@ public class BacktrackingPatterns {
 
 	public void backtrack7(int n, int start, List<List<Integer>> res, List<Integer> tmp) {
 		if (n == 1) {
-			if (tmp.size() > 1)
-				res.add(new ArrayList<>(tmp));
+			res.add(new ArrayList<>(tmp));
 		} else {
 			for (int i = start; i <= n; i++) {
-				if (n < i)
-					break;
-				if (n % i == 0) {
-					tmp.add(i);
-					backtrack7(n / i, i, res, tmp);
-					tmp.remove(tmp.size() - 1);
-				}
+				if (n % i != 0) continue;
+				tmp.add(i);
+				backtrack7(n / i, i, res, tmp);
+				tmp.remove(tmp.size() - 1);
 			}
 		}
 	}
@@ -115,8 +105,7 @@ public class BacktrackingPatterns {
 		queue.add(S);
 
 		for (int i = 0; i < S.length(); i++) {
-			if (Character.isDigit(S.charAt(i)))
-				continue;
+			if (Character.isDigit(S.charAt(i))) continue;
 			int size = queue.size();
 			while (size-- > 0) {
 				char[] arr = queue.poll().toCharArray();
@@ -138,8 +127,9 @@ public class BacktrackingPatterns {
 		for (int i = 0; i < size; i++) {
 			char[] arr = S.toCharArray();
 			for (int j = 0; j < n; j++) {
-				if (Character.isLetter(arr[j]) && (i >> j & 1) == 1)
+				if (Character.isLetter(arr[j]) && (i >> j & 1) == 1) {
 					arr[j] = (char) (arr[j] - 32); // or Character.toUpperCase(arr[j]);
+				}
 			}
 			set.add(String.valueOf(arr));
 		}
@@ -147,7 +137,12 @@ public class BacktrackingPatterns {
 	}
 
 	/********************* 2.Backtracking template -1 problems ***********************/
-	// Palindrome Partitioning :
+	/* Palindrome Partitioning: 
+	 * Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome
+	 *  partitioning of s.
+	 *  [["aa","b"], ["a","a","b"]] 
+	 */
+	//Using Backtracking(DFS) Algorithm - TC:O(n(2^n))
 	public List<List<String>> partition(String s) {
 		List<List<String>> res = new ArrayList<>();
 		backtrack12(res, new ArrayList<>(), s, 0);
@@ -156,8 +151,7 @@ public class BacktrackingPatterns {
 	}
 
 	public void backtrack12(List<List<String>> res, List<String> tmp, String s, int start) {
-		if (start == s.length())
-			res.add(new ArrayList<>(tmp));
+		if (start == s.length()) res.add(new ArrayList<>(tmp));
 		else {
 			for (int i = start; i < s.length(); i++) {
 				if (isPalindrome(s, start, i)) {
@@ -170,10 +164,44 @@ public class BacktrackingPatterns {
 	}
 
 	public boolean isPalindrome(String s, int low, int high) {
-		while (low < high)
-			if (s.charAt(low++) != s.charAt(high--))
-				return false;
+		while (low < high) if (s.charAt(low++) != s.charAt(high--)) return false;
 		return true;
+	}
+
+	//Using DP & BackTracking(DFS) Algorithm 
+	//TC:O(n^2 +2^n) = sTC:O(2^n)
+	public List<List<String>> partition2(String s) {
+		List<List<String>> result = new ArrayList<>();
+		int n = s.length();
+		//use longest palindromic substring solution
+		boolean[][] dp = new boolean[n][n];
+		for (int len = 1; len <= n; len++) {
+			for (int i = 0; i <= n - len; i++) {
+				int j = i + len - 1;
+				if (s.charAt(i) == s.charAt(j)) {
+					if (len == 1 || len == 2) dp[i][j] = true;
+					else dp[i][j] = dp[i + 1][j - 1];
+				}
+			}
+		}
+		//Apply Backtracking algorithm
+		backtrackPartition(dp, s, result, new ArrayList<>(), 0);
+		return result;
+	}
+
+	public void backtrackPartition(boolean[][] dp, String s, List<List<String>> result, List<String> tempList,
+			int start) {
+		if (s.length() == start) {
+			result.add(new ArrayList<>(tempList));
+		} else {
+			for (int i = start; i < s.length(); i++) {
+				if (dp[start][i]) {
+					tempList.add(s.substring(start, i + 1));
+					backtrackPartition(dp, s, result, tempList, i + 1);
+					tempList.remove(tempList.size() - 1);
+				}
+			}
+		}
 	}
 
 	/*Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could
@@ -181,8 +209,7 @@ public class BacktrackingPatterns {
 	 Combination: Eg: 236 -> 3C1*3C1*3C1 -> 3*3*3 -> 27 combinations
 	 */
 	public List<String> letterCombinations(String num) {
-		if (num.length() == 0)
-			return new ArrayList<>();
+		if (num.length() == 0) return new ArrayList<>();
 		Map<Character, String> map = new HashMap<>();
 		map.put('2', "abc");
 		map.put('3', "def");
@@ -221,17 +248,13 @@ public class BacktrackingPatterns {
 					for (int l = 1; l <= 3; l++)
 						if (i + j + k + l == s.length()) {
 							String a = s.substring(0, i);
-							if (Integer.parseInt(a) > 255 || (a.charAt(0) == '0' && a.length() > 1))
-								continue;
+							if (Integer.parseInt(a) > 255 || (a.charAt(0) == '0' && a.length() > 1)) continue;
 							String b = s.substring(i, i + j);
-							if (Integer.parseInt(b) > 255 || (b.charAt(0) == '0' && b.length() > 1))
-								continue;
+							if (Integer.parseInt(b) > 255 || (b.charAt(0) == '0' && b.length() > 1)) continue;
 							String c = s.substring(i + j, i + j + k);
-							if (Integer.parseInt(c) > 255 || (c.charAt(0) == '0' && c.length() > 1))
-								continue;
+							if (Integer.parseInt(c) > 255 || (c.charAt(0) == '0' && c.length() > 1)) continue;
 							String d = s.substring(i + j + k, i + j + k + l);
-							if (Integer.parseInt(d) > 255 || (d.charAt(0) == '0' && d.length() > 1))
-								continue;
+							if (Integer.parseInt(d) > 255 || (d.charAt(0) == '0' && d.length() > 1)) continue;
 							res.add(a + "." + b + "." + c + "." + d);
 						}
 		return res;
@@ -239,24 +262,21 @@ public class BacktrackingPatterns {
 
 	// Approach2: Recursive Method; DFS Search
 	public List<String> restoreIpAddresses2(String s) {
-		List<String> solutions = new ArrayList<String>();
-		restoreIp(s, solutions, 0, "", 0);
-		solutions.stream().forEach(k -> System.out.print(k + ", "));
-		return solutions;
+		List<String> result = new ArrayList<String>();
+		restoreIp(s, result, 0, "", 0);
+		result.stream().forEach(k -> System.out.print(k + ", "));
+		return result;
 	}
 
-	private void restoreIp(String ip, List<String> solutions, int idx, String restored, int digits) {
-		if (digits == 4 && idx == ip.length())
-			solutions.add(restored);
-		if (digits == 4)
-			return;
+	private void restoreIp(String ip, List<String> result, int currIndex, String ipCombinations, int count) {
+		if (count == 4 && currIndex == ip.length()) result.add(ipCombinations.toString());
+		if (count == 4) return;
+
 		for (int i = 1; i <= 3; i++) {
-			if (idx + i > ip.length())
-				break;
-			String s = ip.substring(idx, idx + i);
-			if ((s.startsWith("0") && s.length() > 1) || (i == 3 && Integer.parseInt(s) > 255))
-				continue;
-			restoreIp(ip, solutions, idx + i, restored + s + (digits == 3 ? "" : "."), digits + 1);
+			if (currIndex + i > ip.length()) break;
+			String s = ip.substring(currIndex, currIndex + i);
+			if (Integer.parseInt(s) > 255 || (s.startsWith("0") && s.length() > 1)) continue;
+			restoreIp(ip, result, currIndex + i, ipCombinations + s + (count < 3 ? "." : ""), count + 1);
 		}
 	}
 }

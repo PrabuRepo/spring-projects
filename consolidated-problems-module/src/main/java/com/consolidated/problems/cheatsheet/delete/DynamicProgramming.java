@@ -1,9 +1,7 @@
 package com.consolidated.problems.cheatsheet.delete;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.common.model.Box;
@@ -1473,78 +1471,6 @@ public class DynamicProgramming {
 			}
 		}
 		return cut[n - 1];
-	}
-
-	/*
-	 * Palindrome PartitioningI:
-	 * Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome
-	 *  partitioning of s.
-	 *  [["aa","b"], ["a","a","b"]] 
-	 */
-	//Using Backtracking(DFS) Algorithm - TC:O(n(2^n))
-	public List<List<String>> partition1(String s) {
-		List<List<String>> result = new ArrayList<>();
-		backtrackPartition(s, result, new ArrayList<>(), 0);
-		return result;
-	}
-
-	public void backtrackPartition(String s, List<List<String>> result, List<String> tempList, int start) {
-		if (start == s.length())
-			result.add(new ArrayList<>(tempList));
-		else {
-			for (int i = start; i < s.length(); i++) {
-				if (isPalindrome(s, start, i)) {
-					tempList.add(s.substring(start, i + 1));
-					backtrackPartition(s, result, tempList, i + 1);
-					tempList.remove(tempList.size() - 1);
-				}
-			}
-		}
-	}
-
-	public boolean isPalindrome(String s, int low, int high) {
-		while (low < high)
-			if (s.charAt(low++) != s.charAt(high--))
-				return false;
-		return true;
-	}
-
-	//Using DP & BackTracking(DFS) Algorithm 
-	//TC:O(n^2 +2^n) = sTC:O(2^n)
-	public List<List<String>> partition2(String s) {
-		List<List<String>> result = new ArrayList<>();
-		int n = s.length();
-		//use longest palindromic substring solution
-		boolean[][] dp = new boolean[n][n];
-		for (int len = 1; len <= n; len++) {
-			for (int i = 0; i <= n - len; i++) {
-				int j = i + len - 1;
-				if (s.charAt(i) == s.charAt(j)) {
-					if (len == 1 || len == 2)
-						dp[i][j] = true;
-					else
-						dp[i][j] = dp[i + 1][j - 1];
-				}
-			}
-		}
-		//Apply Backtracking algorithm
-		backtrackPartition(dp, s, result, new ArrayList<>(), 0);
-		return result;
-	}
-
-	public void backtrackPartition(boolean[][] dp, String s, List<List<String>> result, List<String> tempList,
-			int start) {
-		if (s.length() == start) {
-			result.add(new ArrayList<>(tempList));
-		} else {
-			for (int i = start; i < s.length(); i++) {
-				if (dp[start][i]) {
-					tempList.add(s.substring(start, i + 1));
-					backtrackPartition(dp, s, result, tempList, i + 1);
-					tempList.remove(tempList.size() - 1);
-				}
-			}
-		}
 	}
 
 	/***************************** Pattern 5: Longest Common Substring *************************/

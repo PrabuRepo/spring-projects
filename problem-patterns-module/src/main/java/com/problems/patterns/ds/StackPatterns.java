@@ -517,9 +517,8 @@ public class StackPatterns {
 		return maxArea;
 	}
 
-	//Trapping Rain Water - Duplicate here
-	//Using Stack 
-	public int trap(int[] height) {
+	//Trapping Rain Water -using Monotonic Stack 
+	public int trappingRainWater(int[] height) {
 		if (height.length <= 1)
 			return 0;
 

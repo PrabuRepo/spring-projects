@@ -24,8 +24,7 @@ public class SlidingWindowPatterns {
 	 */
 	public String minWindow1(String str, String pat) {
 		int len1 = str.length(), len2 = pat.length();
-		if (len1 == 0 || len2 == 0 || (len1 < len2))
-			return "";
+		if (len1 == 0 || len2 == 0 || (len1 < len2)) return "";
 
 		int[] hashStr = new int[256];
 		int[] hashPat = new int[256];
@@ -39,8 +38,7 @@ public class SlidingWindowPatterns {
 			index = str.charAt(r); // Get the String index
 			// Increase the char count in hashStr
 			hashStr[index]++;
-			if (hashPat[index] != 0 && hashStr[index] <= hashPat[index])
-				count++;
+			if (hashPat[index] != 0 && hashStr[index] <= hashPat[index]) count++;
 
 			// Move 'l' from zero and update minwindow & the string map
 			while (l <= r && count == len2) {
@@ -51,8 +49,7 @@ public class SlidingWindowPatterns {
 				index = str.charAt(l); // Get the String index
 				// Decrease the char count in strMap
 				hashStr[index]--;
-				if (hashStr[index] < hashPat[index])
-					count--;
+				if (hashStr[index] < hashPat[index]) count--;
 				l++;
 			}
 			r++;
@@ -68,8 +65,7 @@ public class SlidingWindowPatterns {
 	 */
 	// Approach1: Sliding Window solution using Array to store the data
 	public int lengthOfLongestSubstring1(String s) {
-		if (s.length() == 0)
-			return 0;
+		if (s.length() == 0) return 0;
 
 		int l = 0, r = 0, maxLen = 0, n = s.length();
 		int[] countArr = new int[128];
@@ -91,8 +87,7 @@ public class SlidingWindowPatterns {
 
 	//Approach2: Sliding Window solution using map to store the data
 	public int lengthOfLongestSubstring2(String s) {
-		if (s.length() == 0)
-			return 0;
+		if (s.length() == 0) return 0;
 		HashMap<Character, Integer> map = new HashMap<Character, Integer>();
 		int l = 0, r = 0, maxLen = 0, n = s.length();
 		while (r < n) {
@@ -115,11 +110,8 @@ public class SlidingWindowPatterns {
 		int[] countArr = new int[128];
 		while (r < n) {
 			char ch = s.charAt(r++);
-			if (countArr[ch]++ > 0)
-				counter++;
-			while (counter > 0 && l < n)
-				if (countArr[s.charAt(l++)]-- > 1)
-					counter--;
+			if (countArr[ch]++ > 0) counter++;
+			while (counter > 0 && l < n) if (countArr[s.charAt(l++)]-- > 1) counter--;
 
 			maxLen = Math.max(maxLen, r - l);
 		}
@@ -128,8 +120,7 @@ public class SlidingWindowPatterns {
 
 	// Approach2: Sliding Window solution using map to store the data
 	public int lengthOfLongestSubstring4(String s) {
-		if (s.length() == 0)
-			return 0;
+		if (s.length() == 0) return 0;
 		HashMap<Character, Integer> map = new HashMap<Character, Integer>();
 		int l = 0, r = 0, maxLen = 0, n = s.length();
 		while (r < n) {
@@ -269,8 +260,7 @@ public class SlidingWindowPatterns {
 	// Time Complexity: O(26n)
 	public int characterReplacement2(String s, int k) {
 		int n = s.length();
-		if (n < k)
-			return 0;
+		if (n < k) return 0;
 
 		// Added this to improve the performance; Solution will work without this
 		int[] countArray = new int[26];
@@ -282,8 +272,7 @@ public class SlidingWindowPatterns {
 			char ch = (char) (i + 'A'); // Get the char one by one from A to Z;(input has only upper case)
 			int l = 0, r = 0, count = 0;
 
-			if (countArray[ch - 'A'] == 0)
-				continue;
+			if (countArray[ch - 'A'] == 0) continue;
 
 			while (r < n) {
 				if (s.charAt(r) != ch) // if char mismatches, increase the count
@@ -327,8 +316,7 @@ public class SlidingWindowPatterns {
 				l++;
 			}
 
-			if (r - l + 1 == s1.length())
-				return true;
+			if (r - l + 1 == s1.length()) return true;
 			r++;
 		}
 
@@ -345,8 +333,7 @@ public class SlidingWindowPatterns {
 	 */
 	public List<Integer> findSubstring(String s, String[] words) {
 		List<Integer> result = new ArrayList<>();
-		if (s == null || s.length() == 0 || words.length == 0)
-			return result;
+		if (s == null || s.length() == 0 || words.length == 0) return result;
 
 		HashMap<String, Integer> map = new HashMap<>();
 
@@ -360,10 +347,8 @@ public class SlidingWindowPatterns {
 			for (int j = 0; j < size; j++) {
 				String sub = s.substring(i + j * len, i + j * len + len);
 				if (copy.containsKey(sub)) {
-					if (copy.get(sub) == 1)
-						copy.remove(sub);
-					else
-						copy.put(sub, copy.get(sub) - 1);
+					if (copy.get(sub) == 1) copy.remove(sub);
+					else copy.put(sub, copy.get(sub) - 1);
 					if (copy.isEmpty()) {
 						result.add(i);
 						break;
@@ -400,10 +385,8 @@ public class SlidingWindowPatterns {
 			}
 		}
 
-		if (sum == currSum)
-			System.out.println((start + 1) + " " + (end + 1));
-		else
-			System.out.println("-1");
+		if (sum == currSum) System.out.println((start + 1) + " " + (end + 1));
+		else System.out.println("-1");
 	}
 
 	/* Minimum Size Subarray Sum:
@@ -412,8 +395,7 @@ public class SlidingWindowPatterns {
 	 * 2 Explanation: the subarray [4,3] has the minimal length under the problem constraint.
 	 */
 	public int minSubArrayLen(int s, int[] nums) {
-		if (nums.length == 0)
-			return 0;
+		if (nums.length == 0) return 0;
 
 		int l = 0, r = 0, sum = 0, minLen = Integer.MAX_VALUE;
 		while (r < nums.length) {
@@ -435,15 +417,13 @@ public class SlidingWindowPatterns {
 	 * Example: Input: [-2,1,-3,4,-1,2,1,-5,4], Output: 6 Explanation: [4,-1,2,1] has the largest sum = 6.
 	 */
 	public int maxSubArray(int[] nums) {
-		if (nums.length == 0)
-			return 0;
+		if (nums.length == 0) return 0;
 
 		int sum = 0, maxSum = Integer.MIN_VALUE;
 		for (int num : nums) {
 			sum += num;
 			maxSum = Math.max(sum, maxSum);
-			if (sum < 0)
-				sum = 0;
+			if (sum < 0) sum = 0;
 
 		}
 		return maxSum;
@@ -454,8 +434,7 @@ public class SlidingWindowPatterns {
 	 * has the largest product. Example 1: Input: [2,3,-2,4] Output: 6 Explanation: [2,3] has the largest product 6.
 	 */
 	public int maxProduct(int[] nums) {
-		if (nums.length == 0)
-			return 0;
+		if (nums.length == 0) return 0;
 		int max = 1, min = 1, result = Integer.MIN_VALUE;
 		for (int num : nums) {
 			int tempMax = max;
@@ -501,12 +480,9 @@ public class SlidingWindowPatterns {
 		int max = 0, zero = 0, k = 1; // flip at most k zero
 		int l = 0, r = 0;
 		while (r < nums.length) {
-			if (nums[r] == 0)
-				zero++;
+			if (nums[r] == 0) zero++;
 
-			while (zero > k)
-				if (nums[l++] == 0)
-					zero--;
+			while (zero > k) if (nums[l++] == 0) zero--;
 
 			max = Math.max(max, r - l + 1);
 			r++;
@@ -521,10 +497,8 @@ public class SlidingWindowPatterns {
 		int max = 0, k = 1; // flip at most k zero
 		Queue<Integer> zeroIndex = new LinkedList<>();
 		for (int l = 0, h = 0; h < nums.length; h++) {
-			if (nums[h] == 0)
-				zeroIndex.offer(h);
-			if (zeroIndex.size() > k)
-				l = zeroIndex.poll() + 1;
+			if (nums[h] == 0) zeroIndex.offer(h);
+			if (zeroIndex.size() > k) l = zeroIndex.poll() + 1;
 			max = Math.max(max, h - l + 1);
 		}
 		return max;
@@ -538,14 +512,12 @@ public class SlidingWindowPatterns {
 	 * Example 1: Input: [1,12,-5,-6,50,3], k = 4 Output: 12.75 Explanation: Maximum average is (12-5-6+50)/4 = 51/4 = 12.75
 	 */
 	public double findMaxAverage(int[] arr, int k) {
-		if (arr.length == 0 || arr.length < k)
-			return 0;
+		if (arr.length == 0 || arr.length < k) return 0;
 
 		int sum = 0;
 		double maxAvg = Integer.MIN_VALUE;
 		for (int i = 0; i < arr.length; i++) {
-			if (i < k)
-				sum += arr[i];
+			if (i < k) sum += arr[i];
 			else {
 				maxAvg = Math.max(maxAvg, (double) sum / k);
 				sum -= arr[i - k];
@@ -566,19 +538,15 @@ public class SlidingWindowPatterns {
 		for (int i = 0; i < n; i++) {
 			if (i >= k) {
 				value = map.get(A[i - k]);
-				if (value > 1)
-					map.put(A[i - k], --value);
-				else
-					map.remove(A[i - k]);
+				if (value > 1) map.put(A[i - k], --value);
+				else map.remove(A[i - k]);
 			}
 
 			value = map.get(A[i]);
-			if (value == null)
-				value = 0;
+			if (value == null) value = 0;
 			map.put(A[i], ++value);
 
-			if (i >= k - 1)
-				System.out.print(map.size() + " ");
+			if (i >= k - 1) System.out.print(map.size() + " ");
 		}
 
 	}
@@ -601,8 +569,7 @@ public class SlidingWindowPatterns {
 		map.put(0, 1); // Initialize with count 1;
 		for (int i = 0; i < n; i++) {
 			sum += nums[i];
-			if (map.containsKey(sum - k))
-				count += map.get(sum - k);
+			if (map.containsKey(sum - k)) count += map.get(sum - k);
 
 			map.put(sum, map.getOrDefault(sum, 0) + 1);
 		}
@@ -666,13 +633,10 @@ public class SlidingWindowPatterns {
 
 		for (int i = 0; i < nums.length; i++) {
 			sum += nums[i];
-			if (sum == k)
-				max = Math.max(max, i + 1);
+			if (sum == k) max = Math.max(max, i + 1);
 			int diff = sum - k;
-			if (map.containsKey(diff))
-				max = Math.max(max, i - map.get(diff));
-			if (!map.containsKey(sum))
-				map.put(sum, i);
+			if (map.containsKey(diff)) max = Math.max(max, i - map.get(diff));
+			if (!map.containsKey(sum)) map.put(sum, i);
 
 		}
 
@@ -737,8 +701,7 @@ public class SlidingWindowPatterns {
 	}
 
 	public int maxSubsetSum(int[] arr) {
-		if (arr.length == 0)
-			return 0;
+		if (arr.length == 0) return 0;
 		int incl = 0, excl = 0, temp = 0;
 		for (int a : arr) {
 			temp = incl;
@@ -764,8 +727,7 @@ public class SlidingWindowPatterns {
 				sum -= arr[i - k];
 			}
 
-			if (i == n)
-				break;
+			if (i == n) break;
 
 			sum += arr[i];
 		}
