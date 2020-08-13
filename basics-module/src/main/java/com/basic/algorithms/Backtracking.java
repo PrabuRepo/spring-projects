@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
 
 import com.common.utilities.Utils;
 
+/*
+ * Backtracking: Subsequence, Subsets, Combination, and Permutation.
+ */
 public class Backtracking {
 
 	/********************* Backtracking Template - I ***********************/
@@ -58,8 +61,7 @@ public class Backtracking {
 	private void backtrack2(List<List<Integer>> res, List<Integer> tmp, int[] nums, int start) {
 		res.add(new ArrayList<>(tmp));
 		for (int i = start; i < nums.length; i++) {
-			if (i > start && nums[i] == nums[i - 1])
-				continue;
+			if (i > start && nums[i] == nums[i - 1]) continue;
 			tmp.add(nums[i]);
 			backtrack2(res, tmp, nums, i + 1);
 			tmp.remove(tmp.size() - 1);
@@ -115,10 +117,8 @@ public class Backtracking {
 	}
 
 	private void backtrack4(List<List<Integer>> res, List<Integer> tmp, int[] nums, int target, int start) {
-		if (target < 0)
-			return;
-		else if (target == 0)
-			res.add(new ArrayList<>(tmp));
+		if (target < 0) return;
+		else if (target == 0) res.add(new ArrayList<>(tmp));
 		else {
 			for (int i = start; i < nums.length; i++) {
 				tmp.add(nums[i]);
@@ -142,8 +142,7 @@ public class Backtracking {
 			res.add(new ArrayList<>(tmp));
 		} else {
 			for (int i = 0; i < nums.length; i++) {
-				if (tmp.contains(nums[i]))
-					continue;
+				if (tmp.contains(nums[i])) continue;
 				tmp.add(nums[i]);
 				backtrack8(res, tmp, nums);
 				tmp.remove(tmp.size() - 1);
@@ -187,8 +186,7 @@ public class Backtracking {
 			list.add(new ArrayList<>(tmp));
 		} else {
 			for (int i = 0; i < nums.length; i++) {
-				if (used[i] || i > 0 && nums[i] == nums[i - 1] && !used[i - 1])
-					continue;
+				if (used[i] || i > 0 && nums[i] == nums[i - 1] && !used[i - 1]) continue;
 				used[i] = true;
 				tmp.add(nums[i]);
 				backtrack10(list, tmp, nums, used);

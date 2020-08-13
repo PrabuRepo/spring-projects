@@ -24,8 +24,7 @@ public class GreedyAlgorithms {
 	private final int[] coins = { 1, 2, 5, 10, 20, 50, 100, 200, 500, 2000 };
 
 	public void minNoOfCoins(int sum) {
-		if (sum < 1)
-			return;
+		if (sum < 1) return;
 
 		int i = coins.length - 1;
 		while (sum > 0) {
@@ -45,8 +44,7 @@ public class GreedyAlgorithms {
 	 */
 	// Similar to Minimum number of Coins
 	public static int maximizeToys(int[] prices, int k) {
-		if (k < 1)
-			return 0;
+		if (k < 1) return 0;
 
 		Arrays.sort(prices);
 		int count = 0;
@@ -89,8 +87,7 @@ public class GreedyAlgorithms {
 				i = j;
 				j++;
 			} else {
-				if (pairs[i][1] > pairs[j][1])
-					i = j;
+				if (pairs[i][1] > pairs[j][1]) i = j;
 				j++;
 			}
 		}
@@ -108,8 +105,7 @@ public class GreedyAlgorithms {
 	 * Input:3 20; Output: 992 
 	 */
 	public String largestNumber(int n, int sum) {
-		if (sum == 0 || sum > n * 9)
-			return "-1";
+		if (sum == 0 || sum > n * 9) return "-1";
 		StringBuilder sb = new StringBuilder();
 		while (n-- > 0) {
 			if (sum > 9) {
@@ -129,15 +125,13 @@ public class GreedyAlgorithms {
 	 */
 	// Approach 1: Traverse from right to left index and find the max & min index to swap;
 	public int maximumSwap(int num) {
-		if (num < 10)
-			return num;
+		if (num < 10) return num;
 
 		char[] digits = String.valueOf(num).toCharArray();
 
 		int l = 0, h = 0, maxIndex = digits.length - 1;
 		for (int i = digits.length - 2; i >= 0; i--) {
-			if (digits[i] == digits[maxIndex])
-				continue;
+			if (digits[i] == digits[maxIndex]) continue;
 
 			if (digits[i] > digits[maxIndex]) {
 				maxIndex = i;
@@ -181,19 +175,14 @@ public class GreedyAlgorithms {
 			int pos1 = 0, pos2 = 0, tpos = 0;
 			// Merge the max arrays
 			while (res1.length > 0 && res2.length > 0 && pos1 < res1.length && pos2 < res2.length) {
-				if (compare(res1, pos1, res2, pos2))
-					res[tpos++] = res1[pos1++];
-				else
-					res[tpos++] = res2[pos2++];
+				if (compare(res1, pos1, res2, pos2)) res[tpos++] = res1[pos1++];
+				else res[tpos++] = res2[pos2++];
 			}
-			while (pos1 < res1.length)
-				res[tpos++] = res1[pos1++];
-			while (pos2 < res2.length)
-				res[tpos++] = res2[pos2++];
+			while (pos1 < res1.length) res[tpos++] = res1[pos1++];
+			while (pos2 < res2.length) res[tpos++] = res2[pos2++];
 
 			// Finally choose the maximum number combinations
-			if (!compare(maxNumber, 0, res, 0))
-				maxNumber = res;
+			if (!compare(maxNumber, 0, res, 0)) maxNumber = res;
 		}
 
 		return maxNumber;
@@ -206,18 +195,15 @@ public class GreedyAlgorithms {
 			while (len > 0 && len + nums.length - i > k && res[len - 1] < nums[i]) {
 				len--;
 			}
-			if (len < k)
-				res[len++] = nums[i];
+			if (len < k) res[len++] = nums[i];
 		}
 		return res;
 	}
 
 	public boolean compare(int[] nums1, int start1, int[] nums2, int start2) {
 		for (; start1 < nums1.length && start2 < nums2.length; start1++, start2++) {
-			if (nums1[start1] > nums2[start2])
-				return true;
-			if (nums1[start1] < nums2[start2])
-				return false;
+			if (nums1[start1] > nums2[start2]) return true;
+			if (nums1[start1] < nums2[start2]) return false;
 		}
 		return start1 != nums1.length;
 	}
@@ -249,127 +235,9 @@ public class GreedyAlgorithms {
 			sb.append(ch);
 
 		// Remove leading zeros
-		while (sb.length() > 1 && sb.charAt(0) == '0')
-			sb.deleteCharAt(0);
+		while (sb.length() > 1 && sb.charAt(0) == '0') sb.deleteCharAt(0);
 
 		return sb.length() == 0 ? "0" : sb.toString();
-	}
-
-	/*Find Permutation:
-	 * By now, you are given a secret signature consisting of character 'D' and 'I'. 'D' represents a decreasing
-	 * relationship between two numbers, 'I' represents an increasing relationship between two numbers. And our secret
-	 * signature was constructed by a special integer array, which contains uniquely all the different number from 1 to
-	 * n (n is the length of the secret signature plus 1). For example, the secret signature "DI" can be constructed by
-	 * array [2,1,3] or [3,1,2], but won't be constructed by array [3,2,4] or [2,1,3,4], which are both illegal
-	 * constructing special string that can't represent the "DI" secret signature.
-	 * On the other hand, now your job is to find the lexicographically smallest permutation of [1, 2, ... n] could refer
-	 * to the given secret signature in the input. 
-	 * Example 1: Input: "I" Output: [1,2] Explanation: [1,2] is the only legal initial special string can construct secret 
-	 * signature "I", where the number 1 and 2 construct an increasing relationship. 
-	 * Example 2: Input: "DI" Output: [2,1,3] Explanation: Both [2,1,3] and [3,1,2] can construct the secret signature "DI",
-	 * but since we want to find the one with the smallest lexicographical permutation, you need to output [2,1,3] Note: The 
-	 * input string will only contain the character 'D' and 'I'.
-	 */
-	// Approach1: Assign the elements in forward & reverse direction
-	public int[] findPermutation1(String s) {
-		int num = 1, l = 0, r = 0;
-		int[] result = new int[s.length() + 1];
-
-		while (l < result.length) {
-			if (l == s.length() || s.charAt(l) == 'I') {
-				result[l++] = num++; // Store number in forward direction
-			} else {
-				r = l;
-				while (r < s.length() && s.charAt(r) == 'D')
-					r++;
-				for (int i = r; i >= l; i--)
-					result[i] = num++; // Store number in reverse direction
-				l = r + 1;
-			}
-		}
-		return result;
-	}
-
-	// Approach2: Assign the elements first, after that reverse the elements when char is 'D'.
-	public int[] findPermutation2(String s) {
-		int n = s.length(), arr[] = new int[n + 1];
-		// Assign the elements
-		for (int i = 0; i <= n; i++)
-			arr[i] = i + 1; // sorted
-
-		// Reverse the elements, if there in any 'D'
-		for (int h = 0; h < n; h++) {
-			if (s.charAt(h) == 'D') {
-				int l = h;
-				while (h < n && s.charAt(h) == 'D')
-					h++;
-				reverse(arr, l, h);
-			}
-		}
-		return arr;
-	}
-
-	void reverse(int[] arr, int l, int h) {
-		while (l < h) {
-			arr[l] ^= arr[h];
-			arr[h] ^= arr[l];
-			arr[l] ^= arr[h];
-			l++;
-			h--;
-		}
-	}
-
-	/*Next Permutation
-	 * Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
-	 * If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).
-	 * The replacement must be in-place and use only constant extra memory.
-	 * Here are some examples. Inputs are in the left-hand column and its corresponding outputs are in the right-hand column.
-	 * 1,2,3 -> 1,3,2
-	 * 3,2,1 -> 1,2,3
-	 * 1,1,5 -> 1,5,1
-	 */
-
-	//Time: O(n), Space: O(1)
-	public void nextPermutation(int[] nums) {
-		if (nums.length <= 1)
-			return;
-
-		int i = nums.length - 1;
-		//1.Find first increasing seq from the right
-		while (i > 0) {
-			if (nums[i - 1] < nums[i])
-				break;
-			i--;
-		}
-
-		if (i > 0) {
-			//2.Find first max value which is greater than (i-1)th index value from the last index.
-			int maxIndex = nums.length - 1;
-			while (maxIndex >= i) {
-				if (nums[maxIndex] > nums[i - 1])
-					break;
-				maxIndex--;
-			}
-			swap(nums, i - 1, maxIndex);
-		}
-
-		//3.Reverse the values from index i to n-1;
-		reverse(nums, i);
-	}
-
-	private void swap(int[] arr, int i, int j) {
-		int tmp = arr[i];
-		arr[i] = arr[j];
-		arr[j] = tmp;
-	}
-
-	private void reverse(int[] nums, int l) {
-		int h = nums.length - 1;
-		while (l < h) {
-			swap(nums, l, h);
-			l++;
-			h--;
-		}
 	}
 
 	/*************************** Type4: Other Greedy Problems ******************/
@@ -469,8 +337,7 @@ public class GreedyAlgorithms {
 		for (int i = 0; i < encodedString.length(); i++) {
 			char ch = encodedString.charAt(i);
 			// 1.If current bit is 0, we move to left node of the tree.
-			if (ch == '0')
-				curr = curr.left;
+			if (ch == '0') curr = curr.left;
 			else // 2.If the bit is 1, we move to right node of the tree.
 				curr = curr.right;
 

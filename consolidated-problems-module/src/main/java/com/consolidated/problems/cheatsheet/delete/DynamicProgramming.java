@@ -32,26 +32,21 @@ public class DynamicProgramming {
 	// Staircase
 	// 1.Recursive Solution
 	public int tripleSteps1(int n) {
-		if (n < 0)
-			return 0;
-		else if (n == 0)
-			return 1;
+		if (n < 0) return 0;
+		else if (n == 0) return 1;
 		return tripleSteps1(n - 1) + tripleSteps1(n - 2) + tripleSteps1(n - 3);
 	}
 
 	// 2. DP- Top down: Memoization
 	public int tripleSteps2(int n) {
-		if (n <= 0)
-			return 0;
+		if (n <= 0) return 0;
 		int[] dp = new int[n + 1];
 		return tripleStepsUtil(n, dp);
 	}
 
 	public int tripleStepsUtil(int n, int[] dp) {
-		if (n < 0)
-			return 0;
-		else if (n == 0)
-			return 1;
+		if (n < 0) return 0;
+		else if (n == 0) return 1;
 		if (dp[n] == 0) {
 			dp[n] = tripleStepsUtil(n - 1, dp) + tripleStepsUtil(n - 2, dp) + tripleStepsUtil(n - 3, dp);
 		}
@@ -60,14 +55,10 @@ public class DynamicProgramming {
 
 	// 3. DP- Bottom up: Tabulation
 	public int tripleSteps3(int n) {
-		if (n <= 0)
-			return 0;
-		else if (n == 1)
-			return 1;
-		else if (n == 2)
-			return 2;
-		else if (n == 3)
-			return 4;
+		if (n <= 0) return 0;
+		else if (n == 1) return 1;
+		else if (n == 2) return 2;
+		else if (n == 3) return 4;
 		int[] dp = new int[n + 1];
 		dp[1] = 1;
 		dp[2] = 2;
@@ -80,8 +71,7 @@ public class DynamicProgramming {
 	// Fibonacci Number calculation:
 	// 1.using recursive function
 	public int fibonacci1(int n) {
-		if (n <= 1)
-			return n;
+		if (n <= 1) return n;
 		return fibonacci1(n - 1) + fibonacci1(n - 2);
 	}
 
@@ -93,8 +83,7 @@ public class DynamicProgramming {
 	}
 
 	public int fibonacci2(int n, int[] dp) {
-		if (dp[n] != -1)
-			return dp[n];
+		if (dp[n] != -1) return dp[n];
 		if (n <= 1) {
 			dp[n] = n;
 		} else {
@@ -125,8 +114,7 @@ public class DynamicProgramming {
 	 *   - Final result will be p2.
 	 */
 	public int fibonacci4(int n) {
-		if (n == 0)
-			return 0;
+		if (n == 0) return 0;
 		int p1 = 1, p2 = 1;
 		for (int i = 2; i < n; i++) {
 			int tmp = p2;
@@ -138,21 +126,17 @@ public class DynamicProgramming {
 
 	// Approach1: Using Recursion
 	public int numDecodings1(String s) {
-		if (s.length() == 0)
-			return 0;
+		if (s.length() == 0) return 0;
 		return numDecodings(s, 0);
 	}
 
 	public int numDecodings(String s, int i) {
 		int n = s.length();
-		if (i == n)
-			return 1;
-		if (i > n || s.charAt(i) == '0')
-			return 0;
+		if (i == n) return 1;
+		if (i > n || s.charAt(i) == '0') return 0;
 		int sum = numDecodings(s, i + 1);
 		if (i + 1 < n)
-			if (s.charAt(i) == '1' || (s.charAt(i) == '2' && s.charAt(i + 1) <= '6'))
-				sum += numDecodings(s, i + 2);
+			if (s.charAt(i) == '1' || (s.charAt(i) == '2' && s.charAt(i + 1) <= '6')) sum += numDecodings(s, i + 2);
 		return sum;
 	}
 
@@ -170,8 +154,7 @@ public class DynamicProgramming {
 			int second = Integer.valueOf(s.substring(i - 2, i));
 			if (first >= 1 && first <= 9) //if(first!=0)
 				dp[i] += dp[i - 1];
-			if (second >= 10 && second <= 26)
-				dp[i] += dp[i - 2];
+			if (second >= 10 && second <= 26) dp[i] += dp[i - 2];
 		}
 		return dp[n];
 	}
@@ -182,20 +165,16 @@ public class DynamicProgramming {
 	 * just use two variable prev1, prev2 instead? This can reduce the 
 	 * space to O(1) */
 	public int numDecodings(String s) {
-		if (s.charAt(0) == '0')
-			return 0;
+		if (s.charAt(0) == '0') return 0;
 		int p1 = 1, p2 = 1;
 		for (int i = 1; i < s.length(); i++) {
 			// if p1 & p2 are zero, we can jump 
 			//out of the loop earlier
-			if (p1 == 0 && p2 == 0)
-				return 0;
+			if (p1 == 0 && p2 == 0) return 0;
 			int tmp = p2;
-			if (s.charAt(i) == '0')
-				p2 = 0;
+			if (s.charAt(i) == '0') p2 = 0;
 			int num = Integer.valueOf(s.substring(i - 1, i + 1));
-			if (num >= 10 && num <= 26)
-				p2 += p1;
+			if (num >= 10 && num <= 26) p2 += p1;
 			p1 = tmp;
 		}
 		return p2;
@@ -222,8 +201,7 @@ public class DynamicProgramming {
 	}
 
 	private int rob1(int[] nums, int i) {
-		if (i < 0)
-			return 0;
+		if (i < 0) return 0;
 		return Math.max(rob1(nums, i - 2) + nums[i], rob1(nums, i - 1));
 	}
 
@@ -237,10 +215,8 @@ public class DynamicProgramming {
 	}
 
 	private int rob2(int[] nums, int i) {
-		if (i < 0)
-			return 0;
-		if (memo[i] >= 0)
-			return memo[i];
+		if (i < 0) return 0;
+		if (memo[i] >= 0) return memo[i];
 		int result = Math.max(rob2(nums, i - 2) + nums[i], rob2(nums, i - 1));
 		memo[i] = result;
 		return result;
@@ -249,11 +225,9 @@ public class DynamicProgramming {
 	/* Java Solution 3- Dynamic Programming The key is to find the relation dp[i]=Math.max(dp[i-1],dp[i-2]+nums[i]).
 	 */
 	public int houseRob13(int[] nums) {
-		if (nums == null || nums.length == 0)
-			return 0;
+		if (nums == null || nums.length == 0) return 0;
 		int n = nums.length;
-		if (n == 1)
-			return nums[0];
+		if (n == 1) return nums[0];
 		int[] dp = new int[n];
 		dp[0] = nums[0];
 		dp[1] = Math.max(nums[0], nums[1]);
@@ -265,8 +239,7 @@ public class DynamicProgramming {
 
 	// 4:Bottom Up: Two variable approach:
 	public int houseRob14(int[] nums) {
-		if (nums.length == 0)
-			return 0;
+		if (nums.length == 0) return 0;
 		int p1 = 0, p2 = 0;
 		for (int i = 0; i < nums.length; i++) {
 			int tmp = p2;
@@ -280,8 +253,7 @@ public class DynamicProgramming {
 	 * array.You can use the following example to walk through the code.
 	 */
 	public int houseRob15(int[] num) {
-		if (num == null || num.length == 0)
-			return 0;
+		if (num == null || num.length == 0) return 0;
 		int even = 0;
 		int odd = 0;
 		for (int i = 0; i < num.length; i++) {
@@ -312,18 +284,15 @@ public class DynamicProgramming {
 	 */
 
 	public int houseRob2(int[] nums) {
-		if (nums == null || nums.length == 0)
-			return 0;
-		if (nums.length == 1)
-			return nums[0];
+		if (nums == null || nums.length == 0) return 0;
+		if (nums.length == 1) return nums[0];
 		int max1 = robHelper(nums, 0, nums.length - 2);
 		int max2 = robHelper(nums, 1, nums.length - 1);
 		return Math.max(max1, max2);
 	}
 
 	public int robHelper(int[] nums, int i, int j) {
-		if (i == j)
-			return nums[i];
+		if (i == j) return nums[i];
 		int[] dp = new int[nums.length];
 		dp[i] = nums[i];
 		dp[i + 1] = Math.max(nums[i + 1], dp[i]);
@@ -340,8 +309,7 @@ public class DynamicProgramming {
 	 * the maximum value when a root if NOT selected.
 	 */
 	public int houseRob3(TreeNode root) {
-		if (root == null)
-			return 0;
+		if (root == null) return 0;
 		int[] result = helper(root);
 		return Math.max(result[0], result[1]);
 	}
@@ -373,10 +341,8 @@ public class DynamicProgramming {
 	 *  second post : same + diff
 	 */
 	public int paintFence1(int n, int k) {
-		if (n <= 0 || k <= 0)
-			return 0;
-		if (n == 1)
-			return k;
+		if (n <= 0 || k <= 0) return 0;
+		if (n == 1) return k;
 		int same = k, diff = k * (k - 1);
 		for (int i = 2; i < n; i++) {
 			int tmp = diff;
@@ -388,8 +354,7 @@ public class DynamicProgramming {
 
 	//Simplified version on above:
 	public int paintFence11(int n, int k) {
-		if (n <= 0 || k <= 0)
-			return 0;
+		if (n <= 0 || k <= 0) return 0;
 		int same = 0, diff = k;
 		for (int i = 1; i < n; i++) {
 			int tmp = diff;
@@ -407,8 +372,7 @@ public class DynamicProgramming {
 	 */
 	public int paintFence2(int n, int k) {
 		int dp[] = { 0, k, k * k, 0 };
-		if (n <= 2)
-			return dp[n];
+		if (n <= 2) return dp[n];
 		for (int i = 2; i < n; i++) {
 			dp[3] = (k - 1) * (dp[1] + dp[2]);
 			dp[1] = dp[2];
@@ -428,8 +392,7 @@ public class DynamicProgramming {
 	 */
 
 	public int minCostToPaintHouse(int[][] costs) {
-		if (costs == null || costs.length == 0)
-			return 0;
+		if (costs == null || costs.length == 0) return 0;
 		int n = costs.length;
 		for (int i = 1; i < n; i++) {
 			costs[i][0] += Math.min(costs[i - 1][1], costs[i - 1][2]);
@@ -452,8 +415,7 @@ public class DynamicProgramming {
 	 */
 	//Approach1: Time: O(n*k^2); Space:O(nk)
 	public int minCostToPaintHouseII1(int[][] costs) {
-		if (costs == null || costs.length == 0)
-			return 0;
+		if (costs == null || costs.length == 0) return 0;
 		int n = costs.length;
 		int k = costs[0].length;
 		int[][] dp = new int[n][k];
@@ -465,8 +427,7 @@ public class DynamicProgramming {
 				dp[i][j] = Integer.MAX_VALUE;
 				//Find Min value
 				for (int m = 0; m < k; m++) {
-					if (m == j)
-						continue;
+					if (m == j) continue;
 					dp[i][j] = Math.min(dp[i - 1][m] + costs[i][j], dp[i][j]);
 
 				}
@@ -480,21 +441,17 @@ public class DynamicProgramming {
 
 	//Efficient Approach: TC: O(nk); Space:O(1)
 	public int minCostToPaintHouseII2(int[][] costs) {
-		if (costs == null || costs.length == 0)
-			return 0;
+		if (costs == null || costs.length == 0) return 0;
 		int n = costs.length, k = costs[0].length;
-		if (n == 1 && k == 1)
-			return costs[0][0];
+		if (n == 1 && k == 1) return costs[0][0];
 
 		int preMin = 0, preMinIndex = -1, preSecond = 0;
 		for (int i = 0; i < n; i++) {
 			int currMin = Integer.MAX_VALUE, currMinIndex = -1, currSecond = Integer.MAX_VALUE;
 			for (int j = 0; j < k; j++) {
 				//Add prev min 1st and 2nd in the curr cost 
-				if (j == preMinIndex)
-					costs[i][j] += preSecond;
-				else
-					costs[i][j] += preMin;
+				if (j == preMinIndex) costs[i][j] += preSecond;
+				else costs[i][j] += preMin;
 
 				//Find min 1st and 2nd in every stage:
 				if (costs[i][j] < currMin) {
@@ -521,10 +478,8 @@ public class DynamicProgramming {
 
 	// Returns minimum number of jumps to reach arr[h] from arr[l]
 	public int minJumps(int arr[], int l, int h) {
-		if (h == l)
-			return 0;
-		if (arr[l] == 0)
-			return Integer.MAX_VALUE;
+		if (h == l) return 0;
+		if (arr[l] == 0) return Integer.MAX_VALUE;
 		int minJumps = Integer.MAX_VALUE;
 		for (int i = l + 1; i <= h && i <= l + arr[l]; i++) {
 			int currJump = minJumps(arr, i, h);
@@ -573,10 +528,8 @@ public class DynamicProgramming {
 	}
 
 	public int knapsack1(int capacity, int wt[], int val[], int i) {
-		if (i < 0 || capacity == 0)
-			return 0;
-		if (wt[i] > capacity)
-			return knapsack1(capacity, wt, val, i - 1);
+		if (i < 0 || capacity == 0) return 0;
+		if (wt[i] > capacity) return knapsack1(capacity, wt, val, i - 1);
 		return Math.max(val[i] + knapsack1(capacity - wt[i], wt, val, i - 1), knapsack1(capacity, wt, val, i - 1));
 	}
 
@@ -625,12 +578,9 @@ public class DynamicProgramming {
 	}
 
 	boolean isSubsetSum1(int arr[], int i, int sum) {
-		if (sum == 0)
-			return true;
-		if (i < 0)
-			return false;
-		if (arr[i] > sum)
-			return isSubsetSum1(arr, i - 1, sum);
+		if (sum == 0) return true;
+		if (i < 0) return false;
+		if (arr[i] > sum) return isSubsetSum1(arr, i - 1, sum);
 		return isSubsetSum1(arr, i - 1, sum) || isSubsetSum1(arr, i - 1, sum - arr[i]);
 	}
 
@@ -670,8 +620,7 @@ public class DynamicProgramming {
 		int n = arr.length, sum = 0;
 		for (int i = 0; i < n; i++)
 			sum += arr[i];
-		if (sum % 2 == 1)
-			return false;
+		if (sum % 2 == 1) return false;
 		return isSubsetSum1(arr, sum / 2);
 	}
 
@@ -681,8 +630,7 @@ public class DynamicProgramming {
 		int sum = 0;
 		for (int n : nums)
 			sum += n;
-		if (sum % 2 != 0)
-			return false;
+		if (sum % 2 != 0) return false;
 		sum /= 2;
 		return isSubsetSum31(nums, sum);
 	}
@@ -693,8 +641,7 @@ public class DynamicProgramming {
 		int sum = 0;
 		for (int n : nums)
 			sum += n;
-		if (sum % 2 != 0)
-			return false;
+		if (sum % 2 != 0) return false;
 		sum /= 2;
 		return isSubsetSum32(nums, sum);
 	}
@@ -759,12 +706,9 @@ public class DynamicProgramming {
 	}
 
 	private int countSubsetSum1(int arr[], int i, int sum) {
-		if (sum == 0)
-			return 1;
-		if (i < 0)
-			return 0;
-		if (arr[i] > sum)
-			return countSubsetSum1(arr, i - 1, sum);
+		if (sum == 0) return 1;
+		if (i < 0) return 0;
+		if (arr[i] > sum) return countSubsetSum1(arr, i - 1, sum);
 		return countSubsetSum1(arr, i - 1, sum) + countSubsetSum1(arr, i - 1, sum - arr[i]);
 	}
 
@@ -775,10 +719,8 @@ public class DynamicProgramming {
 		dp[0] = true;
 		for (int i = 0; i < n; i++)
 			for (int j = sum; j >= nums[i]; j--) {
-				if (j == sum && dp[j - nums[i]])
-					count++;
-				else
-					dp[j] = dp[j] || dp[j - nums[i]];
+				if (j == sum && dp[j - nums[i]]) count++;
+				else dp[j] = dp[j] || dp[j - nums[i]];
 			}
 
 		return count;
@@ -791,14 +733,12 @@ public class DynamicProgramming {
 	 */
 	// Aproach1: Recursive Algorithm; Time Complexity: O(2^n)
 	public int findTargetSumWays1(int[] num, int s) {
-		if (num == null || num.length == 0)
-			return 0;
+		if (num == null || num.length == 0) return 0;
 		return noOfWays(num, s, 0, 0);
 	}
 
 	public int noOfWays(int[] nums, int target, int sum, int index) {
-		if (nums.length == index)
-			return target == sum ? 1 : 0;
+		if (nums.length == index) return target == sum ? 1 : 0;
 		return noOfWays(nums, target, sum + nums[index], index + 1)
 				+ noOfWays(nums, target, sum - nums[index], index + 1);
 	}
@@ -807,18 +747,15 @@ public class DynamicProgramming {
 
 	// Aproach2: Top Down DP or Memoization
 	public int findTargetSumWays2(int[] num, int s) {
-		if (num == null || num.length == 0)
-			return 0;
+		if (num == null || num.length == 0) return 0;
 		Map<String, Integer> memo = new HashMap<>();
 		return noOfWays(num, memo, s, 0, 0);
 	}
 
 	public int noOfWays(int[] nums, Map<String, Integer> memo, int target, int sum, int index) {
 		String serializedKey = index + "-" + sum;
-		if (memo.containsKey(serializedKey))
-			memo.get(serializedKey);
-		if (nums.length == index)
-			return target == sum ? 1 : 0;
+		if (memo.containsKey(serializedKey)) memo.get(serializedKey);
+		if (nums.length == index) return target == sum ? 1 : 0;
 		int add = noOfWays(nums, target, sum + nums[index], index + 1);
 		int sub = noOfWays(nums, target, sum - nums[index], index + 1);
 		memo.put(serializedKey, add + sum);
@@ -867,10 +804,8 @@ public class DynamicProgramming {
 	}
 
 	public int unboundedKnapsack1(int cap, int wt[], int val[], int i) {
-		if (i == 0 || cap == 0)
-			return 0;
-		if (wt[i] > cap)
-			return unboundedKnapsack1(cap, wt, val, i - 1);
+		if (i == 0 || cap == 0) return 0;
+		if (wt[i] > cap) return unboundedKnapsack1(cap, wt, val, i - 1);
 		return Math.max(val[i] + unboundedKnapsack1(cap - wt[i], wt, val, i), unboundedKnapsack1(cap, wt, val, i - 1));
 	}
 
@@ -894,8 +829,7 @@ public class DynamicProgramming {
 		dp[0] = 0;
 		for (int i = 1; i <= amount; i++) {
 			for (int coin : coins) {
-				if (coin <= i)
-					dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+				if (coin <= i) dp[i] = Math.min(dp[i], dp[i - coin] + 1);
 			}
 		}
 		return dp[amount] > amount ? -1 : dp[amount];
@@ -910,12 +844,9 @@ public class DynamicProgramming {
 	}
 
 	public int coinChange1(int[] coins, int i, int amt) {
-		if (amt == 0)
-			return 1;
-		if (i < 0)
-			return 0;
-		if (coins[i] > amt)
-			return coinChange1(coins, i - 1, amt);
+		if (amt == 0) return 1;
+		if (i < 0) return 0;
+		if (coins[i] > amt) return coinChange1(coins, i - 1, amt);
 
 		return coinChange1(coins, i - 1, amt) + coinChange1(coins, i, amt - coins[i]);
 	}
@@ -947,12 +878,10 @@ public class DynamicProgramming {
 	 */
 	// Approach1: Recursion
 	public int combinationSum41(int[] nums, int target) {
-		if (target == 0)
-			return 1;
+		if (target == 0) return 1;
 		int count = 0;
 		for (int i = 0; i < nums.length; i++) {
-			if (target >= nums[i])
-				count += combinationSum4(nums, target - nums[i]);
+			if (target >= nums[i]) count += combinationSum4(nums, target - nums[i]);
 		}
 		return count;
 	}
@@ -966,12 +895,10 @@ public class DynamicProgramming {
 	}
 
 	public int helper(int[] nums, int target, int[] dp) {
-		if (dp[target] != -1)
-			return dp[target];
+		if (dp[target] != -1) return dp[target];
 		int count = 0;
 		for (int i = 0; i < nums.length; i++) {
-			if (target >= nums[i])
-				count += combinationSum4(nums, target - nums[i]);
+			if (target >= nums[i]) count += combinationSum4(nums, target - nums[i]);
 		}
 		dp[target] = count;
 		return count;
@@ -983,8 +910,7 @@ public class DynamicProgramming {
 		dp[0] = 1;
 		for (int i = 1; i <= target; i++) {
 			for (int j = 0; j < nums.length; j++) {
-				if (i >= nums[j])
-					dp[i] += dp[i - nums[j]];
+				if (i >= nums[j]) dp[i] += dp[i - nums[j]];
 			}
 		}
 		return dp[target];
@@ -998,13 +924,10 @@ public class DynamicProgramming {
 	}
 
 	public int minCoins11(int amt, int[] coins, int i, int count) {
-		if (amt == 0)
-			return count;
-		if (i < 0)
-			return Integer.MAX_VALUE;
+		if (amt == 0) return count;
+		if (i < 0) return Integer.MAX_VALUE;
 
-		if (amt < coins[i])
-			return minCoins11(amt, coins, i - 1, count);
+		if (amt < coins[i]) return minCoins11(amt, coins, i - 1, count);
 
 		return Math.min(minCoins11(amt, coins, i - 1, count), minCoins11(amt - coins[i], coins, i, count + 1));
 	}
@@ -1017,16 +940,13 @@ public class DynamicProgramming {
 	}
 
 	public int minCoins(int coins[], int amt) {
-		if (amt < 0)
-			return -1;
-		if (amt == 0)
-			return 0;
+		if (amt < 0) return -1;
+		if (amt == 0) return 0;
 
 		int min = Integer.MAX_VALUE;
 		for (int coin : coins) {
 			int currMin = minCoins(coins, amt - coin);
-			if (currMin >= 0 && currMin < min)
-				min = currMin + 1;
+			if (currMin >= 0 && currMin < min) min = currMin + 1;
 		}
 		return min == Integer.MAX_VALUE ? -1 : min;
 	}
@@ -1037,18 +957,14 @@ public class DynamicProgramming {
 	}
 
 	public int minCoins2(int coins[], int amt, int[] dp) {
-		if (amt < 0)
-			return -1;
-		if (amt == 0)
-			return 0;
-		if (dp[amt - 1] != 0)
-			return dp[amt - 1];
+		if (amt < 0) return -1;
+		if (amt == 0) return 0;
+		if (dp[amt - 1] != 0) return dp[amt - 1];
 
 		int min = Integer.MAX_VALUE;
 		for (int coin : coins) {
 			int currMin = minCoins2(coins, amt - coin, dp);
-			if (currMin >= 0 && currMin < min)
-				min = currMin + 1;
+			if (currMin >= 0 && currMin < min) min = currMin + 1;
 		}
 		dp[amt - 1] = min == Integer.MAX_VALUE ? -1 : min;
 		return dp[amt - 1];
@@ -1070,8 +986,7 @@ public class DynamicProgramming {
 
 	// Rod cutting
 	public int cutRod(int price[], int n) {
-		if (n <= 0)
-			return 0;
+		if (n <= 0) return 0;
 		int max_val = Integer.MIN_VALUE;
 		for (int i = 0; i < n; i++) {
 			int prev = price[i] + cutRod(price, n - i - 1);
@@ -1086,8 +1001,7 @@ public class DynamicProgramming {
 	}
 
 	public int cutRod1(int price[], int n) {
-		if (n <= 0)
-			return 0;
+		if (n <= 0) return 0;
 		int max_val = Integer.MIN_VALUE;
 		for (int i = 0; i < n; i++) {
 			int prev = price[i] + cutRod1(price, n - i - 1);
@@ -1119,13 +1033,11 @@ public class DynamicProgramming {
 	// How to print maximum number of A’s using given four keys. Print Max number of As using Ctrl-A, Ctrl-C, Crtl-V
 	// Approach-1: Recursive approach
 	public int printMaxNoOfA1(int n) {
-		if (n <= 6)
-			return n;
+		if (n <= 6) return n;
 		int multiplier = 2, max = -1, currValue;
 		for (int i = n - 3; i >= 1; i--) {
 			currValue = multiplier * printMaxNoOfA1(i);
-			if (currValue > max)
-				max = currValue;
+			if (currValue > max) max = currValue;
 			multiplier++;
 		}
 		return max;
@@ -1135,8 +1047,7 @@ public class DynamicProgramming {
 	/* The above function computes the same subproblems again and again. Re computations of same subproblems can be avoided
 	 * by storing the solutions to subproblems and solving problems in bottom up manner.*/
 	public int printMaxNoOfA2(int n) {
-		if (n <= 6)
-			return n;
+		if (n <= 6) return n;
 		int[] result = new int[n + 1];
 		for (int i = 1; i <= 6; i++)
 			result[i] = i;
@@ -1144,8 +1055,7 @@ public class DynamicProgramming {
 			int multiplier = 2, currValue;
 			for (int j = i - 3; j >= 1; j--) {
 				currValue = multiplier * result[j];
-				if (currValue > result[i])
-					result[i] = currValue;
+				if (currValue > result[i]) result[i] = currValue;
 				multiplier++;
 			}
 		}
@@ -1166,12 +1076,9 @@ public class DynamicProgramming {
 	}
 
 	public int lps1(String str, int i, int j) {
-		if (i == j)
-			return 1;
-		if (str.charAt(i) == str.charAt(j) && i + 1 == j)
-			return 2;
-		if (str.charAt(i) == str.charAt(j))
-			return lps1(str, i + 1, j - 1) + 2;
+		if (i == j) return 1;
+		if (str.charAt(i) == str.charAt(j) && i + 1 == j) return 2;
+		if (str.charAt(i) == str.charAt(j)) return lps1(str, i + 1, j - 1) + 2;
 		return Math.max(lps1(str, i, j - 1), lps1(str, i + 1, j));
 	}
 
@@ -1218,52 +1125,6 @@ public class DynamicProgramming {
 		return String.valueOf(seq);
 	}
 
-	/* Minimum number of deletions to make a string palindrome:
-	 * Given a string of size ‘n’. The task is to remove or delete minimum number of characters from the string so that
-	 * the resultant string is palindrome.
-	 *  Solution: Use Longest Palindromic Subsequence
-	 */
-
-	public int minimumNumberOfDeletions(String str) {
-		int n = str.length();
-		int len = lps3(str);
-		return (n - len);
-	}
-
-	//Form a Palindrome (min no of chars needed to form palindrome)
-	public int findMinInsertion1(String s) {
-		return findMinInsertion1(s, 0, s.length() - 1);
-	}
-
-	public int findMinInsertion1(String s, int l, int h) {
-		if (l > h)
-			return Integer.MAX_VALUE;
-		if (l == h)
-			return 0;
-		if (l == h - 1)
-			return (s.charAt(l) == s.charAt(h)) ? 0 : 1;
-
-		if (s.charAt(l) == s.charAt(h))
-			return findMinInsertion1(s, l + 1, h - 1);
-
-		return Math.min(findMinInsertion1(s, l, h - 1), findMinInsertion1(s, l + 1, h));
-	}
-
-	int findMinInsertions3(String s) {
-		int n = s.length();
-		int dp[][] = new int[n][n];
-
-		for (int len = 1; len < n; ++len)
-			for (int i = 0, j = len; j < n; ++i, ++j)
-				if (s.charAt(i) == s.charAt(j)) {
-					dp[i][j] = dp[i + 1][j - 1];
-				} else {
-					dp[i][j] = Math.min(dp[i][j - 1], dp[i + 1][j]) + 1;
-				}
-
-		return dp[0][n - 1];
-	}
-
 	/*
 	 * The problem of finding minimum insertions can also be solved using Longest Common Subsequence (LCS) Problem.
 	 * If we find out LCS of string and its reverse, we know how many maximum characters can form a palindrome. We
@@ -1286,22 +1147,16 @@ public class DynamicProgramming {
 	}
 
 	public int cps2(String str, int i, int j, int[][] dp) {
-		if (i >= str.length() || j < 0)
-			return 0;
-		if (dp[i][j] != -1)
-			return dp[i][j];
+		if (i >= str.length() || j < 0) return 0;
+		if (dp[i][j] != -1) return dp[i][j];
 		if ((i - j == 1) || (i - j == -1)) {
-			if (str.charAt(i) == str.charAt(j))
-				return dp[i][j] = 3;
-			else
-				return dp[i][j] = 2;
+			if (str.charAt(i) == str.charAt(j)) return dp[i][j] = 3;
+			else return dp[i][j] = 2;
 		}
-		if (i == j)
-			return dp[1][j] = 1;
+		if (i == j) return dp[1][j] = 1;
 		else if (str.charAt(i) == str.charAt(j))
 			return dp[i][j] = cps2(str, i + 1, j, dp) + cps2(str, i, j - 1, dp) + 1;
-		else
-			return dp[i][j] = cps2(str, i + 1, j, dp) + cps2(str, i, j - 1, dp) - cps2(str, i + 1, j - 1, dp);
+		else return dp[i][j] = cps2(str, i + 1, j, dp) + cps2(str, i, j - 1, dp) - cps2(str, i + 1, j - 1, dp);
 	}
 
 	// 3.DP-Bottom Up Approach
@@ -1374,8 +1229,7 @@ public class DynamicProgramming {
 	public boolean isPalindrome(String str) {
 		int l = 0, h = str.length() - 1;
 		while (l < h) {
-			if (str.charAt(l++) != str.charAt(h--))
-				return false;
+			if (str.charAt(l++) != str.charAt(h--)) return false;
 		}
 		return true;
 	}
@@ -1383,8 +1237,7 @@ public class DynamicProgramming {
 	// Count of Palindromic Substrings
 	public int cPStr1(String s) {
 		int n = s.length();
-		if (n <= 1)
-			return n;
+		if (n <= 1) return n;
 
 		boolean[][] dp = new boolean[n][n];
 		for (int i = 0; i < n; i++)
@@ -1428,8 +1281,7 @@ public class DynamicProgramming {
 	}
 
 	public int cPStr3(String s) {
-		if (s == null || s.length() < 1)
-			return 0;
+		if (s == null || s.length() < 1) return 0;
 		int count = 0;
 		for (int i = 0; i < s.length(); i++) {
 			//Count even sized
@@ -1456,8 +1308,7 @@ public class DynamicProgramming {
 	 *   a palindrome partitioning of s.*/
 	public int palindromicPartioningII(String s) {
 		int n = s.length();
-		if (n <= 1)
-			return 0;
+		if (n <= 1) return 0;
 		boolean[][] dp = new boolean[n][n];
 		int[] cut = new int[n];
 
@@ -1495,10 +1346,8 @@ public class DynamicProgramming {
 	}
 
 	public int lcStr1(String s1, String s2, int i, int j, int count) {
-		if (i < 0 || j < 0)
-			return count;
-		if (s1.charAt(i) == s2.charAt(j))
-			return lcStr1(s1, s2, i - 1, j - 1, count + 1);
+		if (i < 0 || j < 0) return count;
+		if (s1.charAt(i) == s2.charAt(j)) return lcStr1(s1, s2, i - 1, j - 1, count + 1);
 		return Utils.max(count, lcStr1(s1, s2, i - 1, j, 0), lcStr1(s1, s2, i, j - 1, 0));
 	}
 
@@ -1545,10 +1394,8 @@ public class DynamicProgramming {
 	}
 
 	private int lcs1(String s1, String s2, int i, int j) {
-		if (i < 0 || j < 0)
-			return 0;
-		if (s1.charAt(i) == s2.charAt(j))
-			return 1 + lcs1(s1, s2, i - 1, j - 1);
+		if (i < 0 || j < 0) return 0;
+		if (s1.charAt(i) == s2.charAt(j)) return 1 + lcs1(s1, s2, i - 1, j - 1);
 		return Math.max(lcs1(s1, s2, i - 1, j), lcs1(s1, s2, i, j - 1));
 	}
 
@@ -1561,12 +1408,9 @@ public class DynamicProgramming {
 	}
 
 	private int lcs2(String s1, String s2, int i, int j, int[][] dp) {
-		if (i < 0 || j < 0)
-			return 0;
-		if (dp[i][j] != -1)
-			return dp[i][j];
-		if (s1.charAt(i) == s2.charAt(j))
-			return dp[i][j] = lcs2(s1, s2, i - 1, j - 1, dp) + 1;
+		if (i < 0 || j < 0) return 0;
+		if (dp[i][j] != -1) return dp[i][j];
+		if (s1.charAt(i) == s2.charAt(j)) return dp[i][j] = lcs2(s1, s2, i - 1, j - 1, dp) + 1;
 		return dp[i][j] = Math.max(lcs2(s1, s2, i - 1, j, dp), lcs2(s1, s2, i, j - 1, dp));
 	}
 
@@ -1620,12 +1464,9 @@ public class DynamicProgramming {
 	}
 
 	private int scs1(String s1, String s2, int m, int n) {
-		if (m == 0)
-			return n;
-		if (n == 0)
-			return m;
-		if (s1.charAt(m - 1) == s2.charAt(n - 1))
-			return 1 + scs1(s1, s2, m - 1, n - 1);
+		if (m == 0) return n;
+		if (n == 0) return m;
+		if (s1.charAt(m - 1) == s2.charAt(n - 1)) return 1 + scs1(s1, s2, m - 1, n - 1);
 		return 1 + Math.min(scs1(s1, s2, m - 1, n), scs1(s1, s2, m, n - 1));
 	}
 
@@ -1695,10 +1536,8 @@ public class DynamicProgramming {
 	}
 
 	private int lrs1(String s1, String s2, int i, int j) {
-		if (i < 0 || j < 0)
-			return 0;
-		if (s1.charAt(i) == s2.charAt(j) && i != j)
-			return 1 + lrs1(s1, s2, i - 1, j - 1);
+		if (i < 0 || j < 0) return 0;
+		if (s1.charAt(i) == s2.charAt(j) && i != j) return 1 + lrs1(s1, s2, i - 1, j - 1);
 		return Math.max(lrs1(s1, s2, i - 1, j), lrs1(s1, s2, 1, j - 1));
 	}
 
@@ -1725,12 +1564,9 @@ public class DynamicProgramming {
 	}
 
 	public int minDistance(String s1, String s2, int i, int j) {
-		if (i < 0)
-			return j + 1;
-		if (j < 0)
-			return i + 1;
-		if (s1.charAt(i) == s2.charAt(j))
-			return minDistance(s1, s2, i - 1, j - 1);
+		if (i < 0) return j + 1;
+		if (j < 0) return i + 1;
+		if (s1.charAt(i) == s2.charAt(j)) return minDistance(s1, s2, i - 1, j - 1);
 		return 1 + Utils.min(minDistance(s1, s2, i, j - 1), minDistance(s1, s2, i - 1, j),
 				minDistance(s1, s2, i - 1, j - 1));
 	}
@@ -1738,19 +1574,14 @@ public class DynamicProgramming {
 	// DP-Bottom up Approach
 	public int minDistance(String s1, String s2) {
 		int m = s1.length(), n = s2.length();
-		if (m == 0 && n == 0)
-			return 0;
+		if (m == 0 && n == 0) return 0;
 		int[][] dp = new int[m + 1][n + 1];
 		for (int i = 0; i <= m; i++) {
 			for (int j = 0; j <= n; j++) {
-				if (i == 0)
-					dp[i][j] = j;
-				else if (j == 0)
-					dp[i][j] = i;
-				else if (s1.charAt(i - 1) == s2.charAt(j - 1))
-					dp[i][j] = dp[i - 1][j - 1];
-				else
-					dp[i][j] = 1 + Utils.min(dp[i - 1][j - 1], dp[i - 1][j], dp[i][j - 1]);
+				if (i == 0) dp[i][j] = j;
+				else if (j == 0) dp[i][j] = i;
+				else if (s1.charAt(i - 1) == s2.charAt(j - 1)) dp[i][j] = dp[i - 1][j - 1];
+				else dp[i][j] = 1 + Utils.min(dp[i - 1][j - 1], dp[i - 1][j], dp[i][j - 1]);
 			}
 		}
 		return dp[m][n];
@@ -1765,17 +1596,14 @@ public class DynamicProgramming {
 	 */
 	// Recursive Approach
 	public boolean isInterleave1(String s1, String s2, String s3) {
-		if ((s1.length() + s2.length()) != s3.length())
-			return false;
+		if ((s1.length() + s2.length()) != s3.length()) return false;
 		return isInterleave(s1, s2, s3, 0, 0, 0);
 	}
 
 	public boolean isInterleave(String s1, String s2, String s3, int i1, int i2, int i3) {
 		int n1 = s1.length(), n2 = s2.length(), n3 = s3.length();
-		if (i1 == n1 && i2 == n2 && i3 == n3)
-			return true;
-		if (i3 == n3)
-			return false;
+		if (i1 == n1 && i2 == n2 && i3 == n3) return true;
+		if (i3 == n3) return false;
 
 		return (i1 < n1 && s1.charAt(i1) == s3.charAt(i3) && isInterleave(s1, s2, s3, i1 + 1, i2, i3 + 1))
 				|| (i2 < n2 && s2.charAt(i2) == s3.charAt(i3) && isInterleave(s1, s2, s3, i1, i2 + 1, i3 + 1));
@@ -1784,8 +1612,7 @@ public class DynamicProgramming {
 	// DP-Bottom Up Approach
 	public boolean isInterleave3(String s1, String s2, String s3) {
 		int n1 = s1.length(), n2 = s2.length();
-		if ((n1 + n2) != s3.length())
-			return false;
+		if ((n1 + n2) != s3.length()) return false;
 
 		boolean[][] dp = new boolean[n1 + 1][n2 + 1];
 		for (int i = 0; i <= n1; i++) {
@@ -1819,8 +1646,7 @@ public class DynamicProgramming {
 		boolean[][] dp = new boolean[m + 1][n + 1];
 		dp[0][0] = true;
 		for (int j = 2; j <= n; j++)
-			if (p.charAt(j - 1) == '*')
-				dp[0][j] = dp[0][j - 1];
+			if (p.charAt(j - 1) == '*') dp[0][j] = dp[0][j - 1];
 		for (int i = 1; i <= m; i++) {
 			for (int j = 1; j <= n; j++) {
 				if (p.charAt(j - 1) == s.charAt(i - 1) || p.charAt(j - 1) == '?') {
@@ -1855,8 +1681,7 @@ public class DynamicProgramming {
 				return false;
 			}
 		}
-		while (j < p.length() && p.charAt(j) == '*')
-			j++;
+		while (j < p.length() && p.charAt(j) == '*') j++;
 		return j == p.length();
 	}
 
@@ -1875,8 +1700,7 @@ public class DynamicProgramming {
 		boolean[][] dp = new boolean[m + 1][n + 1];
 		dp[0][0] = true;
 		for (int j = 2; j <= n; j++)
-			if (p.charAt(j - 1) == '*')
-				dp[0][j] = dp[0][j - 2];
+			if (p.charAt(j - 1) == '*') dp[0][j] = dp[0][j - 2];
 
 		for (int i = 1; i <= m; i++) {
 			for (int j = 1; j <= n; j++) {
@@ -1907,14 +1731,12 @@ public class DynamicProgramming {
 	The value of LIS of full array of size n is stored in max_ref which is our final result 
 	*/
 	public int LIS1(int[] nums) {
-		if (nums.length <= 1)
-			return nums.length;
+		if (nums.length <= 1) return nums.length;
 		return lengthOfLIS(nums, 0, Integer.MIN_VALUE);
 	}
 
 	public int lengthOfLIS(int[] nums, int i, int prevNum) {
-		if (i >= nums.length)
-			return 0;
+		if (i >= nums.length) return 0;
 		int taken = 0, notTaken = 0;
 		if (prevNum < nums[i]) {
 			taken = 1 + lengthOfLIS(nums, i + 1, nums[i]);
@@ -1926,15 +1748,13 @@ public class DynamicProgramming {
 	// Approach2: DP Approach : O(n^2)
 	public int LIS3(int[] arr) {
 		int n = arr.length;
-		if (n <= 1)
-			return n;
+		if (n <= 1) return n;
 		int[] dp = new int[n];
 		Arrays.fill(dp, 1);
 		int max = dp[0];
 		for (int i = 1; i < n; i++) {
 			for (int j = 0; j < i; j++) {
-				if (arr[j] < arr[i] && dp[i] < dp[j] + 1)
-					dp[i] = dp[j] + 1;
+				if (arr[j] < arr[i] && dp[i] < dp[j] + 1) dp[i] = dp[j] + 1;
 			}
 			max = Math.max(max, dp[i]);
 		}
@@ -1949,14 +1769,11 @@ public class DynamicProgramming {
 			int l = 0, h = size;
 			while (l != h) {
 				int m = (l + h) / 2;
-				if (dp[m] < x)
-					l = m + 1;
-				else
-					h = m;
+				if (dp[m] < x) l = m + 1;
+				else h = m;
 			}
 			dp[l] = x;
-			if (l == size)
-				++size;
+			if (l == size) ++size;
 		}
 		return size;
 	}
@@ -1988,19 +1805,16 @@ public class DynamicProgramming {
 		}
 		for (int i = 1; i < n; i++)
 			for (int j = 0; j < i; j++)
-				if (arr[j] < arr[i] && lis[i] < lis[j] + 1)
-					lis[i] = lis[j] + 1;
+				if (arr[j] < arr[i] && lis[i] < lis[j] + 1) lis[i] = lis[j] + 1;
 
 		for (int i = n - 2; i >= 0; i--)
 			for (int j = n - 1; j > i; j--)
-				if (arr[j] < arr[i] && lds[i] < lds[j] + 1)
-					lds[i] = lds[j] + 1;
+				if (arr[j] < arr[i] && lds[i] < lds[j] + 1) lds[i] = lds[j] + 1;
 
 		int max = Integer.MIN_VALUE, temp;
 		for (int i = 0; i < n; i++) {
 			temp = lds[i] + lis[i] - 1;
-			if (temp > max)
-				max = temp;
+			if (temp > max) max = temp;
 		}
 		return max;
 	}
@@ -2034,8 +1848,7 @@ public class DynamicProgramming {
 	// Approach3: DP-Bottom Up Approach
 	public int MSIS3(int[] a) {
 		int n = a.length;
-		if (n <= 1)
-			return n;
+		if (n <= 1) return n;
 		int[] dp = new int[n];
 		int[] indexSeq = new int[n];
 		for (int i = 0; i < n; i++) {

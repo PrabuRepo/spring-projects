@@ -54,12 +54,9 @@ public class ClosestNumberPatterns {
 		int l = 0, h = nums.length - 1, m = 0;
 		while (l <= h) {
 			m = l + (h - l) / 2;
-			if (nums[m] == target)
-				return m;
-			else if (nums[m] < target)
-				l = m + 1;
-			else
-				h = m - 1;
+			if (nums[m] == target) return m;
+			else if (nums[m] < target) l = m + 1;
+			else h = m - 1;
 		}
 		return l;
 	}
@@ -155,8 +152,7 @@ public class ClosestNumberPatterns {
 				int sum = nums[i] + nums[l] + nums[h];
 				int diff = Math.abs(sum - target);
 
-				if (diff == 0)
-					return sum;
+				if (diff == 0) return sum;
 
 				if (diff < minDiff) {
 					minDiff = diff;
@@ -187,18 +183,15 @@ public class ClosestNumberPatterns {
 	}
 
 	private void closestValue(TreeNode node, double target, double minDiff) {
-		if (node == null)
-			return;
+		if (node == null) return;
 
 		if (Math.abs(target - (double) node.val) <= minDiff) {
 			minDiff = Math.abs(target - (double) node.val);
 			closestValue = node.val;
 		}
 
-		if (target <= node.val)
-			closestValue(node.left, target, minDiff);
-		else
-			closestValue(node.right, target, minDiff);
+		if (target <= node.val) closestValue(node.left, target, minDiff);
+		else closestValue(node.right, target, minDiff);
 	}
 
 	//Time: O(n), Space: O(k)
@@ -209,8 +202,7 @@ public class ClosestNumberPatterns {
 	}
 
 	private void inorder(TreeNode node, double target, int k, Queue<Integer> list) {
-		if (node == null)
-			return;
+		if (node == null) return;
 
 		inorder(node.left, target, k, list);
 
@@ -227,8 +219,7 @@ public class ClosestNumberPatterns {
 	//TODO: Try to understand the solution
 	public List<Integer> closestKValues2(TreeNode root, double target, int k) {
 		List<Integer> result = new ArrayList<>();
-		if (root == null)
-			return result;
+		if (root == null) return result;
 
 		Stack<Integer> precedessor = new Stack<>();
 		Stack<Integer> successor = new Stack<>();
@@ -252,50 +243,19 @@ public class ClosestNumberPatterns {
 	}
 
 	private void getPredecessor(TreeNode root, double target, Stack<Integer> precedessor) {
-		if (root == null)
-			return;
+		if (root == null) return;
 		getPredecessor(root.left, target, precedessor);
-		if (root.val > target)
-			return;
+		if (root.val > target) return;
 		precedessor.push(root.val);
 		getPredecessor(root.right, target, precedessor);
 	}
 
 	private void getSuccessor(TreeNode root, double target, Stack<Integer> successor) {
-		if (root == null)
-			return;
+		if (root == null) return;
 		getSuccessor(root.right, target, successor);
-		if (root.val <= target)
-			return;
+		if (root.val <= target) return;
 		successor.push(root.val);
 		getSuccessor(root.left, target, successor);
 	}
 
-	//Find the Closest Palindrome
-	public String nearestPalindromic(String n) {
-		int order = (int) Math.pow(10, n.length() / 2);//Order used to eliminate half of digits
-		Long num = Long.valueOf(new String(n));
-		Long mirrorNum = mirror(num); //Same mid
-		//Two Cases: 1.Increase 1 to mid;  2.handles input like 9, 99...
-		Long mirrorLarger = mirror((num / order) * order + order);
-		//Two Cases: 1.Decrease 1 to mid & 2.handles input like 10, 100...
-		Long mirrorSmaller = mirror((num / order) * order - 1);
-
-		if (mirrorNum > num) {
-			mirrorLarger = (long) Math.min(mirrorNum, mirrorLarger);
-		} else if (mirrorNum < num) {
-			mirrorSmaller = (long) Math.max(mirrorNum, mirrorSmaller);
-		}
-		return String.valueOf(num - mirrorSmaller <= mirrorLarger - num ? mirrorSmaller : mirrorLarger);
-	}
-
-	Long mirror(Long ans) {
-		char[] a = String.valueOf(ans).toCharArray();
-		int i = 0;
-		int j = a.length - 1;
-		while (i < j) {
-			a[j--] = a[i++];
-		}
-		return Long.valueOf(new String(a));
-	}
 }

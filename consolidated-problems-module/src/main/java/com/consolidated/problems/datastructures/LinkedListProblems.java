@@ -137,8 +137,7 @@ public class LinkedListProblems {
 	// Remove Nth Node From End of List
 	public ListNode removeNthFromEnd(ListNode head, int n) {
 		ListNode ptr1 = head, ptr2 = head;
-		while (n-- > 0 && ptr1 != null)
-			ptr1 = ptr1.next;
+		while (n-- > 0 && ptr1 != null) ptr1 = ptr1.next;
 		if (ptr1 == null) {
 			head = head.next;
 			return head;
@@ -334,12 +333,10 @@ public class LinkedListProblems {
 		if (k > 0) {
 			ListNode curr = head;
 			int count = 1;
-			while (count++ < k && curr != null)
-				curr = curr.next;
+			while (count++ < k && curr != null) curr = curr.next;
 			if (curr == null) return head;
 			ListNode nextHead = curr;
-			while (curr.next != null)
-				curr = curr.next;
+			while (curr.next != null) curr = curr.next;
 			curr.next = head;
 			head = nextHead.next;
 			nextHead.next = null;
@@ -527,8 +524,7 @@ public class LinkedListProblems {
 			sortedList = curr;
 		} else {
 			ListNode temp = sortedList;
-			while (temp.next != null && temp.next.data < curr.data)
-				temp = temp.next;
+			while (temp.next != null && temp.next.data < curr.data) temp = temp.next;
 			curr.next = temp.next;
 			temp.next = curr;
 		}
@@ -659,55 +655,6 @@ public class LinkedListProblems {
 		return result;
 	}
 
-	// Palindrome Linked List:
-	public boolean isPalindrome1(ListNode head) {
-		Stack<ListNode> stack = new Stack<>();
-		ListNode curr = head;
-		while (curr != null) {
-			stack.push(curr);
-			curr = curr.next;
-		}
-		curr = head;
-		while (curr != null) {
-			if (curr.data != stack.pop().data) return false;
-			curr = curr.next;
-		}
-		return true;
-	}
-
-	public boolean isPalindrome2(ListNode head) {
-		if (head == null || head.next == null) return true;
-		ListNode slowPtr = head, fastPtr = head, prevNode = null;
-		while (fastPtr != null && fastPtr.next != null) {
-			prevNode = slowPtr;
-			slowPtr = slowPtr.next;
-			fastPtr = fastPtr.next.next;
-		}
-		ListNode midNode = null;
-		if (fastPtr != null) {
-			midNode = slowPtr;
-			slowPtr = slowPtr.next;
-		}
-		prevNode.next = null;
-		ListNode secondHalf = slowPtr;
-		secondHalf = reverseList1(secondHalf);
-		boolean flag = compare(head, secondHalf);
-		secondHalf = reverseList1(secondHalf);
-		if (midNode != null) {
-			prevNode.next = midNode;
-			midNode.next = slowPtr;
-		} else {
-			prevNode.next = slowPtr;
-		}
-		return flag;
-	}
-
-	public boolean compare(ListNode node1, ListNode node2) {
-		if (node1 == null && node2 == null) return true;
-		if (node1 == null || node2 == null) return false;
-		return ((node1.data == node2.data) && compare(node1.next, node2.next));
-	}
-
 	/*
 	 * Linked List Random Node:
 	 * Given a singly linked list, return a random node's value from the linked list. Each node must have the same
@@ -724,7 +671,9 @@ public class LinkedListProblems {
 		return randomVal;
 	}
 
-	/************************* Type4: DS manipulation on mulitple objects **********************************/
+	/*************************
+	 * Type4: DS manipulation on mulitple objects
+	 **********************************/
 
 	// Intersection of Two Linked Lists
 	public ListNode getIntersectionNode(ListNode head1, ListNode head2) {
@@ -734,12 +683,10 @@ public class LinkedListProblems {
 			int diff;
 			if (len1 > len2) {
 				diff = len1 - len2;
-				while (diff-- > 0)
-					head1 = head1.next;
+				while (diff-- > 0) head1 = head1.next;
 			} else {
 				diff = len2 - len1;
-				while (diff-- > 0)
-					head2 = head2.next;
+				while (diff-- > 0) head2 = head2.next;
 			}
 			while (head1 != null && head2 != null) {
 				if (head1.data == head2.data) return head1;
@@ -814,9 +761,9 @@ public class LinkedListProblems {
 }
 
 class Node {
-	public int	val;
-	public Node	next;
-	public Node	random;
+	public int val;
+	public Node next;
+	public Node random;
 
 	public Node(int _val, Node _next, Node _random) {
 		val = _val;
@@ -826,9 +773,9 @@ class Node {
 }
 
 class FlattenNode {
-	int			data;
-	FlattenNode	next;
-	FlattenNode	bottom;
+	int data;
+	FlattenNode next;
+	FlattenNode bottom;
 
 	public FlattenNode(int d) {
 		data = d;

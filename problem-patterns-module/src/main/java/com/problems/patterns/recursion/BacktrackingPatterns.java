@@ -119,7 +119,7 @@ public class BacktrackingPatterns {
 	}
 
 	// Approach3: Using Bit Manipulation
-	public List<String> letterCasePermutation(String S) {
+	public List<String> letterCasePermutation3(String S) {
 		int n = S.length();
 		int size = 1 << n; // or Math.pow(2, n);
 		HashSet<String> set = new HashSet<>();
@@ -143,7 +143,7 @@ public class BacktrackingPatterns {
 	 *  [["aa","b"], ["a","a","b"]] 
 	 */
 	//Using Backtracking(DFS) Algorithm - TC:O(n(2^n))
-	public List<List<String>> partition(String s) {
+	public List<List<String>> partition1(String s) {
 		List<List<String>> res = new ArrayList<>();
 		backtrack12(res, new ArrayList<>(), s, 0);
 		res.stream().forEach(val -> System.out.print(val + ", "));

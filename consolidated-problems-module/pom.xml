@@ -9,7 +9,7 @@
   	<dependencies>
 		<dependency>
 			<groupId>com.problems.practice</groupId>
-			<artifactId>common-module</artifactId>
+			<artifactId>problem-patterns-module</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

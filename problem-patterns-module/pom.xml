@@ -11,8 +11,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.problems.practice</groupId>
-			<artifactId>common-module</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+		    <artifactId>basics-module</artifactId>
+		    <version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>

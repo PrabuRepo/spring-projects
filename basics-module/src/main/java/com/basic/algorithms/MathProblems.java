@@ -9,8 +9,7 @@ public class MathProblems {
 		while (curr != 0) {
 			int rem = curr % 10;
 			// Integer Overflow Condition:
-			if (rev > MAX || (rev == MAX && rem > MAX % 10))
-				return 0;
+			if (rev > MAX || (rev == MAX && rem > MAX % 10)) return 0;
 			rev = rev * 10 + rem;
 			curr /= 10;
 		}
@@ -23,8 +22,7 @@ public class MathProblems {
 		while (rem != 0) {
 			int tail = rem % 10;
 			int rev = (result * 10) + tail;
-			if ((rev - tail) / 10 != result)
-				return 0; // If rev overflows, this condition success and returns 0;
+			if ((rev - tail) / 10 != result) return 0; // If rev overflows, this condition success and returns 0;
 			result = rev;
 			rem /= 10;
 		}
@@ -34,8 +32,7 @@ public class MathProblems {
 
 	// Palindrome Number
 	public boolean isPalindrome(int x) {
-		if (x < 0)
-			return false;
+		if (x < 0) return false;
 
 		int rem = x, result = 0;
 		while (rem >= 10) {
@@ -49,23 +46,19 @@ public class MathProblems {
 
 	// Count Primes
 	public int countPrimes(int n) {
-		if (n <= 2)
-			return 0;
+		if (n <= 2) return 0;
 		int count = 1;
 		for (int i = 3; i < n; i++) {
-			if (isPrime(i))
-				count++;
+			if (isPrime(i)) count++;
 		}
 		return count;
 	}
 
 	private boolean isPrime(int n) {
-		if (n == 2 || n == 3)
-			return true;
+		if (n == 2 || n == 3) return true;
 		int sqrt = (int) Math.sqrt(n);
 		for (int i = 2; i <= sqrt; i++) {
-			if (n % i == 0)
-				return false;
+			if (n % i == 0) return false;
 		}
 		return true;
 	}
@@ -76,10 +69,8 @@ public class MathProblems {
 	}
 
 	public double pow(double x, int n) {
-		if (n == 0)
-			return 1.0;
-		if (n == 1)
-			return x;
+		if (n == 0) return 1.0;
+		if (n == 1) return x;
 
 		if (n % 2 == 0) {
 			double val = pow(x, n / 2);
@@ -93,8 +84,7 @@ public class MathProblems {
 	// Simple Approach: It doesnt work for high values
 	/*The squareroot of a (non-negative) number N always lies between 0 and N/2. The straightforward way to solve this problem would be to check every number k between 0 and N/2, until the square of k becomes greater than or rqual to N.  */
 	public int mySqrt1(int n) {
-		if (n == 0 || n == 1)
-			return n;
+		if (n == 0 || n == 1) return n;
 		int i = 1, multiply = 1;
 		while (multiply <= n / 2) {
 			i++;
@@ -105,35 +95,29 @@ public class MathProblems {
 
 	// Modification of Binary Search
 	public int mySqrt(int n) {
-		if (n == 0 || n == 1)
-			return n;
+		if (n == 0 || n == 1) return n;
 
 		int low = 1, high = n / 2, div = 0, mid;
 		while (low <= high) {
 			mid = low + (high - low) / 2;
 			div = n / mid;
-			if (mid == div)
-				return mid;
-			else if (mid > div)
-				high = mid - 1;
-			else
-				low = mid + 1;
+			if (mid == div) return mid;
+			else if (mid > div) high = mid - 1;
+			else low = mid + 1;
 
 		}
 		return low - 1;
 	}
 
 	public int sqrt3(int A) {
-		if (A <= 1)
-			return A;
+		if (A <= 1) return A;
 
 		int l = 2, h = A / 2, m = 0, resut = 1;
 		while (l <= h) {
 			m = l + (h - l) / 2;
 
 			long sq = (long) m * (long) m;
-			if (sq == A)
-				return m;
+			if (sq == A) return m;
 			else if (sq < A) {
 				resut = m;
 				l = m + 1;
@@ -170,8 +154,7 @@ public class MathProblems {
 	 * Time complexity: O(log(max(A, B)))
 	 */
 	public int gcd1(int a, int b) {
-		if (b == 0)
-			return a;
+		if (b == 0) return a;
 		return gcd1(b, a % b);
 	}
 
@@ -191,16 +174,13 @@ public class MathProblems {
 	// Other way to calculate the GCD;
 	public int gcd3(int a, int b) {
 		// Everything divides 0
-		if (a == 0 || b == 0)
-			return 0;
+		if (a == 0 || b == 0) return 0;
 
 		// base case
-		if (a == b)
-			return a;
+		if (a == b) return a;
 
 		// a is greater
-		if (a > b)
-			return gcd3(a - b, b);
+		if (a > b) return gcd3(a - b, b);
 		return gcd3(a, b - a);
 	}
 
@@ -235,8 +215,7 @@ public class MathProblems {
 	 */
 	// Approach1:
 	public String decimalToBinary1(double n) {
-		if (n >= 1)
-			return "ERROR";
+		if (n >= 1) return "ERROR";
 
 		StringBuilder sb = new StringBuilder();
 		double r;
@@ -260,8 +239,7 @@ public class MathProblems {
 
 	// Approach2:
 	public String decimalToBinary2(double n) {
-		if (n >= 1)
-			return "ERROR";
+		if (n >= 1) return "ERROR";
 
 		StringBuilder sb = new StringBuilder();
 		double frac = 0.5;
@@ -285,15 +263,11 @@ public class MathProblems {
 	/* String to Integer (atoi): Implement atoi which converts a string to an integer.
 	 */
 	public int myAtoi(String str) {
-		if (str.isEmpty())
-			return 0;
+		if (str.isEmpty()) return 0;
 		int sign = 1, base = 0, i = 0, n = str.length();
-		while (i < n && str.charAt(i) == ' ')
-			i++;
-		if (i == n)
-			return 0;
-		if (str.charAt(i) == '-' || str.charAt(i) == '+')
-			sign = str.charAt(i++) == '-' ? -1 : 1;
+		while (i < n && str.charAt(i) == ' ') i++;
+		if (i == n) return 0;
+		if (str.charAt(i) == '-' || str.charAt(i) == '+') sign = str.charAt(i++) == '-' ? -1 : 1;
 		while (i < str.length() && str.charAt(i) >= '0' && str.charAt(i) <= '9') {
 			if (base > Integer.MAX_VALUE / 10 || (base == Integer.MAX_VALUE / 10 && str.charAt(i) - '0' > 7)) {
 				return (sign == 1) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
@@ -306,13 +280,11 @@ public class MathProblems {
 	/* String to Integer (atoi): Implement atoi which converts a string to an integer.
 	 */
 	public int atoi(final String str) {
-		if (str == null || str.length() == 0)
-			return -1;
+		if (str == null || str.length() == 0) return -1;
 
 		int i = 0, n = str.length(), result = 0, sign = 1;
 		// Skip space
-		while (i < n && str.charAt(i) == ' ')
-			i++;
+		while (i < n && str.charAt(i) == ' ') i++;
 
 		// Find sign
 		if (i < n && str.charAt(i) == '+' || str.charAt(i) == '-') {
@@ -321,22 +293,18 @@ public class MathProblems {
 		}
 
 		// If garbage char, return result
-		if (i < n && !Character.isDigit(str.charAt(i)))
-			return 0;
+		if (i < n && !Character.isDigit(str.charAt(i))) return 0;
 
 		while (i < n) {
 			char ch = str.charAt(i);
-			if (ch == ' ' || !Character.isDigit(ch))
-				break;
+			if (ch == ' ' || !Character.isDigit(ch)) break;
 
 			// int parseVal = ch - '0';
 			int parseVal = Integer.parseInt(String.valueOf(ch));
 
 			// Integer Overflow condition:
-			if (sign == 1 && isIntOverFlow(result, parseVal, 7))
-				return Integer.MAX_VALUE;
-			if (sign == -1 && isIntOverFlow(result, parseVal, 8))
-				return Integer.MIN_VALUE;
+			if (sign == 1 && isIntOverFlow(result, parseVal, 7)) return Integer.MAX_VALUE;
+			if (sign == -1 && isIntOverFlow(result, parseVal, 8)) return Integer.MIN_VALUE;
 
 			result = result * 10 + parseVal;
 			i++;

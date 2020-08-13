@@ -7,6 +7,11 @@ import java.util.Scanner;
 import com.basic.datastructures.operations.TreeOperations;
 import com.common.model.TreeNode;
 
+/*
+ * All the tree problems can be solved by 
+ * 	1.DFS - Using Recursion or Stack
+ *  2.BFS - Using Queue
+ */
 public class Tree {
 	public static void main(String[] arge) {
 		Scanner in = new Scanner(System.in);
@@ -27,8 +32,7 @@ public class Tree {
 			case 1:
 				System.out.println("Enter no of elements to be inserted:");
 				int t = in.nextInt();
-				while (t-- > 0)
-					bst.add(in.nextInt());
+				while (t-- > 0) bst.add(in.nextInt());
 				break;
 			case 2:
 				System.out.println("Element needs to be removed in tree:");
@@ -89,8 +93,7 @@ class BinarySearchTree implements TreeOperations {
 	@Override
 	public void addIterative(int data) {
 		TreeNode newNode = new TreeNode(data);
-		if (root == null)
-			root = newNode;
+		if (root == null) root = newNode;
 
 		else {
 			TreeNode curr = root;
@@ -143,15 +146,11 @@ class BinarySearchTree implements TreeOperations {
 	}
 
 	private TreeNode search(TreeNode node, int x) {
-		if (node == null)
-			return null;
+		if (node == null) return null;
 
-		if (x == node.val)
-			return node;
-		else if (x < node.val)
-			return search(node.left, x);
-		else
-			return search(node.right, x);
+		if (x == node.val) return node;
+		else if (x < node.val) return search(node.left, x);
+		else return search(node.right, x);
 	}
 
 	@Override
@@ -168,30 +167,25 @@ class BinarySearchTree implements TreeOperations {
 
 	@Override
 	public int findMin(TreeNode node) {
-		if (node == null)
-			return -1;
+		if (node == null) return -1;
 
-		while (node.left != null)
-			node = node.left;
+		while (node.left != null) node = node.left;
 
 		return node.val;
 	}
 
 	@Override
 	public int findMax(TreeNode node) {
-		if (node == null)
-			return -1;
+		if (node == null) return -1;
 
-		while (node.right != null)
-			node = node.right;
+		while (node.right != null) node = node.right;
 
 		return node.val;
 	}
 
 	@Override
 	public void preorder(TreeNode root) {
-		if (root == null)
-			return;
+		if (root == null) return;
 
 		System.out.print(root.val + " ");
 		preorder(root.left);
@@ -200,8 +194,7 @@ class BinarySearchTree implements TreeOperations {
 
 	@Override
 	public void inorder(TreeNode root) {
-		if (root == null)
-			return;
+		if (root == null) return;
 
 		inorder(root.left);
 		System.out.print(root.val + " ");
@@ -210,8 +203,7 @@ class BinarySearchTree implements TreeOperations {
 
 	@Override
 	public void postorder(TreeNode root) {
-		if (root == null)
-			return;
+		if (root == null) return;
 
 		postorder(root.left);
 		postorder(root.right);
@@ -220,32 +212,27 @@ class BinarySearchTree implements TreeOperations {
 
 	@Override
 	public void preorderIterative(TreeNode root) {
-		if (root == null)
-			return;
+		if (root == null) return;
 		java.util.Stack<TreeNode> stack = new java.util.Stack<>();
 		stack.push(root);
 		while (!stack.isEmpty()) {
 			root = stack.pop();
 			System.out.print(root.val + " ");
-			if (root.right != null)
-				stack.push(root.right);
-			if (root.left != null)
-				stack.push(root.left);
+			if (root.right != null) stack.push(root.right);
+			if (root.left != null) stack.push(root.left);
 		}
 	}
 
 	@Override
 	public void inorderIterative(TreeNode root) {
-		if (root == null)
-			return;
+		if (root == null) return;
 		java.util.Stack<TreeNode> stack = new java.util.Stack<>();
 		while (true) {
 			if (root != null) {
 				stack.push(root);
 				root = root.left;
 			} else {
-				if (stack.isEmpty())
-					break;
+				if (stack.isEmpty()) break;
 				root = stack.pop();
 				System.out.print(root.val + " ");
 				root = root.right;
@@ -262,27 +249,22 @@ class BinarySearchTree implements TreeOperations {
 
 	// Reverse logic of Preorder iterative approach
 	private void postOrderUsing2Stack(TreeNode root) {
-		if (root == null)
-			return;
+		if (root == null) return;
 		java.util.Stack<TreeNode> s1 = new java.util.Stack<>();
 		java.util.Stack<Integer> s2 = new java.util.Stack<>();
 		s1.push(root);
 		while (!s1.isEmpty()) {
 			root = s1.pop();
 			s2.push(root.val);
-			if (root.left != null)
-				s1.push(root.left);
-			if (root.right != null)
-				s1.push(root.right);
+			if (root.left != null) s1.push(root.left);
+			if (root.right != null) s1.push(root.right);
 		}
 
-		while (!s2.isEmpty())
-			System.out.print(s2.pop() + " ");
+		while (!s2.isEmpty()) System.out.print(s2.pop() + " ");
 	}
 
 	private void postOrderUsingStack(TreeNode root) {
-		if (root == null)
-			return;
+		if (root == null) return;
 		TreeNode current = root, rightNode, topNode;
 		java.util.Stack<TreeNode> stack = new java.util.Stack<>();
 		while (current != null || !stack.isEmpty()) {
@@ -314,11 +296,9 @@ class BinarySearchTree implements TreeOperations {
 	}
 
 	public void levelOrder(TreeNode root, List<List<Integer>> result, int level) {
-		if (root == null)
-			return;
+		if (root == null) return;
 
-		if (result.size() <= level)
-			result.add(new ArrayList<>());
+		if (result.size() <= level) result.add(new ArrayList<>());
 		result.get(level).add(root.val);
 
 		levelOrder(root.left, result, level + 1);
@@ -327,17 +307,14 @@ class BinarySearchTree implements TreeOperations {
 
 	@Override
 	public void levelorderIterative(TreeNode root) {
-		if (root == null)
-			return;
+		if (root == null) return;
 		java.util.Queue<TreeNode> queue = new java.util.LinkedList<>();
 		queue.add(root);
 		while (!queue.isEmpty()) {
 			root = queue.remove();
 			System.out.print(root.val + " ");
-			if (root.left != null)
-				queue.add(root.left);
-			if (root.right != null)
-				queue.add(root.right);
+			if (root.left != null) queue.add(root.left);
+			if (root.right != null) queue.add(root.right);
 		}
 
 	}

@@ -12,19 +12,16 @@ public class FastAndSlowPtrPatterns {
 		while (fastPtr != null && fastPtr.next != null) {
 			slowPtr = slowPtr.next;
 			fastPtr = fastPtr.next.next;
-			if (slowPtr == fastPtr)
-				return true;
+			if (slowPtr == fastPtr) return true;
 		}
 		return false;
 	}
 
 	// Start of LinkedList Cycle (medium)
 	public ListNode detectCycle(ListNode head) {
-		if (head == null || head.next == null)
-			return null;
+		if (head == null || head.next == null) return null;
 		ListNode slow = head, fast = head, entry = head;
-		while (fast.next != null
-				&& fast.next.next != null) {
+		while (fast.next != null && fast.next.next != null) {
 			slow = slow.next;
 			fast = fast.next.next;
 			if (slow == fast) {
@@ -45,8 +42,7 @@ public class FastAndSlowPtrPatterns {
 	 * Those numbers for which this process ends in 1 are happy numbers.
 	 */
 	public boolean isHappy(int n) {
-		if (n == 0)
-			return false;
+		if (n == 0) return false;
 
 		int slow = n, fast = n;
 		do {
@@ -98,19 +94,16 @@ public class FastAndSlowPtrPatterns {
 	}
 
 	public ListNode middleNode2(ListNode head) {
-		if (head == null)
-			return null;
+		if (head == null) return null;
 		ListNode slowPtr = head, fastPtr = head;
-		while (fastPtr.next != null
-				&& fastPtr.next.next != null) {
+		while (fastPtr.next != null && fastPtr.next.next != null) {
 			slowPtr = slowPtr.next;
 			fastPtr = fastPtr.next.next;
 		}
 		return slowPtr;
 	}
 
-	//TODO: Move below to consolidated module
-	// Palindrome LinkedList (medium)
+	// Palindrome Linked List:
 	public boolean isPalindrome1(ListNode head) {
 		Stack<ListNode> stack = new Stack<>();
 		ListNode curr = head;
@@ -120,18 +113,15 @@ public class FastAndSlowPtrPatterns {
 		}
 		curr = head;
 		while (curr != null) {
-			if (curr.data != stack.pop().data)
-				return false;
+			if (curr.data != stack.pop().data) return false;
 			curr = curr.next;
 		}
 		return true;
 	}
 
 	public boolean isPalindrome2(ListNode head) {
-		if (head == null || head.next == null)
-			return true;
-		ListNode slowPtr = head, fastPtr = head,
-				prevNode = null;
+		if (head == null || head.next == null) return true;
+		ListNode slowPtr = head, fastPtr = head, prevNode = null;
 		while (fastPtr != null && fastPtr.next != null) {
 			prevNode = slowPtr;
 			slowPtr = slowPtr.next;
@@ -157,14 +147,12 @@ public class FastAndSlowPtrPatterns {
 	}
 
 	public boolean compare(ListNode node1, ListNode node2) {
-		if (node1 == null && node2 == null)
-			return true;
-		if (node1 == null || node2 == null)
-			return false;
-		return ((node1.data == node2.data)
-				&& compare(node1.next, node2.next));
+		if (node1 == null && node2 == null) return true;
+		if (node1 == null || node2 == null) return false;
+		return ((node1.data == node2.data) && compare(node1.next, node2.next));
 	}
 
+	//TODO: Move below to consolidated module
 	// Reverse a linked list I
 	// Iterative Approach
 	public ListNode reverseList1(ListNode head) {
@@ -190,11 +178,9 @@ public class FastAndSlowPtrPatterns {
 	 *    3. Merge 2 list: 1st half & reversed 2nd half
 	 */
 	public void reorderList(ListNode head) {
-		if (head == null)
-			return;
+		if (head == null) return;
 		ListNode slowPtr = head, fastPtr = head;
-		while (fastPtr.next != null
-				&& fastPtr.next.next != null) {
+		while (fastPtr.next != null && fastPtr.next.next != null) {
 			slowPtr = slowPtr.next;
 			fastPtr = fastPtr.next.next;
 		}
@@ -204,8 +190,7 @@ public class FastAndSlowPtrPatterns {
 		mergeList(leftHalf, rightHalf);
 	}
 
-	public void mergeList(ListNode leftHalf,
-			ListNode rightHalf) {
+	public void mergeList(ListNode leftHalf, ListNode rightHalf) {
 		while (rightHalf != null) {
 			ListNode rightHalfNext = rightHalf.next;
 			rightHalf.next = leftHalf.next;
@@ -225,8 +210,7 @@ public class FastAndSlowPtrPatterns {
 		ListNode dummy = new ListNode(0);
 		ListNode curr = dummy;
 		dummy.next = head;
-		while (curr.next != null
-				&& curr.next.next != null) {
+		while (curr.next != null && curr.next.next != null) {
 			ListNode first = curr.next;
 			ListNode second = curr.next.next;
 			first.next = second.next;
@@ -239,8 +223,7 @@ public class FastAndSlowPtrPatterns {
 
 	// Recursive solution
 	public ListNode swapPairs(ListNode head) {
-		if (head == null || head.next == null)
-			return head;
+		if (head == null || head.next == null) return head;
 		ListNode second = head.next;
 		head.next = swapPairs(head.next.next);
 		second.next = head;
