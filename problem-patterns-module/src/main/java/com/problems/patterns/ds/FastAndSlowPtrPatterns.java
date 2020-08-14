@@ -6,7 +6,7 @@ import com.common.model.ListNode;
 
 public class FastAndSlowPtrPatterns {
 
-	// LinkedList Cycle (easy)
+	// LinkedList Cycle: Floyd's Algorithm or Tortoise & Hare Algorithm
 	public boolean hasCycle(ListNode head) {
 		ListNode slowPtr = head, fastPtr = head;
 		while (fastPtr != null && fastPtr.next != null) {
@@ -17,19 +17,21 @@ public class FastAndSlowPtrPatterns {
 		return false;
 	}
 
-	// Start of LinkedList Cycle (medium)
+	/* Start of LinkedList Cycle/Linked List Cycle II: Linked List Cycle II: Given a linked list, return the node
+	 *  where the cycle begins. If there is no cycle, return null. */
 	public ListNode detectCycle(ListNode head) {
 		if (head == null || head.next == null) return null;
-		ListNode slow = head, fast = head, entry = head;
+		ListNode slow = head, fast = head, start = head;
 		while (fast.next != null && fast.next.next != null) {
 			slow = slow.next;
 			fast = fast.next.next;
 			if (slow == fast) {
-				while (slow != entry) {
+				//TODO: Check how this is working
+				while (slow != start) {
 					slow = slow.next;
-					entry = entry.next;
+					start = start.next;
 				}
-				return entry;
+				return start;
 			}
 		}
 		return null;
@@ -84,7 +86,8 @@ public class FastAndSlowPtrPatterns {
 	}
 
 	// Middle of the LinkedList (easy)
-	public ListNode middleNode(ListNode head) {
+	//Approach1: For getting first mid element in the even size of LL; i.e. fastPtr.next != null
+	public ListNode middleNode1(ListNode head) {
 		ListNode slowPtr = head, fastPtr = head;
 		while (fastPtr != null && fastPtr.next != null) {
 			slowPtr = slowPtr.next;
@@ -93,6 +96,7 @@ public class FastAndSlowPtrPatterns {
 		return slowPtr;
 	}
 
+	//Approach2: For getting second mid element in the even size of LLl i.e. fastPtr.next.next != null
 	public ListNode middleNode2(ListNode head) {
 		if (head == null) return null;
 		ListNode slowPtr = head, fastPtr = head;

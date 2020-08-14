@@ -43,8 +43,23 @@ public class RandomNumberPatterns {
 		ListNode curr = node;
 		int count = 1, randomVal = 0;
 		while (curr != null) {
-			if (rand.nextInt(count++) == 0)
-				randomVal = curr.data;
+			if (rand.nextInt(count++) == 0) randomVal = curr.data;
+			curr = curr.next;
+		}
+		return randomVal;
+	}
+
+	/*
+	 * Linked List Random Node:
+	 * Given a singly linked list, return a random node's value from the linked list. Each node must have the same
+	 * probability of being chosen.
+	 */
+	public int getRandom2(ListNode node) {
+		ListNode curr = node;
+		Random random = new Random();
+		int count = 1, randomVal = 0;
+		while (curr != null) {
+			if (random.nextInt(count++) == 0) randomVal = curr.data;
 			curr = curr.next;
 		}
 		return randomVal;
@@ -58,10 +73,8 @@ public class RandomNumberPatterns {
 	TreeNode1 root = null;
 
 	public void insertInOrder(int value) {
-		if (root == null)
-			root = new TreeNode1(value);
-		else
-			root.insertInOrder(value);
+		if (root == null) root = new TreeNode1(value);
+		else root.insertInOrder(value);
 	}
 
 	public int size() {
@@ -69,8 +82,7 @@ public class RandomNumberPatterns {
 	}
 
 	public TreeNode1 getRandomNode() {
-		if (root == null)
-			return null;
+		if (root == null) return null;
 
 		Random random = new Random();
 		int i = random.nextInt(size());
@@ -103,15 +115,11 @@ class TreeNode1 {
 
 	public void insertInOrder(int d) {
 		if (d <= data) {
-			if (left == null)
-				left = new TreeNode1(d);
-			else
-				left.insertInOrder(d);
+			if (left == null) left = new TreeNode1(d);
+			else left.insertInOrder(d);
 		} else {
-			if (right == null)
-				right = new TreeNode1(d);
-			else
-				right.insertInOrder(d);
+			if (right == null) right = new TreeNode1(d);
+			else right.insertInOrder(d);
 		}
 		size++;
 	}
@@ -121,12 +129,9 @@ class TreeNode1 {
 	}
 
 	public TreeNode1 find(int d) {
-		if (d == data)
-			return this;
-		else if (d <= data)
-			return left != null ? left.find(d) : null;
-		else if (d > data)
-			return right != null ? right.find(d) : null;
+		if (d == data) return this;
+		else if (d <= data) return left != null ? left.find(d) : null;
+		else if (d > data) return right != null ? right.find(d) : null;
 		return null;
 	}
 
@@ -135,22 +140,16 @@ class TreeNode1 {
 		Random random = new Random();
 		int index = random.nextInt(size);
 
-		if (index < leftSize)
-			return left.getRandomNode();
-		else if (index == leftSize)
-			return this;
-		else
-			return right.getRandomNode();
+		if (index < leftSize) return left.getRandomNode();
+		else if (index == leftSize) return this;
+		else return right.getRandomNode();
 	}
 
 	public TreeNode1 getIthNode(int i) {
 		int leftSize = left == null ? 0 : left.size();
 
-		if (i < leftSize)
-			return left.getIthNode(i);
-		else if (i == leftSize)
-			return this;
-		else
-			return right.getIthNode(i - (leftSize + 1));
+		if (i < leftSize) return left.getIthNode(i);
+		else if (i == leftSize) return this;
+		else return right.getIthNode(i - (leftSize + 1));
 	}
 }

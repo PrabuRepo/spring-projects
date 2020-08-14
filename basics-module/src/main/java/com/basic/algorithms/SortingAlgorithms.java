@@ -104,8 +104,7 @@ public class SortingAlgorithms implements Sorting {
 	public void bubbleSort(int[] a) {
 		boolean swapFlag;
 		int count = 0;
-		if (a.length == 1)
-			return;
+		if (a.length == 1) return;
 
 		for (int i = 1; i < a.length; i++) {
 			swapFlag = false;
@@ -129,8 +128,7 @@ public class SortingAlgorithms implements Sorting {
 	}
 
 	private void bubbleSortAlg(int[] a, int n) {
-		if (n == 1)
-			return;
+		if (n == 1) return;
 
 		/*for (int j = 0; j < n - 1; j++) {
 			if (a[j] > a[j + 1]) {
@@ -143,10 +141,8 @@ public class SortingAlgorithms implements Sorting {
 	}
 
 	void compare(int[] a, int l, int r) {
-		if (l >= r)
-			return;
-		if (a[l] > a[l + 1])
-			swap(a, l, l + 1);
+		if (l >= r) return;
+		if (a[l] > a[l + 1]) swap(a, l, l + 1);
 		compare(a, l + 1, r);
 	}
 	// Bubble sort - end
@@ -157,8 +153,7 @@ public class SortingAlgorithms implements Sorting {
 		for (int i = 0; i < a.length; i++) {
 			minIndex = i;
 			for (int j = i; j < a.length; j++) {
-				if (a[j] < a[minIndex])
-					minIndex = j;
+				if (a[j] < a[minIndex]) minIndex = j;
 			}
 			swap(a, minIndex, i);
 		}
@@ -179,8 +174,7 @@ public class SortingAlgorithms implements Sorting {
 		int n = arr.length;
 		for (int i = n - 1; i > 0; i--) {
 			int maxIndex = findMax(arr, i);
-			if (maxIndex == i)
-				continue;
+			if (maxIndex == i) continue;
 			flip(arr, maxIndex);
 			flip(arr, i);
 		}
@@ -189,8 +183,7 @@ public class SortingAlgorithms implements Sorting {
 	public int findMax(int[] arr, int end) {
 		int i = 1, maxIndex = 0;
 		while (i <= end) {
-			if (arr[i] > arr[maxIndex])
-				maxIndex = i;
+			if (arr[i] > arr[maxIndex]) maxIndex = i;
 			i++;
 		}
 		return maxIndex;
@@ -235,8 +228,7 @@ public class SortingAlgorithms implements Sorting {
 	}
 
 	private void insertionSortAlg(int[] a, int n) {
-		if (n == 0)
-			return;
+		if (n == 0) return;
 
 		insertionSortAlg(a, n - 1);
 
@@ -275,8 +267,7 @@ public class SortingAlgorithms implements Sorting {
 	}
 
 	private void divide(int[] a, int l, int r) {
-		if (l >= r)
-			return;
+		if (l >= r) return;
 
 		int m = (l + r) / 2;
 		divide(a, l, m);
@@ -308,8 +299,7 @@ public class SortingAlgorithms implements Sorting {
 			a[curr++] = (left[leftIndex] <= right[rightIndex]) ? left[leftIndex++] : right[rightIndex++];
 
 		// Copy the remaining left side elements into array
-		while (leftIndex < left.length)
-			a[curr++] = left[leftIndex++];
+		while (leftIndex < left.length) a[curr++] = left[leftIndex++];
 
 		// The right half doesn't need to be copied because it's already there.
 		// Copy the remaining right side elements into array
@@ -325,8 +315,7 @@ public class SortingAlgorithms implements Sorting {
 	}
 
 	private void divide2(int[] a, int l, int r, int[] helper) {
-		if (l >= r)
-			return;
+		if (l >= r) return;
 
 		int m = (l + r) / 2;
 		divide2(a, l, m, helper);
@@ -342,12 +331,10 @@ public class SortingAlgorithms implements Sorting {
 
 		int left = l, right = m + 1, curr = l;
 
-		while (left <= m && right <= r)
-			a[curr++] = (helper[left] <= helper[right]) ? helper[left++] : helper[right++];
+		while (left <= m && right <= r) a[curr++] = (helper[left] <= helper[right]) ? helper[left++] : helper[right++];
 
 		// Copy the remaining left side elements into array
-		while (left <= m)
-			a[curr++] = helper[left++];
+		while (left <= m) a[curr++] = helper[left++];
 
 		// The right half doesn't need to be copied because it's already there.
 		// Copy the remaining right side elements into array
@@ -364,8 +351,7 @@ public class SortingAlgorithms implements Sorting {
 	}
 
 	private ListNode divideLL(ListNode head) {
-		if (head == null || head.next == null)
-			return head;
+		if (head == null || head.next == null) return head;
 
 		ListNode middle = middleNode(head);
 		ListNode middleNext = middle.next;
@@ -388,10 +374,8 @@ public class SortingAlgorithms implements Sorting {
 
 	private ListNode mergeLL(ListNode left, ListNode right) {
 		ListNode result;
-		if (left == null)
-			return right;
-		if (right == null)
-			return left;
+		if (left == null) return right;
+		if (right == null) return left;
 
 		if (left.data < right.data) {
 			result = left;
@@ -403,14 +387,14 @@ public class SortingAlgorithms implements Sorting {
 		return result;
 	}
 
+	//This insert linked list method is used to test the merge sort
 	public ListNode insertLL(ListNode head, int data) {
 		ListNode newNode = new ListNode(data);
 		if (head == null) {
 			head = newNode;
 		} else {
 			ListNode temp = head;
-			while (temp.next != null)
-				temp = temp.next;
+			while (temp.next != null) temp = temp.next;
 			temp.next = newNode;
 		}
 		return head;
@@ -543,8 +527,7 @@ public class SortingAlgorithms implements Sorting {
 		int index = 0;
 		for (int i = 0; i < countArray.length; i++) {
 			count = countArray[i];
-			while (count-- > 0)
-				arr[index++] = countArray[i];
+			while (count-- > 0) arr[index++] = countArray[i];
 		}
 
 	}
@@ -558,8 +541,7 @@ public class SortingAlgorithms implements Sorting {
 		int index = 0;
 		for (int i = 0; i < countArray.length; i++) {
 			count = countArray[i];
-			while (count-- > 0)
-				arr[index++] = (char) i;
+			while (count-- > 0) arr[index++] = (char) i;
 
 		}
 		return arr;
@@ -638,23 +620,20 @@ public class SortingAlgorithms implements Sorting {
 		// Insert the elements into the bucket; where n is size of the array
 		for (int i = 0; i < n; i++) {
 			int key = (int) (arr[i] * n);
-			if (buckets[key] == null)
-				buckets[key] = new LinkedList<>();
+			if (buckets[key] == null) buckets[key] = new LinkedList<>();
 			buckets[key].add(arr[i]);
 		}
 
 		// Sort individual buckets
 		for (int i = 0; i < n; i++)
-			if (buckets[i] != null)
-				Collections.sort(buckets[i]);
+			if (buckets[i] != null) Collections.sort(buckets[i]);
 
 		// Set all the elements back into the arr
 		int curr = 0;
 		for (int i = 0; i < n; i++) {
 			if (buckets[i] != null) {
 				ListIterator<Float> iter = buckets[i].listIterator();
-				while (iter.hasNext())
-					arr[curr++] = iter.next();
+				while (iter.hasNext()) arr[curr++] = iter.next();
 			}
 		}
 
