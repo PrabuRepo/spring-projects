@@ -1,5 +1,7 @@
 package com.problems.patterns;
 
+import java.util.Arrays;
+
 import com.common.utilities.Utils;
 
 public class DataRearrangementPatterns {
@@ -10,8 +12,7 @@ public class DataRearrangementPatterns {
 	 * Given a sorted array of integers nums and integer values a, b and c. Apply a function of the form f(x) = ax2 +bx + c 
 	 * to each element x in the array. The returned array must be in sorted order.
 	 */
-	public int[] sortTransformedArray(int[] nums, int a,
-			int b, int c) {
+	public int[] sortTransformedArray(int[] nums, int a, int b, int c) {
 		int len = nums.length;
 		int[] result = new int[len];
 
@@ -73,31 +74,60 @@ public class DataRearrangementPatterns {
 	void sortInWave(int arr[], int n) {
 		for (int i = 0; i < n; i += 2) {
 			// If current even element is smaller than previous
-			if (i > 0 && arr[i - 1] > arr[i])
-				Utils.swap(arr, i - 1, i);
+			if (i > 0 && arr[i - 1] > arr[i]) Utils.swap(arr, i - 1, i);
 
 			// If current even element is smaller than next
-			if (i < n - 1 && arr[i] < arr[i + 1])
-				Utils.swap(arr, i, i + 1);
+			if (i < n - 1 && arr[i] < arr[i + 1]) Utils.swap(arr, i, i + 1);
 		}
 	}
 
-	/*Wiggle Sort II: (Vice versa of previous one & allowed duplicates)*/
+	// Wiggle Sort II: (Vice versa of previous one & allowed duplicates)
+	//Sorting and Arrangement: O(nlogn) time and O(n)
+	public void wiggleSort1(int[] arr) {
+		if (arr.length == 0) return;
+		int n = arr.length, m = (n + 1) / 2;
+		int[] copy = Arrays.copyOf(arr, n);
+		Arrays.sort(copy);
+
+		//Using for loop
+		for (int i = m - 1, j = 0; i >= 0; i--, j += 2)
+			arr[j] = copy[i];
+		for (int i = n - 1, j = 1; i >= m; i--, j += 2)
+			arr[j] = copy[i];
+
+		//or
+
+		//Using while loop
+		//1. i or sorted copy index moves from m-1 to 0. It stores in j=0,2,4...
+		/*  int i = m-1, j =0;
+		while(i>=0){
+		    arr[j] = copy[i];
+		    i--; 
+		    j += 2;
+		}
+		
+		//2.i or sorted copy index moves from n-1 to m. It stores in j=1,3,5..
+		i = n-1; j =1;
+		while(i>=m){
+		    arr[j] = copy[i];
+		    i--; 
+		    j += 2;
+		}*/
+	}
+
 	// Approach: Combination of Using 3-Way Partitioning & Kth Smallest element Algorithm
-	public void wiggleSort(int[] nums) {
+	public void wiggleSort2(int[] nums) {
 		int n = nums.length;
-		int left = 0, i = 0, right = n - 1;
-		// Find Median
+		// Find Median using kth smallest element Quick Select Algorithm
 		int median = findMedian(nums, (n + 1) / 2);
 
 		// Using 3-Way Partitioning or Sort 012 algorithm to order in waveform
+		int left = 0, i = 0, right = n - 1;
 		while (i <= right) {
 			if (nums[newIndex(i, n)] > median) {
-				Utils.swap(nums, newIndex(left++, n),
-						newIndex(i++, n));
+				Utils.swap(nums, newIndex(left++, n), newIndex(i++, n));
 			} else if (nums[newIndex(i, n)] < median) {
-				Utils.swap(nums, newIndex(right--, n),
-						newIndex(i, n));
+				Utils.swap(nums, newIndex(right--, n), newIndex(i, n));
 			} else {
 				i++;
 			}

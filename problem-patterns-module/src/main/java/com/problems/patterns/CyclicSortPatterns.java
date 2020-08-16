@@ -25,18 +25,12 @@ public class CyclicSortPatterns {
 		CyclicSortPatterns ob = new CyclicSortPatterns();
 		int[] arr = { 2, 3, 1, 8, 2, 3, 5, 1 };
 		System.out.println("Missing Numbers: ");
-		ob.missingNumbers2(arr).stream()
-				.forEach(k -> System.out.print(k + " "));
+		ob.missingNumbers2(arr).stream().forEach(k -> System.out.print(k + " "));
 		System.out.println("\nDuplicate Numbers: ");
-		ob.findDuplicates4(arr).stream()
-				.forEach(k -> System.out.print(k + " "));
-		System.out.println(
-				"\nDup Number: " + ob.findDuplicate61(
-						new int[] { 1, 4, 4, 3, 2 }));
-		int[] result = ob.findCorruptPair(
-				new int[] { 1, 4, 4, 3, 2 });
-		System.out.println("\nCorrupt Pair: "
-				+ Arrays.toString(result));
+		ob.findDuplicates4(arr).stream().forEach(k -> System.out.print(k + " "));
+		System.out.println("\nDup Number: " + ob.findDuplicate61(new int[] { 1, 4, 4, 3, 2 }));
+		int[] result = ob.findCorruptPair(new int[] { 1, 4, 4, 3, 2 });
+		System.out.println("\nCorrupt Pair: " + Arrays.toString(result));
 
 	}
 
@@ -61,14 +55,12 @@ public class CyclicSortPatterns {
 		int n = nums.length, val = 0;
 		for (int i = 0; i < n; i++) {
 			val = nums[i];
-			while (val > 0 && val <= n
-					&& nums[val - 1] != val) {
+			while (val > 0 && val <= n && nums[val - 1] != val) {
 				Utils.swap(nums, val - 1, i);
 				val = nums[i];
 			}
 		}
-		System.out.println(
-				"Sorted Array: " + Arrays.toString(nums));
+		System.out.println("Sorted Array: " + Arrays.toString(nums));
 	}
 
 	// 2. Find the Missing Number
@@ -84,15 +76,12 @@ public class CyclicSortPatterns {
 		// rearrange the array using cyclic sort.
 		while (i < n) {
 			int val = nums[i];
-			if (val < n && nums[val] != nums[i])
-				Utils.swap(nums, val, i);
-			else
-				i++;
+			if (val < n && nums[val] != nums[i]) Utils.swap(nums, val, i);
+			else i++;
 		}
 
 		for (i = 0; i < nums.length; i++)
-			if (nums[i] != i)
-				return i;
+			if (nums[i] != i) return i;
 
 		return n;
 	}
@@ -119,23 +108,22 @@ public class CyclicSortPatterns {
 		}
 
 		for (i = 0; i < n; i++) {
-			if (i + 1 != arr[i])
-				missed.add(i + 1);
+			if (i + 1 != arr[i]) missed.add(i + 1);
 		}
 
 		return missed;
 	}
 
 	// Marker Approach
-	public void missingNumbers3(int[] array) {
-		for (int i = 0; i < array.length; i++) {
-			int value = Math.abs(array[i]);
-			if (array[value - 1] > 0) {
-				array[value - 1] = -array[value - 1];
+	public void missingNumbers3(int[] arr) {
+		for (int i = 0; i < arr.length; i++) {
+			int val = Math.abs(arr[i]) - 1;
+			if (arr[val] > 0) {
+				arr[val] = -arr[val];
 			}
 		}
-		for (int i = 0; i < array.length - 1; i++) {
-			if (array[i] > 0) {
+		for (int i = 0; i < arr.length - 1; i++) {
+			if (arr[i] > 0) {
 				System.out.println(i + 1);
 			}
 		}
@@ -162,14 +150,11 @@ public class CyclicSortPatterns {
 		// rearrange the array using cyclic sort.
 		while (i < n) {
 			int val = nums[i] - 1;
-			if (nums[val] != nums[i])
-				Utils.swap(nums, val, i);
-			else
-				i++;
+			if (nums[val] != nums[i]) Utils.swap(nums, val, i);
+			else i++;
 		}
 		for (i = 0; i < nums.length; i++)
-			if (nums[i] != i + 1)
-				return i;
+			if (nums[i] != i + 1) return nums[i];
 		return 0;
 	}
 
@@ -180,10 +165,8 @@ public class CyclicSortPatterns {
 		while (i < n) {
 			if (i + 1 != nums[i]) {
 				int val = nums[i] - 1;
-				if (nums[val] != nums[i])
-					Utils.swap(nums, val, i);
-				else
-					return nums[i];
+				if (nums[val] != nums[i]) Utils.swap(nums, val, i);
+				else return nums[i];
 			} else {
 				i++;
 			}
@@ -205,8 +188,7 @@ public class CyclicSortPatterns {
 		}
 		// Reset the original elements
 		for (int i = 0; i < nums.length; i++)
-			if (nums[i] < 0)
-				nums[i] = -nums[i];
+			if (nums[i] < 0) nums[i] = -nums[i];
 		return dupNum;
 	}
 
@@ -228,14 +210,11 @@ public class CyclicSortPatterns {
 		// rearrange the array using cyclic sort.
 		while (i < n) {
 			int val = nums[i] - 1;
-			if (nums[val] != nums[i])
-				Utils.swap(nums, val, i);
-			else
-				i++;
+			if (nums[val] != nums[i]) Utils.swap(nums, val, i);
+			else i++;
 		}
 		for (i = 0; i < n; i++) {
-			if (i + 1 != nums[i])
-				duplicates.add(nums[i]);
+			if (i + 1 != nums[i]) duplicates.add(nums[i]);
 		}
 		return duplicates;
 	}
@@ -245,10 +224,8 @@ public class CyclicSortPatterns {
 		List<Integer> result = new ArrayList<>();
 		for (int i = 0; i < nums.length; i++) {
 			int val = Math.abs(nums[i]) - 1;
-			if (nums[val] < 0)
-				result.add(Math.abs(nums[i]));
-			else
-				nums[val] = -nums[val];
+			if (nums[val] < 0) result.add(Math.abs(nums[i]));
+			else nums[val] = -nums[val];
 		}
 		// Reset the original elements
 		for (int i = 0; i < nums.length; i++)
@@ -262,15 +239,15 @@ public class CyclicSortPatterns {
 	 */
 	// Using Cyclic Sort: T:O(n);
 	public int firstMissingPositive11(int[] nums) {
-		int i = 0, val = 0;
+		int i = 0, val = 0, n = nums.length;
 		// Convert the array to "1 to n" (example below) form using Cyclic Sort
 		// and map +ve numbers to respective indices around negative numbers
 		while (i < nums.length) {
-			val = nums[i];
-			if (val > 0 // Skip negative numbers
-					&& val <= nums.length // Critical, so we do not want to go out of bound
-					&& nums[val - 1] != val) { // Cyclic Sort criteria
-				Utils.swap(nums, val - 1, i);
+			val = nums[i] - 1;
+			if (val >= 0 // Skip negative numbers
+					&& val < n // Critical, so we do not want to go out of bound
+					&& nums[val] != nums[i]) { // Cyclic Sort criteria
+				Utils.swap(nums, val, i);
 			} else {
 				i++;
 			}
@@ -285,23 +262,21 @@ public class CyclicSortPatterns {
 			}
 		}
 
-		return i + 1; // This will tc of all negative testcases like empty array etc
+		return n + 1; // This will tc of all negative testcases like empty array etc
 	}
 
 	// Both are same approach
 	public int firstMissingPositive12(int[] nums) {
 		int n = nums.length, val = 0;
 		for (int i = 0; i < n; i++) {
-			val = nums[i];
-			while (val > 0 && val <= n
-					&& nums[val - 1] != val) {
-				Utils.swap(nums, val - 1, i);
-				val = nums[i];
+			val = nums[i] - 1;
+			while (val >= 0 && val < n && nums[val] != nums[i]) {
+				Utils.swap(nums, val, i);
+				val = nums[i] - 1;
 			}
 		}
 		for (int i = 0; i < n; i++)
-			if (nums[i] != i + 1)
-				return i + 1;
+			if (nums[i] != i + 1) return i + 1;
 		return n + 1;
 	}
 
@@ -309,20 +284,16 @@ public class CyclicSortPatterns {
 	public int firstMissingPositive2(int[] nums) {
 		int n = nums.length;
 		for (int i = 0; i < n; i++)
-			if (nums[i] <= 0 || nums[i] > n)
-				nums[i] = n + 1;
+			if (nums[i] <= 0 || nums[i] > n) nums[i] = n + 1;
+
 		for (int i = 0; i < n; i++) {
-			int val = Math.abs(nums[i]);
-			if (val > n)
-				continue;
-			val -= 1;
-			if (nums[val] > 0)
-				nums[val] = -nums[val];
+			int val = Math.abs(nums[i]) - 1;
+			if (val >= n) continue;
+			if (nums[val] > 0) nums[val] = -nums[val];
 		}
 
 		for (int i = 0; i < n; i++)
-			if (nums[i] >= 0)
-				return i + 1;
+			if (nums[i] >= 0) return i + 1;
 
 		return n + 1;
 	}
@@ -341,15 +312,12 @@ public class CyclicSortPatterns {
 		int i = 0, n = nums.length;
 		while (i < n) {
 			int val = nums[i] - 1;
-			if (nums[val] != nums[i])
-				Utils.swap(nums, val, i);
-			else
-				i++;
+			if (nums[val] != nums[i]) Utils.swap(nums, val, i);
+			else i++;
 		}
 
 		for (i = 0; i < nums.length; i++)
-			if (nums[i] != i + 1)
-				return new int[] { nums[i], i + 1 };
+			if (nums[i] != i + 1) return new int[] { nums[i], i + 1 };
 
 		return new int[] { 0, 0 };
 	}

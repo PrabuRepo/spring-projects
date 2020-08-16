@@ -11,7 +11,7 @@ import com.common.utilities.Utils;
  */
 public class QuickSelectPatterns {
 
-	/************************* Using 2-way Partition**************************/
+	/************************* Using 2-way Partition **************************/
 	/* Partition:
 	 * Left side elements are less than pivotIndex(i) and right side elements are greater than pivotIndex(i)
 	 * Use Partition to find the kth Smallest Element; 
@@ -40,19 +40,14 @@ public class QuickSelectPatterns {
 	 *  T(n) = T(n - 1) + O(n) and T(n) = O(n^2).
 	 */
 	// This is simpler than kthSmallestElementInArray32
-	public int kthSmallestElementInArray31(int[] nums,
-			int k) {
-		if (nums.length == 0 || k == 0)
-			return 0;
+	public int kthSmallestElementInArray31(int[] nums, int k) {
+		if (nums.length == 0 || k == 0) return 0;
 		int l = 0, r = nums.length - 1;
 		while (l <= r) {
 			int index = partition(nums, l, r);
-			if (index == k - 1)
-				return nums[index];
-			else if (index < k - 1)
-				l = index + 1;
-			else
-				r = index - 1;
+			if (index == k - 1) return nums[index];
+			else if (index < k - 1) l = index + 1;
+			else r = index - 1;
 		}
 		return -1;
 	}
@@ -61,8 +56,7 @@ public class QuickSelectPatterns {
 	 * Left side elements are greater than pivotIndex(i) and right side elements are less than pivotIndex(i)
 	 * Use reverse Partition to find the kth Largest Element;
 	 */
-	private int reversePartition(int[] a, int left,
-			int right) {
+	private int reversePartition(int[] a, int left, int right) {
 		int pivot = a[right];
 		int i = left, j = left;
 		while (j < right) {
@@ -78,19 +72,14 @@ public class QuickSelectPatterns {
 
 	// K largest elements in the array:
 	// Quick sort Partitioning: Worst Case Time: O(n)
-	public int kthLargestElementsInArray31(int[] nums,
-			int k) {
-		if (nums.length == 0 || k == 0)
-			return 0;
+	public int kthLargestElementsInArray31(int[] nums, int k) {
+		if (nums.length == 0 || k == 0) return 0;
 		int l = 0, r = nums.length - 1;
 		while (l <= r) {
 			int index = reversePartition(nums, l, r);
-			if (index == k - 1)
-				return nums[index];
-			else if (index < k - 1)
-				l = index + 1;
-			else
-				r = index - 1;
+			if (index == k - 1) return nums[index];
+			else if (index < k - 1) l = index + 1;
+			else r = index - 1;
 		}
 		return -1;
 	}
@@ -143,7 +132,7 @@ public class QuickSelectPatterns {
 			j = i - 1;
 			while (j >= 0 && arr[j] > 0) {
 				arr[j + 1] = arr[j];
-				j = j - 1;
+				j--;
 			}
 			arr[j + 1] = key;
 		}
@@ -166,14 +155,11 @@ public class QuickSelectPatterns {
 	 * 1. Reverse Lp and Rn. We get [Lp] -> [Lp'] and [Rn] -> [Rn'];    -> [Ln Lp Rn Rp] -> [Ln Lp’ Rn’ Rp]
 	 * 2. Reverse [Lp’ Rn’]. We get [Rn Lp];  =>  [Ln Lp’ Rn’ Rp] -> [Ln Rn Lp Rp]
 	 */
-	public void mergeGroup(int[] arr, int low, int mid,
-			int high) {
+	public void mergeGroup(int[] arr, int low, int mid, int high) {
 		int l = low;
 		int r = mid + 1;
-		while (l <= mid && arr[l] <= 0)
-			l++;
-		while (r <= high && arr[r] <= 0)
-			r++;
+		while (l <= mid && arr[l] <= 0) l++;
+		while (r <= high && arr[r] <= 0) r++;
 
 		reverse(arr, l, mid);
 		reverse(arr, mid + 1, r - 1);
@@ -213,8 +199,7 @@ public class QuickSelectPatterns {
 		 *   index by 2 and positive index by 1, i.e. swap every alternate negative number with next positive number.
 		 */
 		int posIndex = i, negIndex = 0;
-		while (posIndex < a.length && negIndex < posIndex
-				&& a[negIndex] < 0) {
+		while (posIndex < a.length && negIndex < posIndex && a[negIndex] < 0) {
 			Utils.swap(a, posIndex, negIndex);
 			posIndex++;
 			negIndex += 2;
@@ -229,8 +214,7 @@ public class QuickSelectPatterns {
 	 * at even index. Once we find an out of place element, we find the first element after it with opposite sign. We
 	 * right rotate the subarray between these two elements (including these two).
 	 */
-	void rightrotate(int arr[], int n, int outofplace,
-			int cur) {
+	void rightrotate(int arr[], int n, int outofplace, int cur) {
 		int tmp = arr[cur];
 		for (int i = cur; i > outofplace; i--)
 			arr[i] = arr[i - 1];
@@ -242,15 +226,11 @@ public class QuickSelectPatterns {
 
 		for (int index = 0; index < n; index++) {
 			if (outofplace >= 0) {
-				if (((arr[index] >= 0)
-						&& (arr[outofplace] < 0))
-						|| ((arr[index] < 0)
-								&& (arr[outofplace] >= 0))) {
+				if (((arr[index] >= 0) && (arr[outofplace] < 0)) || ((arr[index] < 0) && (arr[outofplace] >= 0))) {
 					rightrotate(arr, n, outofplace, index);
 
 					// the new out-of-place entry is now 2 steps ahead
-					if (index - outofplace > 2)
-						outofplace = outofplace + 2;
+					if (index - outofplace > 2) outofplace = outofplace + 2;
 					else outofplace = -1;
 				}
 			}
@@ -259,16 +239,14 @@ public class QuickSelectPatterns {
 			if (outofplace == -1) {
 				// check if current entry is out-of-place: odd/even
 				// if (((arr[index] >= 0) && ((index & 0x01) == 0)) || ((arr[index] < 0) && (index & 0x01) == 1))
-				if ((arr[index] >= 0 && index % 2 == 0)
-						|| (arr[index] < 0
-								&& index % 2 == 1)) {
+				if ((arr[index] >= 0 && index % 2 == 0) || (arr[index] < 0 && index % 2 == 1)) {
 					outofplace = index;
 				}
 			}
 		}
 	}
 
-	/************************* Using 3-way Partition**************************/
+	/************************* Using 3-way Partition **************************/
 
 	/*Sort Colors/Sort an array of 0s, 1s and 2s*/
 	// 1.Using count array - With additional space
@@ -280,21 +258,18 @@ public class QuickSelectPatterns {
 			count[a[i]]++;
 
 		int index = 0;
-		while (count[0]-- > 0)
-			a[index++] = 0;
+		while (count[0]-- > 0) a[index++] = 0;
 
-		while (count[1]-- > 0)
-			a[index++] = 1;
+		while (count[1]-- > 0) a[index++] = 1;
 
-		while (count[2]-- > 0)
-			a[index++] = 2;
+		while (count[2]-- > 0) a[index++] = 2;
 
 		return a;
 	}
 
 	public int[] sort012Approach2(int a[]) {
-		int arr_size = a.length;
-		int l = 0, h = arr_size - 1, curr = 0;
+		int n = a.length;
+		int l = 0, h = n - 1, curr = 0;
 		while (curr <= h) {
 			if (a[curr] == 0) {
 				Utils.swap(a, l, curr);

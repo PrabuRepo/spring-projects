@@ -27,8 +27,28 @@ public class TestClass {
 
 		//isMatch("mississippi", "mis*is*ip*.");
 
-		ob.cellCompete(new int[] { 1, 1, 1, 0, 1, 1, 1, 1 }, 2).forEach(k -> System.out.print(k + ","));
+		//ob.cellCompete(new int[] { 1, 1, 1, 0, 1, 1, 1, 1 }, 2).forEach(k -> System.out.print(k + ","));
 
+		System.out.println(Arrays.toString(ob.zeroSumSubArray(new int[] { 1, -3, 2 })));
+
+	}
+
+	public int[] zeroSumSubArray(int[] arr) {
+		//Hashmap: Key: sum[0,i - 1]; Val: index
+		Map<Integer, Integer> map = new HashMap<>();
+		map.put(0, -1);
+		int sum = 0;
+		for (int i = 0; i < arr.length; i++) {
+			sum += arr[i];
+			if (map.containsKey(sum)) {
+				int oldIndex = map.get(sum);
+				// Sum range from next index of sum to curr index
+				return Arrays.copyOfRange(arr, oldIndex + 1, i + 1);
+			} else {
+				map.put(sum, i);
+			}
+		}
+		return null;
 	}
 
 	public List<Integer> cellCompete(int[] states, int days) {

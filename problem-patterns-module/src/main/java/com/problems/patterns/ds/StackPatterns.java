@@ -6,65 +6,41 @@ import java.util.Stack;
 
 import com.common.utilities.Utils;
 
+/*
+ * Note: In all the problems, generally use stack.peek(). It means prev value in the array/string
+ */
 public class StackPatterns {
 
 	/********************** Type1: Parse the expression/String *******************/
-	// Evaluate Post Fix Expression or Polish Notation
+	// Evaluate Post Fix Expression or Polish Notation -> Here input is string
 	public void evaluatePosfixExpression(String expr) {
 		Stack<Integer> stack = new Stack<>();
 
-		for (int i = 0; i < expr.length(); i++) { // Scan the given expression and do following for every scanned
-													// element.
+		// Scan the given expression and do following for every scanned element.
+		for (int i = 0; i < expr.length(); i++) {
 			char ch = expr.charAt(i);
-			if (Character.isDigit(ch)) { // If the element is a number, push it into the stack
+			// If the element is a number, push it into the stack
+			if (Character.isDigit(ch)) {
 				stack.push(Character.getNumericValue(ch));
 				// stack.push(Integer.valueOf(ch - '0'));
-				// System.out.println(Integer.valueOf('0')); //48
-			} else { /*If the element is a operator, pop operands for the operator from stack. Evaluate the operator and push the result back to the stack*/
-				int val1 = stack.pop();
-				int val2 = stack.pop();
-				int result = 0;
-				switch (ch) {
-				case '+':
-					result = val2 + val1;
-					break;
-				case '-':
-					result = val2 - val1;
-					break;
-				case '*':
-					result = val2 * val1;
-					break;
-				case '/':
-					result = val2 / val1;
-					break;
-				case '^':
-					result = pow(val2, val1);
-					break;
-				}
+			} else {
+				/* If the element is a operator, pop operands for the operator from stack. Evaluate the operator 
+				 * and push the result back to the stack*/
+				int result = arithmeticOperation(ch, stack.pop(), stack.pop());
 				stack.push(result);
 			}
 		}
 		System.out.println("Value:" + stack.pop());
 	}
 
-	private static int pow(int a, int b) {
-		if (b == 1)
-			return a;
-		return a * pow(a, b - 1);
-	}
-
-	//TODO:  Compare this solution with Post Fix Evaluation
-	// Evaluate Reverse Polish/Postfix Notation
-	public int evalRPN(String[] tokens) {
+	// Evaluate Reverse Polish/Postfix Notation -> Here input is string array
+	public int evalRPN1(String[] tokens) {
 		Stack<Integer> stack = new Stack<>();
 		String str = null;
-		int val1 = 0, val2 = 0;
 		for (int i = 0; i < tokens.length; i++) {
 			str = tokens[i];
 			if (str.equals("/") || str.equals("-") || str.equals("*") || str.equals("+")) {
-				val2 = stack.pop();
-				val1 = stack.pop();
-				stack.push(arithmeticOperation(str.charAt(0), val1, val2));
+				stack.push(arithmeticOperation(str.charAt(0), stack.pop(), stack.pop()));
 			} else {
 				stack.push(Integer.valueOf(str));
 			}
@@ -72,7 +48,7 @@ public class StackPatterns {
 		return (!stack.isEmpty() && stack.size() == 1) ? stack.pop() : 0;
 	}
 
-	// Without using stack
+	//Using Recursion
 	int i;
 
 	public int evalRPN2(String[] tokens) {
@@ -106,8 +82,7 @@ public class StackPatterns {
 				if (!stack.isEmpty() && ((ch == ')' && stack.peek() == '(') || (ch == ']' && stack.peek() == '[')
 						|| (ch == '}' && stack.peek() == '{')))
 					stack.pop();
-				else
-					return false;
+				else return false;
 			}
 		}
 
@@ -132,12 +107,12 @@ public class StackPatterns {
 		for (int i = 0; i < n; i++) {
 			char ch = s.charAt(i);
 			if (Character.isDigit(ch)) {
-				int digit = (int) ch - '0';
+				int num = (int) ch - '0';
 				while (i + 1 < n && Character.isDigit(s.charAt(i + 1))) { // Collect all the digits from the input
-					digit = digit * 10 + s.charAt(i + 1) - '0';
+					num = num * 10 + s.charAt(i + 1) - '0';
 					i++;
 				}
-				result += digit * sign;
+				result += num * sign;
 			} else if (ch == '+') {
 				sign = 1;
 			} else if (ch == '-') {
@@ -165,7 +140,7 @@ public class StackPatterns {
 
 	// Approach1: Using Stack
 	public int calculator21(String s) {
-		int n = s.length(), result = 0, num = 0;
+		int n = s.length(), num = 0;
 		Stack<Integer> stack = new Stack<>();
 		char oper = '+';
 		for (int i = 0; i < n; i++) {
@@ -178,22 +153,17 @@ public class StackPatterns {
 					num = num * 10 + s.charAt(i + 1) - '0';
 					i++;
 				}
-				if (oper == '+')
-					stack.push(num);
-				else if (oper == '-')
-					stack.push(-num);
-				else if (oper == '*')
-					stack.push(stack.pop() * num);
-				else if (oper == '/')
-					stack.push(stack.pop() / num);
+				if (oper == '+') stack.push(num);
+				else if (oper == '-') stack.push(-num);
+				else if (oper == '*') stack.push(stack.pop() * num);
+				else if (oper == '/') stack.push(stack.pop() / num);
 			} else {
 				oper = ch;
-				result = 0;
 			}
 		}
 
-		while (!stack.isEmpty())
-			result += stack.pop();
+		int result = 0;
+		while (!stack.isEmpty()) result += stack.pop();
 		return result;
 	}
 
@@ -239,55 +209,135 @@ public class StackPatterns {
 	 * " 6-4 / 2 " = 4
 	 * "2*(5+5*2)/3+(6/2+8)" = 21
 	 */
-	public int calculator3(String s) {
+	public int calculator31(String s) {
 		Stack<Character> operStack = new Stack<>();
-		Stack<Integer> valStack = new Stack<>();
+		Stack<Long> valStack = new Stack<>();
+		// s = s.trim().replaceAll("[ ]+", ""); //Check this RegEx
 		int n = s.length();
 		for (int i = 0; i < n; i++) {
 			char ch = s.charAt(i);
-			if (ch == ' ')
+			if (ch == ' ') {
 				continue;
-			else if (Character.isDigit(ch)) {
+			} else if (Character.isDigit(ch)) {
 				int start = i;
-				while (i + 1 < n && Character.isDigit(s.charAt(i + 1)))
-					i++;
-				valStack.push(Integer.valueOf(s.substring(start, i + 1)));
-			} else if (ch == '(') {
-				operStack.push('(');
-			} else if (ch == ')') {
-				while (operStack.peek() != '(')
-					valStack.push(arithmeticOperation(operStack.pop(), valStack.pop(), valStack.pop()));
-				operStack.pop();
+				while (i + 1 < n && Character.isDigit(s.charAt(i + 1))) i++;
+				valStack.push(Long.valueOf(s.substring(start, i + 1)));
 			} else {
-				while (!operStack.isEmpty() && (operStack.peek() == '*' || operStack.peek() == '/'))
-					valStack.push(arithmeticOperation(operStack.pop(), valStack.pop(), valStack.pop()));
-				operStack.push(ch);
+				if (operStack.isEmpty() || ch == '(') {
+					operStack.push(ch);
+				} else if (ch == ')') {
+					while (operStack.peek() != '(')
+						valStack.push(arithmeticOperation(operStack.pop(), valStack.pop(), valStack.pop()));
+					operStack.pop();
+				} else {
+					char prevOp = operStack.peek();
+					if (prevOp != '(' && getPrecedence(prevOp) >= getPrecedence(ch)) {
+						valStack.push(arithmeticOperation(operStack.pop(), valStack.pop(), valStack.pop()));
+					}
+					operStack.push(ch);
+				}
 			}
 		}
 
 		while (!operStack.isEmpty())
 			valStack.push(arithmeticOperation(operStack.pop(), valStack.pop(), valStack.pop()));
 
-		return valStack.pop();
+		return (int) valStack.pop().longValue();
 	}
 
-	private int arithmeticOperation(char ch, int b, int a) {
-		int result = 0;
-		switch (ch) {
+	//TODO: Understand how this solution works for Integer.MIN_VALUE. Eg: 10-2147483648, 0-2147483648
+	public int calculator32(String s) {
+		if (s == null || s.length() == 0) return 0;
+
+		// remove leading and trailing spaces and white spaces.
+		s = s.trim().replaceAll("[ ]+", "");
+
+		if (s == null || s.length() == 0) {
+			return 0;
+		}
+
+		Stack<Character> opStack = new Stack<>();
+		Stack<Integer> numStack = new Stack<>();
+		System.out.println("Input: " + s);
+		int i = 0;
+		while (i < s.length()) {
+			if (Character.isDigit(s.charAt(i))) {
+				int num = 0;
+				//TODO: Check these samples here in debug mode  Eg: 10-2147483648, 0-2147483648
+				while (i < s.length() && Character.isDigit(s.charAt(i))) {
+					num = num * 10 + Character.getNumericValue(s.charAt(i));
+					i++;
+				}
+				numStack.push(num);
+				System.out.println(num);
+			} else {
+				char op = s.charAt(i);
+				if (opStack.isEmpty()) {
+					opStack.push(op);
+					i++;
+				} else if (op == '+' || op == '-') {
+					char top = opStack.peek();
+					if (top == '(') {
+						opStack.push(op);
+						i++;
+					} else {
+						calculate(numStack, opStack);
+					}
+				} else if (op == '*' || op == '/') {
+					char top = opStack.peek();
+					if (top == '(') {
+						opStack.push(op);
+						i++;
+					} else if (top == '*' || top == '/') {
+						calculate(numStack, opStack);
+					} else if (top == '+' || top == '-') {
+						opStack.push(op);
+						i++;
+					}
+				} else if (op == '(') {
+					opStack.push(op);
+					i++;
+				} else if (op == ')') {
+					while (opStack.peek() != '(') {
+						calculate(numStack, opStack);
+					}
+					opStack.pop();
+					i++;
+				}
+			}
+		}
+
+		while (!opStack.isEmpty()) {
+			calculate(numStack, opStack);
+		}
+
+		return numStack.peek();
+	}
+
+	private void calculate(Stack<Integer> numStack, Stack<Character> opStack) {
+		int num2 = numStack.pop();
+		int num1 = numStack.pop();
+		//TODO: Check these samples here in debug mode Eg: 10-2147483648, 0-2147483648
+		char op = opStack.pop();
+
+		int ans = 0;
+
+		switch (op) {
 		case '+':
-			result = a + b;
+			ans = num1 + num2;
 			break;
 		case '-':
-			result = a - b;
+			ans = num1 - num2;
 			break;
 		case '*':
-			result = a * b;
+			ans = num1 * num2;
 			break;
 		case '/':
-			result = a / b;
+			ans = num1 / num2;
 			break;
 		}
-		return result;
+
+		numStack.push(ans);
 	}
 
 	//Simplify Path
@@ -295,10 +345,8 @@ public class StackPatterns {
 		Stack<String> stack = new Stack<>();
 
 		for (String str : path.split("/")) {
-			if (!stack.isEmpty() && str.equals(".."))
-				stack.pop();
-			else if (!str.equals("") && !str.equals(".") && !str.equals(".."))
-				stack.push(str);
+			if (!stack.isEmpty() && str.equals("..")) stack.pop();
+			else if (!str.equals("") && !str.equals(".") && !str.equals("..")) stack.push(str);
 		}
 
 		StringBuilder result = new StringBuilder();
@@ -313,8 +361,6 @@ public class StackPatterns {
 	 * 	Monotonic stack is actually a stack. It just uses some ingenious logic to keep the elements in the stack orderly
 	 * (monotone increasing or monotone decreasing) after each new element putting into the stack. Well,sounds like a heap?
 	 * No, monotonic stack is not widely used. It only deals with one typical problem, which is called Next Greater Element
-	 * The monotonically increasing stack can find the first element from the left that is smaller than the current number.
-	 * The monotonically decreasing stack can find the first element from the left that is larger than the current number.
 	 * The monotonous stack mainly answers several questions like this.
 	 * 		The next element larger than the current element
 	 * 		The previous element larger than the current element
@@ -322,7 +368,6 @@ public class StackPatterns {
 	 * 		The previous element smaller than the current element
 	 * Tips: You can store indexes in the stack, or you can directly store elements
 	 */
-
 	//monotonous increasing stack: elements in the monotonous increase stack keeps an increasing order.
 	public void monotonicIncreasingStack(int[] arr) {
 		Stack<Integer> stack = new Stack<>();
@@ -364,16 +409,16 @@ public class StackPatterns {
 	// Approach2: Using Stack; Time Complexity: O(n), with additional stack space
 	//Loop once, we can get the Next Greater Number of a normal array.
 	public int[] nextGreaterElementI2(int[] nums1, int[] nums2) {
-		if (nums2.length == 0 || nums1.length == 0)
-			return new int[0];
+		if (nums2.length == 0 || nums1.length == 0) return new int[0];
 
 		int[] result = new int[nums1.length];
 		Stack<Integer> stack = new Stack<>();
 		Map<Integer, Integer> map = new HashMap<>();
 
 		for (int i = 0; i < nums2.length; i++) {
-			while (!stack.isEmpty() && stack.peek() < nums2[i])
+			while (!stack.isEmpty() && stack.peek() < nums2[i]) {
 				map.put(stack.pop(), nums2[i]);
+			}
 			stack.push(nums2[i]);
 		}
 
@@ -387,9 +432,28 @@ public class StackPatterns {
 	}
 
 	//Next Greater Element II: Time-O(n), Space-O(n)
-	public int[] nextGreaterElementsII(int[] nums) {
-		if (nums.length == 0)
-			return new int[0];
+	//Given a circular array (the next element of the last element is the first element of the array), print the Next Greater Number for every element.
+	//Bruteforce Approach:
+	public int[] nextGreaterElements(int[] nums) {
+		int[] res = new int[nums.length];
+		int[] doublenums = new int[nums.length * 2];
+		System.arraycopy(nums, 0, doublenums, 0, nums.length);
+		System.arraycopy(nums, 0, doublenums, nums.length, nums.length);
+		for (int i = 0; i < nums.length; i++) {
+			res[i] = -1;
+			for (int j = i + 1; j < doublenums.length; j++) {
+				if (doublenums[j] > doublenums[i]) {
+					res[i] = doublenums[j];
+					break;
+				}
+			}
+		}
+		return res;
+	}
+
+	//Using Stack
+	public int[] nextGreaterElementsII2(int[] nums) {
+		if (nums.length == 0) return new int[0];
 
 		Stack<Integer> stack = new Stack<>();
 		int n = nums.length;
@@ -452,16 +516,13 @@ public class StackPatterns {
 	 * T(n) = O(Logn) + T(n-1)
 	 */
 	public int largestRectangleArea2(int[] heights) {
-		if (heights.length == 0)
-			return 0;
+		if (heights.length == 0) return 0;
 		return largestRectangleArea2(heights, 0, heights.length - 1);
 	}
 
 	public int largestRectangleArea2(int[] heights, int l, int h) {
-		if (l > h)
-			return 0;
-		if (l == h)
-			return heights[l];
+		if (l > h) return 0;
+		if (l == h) return heights[l];
 
 		// Rewrite this using Range Minimum query
 		int m = findMin(heights, l, h);
@@ -473,16 +534,14 @@ public class StackPatterns {
 	private int findMin(int[] a, int l, int h) {
 		int minIndex = l;
 		for (int i = l + 1; i <= h; i++)
-			if (a[i] < a[minIndex])
-				minIndex = i;
+			if (a[i] < a[minIndex]) minIndex = i;
 
 		return minIndex;
 	}
 
 	// Using Stack
-	public int largestRectangleArea31(int[] heights) {
-		if (heights == null || heights.length == 0)
-			return 0;
+	public int largestRectangleArea3(int[] heights) {
+		if (heights == null || heights.length == 0) return 0;
 
 		Stack<Integer> stack = new Stack<Integer>();
 		int maxArea = 0, n = heights.length;
@@ -497,30 +556,9 @@ public class StackPatterns {
 		return maxArea;
 	}
 
-	public int largestRectangleArea32(int[] heights) {
-		int n = heights.length;
-		if (n == 0)
-			return 0;
-		Stack<Integer> stack = new Stack<>();
-		int i = 0, width = 0, maxArea = 0, topIndex = 0;
-
-		while (i < n || !stack.isEmpty()) {
-			if (stack.isEmpty() || i < n && (heights[stack.peek()] <= heights[i])) {
-				stack.push(i++); // Store the index
-			} else {
-				topIndex = stack.pop(); // Get the top value, this will be used below to get height
-				width = stack.isEmpty() ? i : (i - stack.peek() - 1); // i - peek/prev in the stack
-				maxArea = Math.max(maxArea, heights[topIndex] * width);
-			}
-		}
-
-		return maxArea;
-	}
-
 	//Trapping Rain Water -using Monotonic Stack 
 	public int trappingRainWater(int[] height) {
-		if (height.length <= 1)
-			return 0;
+		if (height.length <= 1) return 0;
 
 		Stack<Integer> stack = new Stack<>();
 		int n = height.length, water = 0;
@@ -528,8 +566,7 @@ public class StackPatterns {
 		for (int i = 0; i < n; i++) {
 			while (!stack.isEmpty() && height[stack.peek()] < height[i]) {
 				int prev = stack.pop();
-				if (stack.isEmpty())
-					break;
+				if (stack.isEmpty()) break;
 				int minHeight = Math.min(height[stack.peek()], height[i]);
 				water += (minHeight - height[prev]) * (i - stack.peek() - 1);
 			}
@@ -540,5 +577,60 @@ public class StackPatterns {
 	}
 
 	/********************** Type3: Stack design problems *******************/
+
+	/********************************** Util Methods **************************/
+	private int arithmeticOperation(char ch, int b, int a) {
+		int result = 0;
+		switch (ch) {
+		case '+':
+			result = a + b;
+			break;
+		case '-':
+			result = a - b;
+			break;
+		case '*':
+			result = a * b;
+			break;
+		case '/':
+			result = a / b;
+			break;
+		case '^':
+			result = pow(a, b);
+			break;
+		}
+		return result;
+	}
+
+	private long arithmeticOperation(char ch, long b, long a) {
+		long result = 0;
+		switch (ch) {
+		case '+':
+			result = a + b;
+			break;
+		case '-':
+			result = a - b;
+			break;
+		case '*':
+			result = a * b;
+			break;
+		case '/':
+			result = a / b;
+			break;
+		}
+		return result;
+	}
+
+	private int getPrecedence(char op) {
+		if (op == '+' || op == '-') return 1;
+		else if (op == '*' || op == '/') return 2;
+		else if (op == '%') return 3;
+		else if (op == '^') return 4;
+		return -1;
+	}
+
+	private static int pow(int a, int b) {
+		if (b == 1) return a;
+		return a * pow(a, b - 1);
+	}
 
 }

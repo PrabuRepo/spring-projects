@@ -15,6 +15,7 @@ public class SlidingWindowPatterns {
 	/* Window Sliding Technique: 
 	 * 	This technique shows how a nested for loop in few problems can be converted to single for loop and hence reducing the time 
 	 *  complexity.
+	 *  Sliding Window String Pattern: This pattern has two pointers(l & r), counter, hash array or map
 	 */
 
 	/* Minimum Window Substring/Smallest window in a string containing all the char of another string:
@@ -22,7 +23,37 @@ public class SlidingWindowPatterns {
 	 * complexity O(n). 
 	 * Example: Input: S = "ADOBECODEBANC", T = "ABC" Output: "BANC"
 	 */
+	//Follows the pattern
 	public String minWindow1(String str, String pat) {
+		int[] hash = new int[128];
+		for (char c : pat.toCharArray())
+			hash[c]++;
+
+		int l = 0, r = 0, counter = pat.length(), minLeft = -1, minWindow = Integer.MAX_VALUE;
+		while (r < str.length()) {
+			char c1 = str.charAt(r);
+			// Decrease the counter only if char is present in pattern
+			//Note: pat chars are always greater than equal to zero in hash arr, but other chars are less than equal to zero 
+			if (hash[c1] > 0) counter--;
+			hash[c1]--;
+			// Move 'l' from zero and update minwindow & the string map
+			while (counter == 0) {
+				if ((r - l + 1) < minWindow) {
+					minWindow = r - l + 1;
+					minLeft = l;
+				}
+				char c2 = str.charAt(l);
+				hash[c2]++;
+				if (hash[c2] > 0) counter++;
+				l++;
+			}
+			r++;
+		}
+
+		return minLeft != -1 ? str.substring(minLeft, minLeft + minWindow) : "";
+	}
+
+	public String minWindow2(String str, String pat) {
 		int len1 = str.length(), len2 = pat.length();
 		if (len1 == 0 || len2 == 0 || (len1 < len2)) return "";
 
@@ -64,7 +95,28 @@ public class SlidingWindowPatterns {
 	 * Note that the answer must be a substring, "pwke" is a subsequence and not a substring.
 	 */
 	// Approach1: Sliding Window solution using Array to store the data
+	//Follows the pattern
 	public int lengthOfLongestSubstring1(String s) {
+		int l = 0, r = 0, counter = 0, maxLen = 0, n = s.length();
+		int[] hash = new int[128];
+		while (r < n) {
+			char c1 = s.charAt(r++);
+			if (hash[c1] > 0) counter++;
+			hash[c1]++;
+
+			while (counter > 0) {
+				char c2 = s.charAt(l);
+				if (hash[c2] > 1) counter--;
+				hash[c2]--;
+				l++;
+			}
+
+			maxLen = Math.max(maxLen, r - l);
+		}
+		return maxLen;
+	}
+
+	public int lengthOfLongestSubstring2(String s) {
 		if (s.length() == 0) return 0;
 
 		int l = 0, r = 0, maxLen = 0, n = s.length();
@@ -86,7 +138,7 @@ public class SlidingWindowPatterns {
 	}
 
 	//Approach2: Sliding Window solution using map to store the data
-	public int lengthOfLongestSubstring2(String s) {
+	public int lengthOfLongestSubstring3(String s) {
 		if (s.length() == 0) return 0;
 		HashMap<Character, Integer> map = new HashMap<Character, Integer>();
 		int l = 0, r = 0, maxLen = 0, n = s.length();
@@ -104,93 +156,108 @@ public class SlidingWindowPatterns {
 		return maxLen;
 	}
 
-	// Similar to previous
-	public int lengthOfLongestSubstring3(String s) {
-		int l = 0, r = 0, maxLen = 0, n = s.length(), counter = 0;
-		int[] countArr = new int[128];
-		while (r < n) {
-			char ch = s.charAt(r++);
-			if (countArr[ch]++ > 0) counter++;
-			while (counter > 0 && l < n) if (countArr[s.charAt(l++)]-- > 1) counter--;
-
-			maxLen = Math.max(maxLen, r - l);
-		}
-		return maxLen;
-	}
-
-	// Approach2: Sliding Window solution using map to store the data
-	public int lengthOfLongestSubstring4(String s) {
-		if (s.length() == 0) return 0;
-		HashMap<Character, Integer> map = new HashMap<Character, Integer>();
-		int l = 0, r = 0, maxLen = 0, n = s.length();
-		while (r < n) {
-			char ch = s.charAt(r);
-			if (!map.containsKey(ch)) {
-				map.put(ch, r);
-				r++;
-				maxLen = Math.max(maxLen, r - l);
-			} else {
-				l = Math.max(l, map.get(ch) + 1); // If char already present, move left index to repeating char
-				map.remove(ch);
-			}
-		}
-		return maxLen;
-	}
-
 	/*
 	 * Longest Substring with At Most Two Distinct Characters:
 	 * Given a string, find the longest substring that contains only two unique characters. For example, given "abcbbbbcccbdddadacb",
 	 * the longest substring that contains 2 unique character is "bcbbbbcccb".
 	 */
+	//Follows the pattern
 	public int lengthOfLongestSubstringTwoDistinct(String s) {
-		int max = 0, start = 0;
-		HashMap<Character, Integer> map = new HashMap<Character, Integer>();
+		int[] hash = new int[128];
+		int l = 0, r = 0, maxLen = 0, counter = 0;
 
-		for (int i = 0; i < s.length(); i++) {
-			char ch = s.charAt(i);
+		while (r < s.length()) {
+			char c1 = s.charAt(r);
+			if (hash[c1] == 0) counter++;
+			hash[c1]++;
 
-			map.put(ch, map.getOrDefault(ch, 0) + 1);
+			while (counter > 2) {
+				char c2 = s.charAt(l);
+				if (hash[c2] == 1) counter--;
+				hash[c2]--;
+				l++;
+			}
+
+			maxLen = Math.max(maxLen, r - l + 1);
+			r++;
+		}
+
+		return maxLen;
+	}
+
+	public int lengthOfLongestSubstringTwoDistinct2(String s) {
+		int max = 0, l = 0, r = 0, n = s.length();
+		HashMap<Character, Integer> map = new HashMap<>();
+
+		for (r = 0; r < n; r++) {
+			char c1 = s.charAt(r);
+
+			map.put(c1, map.getOrDefault(c1, 0) + 1);
 			if (map.size() > 2) {
-				max = Math.max(max, i - start);
+				max = Math.max(max, r - l);
 
 				while (map.size() > 2) {
-					char t = s.charAt(start);
+					char t = s.charAt(l);
 					int count = map.get(t);
 					if (count > 1) {
 						map.put(t, count - 1);
 					} else {
 						map.remove(t);
 					}
-					start++;
+					l++;
 				}
 			}
 		}
 
-		return Math.max(max, s.length() - start);
+		return Math.max(max, n - l);
 	}
 
 	/*
 	 * Longest Substring with At Most K Distinct Characters:
 	 */
-	public int lengthOfLongestSubstringKDistinct(String s, int k) {
-		int result = 0;
-		int i = 0;
-		HashMap<Character, Integer> map = new HashMap<Character, Integer>();
-		for (int j = 0; j < s.length(); j++) {
-			char ch = s.charAt(i);
+	//Follows the pattern
+	public int lengthOfLongestSubstringKDistinct1(String s) {
+		int[] hash = new int[128];
+		int l = 0, r = 0, maxLen = 0, counter = 0;
+
+		while (r < s.length()) {
+			char c1 = s.charAt(r);
+			if (hash[c1] == 0) counter++;
+			hash[c1]++;
+
+			while (counter > 2) {
+				char c2 = s.charAt(l);
+				if (hash[c2] == 1) counter--;
+				hash[c2]--;
+				l++;
+			}
+
+			maxLen = Math.max(maxLen, r - l + 1);
+			r++;
+		}
+
+		return maxLen;
+	}
+
+	public int lengthOfLongestSubstringKDistinct2(String s, int k) {
+		int result = 0, l = 0;
+		HashMap<Character, Integer> map = new HashMap<>();
+		for (int r = 0; r < s.length(); r++) {
+			char ch = s.charAt(l);
 			map.put(ch, map.getOrDefault(ch, 0) + 1);
+
 			if (map.size() <= k) {
-				result = Math.max(result, j - i + 1);
+				result = Math.max(result, r - l + 1);
 			} else {
 				while (map.size() > k) {
-					char l = s.charAt(i);
-					int count = map.get(l);
+					char c = s.charAt(l);
+					int count = map.get(c);
 					if (count == 1) {
-						map.remove(l);
+						map.remove(c);
 					} else {
-						map.put(l, count - 1);
+						map.put(c, count - 1);
 					}
-					i++;
+					l++;
 				}
 			}
 		}
@@ -204,7 +271,35 @@ public class SlidingWindowPatterns {
 	 * Example 1: Input: s: "cbaebabacd" p: "abc" Output: [0, 6] Explanation: The substring with start index = 0 is "cba", 
 	 * which is an anagram of "abc". The substring with start index = 6 is "bac", which is an anagram of "abc".
 	 */
-	public List<Integer> findAnagrams(String s, String p) {
+	//Follows the pattern
+	public List<Integer> findAnagrams1(String s, String p) {
+		int l = 0, r = 0, counter = p.length();
+		int[] hash = new int[128];
+		List<Integer> result = new ArrayList<>();
+
+		for (char ch : p.toCharArray())
+			hash[ch]++;
+
+		while (r < s.length()) {
+			char c1 = s.charAt(r);
+			if (hash[c1] > 0) counter--;
+			hash[c1]--;
+
+			while (counter == 0) {
+				if ((r - l + 1) == p.length()) result.add(l);
+
+				char c2 = s.charAt(l);
+				if (hash[c2] == 0) counter++;
+				hash[c2]++;
+				l++;
+			}
+			r++;
+		}
+
+		return result;
+	}
+
+	public List<Integer> findAnagrams2(String s, String p) {
 		int[] hash = new int[26];
 		for (char c : p.toCharArray())
 			hash[c - 'a']++;
@@ -392,10 +487,9 @@ public class SlidingWindowPatterns {
 
 		int sum = 0, maxSum = Integer.MIN_VALUE;
 		for (int num : nums) {
-			sum += num;
+			sum = Math.max(sum + num, num);
 			maxSum = Math.max(sum, maxSum);
-			if (sum < 0) sum = 0;
-
+			//if(sum < 0) sum = 0;
 		}
 		return maxSum;
 	}
@@ -453,7 +547,10 @@ public class SlidingWindowPatterns {
 		while (r < nums.length) {
 			if (nums[r] == 0) zero++;
 
-			while (zero > k) if (nums[l++] == 0) zero--;
+			while (zero > k) {
+				if (nums[l] == 0) zero--;
+				l++;
+			}
 
 			max = Math.max(max, r - l + 1);
 			r++;
@@ -467,10 +564,12 @@ public class SlidingWindowPatterns {
 	public int findMaxConsecutiveOnesII2(int[] nums) {
 		int max = 0, k = 1; // flip at most k zero
 		Queue<Integer> zeroIndex = new LinkedList<>();
-		for (int l = 0, h = 0; h < nums.length; h++) {
-			if (nums[h] == 0) zeroIndex.offer(h);
-			if (zeroIndex.size() > k) l = zeroIndex.poll() + 1;
-			max = Math.max(max, h - l + 1);
+		for (int l = 0, r = 0; r < nums.length; r++) {
+			if (nums[r] == 0) zeroIndex.offer(r);
+			if (zeroIndex.size() > k) {
+				l = zeroIndex.poll() + 1;
+			}
+			max = Math.max(max, r - l + 1);
 		}
 		return max;
 	}
@@ -488,12 +587,11 @@ public class SlidingWindowPatterns {
 		int sum = 0;
 		double maxAvg = Integer.MIN_VALUE;
 		for (int i = 0; i < arr.length; i++) {
-			if (i < k) sum += arr[i];
-			else {
+			if (i >= k) {
 				maxAvg = Math.max(maxAvg, (double) sum / k);
 				sum -= arr[i - k];
-				sum += arr[i];
 			}
+			sum += arr[i];
 		}
 
 		return Math.max(maxAvg, (double) sum / k);
@@ -505,47 +603,48 @@ public class SlidingWindowPatterns {
 	 */
 	public void countDistinct(int A[], int k, int n) {
 		Map<Integer, Integer> map = new HashMap<>(); // Number, count
-		Integer value;
 		for (int i = 0; i < n; i++) {
 			if (i >= k) {
-				value = map.get(A[i - k]);
-				if (value > 1) map.put(A[i - k], --value);
+				int val = map.get(A[i - k]);
+				if (val > 1) map.put(A[i - k], --val);
 				else map.remove(A[i - k]);
 			}
 
-			value = map.get(A[i]);
-			if (value == null) value = 0;
-			map.put(A[i], ++value);
+			map.put(A[i], map.getOrDefault(A[i], 0) + 1);
 
 			if (i >= k - 1) System.out.print(map.size() + " ");
 		}
-
 	}
 
 	//TODO: Moving Average from Data Stream - Queue/Array - Design
 
-	/*********************** 3.Apply prefix sum logic ***********************/
+	/*********************** 3.HashMap+ Prefix sum logic ***********************/
 
 	/**
 	 * Sliding Window - Prefix Sum Patterns If we consider all prefix sums, we can notice that there is
 	 * a subarray with 0 sum when : 1) Either a prefix sum repeats or 2) Or prefix sum becomes 0.
+	 * 
+	 * Hashmap + Prefix sum Patterns uses Hashmap<sum[0,i - 1], frequency>
 	 */
-	/* Subarray Sum Equals K/Zero Sum Subarrays
+	/* Subarray Sum Equals K/Zero Sum Subarrays:
 	 * Given an array of integers and an integer k, you need to find the total number of continuous subarrays whose sum
 	 * equals to k. Example 1: Input:nums = [1,1,1], k = 2 Output: 2
 	 */
 	public int subarraySum(int[] nums, int k) {
 		int n = nums.length, count = 0, sum = 0;
-		Map<Integer, Integer> map = new HashMap<>(); // key-sum & val -count(number of continuous subarrays with sum k)
-		map.put(0, 1); // Initialize with count 1;
+		//Hashmap: Key: sum[0,i - 1]; Val: frequency
+		Map<Integer, Integer> map = new HashMap<>();
+		//the initial entry preSum.put(0, 1) can be exchanged with statement: if (sum == k) count++; inside for loop
+		map.put(0, 1);
 		for (int i = 0; i < n; i++) {
 			sum += nums[i];
-			if (map.containsKey(sum - k)) count += map.get(sum - k);
+			if (map.containsKey(sum - k)) {
+				count += map.get(sum - k);
+			}
 
 			map.put(sum, map.getOrDefault(sum, 0) + 1);
 		}
 		return count;
-
 	}
 
 	/*
@@ -553,21 +652,16 @@ public class SlidingWindowPatterns {
 	 * You are given an array A of size N. You need to print the total count of sub-arrays having their sum equal to 0
 	 */
 	public static int zeroSumArrays(int[] a) {
-		int n = a.length;
 		HashMap<Integer, Integer> map = new HashMap<>();
-
 		map.put(0, 1);
-		int count = 0, sum = 0;
-		Integer value = null;
+		int count = 0, sum = 0, n = a.length;
 		for (int i = 0; i < n; i++) {
 			sum += a[i];
-			value = map.get(sum);
-			if (value != null) {
-				count += value;
-				map.put(sum, value + 1);
-			} else {
-				map.put(sum, 1);
+			if (map.containsKey(sum)) { //Its similar to prev prob, here k = 0
+				count += map.get(sum);
 			}
+
+			map.put(sum, map.getOrDefault(sum, 0) + 1);
 		}
 		return count;
 	}
@@ -576,19 +670,20 @@ public class SlidingWindowPatterns {
 	 * Zero Sum Subarray:
 	 */
 	public int[] zeroSumSubArray(int[] arr) {
-		Map<Integer, Integer> sumMap = new HashMap<>();// Sum, Index
-
+		//Hashmap: Key: sum[0,i - 1]; Val: index
+		Map<Integer, Integer> map = new HashMap<>();
+		map.put(0, -1);
 		int sum = 0;
 		for (int i = 0; i < arr.length; i++) {
 			sum += arr[i];
-			if (sumMap.containsKey(sum)) {
-				int oldIndex = sumMap.get(sum);
-				return Arrays.copyOfRange(arr, oldIndex + 1, i + 1); // Sum range from next index of sum to curr index
-			} else {
-				sumMap.put(sum, i);
+			if (map.containsKey(sum)) {
+				int oldIndex = map.get(sum);
+				// Sum range from next index of sum to curr index
+				return Arrays.copyOfRange(arr, oldIndex + 1, i + 1);
 			}
-		}
 
+			map.put(sum, i);
+		}
 		return null;
 	}
 
@@ -599,18 +694,21 @@ public class SlidingWindowPatterns {
 	 * Given an array nums and a target value k, find the maximum length of a subarray that sums to k. If there isn't one, return 0 instead.
 	 */
 	public int maxSubArrayLen(int[] nums, int k) {
-		HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
 		int max = 0, sum = 0;
-
+		//Hashmap: Key: sum[0,i - 1]; Val: index
+		HashMap<Integer, Integer> map = new HashMap<>();
+		map.put(0, -1); //Use this one or below commented -> if (sum == k) 
 		for (int i = 0; i < nums.length; i++) {
 			sum += nums[i];
-			if (sum == k) max = Math.max(max, i + 1);
-			int diff = sum - k;
-			if (map.containsKey(diff)) max = Math.max(max, i - map.get(diff));
-			if (!map.containsKey(sum)) map.put(sum, i);
-
+			//if (sum == k) max = Math.max(max, i + 1);
+			if (map.containsKey(sum - k)) {
+				max = Math.max(max, i - map.get(sum - k));
+			}
+			//This condition is not required for normal scenario, but here it needs to find the max size subarray
+			if (!map.containsKey(sum)) {
+				map.put(sum, i);
+			}
 		}
-
 		return max;
 	}
 
@@ -697,12 +795,9 @@ public class SlidingWindowPatterns {
 				result[i - k] = sum; // or initialize index=0 and increment->result[index++]
 				sum -= arr[i - k];
 			}
-
 			if (i == n) break;
-
 			sum += arr[i];
 		}
-
 		return result;
 	}
 

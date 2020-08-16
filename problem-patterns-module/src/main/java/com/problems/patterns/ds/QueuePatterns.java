@@ -11,17 +11,19 @@ public class QueuePatterns {
 	/********************* Type1: Queue Simple Problems ****************/
 
 	//Circular tour/Gas Station - Circular Queue & Greed Alg
-	/* Greedy Algorithm: 
-	*The algorithm is pretty easy to understand. Imagine we take a tour around this circle, the only condition that we can complete this trip is to have more fuel provided than costed in total. That's what the first loop does.
-	
-	If we do have more fuel provided than costed, that means we can always find a start point around this circle that we could complete the journey with an empty tank. Hence, we check from the beginning of the array, if we can gain more fuel at the current station, we will maintain the start point, else, which means we will burn out of oil before reaching to the next station, we will start over at the next station.
-	*/
+	/* There are N gas stations along a circular route, where the amount of gas at station i is gas[i].
+	 * You have a car with an unlimited gas tank and it costs cost[i] of gas to travel from station i to its next station (i+1). 
+	 * You begin the journey with an empty tank at one of the gas stations.
+	 * Return the starting gas station's index if you can travel around the circuit once in the clockwise direction, otherwise return -1.
+	 * 
+	 * Note: gas[i] -> Amount of gas in the gas station;
+	 *       cost[i] -> Amount of gas required to travel from ith station to i+1th station
+	 */
 	public int canCompleteCircuit1(int[] gas, int[] cost) {
 		int n = gas.length, tank = 0;
 		for (int i = 0; i < n; i++)
 			tank += gas[i] - cost[i];
-		if (tank < 0)
-			return -1;
+		if (tank < 0) return -1;
 
 		int rem = 0, start = 0;
 		for (int i = 0; i < n; i++) {
@@ -38,15 +40,13 @@ public class QueuePatterns {
 	public int canCompleteCircuit(int[] gas, int[] cost) {
 		int n = gas.length, front = 0, rear = 1;
 		int rem = gas[front] - cost[front];
-		if (n == 1)
-			return rem < 0 ? -1 : 0;
+		if (n == 1) return rem < 0 ? -1 : 0;
 		while (front != rear || rem < 0) {
 			//Move front ptr
 			while (front != rear && rem < 0) {
 				rem -= gas[front] - cost[front];
 				front = (front + 1) % n;
-				if (front == 0)
-					return -1;
+				if (front == 0) return -1;
 			}
 			rem += gas[rear] - cost[rear];
 			rear = (rear + 1) % n;
@@ -56,8 +56,7 @@ public class QueuePatterns {
 
 	//First non-repeating character in a stream
 	public void firstNonRepeatingChar(char[] ch) {
-		if (ch.length == 0)
-			return;
+		if (ch.length == 0) return;
 		Queue<Character> queue = new LinkedList<>();
 		int[] count = new int[26];
 		for (int i = 0; i < ch.length; i++) {
@@ -74,12 +73,12 @@ public class QueuePatterns {
 					break;
 				}
 			}
-			if (queue.isEmpty())
-				System.out.print("-1" + " ");
+			if (queue.isEmpty()) System.out.print("-1" + " ");
 		}
 	}
 
 	//LRU Cache
+
 	//LFU Cache 
 
 	/********************* Type1: Monotonic Queue Problems ****************/
@@ -120,11 +119,10 @@ public class QueuePatterns {
 	 * Solution:
 	 * 	1. BruteForce: O(nk)
 	 *  2. Balanced BST(TreeMap): O(nlogk)
-	 *  3.Sliding Window: O(n)
+	 *  3. Sliding Window: O(n)
 	 */
 	public int[] maxSlidingWindow(int[] nums, int k) {
-		if (nums.length == 0 || k > nums.length)
-			return new int[0];
+		if (nums.length == 0 || k > nums.length) return new int[0];
 
 		int n = nums.length;
 		int[] result = new int[n - k + 1];
@@ -133,17 +131,14 @@ public class QueuePatterns {
 
 		for (int i = 0; i < n; i++) {
 			//If 'i' reaches the size k, then Remove the top element 
-			if (!deque.isEmpty() && i - deque.peekFirst() == k)
-				deque.removeFirst();
+			if (!deque.isEmpty() && i - deque.peekFirst() == k) deque.removeFirst();
 
 			//Keep removing the smaller element from the last in deque
-			while (!deque.isEmpty() && nums[i] > nums[deque.peekLast()])
-				deque.removeLast();
+			while (!deque.isEmpty() && nums[i] > nums[deque.peekLast()]) deque.removeLast();
 
 			deque.addLast(i);
 
-			if (i + 1 >= k)
-				result[i - k + 1] = nums[deque.peek()];
+			if (i + 1 >= k) result[i - k + 1] = nums[deque.peek()];
 		}
 
 		return result;
@@ -159,8 +154,7 @@ public class QueuePatterns {
 	 *  		- max denotes the largest integer in subArr
 	 *   		- min denotes the smallest integer in subArr*/
 	int maxMin(int k, int[] nums) {
-		if (nums.length == 0 || k > nums.length)
-			return 0;
+		if (nums.length == 0 || k > nums.length) return 0;
 		Arrays.sort(nums);
 
 		int n = nums.length, maxDiff = Integer.MAX_VALUE;
@@ -171,21 +165,16 @@ public class QueuePatterns {
 
 		for (int i = 0; i < n; i++) {
 			// If 'i' reaches the size k, then Remove the top element
-			if (!minDeque.isEmpty() && i - minDeque.peek() == k)
-				minDeque.poll();
-			if (!maxDeque.isEmpty() && i - maxDeque.peek() == k)
-				maxDeque.poll();
+			if (!minDeque.isEmpty() && i - minDeque.peek() == k) minDeque.poll();
+			if (!maxDeque.isEmpty() && i - maxDeque.peek() == k) maxDeque.poll();
 
 			// Keep removing the smaller element from the last in deque
-			while (!minDeque.isEmpty() && nums[i] < nums[minDeque.peekLast()])
-				minDeque.removeLast();
-			while (!maxDeque.isEmpty() && nums[i] > nums[maxDeque.peekLast()])
-				maxDeque.removeLast();
+			while (!minDeque.isEmpty() && nums[i] < nums[minDeque.peekLast()]) minDeque.removeLast();
+			while (!maxDeque.isEmpty() && nums[i] > nums[maxDeque.peekLast()]) maxDeque.removeLast();
 			minDeque.addLast(i);
 			maxDeque.addLast(i);
 
-			if (i + 1 >= k)
-				maxDiff = Math.min(maxDiff, nums[maxDeque.peek()] - nums[minDeque.peek()]);
+			if (i + 1 >= k) maxDiff = Math.min(maxDiff, nums[maxDeque.peek()] - nums[minDeque.peek()]);
 		}
 		return maxDiff;
 	}
@@ -198,10 +187,10 @@ public class QueuePatterns {
 			B[i + 1] = B[i] + A[i];
 		Deque<Integer> d = new ArrayDeque<>();
 		for (int i = 0; i < N + 1; i++) {
-			while (d.size() > 0 && B[i] - B[d.getFirst()] >= K)
+			while (d.size() > 0 && B[i] - B[d.getFirst()] >= K) {
 				res = Math.min(res, i - d.pollFirst());
-			while (d.size() > 0 && B[i] <= B[d.getLast()])
-				d.pollLast();
+			}
+			while (d.size() > 0 && B[i] <= B[d.getLast()]) d.pollLast();
 			d.addLast(i);
 		}
 		return res <= N ? res : -1;

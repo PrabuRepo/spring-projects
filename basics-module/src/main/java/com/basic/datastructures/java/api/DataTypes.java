@@ -43,6 +43,7 @@ public class DataTypes {
 		Character.isLowerCase('a');
 		Character.isUpperCase('A');
 		Character.isWhitespace(' ');
+		int val = Character.getNumericValue('5'); // '5' - '0'
 		char ch = Character.toLowerCase('A');
 		ch = Character.toUpperCase('a');
 		String str = Character.toString(ch);

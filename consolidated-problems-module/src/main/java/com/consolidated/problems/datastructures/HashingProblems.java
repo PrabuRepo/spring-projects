@@ -2,7 +2,6 @@ package com.consolidated.problems.datastructures;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -737,71 +736,6 @@ public class HashingProblems {
 		return maxLen;
 	}
 
-	/*
-	 * Longest Substring with At Most Two Distinct Characters:
-	 * Given a string, find the longest substring that contains only two unique characters. For example, given "abcbbbbcccbdddadacb",
-	 * the longest substring that contains 2 unique character is "bcbbbbcccb".
-	 */
-	public int lengthOfLongestSubstringTwoDistinct(String s) {
-		int max = 0, start = 0;
-		HashMap<Character, Integer> map = new HashMap<Character, Integer>();
-
-		for (int i = 0; i < s.length(); i++) {
-			char ch = s.charAt(i);
-
-			map.put(ch, map.getOrDefault(ch, 0) + 1);
-			if (map.size() > 2) {
-				max = Math.max(max, i - start);
-
-				while (map.size() > 2) {
-					char t = s.charAt(start);
-					int count = map.get(t);
-					if (count > 1) {
-						map.put(t, count - 1);
-					} else {
-						map.remove(t);
-					}
-					start++;
-				}
-			}
-		}
-
-		return Math.max(max, s.length() - start);
-	}
-
-	/*
-	 * Longest Substring with At Most K Distinct Characters:
-	 */
-	public int lengthOfLongestSubstringKDistinct(String s, int k) {
-		int result = 0;
-		int i = 0;
-		HashMap<Character, Integer> map = new HashMap<Character, Integer>();
-
-		for (int j = 0; j < s.length(); j++) {
-			char ch = s.charAt(i);
-
-			map.put(ch, map.getOrDefault(ch, 0) + 1);
-
-			if (map.size() <= k) {
-				result = Math.max(result, j - i + 1);
-			} else {
-				while (map.size() > k) {
-					char l = s.charAt(i);
-					int count = map.get(l);
-					if (count == 1) {
-						map.remove(l);
-					} else {
-						map.put(l, count - 1);
-					}
-					i++;
-				}
-			}
-
-		}
-
-		return result;
-	}
-
 	/*Find All Anagrams in a String/Anagram Pattern Search:
 	 * Given a string s and a non-empty string p, find all the start indices of p's anagrams in s. Strings consists of
 	 * lowercase English letters only and the length of both strings s and p will not be larger than 20,100. The order
@@ -1273,42 +1207,6 @@ public class HashingProblems {
 			if (i >= k - 1) System.out.print(map.size() + " ");
 		}
 
-	}
-
-	/* Sliding Window Maximum/Maximum of all subarrays of size k:
-	 * Given an array nums, there is a sliding window of size k which is moving from the very left of the array to the
-	 * very right. You can only see the k numbers in the window. Each time the sliding window moves right by one
-	 * position. Return the max sliding window.
-	 * Input: nums = [1,3,-1,-3,5,3,6,7], and k = 3; Output: [3,3,5,5,6,7] 
-	 * 
-	 * Solution:
-	 * 	1. BruteForce: O(nk)
-	 *  2. Balanced BST(TreeMap): O(nlogk)
-	 *  3.Sliding Window: O(n)
-	 */
-	public int[] maxSlidingWindow(int[] nums, int k) {
-		if (nums.length == 0 || k > nums.length) return new int[0];
-
-		int n = nums.length;
-		int[] result = new int[n - k + 1];
-		// Queue to store the index of the elements; Max element index should be retained in the deque front.
-		Deque<Integer> deque = new LinkedList<>();
-
-		for (int i = 0; i <= n; i++) {
-			if (i >= k) result[i - k] = nums[deque.peek()]; // or initialize index=0 and increment->result[index++]
-
-			if (i == n) break;
-
-			// If 'i' reaches the size k, then Remove the top element
-			if (!deque.isEmpty() && i - deque.peek() == k) deque.poll();
-
-			// Keep removing the smaller element from the last in deque
-			while (!deque.isEmpty() && nums[i] > nums[deque.peekLast()]) deque.removeLast();
-
-			deque.addLast(i);
-		}
-
-		return result;
 	}
 
 	/*
