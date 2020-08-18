@@ -43,13 +43,13 @@ public class BitwiseXorPatterns {
 		int sumOfN = sum(n);
 
 		// 2.Sum of 2 missing numbers
-		int sum = 0;
+		int currSum = 0;
 		for (int a : arr) {
-			sum += a;
+			currSum += a;
 		}
 
 		// 3. Sum of two missing numbers
-		int sumOfMissingNum = sumOfN - sum;
+		int sumOfMissingNum = sumOfN - currSum;
 
 		// 4. Average of 2 missing numbers
 		int avgOfMissingElem = sumOfMissingNum / 2;
@@ -60,8 +60,7 @@ public class BitwiseXorPatterns {
 		// 6.Sum of array elements less than or equal to average
 		int sumBeforeAvg = 0;
 		for (int a : arr)
-			if (a <= avgOfMissingElem)
-				sumBeforeAvg += a;
+			if (a <= avgOfMissingElem) sumBeforeAvg += a;
 
 		// First missing number
 		result[0] = sumOfAvg - sumBeforeAvg;
@@ -80,14 +79,17 @@ public class BitwiseXorPatterns {
 		int n = arr.length + 2;
 
 		int xor = 0;
-		/* 1.Find XOR of all array elements and natural numbers from 1 to n; 
-		  Note: Result is xor of two missing numbers; one element should be less than other. */
+		/* 1.Find XOR of input elements and natural numbers from 1 to n; 
+		 * Note: Result is xor of two missing numbers, which is equal to 
+		 * sumOfMissingNum(sumOfN - currSum) in the prev one;
+		 */
 		for (int i = 1; i <= n; i++)
 			xor ^= i;
 		for (int a : arr)
 			xor ^= a;
 
-		/* Note: A bit is set in xor only if corresponding bits in X and Y are different. 
+		/* 
+		 * Note: A bit is set in xor only if corresponding bits in X and Y are different. 
 		 * Let us consider the rightmost set bit in XOR; which is used to split the elements into 2 sets.   
 		 */
 
@@ -101,16 +103,12 @@ public class BitwiseXorPatterns {
 		 * 
 		 */
 		for (int i = 1; i <= n; i++) {
-			if ((i & rightMostSetXor) > 0)
-				result[0] ^= i;
-			else
-				result[1] ^= i;
+			if ((i & rightMostSetXor) > 0) result[0] ^= i;
+			else result[1] ^= i;
 		}
 		for (int a : arr) {
-			if ((a & rightMostSetXor) > 0)
-				result[0] ^= a;
-			else
-				result[1] ^= a;
+			if ((a & rightMostSetXor) > 0) result[0] ^= a;
+			else result[1] ^= a;
 		}
 
 		return result;
@@ -136,27 +134,20 @@ public class BitwiseXorPatterns {
 		// 4. Average of 2 missing numbers
 		int avgOfMissingElem = sumOfMissingNum / 2;
 
-		int totalLeftXor = 0, arrLeftXor = 0,
-				totalRightXor = 0, arrRightXor = 0;
-
 		/* 5.XOR of all the elements(1 to n and arr) which is less than qual to avgOfMissingElem. It gives one missing element
 		 *   XOR of all the elements(1 to n and arr) which is greater than avgOfMissingElem. It gives another missing element
+		 *   result[0] denotes missing element less than avgOfMissingElem
+		 *   result[1] denotes missing element greater than avgOfMissingElem
 		 */
 		for (int i = 1; i <= n; i++) {
-			if (i <= avgOfMissingElem)
-				totalLeftXor ^= i;
-			else
-				totalRightXor ^= i;
+			if (i <= avgOfMissingElem) result[0] ^= i;
+			else result[1] ^= i;
 		}
 		for (int a : arr) {
-			if (a <= avgOfMissingElem)
-				arrLeftXor ^= a;
-			else
-				arrRightXor ^= a;
+			if (a <= avgOfMissingElem) result[0] ^= a;
+			else result[1] ^= a;
 		}
 
-		result[0] = totalLeftXor ^ arrLeftXor;
-		result[1] = totalRightXor ^ arrRightXor;
 		return result;
 	}
 
@@ -198,12 +189,11 @@ public class BitwiseXorPatterns {
 	 * O(1) extra space.
 	 * Assume array contain elements in the range 0 to 63.
 	 */
-	public static void getEvenOccurrenceInRange1(int arr[],
-			int n) {
+	public static void getEvenOccurrenceInRange1(int arr[], int n) {
 		int xor = 0;
 		List<Integer> result = new ArrayList<>();
 
-		// Right shift 1 by value of each element in the array and take XOR of all the items
+		// Left shift 1 by value of each element in the array and take XOR of all the items
 		for (int a : arr) {
 			xor ^= (1 << a);
 		}
@@ -219,8 +209,7 @@ public class BitwiseXorPatterns {
 			}
 		}
 
-		result.stream()
-				.forEach(k -> System.out.print(k + " "));
+		result.stream().forEach(k -> System.out.print(k + " "));
 	}
 
 }

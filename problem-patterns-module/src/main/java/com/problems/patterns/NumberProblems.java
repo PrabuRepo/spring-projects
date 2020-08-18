@@ -10,7 +10,7 @@ import java.util.List;
 import com.common.utilities.Utils;
 
 /* 
- * Number Problems: Its collection of Cyclic Sort, Marker Approach, Bitwise XOR, Floyd's Algorithm(Fast & Slow Ptr), some Binary Search alg problems
+ * Number Problems: Its collection of Cyclic Sort, Marker Approach, Bitwise XOR, Floyd's Algorithm(Fast & Slow Ptr), Binary Search alg problems
  *  
  */
 
@@ -31,8 +31,7 @@ public class NumberProblems {
 	public int findDuplicate1(int[] nums) {
 		for (int i = 0; i < nums.length; i++) {
 			for (int j = i + 1; j < nums.length; j++) {
-				if (nums[i] == nums[j])
-					return nums[i];
+				if (nums[i] == nums[j]) return nums[i];
 			}
 		}
 		return -1;
@@ -42,8 +41,7 @@ public class NumberProblems {
 	public int findDuplicate2(int[] nums) {
 		Arrays.sort(nums);
 		for (int i = 1; i < nums.length; i++)
-			if (nums[i] == nums[i - 1])
-				return nums[i];
+			if (nums[i] == nums[i - 1]) return nums[i];
 		return -1;
 	}
 
@@ -51,8 +49,7 @@ public class NumberProblems {
 	public int findDuplicate3(int[] nums) {
 		HashSet<Integer> set = new HashSet<>();
 		for (int i = 0; i < nums.length; i++) {
-			if (set.contains(nums[i]))
-				return nums[i];
+			if (set.contains(nums[i])) return nums[i];
 			set.add(nums[i]);
 		}
 		return -1;
@@ -65,13 +62,10 @@ public class NumberProblems {
 			int mid = (int) (low + (high - low) * 0.5);
 			int cnt = 0;
 			for (int a : nums) {
-				if (a <= mid)
-					++cnt;
+				if (a <= mid) ++cnt;
 			}
-			if (cnt <= mid)
-				low = mid + 1;
-			else
-				high = mid - 1;
+			if (cnt <= mid) low = mid + 1;
+			else high = mid - 1;
 		}
 		return low;
 	}
@@ -107,8 +101,7 @@ public class NumberProblems {
 		}
 		// Reset the original elements
 		for (int i = 0; i < nums.length; i++)
-			if (nums[i] < 0)
-				nums[i] = -nums[i];
+			if (nums[i] < 0) nums[i] = -nums[i];
 		return dupNum;
 	}
 
@@ -152,10 +145,8 @@ public class NumberProblems {
 		List<Integer> result = new ArrayList<>();
 		for (int i = 0; i < nums.length; i++) {
 			int val = Math.abs(nums[i]) - 1;
-			if (nums[val] < 0)
-				result.add(Math.abs(nums[i]));
-			else
-				nums[val] = -nums[val];
+			if (nums[val] < 0) result.add(Math.abs(nums[i]));
+			else nums[val] = -nums[val];
 		}
 		// Reset the original elements
 		for (int i = 0; i < nums.length; i++)
@@ -173,10 +164,8 @@ public class NumberProblems {
 		BitSet bitSet = new BitSet(32000);
 
 		for (int i = 0; i < arr.length; i++) {
-			if (bitSet.get(arr[i] - 1))
-				System.out.println(arr[i] + " ");
-			else
-				bitSet.set(arr[i] - 1);
+			if (bitSet.get(arr[i] - 1)) System.out.println(arr[i] + " ");
+			else bitSet.set(arr[i] - 1);
 		}
 	}
 
@@ -217,10 +206,8 @@ public class NumberProblems {
 		while (l < h) {
 			m = (l + h) / 2;
 			// Modification: Compare m with m element.
-			if (nums[m] > m)
-				h = m;
-			else
-				l = m + 1;
+			if (nums[m] > m) h = m;
+			else l = m + 1;
 		}
 		return l;
 	}
@@ -230,15 +217,12 @@ public class NumberProblems {
 		int i = 0;
 		while (i < n) {
 			int valIndex = nums[i];
-			if (valIndex < n && nums[valIndex] != nums[i])
-				Utils.swap(nums, valIndex, i);
-			else
-				i++;
+			if (valIndex < n && nums[valIndex] != nums[i]) Utils.swap(nums, valIndex, i);
+			else i++;
 		}
 
 		for (i = 0; i < nums.length; i++)
-			if (nums[i] != i)
-				return i;
+			if (nums[i] != i) return i;
 
 		return n;
 	}
@@ -335,8 +319,7 @@ public class NumberProblems {
 		// 6.Sum of array elements less than or equal to average
 		int sumBeforeAvg = 0;
 		for (int a : arr)
-			if (a <= avgOfMissingElem)
-				sumBeforeAvg += a;
+			if (a <= avgOfMissingElem) sumBeforeAvg += a;
 
 		// First missing number
 		result[0] = sumOfAvg - sumBeforeAvg;
@@ -376,16 +359,12 @@ public class NumberProblems {
 		 * 
 		 */
 		for (int i = 1; i <= n; i++) {
-			if ((i & rightMostSetXor) > 0)
-				result[0] ^= i;
-			else
-				result[1] ^= i;
+			if ((i & rightMostSetXor) > 0) result[0] ^= i;
+			else result[1] ^= i;
 		}
 		for (int a : arr) {
-			if ((a & rightMostSetXor) > 0)
-				result[0] ^= a;
-			else
-				result[1] ^= a;
+			if ((a & rightMostSetXor) > 0) result[0] ^= a;
+			else result[1] ^= a;
 		}
 
 		return result;
@@ -417,16 +396,12 @@ public class NumberProblems {
 		 *   XOR of all the elements(1 to n and arr) which is greater than avgOfMissingElem. It gives another missing element
 		 */
 		for (int i = 1; i <= n; i++) {
-			if (i <= avgOfMissingElem)
-				totalLeftXor ^= i;
-			else
-				totalRightXor ^= i;
+			if (i <= avgOfMissingElem) totalLeftXor ^= i;
+			else totalRightXor ^= i;
 		}
 		for (int a : arr) {
-			if (a <= avgOfMissingElem)
-				arrLeftXor ^= a;
-			else
-				arrRightXor ^= a;
+			if (a <= avgOfMissingElem) arrLeftXor ^= a;
+			else arrRightXor ^= a;
 		}
 
 		result[0] = totalLeftXor ^ arrLeftXor;
@@ -461,8 +436,7 @@ public class NumberProblems {
 		}
 
 		for (Integer a : hmap.keySet()) {
-			if (hmap.get(a) % 2 != 0)
-				return a;
+			if (hmap.get(a) % 2 != 0) return a;
 		}
 		return -1;
 	}
@@ -487,10 +461,8 @@ public class NumberProblems {
 		while (l < h) {
 			int m = (l + h) / 2;
 			// Non duplicate present in second half
-			if ((m % 2 == 0 && nums[m] == nums[m + 1]) || (m % 2 == 1 && nums[m - 1] == nums[m]))
-				l = m + 1;
-			else
-				h = m; // Non duplicate present in first half
+			if ((m % 2 == 0 && nums[m] == nums[m + 1]) || (m % 2 == 1 && nums[m - 1] == nums[m])) l = m + 1;
+			else h = m; // Non duplicate present in first half
 		}
 
 		return nums[l];
@@ -504,10 +476,8 @@ public class NumberProblems {
 		int n = nums.length, lo = 0, hi = n / 2;
 		while (lo < hi) {
 			int m = (lo + hi) / 2;
-			if (nums[2 * m] != nums[2 * m + 1])
-				hi = m;
-			else
-				lo = m + 1;
+			if (nums[2 * m] != nums[2 * m + 1]) hi = m;
+			else lo = m + 1;
 		}
 		return nums[2 * lo];
 	}
@@ -527,8 +497,7 @@ public class NumberProblems {
 		}
 
 		for (Integer a : hmap.keySet())
-			if (hmap.get(a) % 2 == 0)
-				return a;
+			if (hmap.get(a) % 2 == 0) return a;
 
 		return -1;
 	}

@@ -49,7 +49,7 @@ public class BTProblems implements TreeProperties, TreePaths {
 	/*
 	 * Approach1: Time Complexity-O(log(n)^2) - A fully completed tree has node
 	 * number: count = 2 ^ h - 1 - Compare left height and right height, if equal,
-	 * use the formular, otherwise recurvisely search left and right at next level -
+	 * use the formular, otherwise recursively search left and right at next level -
 	 * The search pattern is very similar to binary search, the difference of
 	 * heights ethier exsits in left side, or right side - Due to the reason stated
 	 * in point 3, the time complexity is h ^ 2, there is h times for each level,
@@ -209,43 +209,27 @@ public class BTProblems implements TreeProperties, TreePaths {
 
 	@Override
 	public int levelOfNode1(TreeNode root, int data) {
-		return levelOfNode1(root, data, 1);
-	}
-
-	private int levelOfNode1(TreeNode root, int data, int level) {
-		if (root == null) return 0;
-
-		if (root.val == data) return level;
-		int currentLevel = levelOfNode1(root.left, data, level + 1);
-		if (currentLevel == 0) currentLevel = levelOfNode1(root.right, data, level + 1);
-		return currentLevel;
+		return depthOfNode(root, data);
 	}
 
 	@Override
 	public int levelOfNode2(TreeNode root, int element) {
-		int level = 0, count = 0;
-		TreeNode curr = null;
-		if (root != null) {
-			Queue<TreeNode> queue = new LinkedList<>();
-			queue.add(root);
-			level++;
-			if (root.val == element) return level;
-			while (!queue.isEmpty()) {
-				count = queue.size();
-				level++;
-				while (count-- > 0) {
-					curr = queue.remove();
-					if (curr.left != null) {
-						if (curr.left.val == element) return level;
-						queue.add(curr.left);
-					}
-					if (curr.right != null) {
-						if (curr.right.val == element) return level;
-						queue.add(curr.right);
-					}
-				}
+		if (root == null) return 0;
+		int level = 1, count = 0;
+		Queue<TreeNode> queue = new LinkedList<>();
+		queue.add(root);
+		while (!queue.isEmpty()) {
+			count = queue.size();
+			while (count-- > 0) {
+				TreeNode curr = queue.remove();
+				if (curr.val == element) return level;
+
+				if (curr.left != null) queue.add(curr.left);
+				if (curr.right != null) queue.add(curr.right);
 			}
+			level++;
 		}
+
 		return level;
 	}
 
@@ -583,11 +567,14 @@ public class BTProblems implements TreeProperties, TreePaths {
 	private void verticalOrder(TreeNode root, Map<Integer, ArrayList<Integer>> map, int hd) {
 		if (root == null) return;
 		// hd - horizontal distance
-		ArrayList<Integer> list = map.get(hd);
-		if (list == null) list = new ArrayList<>();
 
+		/*ArrayList<Integer> list = map.get(hd);
+		if (list == null) list = new ArrayList<>();
 		list.add(root.val);
-		map.put(hd, list);
+		map.put(hd, list);*/
+
+		map.putIfAbsent(hd, new ArrayList<>());
+		map.get(hd).add(root.val);
 
 		verticalOrder(root.left, map, hd - 1);
 		verticalOrder(root.right, map, hd + 1);
@@ -598,7 +585,7 @@ public class BTProblems implements TreeProperties, TreePaths {
 		TreeMap<Integer, ArrayList<Integer>> map = new TreeMap<>();
 		Queue<QueuePack> queue = new LinkedList<>();
 		QueuePack queuePack;
-		ArrayList<Integer> list = new ArrayList<>();
+		//ArrayList<Integer> list = new ArrayList<>();
 		TreeNode curr;
 		int hd;
 		queue.add(new QueuePack(0, root));
@@ -607,14 +594,15 @@ public class BTProblems implements TreeProperties, TreePaths {
 			hd = queuePack.hd;
 			curr = queuePack.node;
 
-			list = map.get(hd);
+			/*list = map.get(hd);
 			if (list == null) list = new ArrayList<>();
-
 			list.add(curr.val);
-			map.put(hd, list);
+			map.put(hd, list);*/
+
+			map.putIfAbsent(hd, new ArrayList<>());
+			map.get(hd).add(curr.val);
 
 			if (curr.left != null) queue.add(new QueuePack(hd - 1, curr.left));
-
 			if (curr.right != null) queue.add(new QueuePack(hd + 1, curr.right));
 		}
 
@@ -690,10 +678,13 @@ public class BTProblems implements TreeProperties, TreePaths {
 	public void diagonalTraversal(TreeNode root, int dist, Map<Integer, ArrayList<Integer>> map) {
 		if (root == null) return;
 
-		ArrayList<Integer> list = map.get(dist);
+		/*ArrayList<Integer> list = map.get(dist);
 		if (list == null) list = new ArrayList<>();
 		list.add(root.val);
-		map.put(dist, list);
+		map.put(dist, list);*/
+
+		map.putIfAbsent(dist, new ArrayList<>());
+		map.get(dist).add(root.val);
 
 		diagonalTraversal(root.left, dist + 1, map);
 		diagonalTraversal(root.right, dist, map);
@@ -857,8 +848,7 @@ public class BTProblems implements TreeProperties, TreePaths {
 	}
 
 	// Approach3: Time Complexity: O(m+n): Use Preorder traversal and build the
-	// string for the both, finally check the
-	// substring
+	// string for the both, finally check the substring
 	public boolean isSubtree3(TreeNode T1, TreeNode T2) {
 		if (T1 == null) return true;
 		StringBuilder sb1 = new StringBuilder();
@@ -948,7 +938,7 @@ public class BTProblems implements TreeProperties, TreePaths {
 
 		// Remove the visited path from list, if node is not present in the path;
 		if (!flag) path.remove(path.size() - 1);
-		return false;
+		return flag;
 	}
 
 	// Approach-2:

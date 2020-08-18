@@ -50,16 +50,14 @@ public class GraphPatterns {
 		}
 
 		for (int i = 0; i < indegree.length; i++)
-			if (indegree[i] == 0)
-				queue.offer(i);
+			if (indegree[i] == 0) queue.offer(i);
 
 		int count = 0;
 		while (!queue.isEmpty()) {
 			int course = queue.poll();
 			count++;
 			for (int adj : adjList[course])
-				if (--indegree[adj] == 0)
-					queue.offer(adj);
+				if (--indegree[adj] == 0) queue.offer(adj);
 		}
 
 		return count == numCourses;
@@ -78,18 +76,15 @@ public class GraphPatterns {
 		}
 
 		for (int i = 0; i < indegree.length; i++)
-			if (indegree[i] == 0)
-				queue.offer(i);
+			if (indegree[i] == 0) queue.offer(i);
 
 		int count = 0;
 		while (!queue.isEmpty()) {
 			int course = queue.poll();
 			count++;
-			if (graph.get(course) == null)
-				continue;
+			if (graph.get(course) == null) continue;
 			for (int adj : graph.get(course))
-				if (--indegree[adj] == 0)
-					queue.offer(adj);
+				if (--indegree[adj] == 0) queue.offer(adj);
 		}
 
 		return count == numCourses;
@@ -98,8 +93,7 @@ public class GraphPatterns {
 	//DFS Approach - Using LinkedList Array
 	public boolean canFinish21(int noOfcourses, int[][] prerequisites) {
 		// validation
-		if (noOfcourses == 0 || prerequisites.length == 0)
-			return true;
+		if (noOfcourses == 0 || prerequisites.length == 0) return true;
 
 		// build graph
 		LinkedList<Integer>[] graph = new LinkedList[noOfcourses];
@@ -112,8 +106,7 @@ public class GraphPatterns {
 	//DFS Approach - Using Map
 	public boolean canFinish22(int noOfcourses, int[][] preReq) {
 		// validation
-		if (noOfcourses == 0 || preReq.length == 0)
-			return true;
+		if (noOfcourses == 0 || preReq.length == 0) return true;
 
 		// build graph
 		Map<Integer, Set<Integer>> graph = new HashMap<>();
@@ -126,8 +119,7 @@ public class GraphPatterns {
 		Set<Integer> recStack = new HashSet<>();
 		for (int i = 0; i < noOfcourses; i++) {
 			if (!visited.contains(i)) {
-				if (hasCycle(graph, i, visited, recStack))
-					return false;
+				if (hasCycle(graph, i, visited, recStack)) return false;
 			}
 		}
 
@@ -136,11 +128,9 @@ public class GraphPatterns {
 
 	private boolean hasCycle(Map<Integer, Set<Integer>> graph, int v, Set<Integer> visited, Set<Integer> recStack) {
 		// If this condition satisfies, then graph contains cycle
-		if (recStack.contains(v))
-			return true;
+		if (recStack.contains(v)) return true;
 
-		if (visited.contains(v))
-			return false;
+		if (visited.contains(v)) return false;
 
 		// Mark vertex as visited and set recursion stack
 		visited.add(v);
@@ -148,8 +138,7 @@ public class GraphPatterns {
 
 		if (graph.get(v) != null) {
 			for (int adjVertex : graph.get(v)) {
-				if (hasCycle(graph, adjVertex, visited, recStack))
-					return true;
+				if (hasCycle(graph, adjVertex, visited, recStack)) return true;
 			}
 		}
 		// Reset the recursion stack 
@@ -161,8 +150,7 @@ public class GraphPatterns {
 		int noOfEdges = preReq.length, node;
 		for (int i = 0; i < noOfEdges; i++) {
 			node = preReq[i][0];
-			if (graph[node] == null)
-				graph[node] = new LinkedList<>();
+			if (graph[node] == null) graph[node] = new LinkedList<>();
 			graph[node].add(preReq[i][1]);
 		}
 	}
@@ -171,8 +159,7 @@ public class GraphPatterns {
 		boolean[] visited = new boolean[n], recursionStack = new boolean[n];
 		for (int i = 0; i < n; i++) {
 			if (!visited[i]) {
-				if (hasCycle(graph, i, visited, recursionStack))
-					return true;
+				if (hasCycle(graph, i, visited, recursionStack)) return true;
 			}
 		}
 		return false;
@@ -180,11 +167,9 @@ public class GraphPatterns {
 
 	private boolean hasCycle(LinkedList<Integer>[] adjList, int vertex, boolean[] visited, boolean[] recursionStack) {
 		// If this condition satisfies, then graph contains cycle
-		if (recursionStack[vertex])
-			return true;
+		if (recursionStack[vertex]) return true;
 
-		if (visited[vertex])
-			return false;
+		if (visited[vertex]) return false;
 
 		// Mark vertex as visited and set recursion stack
 		visited[vertex] = true;
@@ -194,8 +179,7 @@ public class GraphPatterns {
 			ListIterator<Integer> iter = adjList[vertex].listIterator();
 			while (iter.hasNext()) {
 				int adjVertex = iter.next();
-				if (hasCycle(adjList, adjVertex, visited, recursionStack))
-					return true;
+				if (hasCycle(adjList, adjVertex, visited, recursionStack)) return true;
 			}
 		}
 		// Reset the recursion stack array
@@ -209,8 +193,7 @@ public class GraphPatterns {
 	//BFS Solution: Time: O(V+E) and Space: O(V+E)
 	public int[] findOrder(int n, int[][] prereq) {
 		//n - no of courses
-		if (n == 0)
-			return null;
+		if (n == 0) return null;
 		Map<Integer, Set<Integer>> graph = new HashMap<>();
 		Queue<Integer> queue = new LinkedList<Integer>();
 		int[] indegree = new int[n], order = new int[n];
@@ -232,11 +215,9 @@ public class GraphPatterns {
 		while (!queue.isEmpty()) {
 			int v = queue.poll();
 			order[index++] = v;
-			if (graph.get(v) == null)
-				continue;
+			if (graph.get(v) == null) continue;
 			for (int adjVertex : graph.get(v)) {
-				if (--indegree[adjVertex] == 0)
-					queue.add(adjVertex);
+				if (--indegree[adjVertex] == 0) queue.add(adjVertex);
 			}
 		}
 
@@ -258,8 +239,7 @@ public class GraphPatterns {
 	// Using DFS, but remove the visted data from the priority queue
 	public void reconstructItinerary(String s, Map<String, PriorityQueue<String>> map, LinkedList<String> result) {
 		PriorityQueue<String> queue = map.get(s);
-		while (queue != null && !queue.isEmpty())
-			reconstructItinerary(queue.poll(), map, result);
+		while (queue != null && !queue.isEmpty()) reconstructItinerary(queue.poll(), map, result);
 		result.addFirst(s);
 	}
 
@@ -306,8 +286,7 @@ public class GraphPatterns {
 	private String topoSortBFS(Map<Character, Set<Character>> graph, Map<Character, Integer> inDegree) {
 		Queue<Character> queue = new LinkedList<>();
 		for (char c : inDegree.keySet()) { // Build queue with item of inDegree==0: means no edge points towards it.
-			if (inDegree.get(c) == 0)
-				queue.offer(c);
+			if (inDegree.get(c) == 0) queue.offer(c);
 		}
 
 		StringBuffer sb = new StringBuffer();
@@ -316,20 +295,17 @@ public class GraphPatterns {
 			sb.append(c);
 			for (char edgeNode : graph.get(c)) { // reduce edge degrees count since node:graph.get(c) has been processed
 				inDegree.put(edgeNode, inDegree.get(edgeNode) - 1);
-				if (inDegree.get(edgeNode) == 0)
-					queue.offer(edgeNode);
+				if (inDegree.get(edgeNode) == 0) queue.offer(edgeNode);
 			}
 		}
 
-		if (sb.length() != graph.size())
-			return "";
+		if (sb.length() != graph.size()) return "";
 		return sb.toString();
 	}
 
 	//Alien Order using DFS algorithm	
 	public String alienOrder2(String[] words) {
-		if (words == null || words.length == 0)
-			return "";
+		if (words == null || words.length == 0) return "";
 
 		Map<Character, List<Character>> graph = new HashMap<>();
 		Map<Character, Integer> visited = new HashMap<>();
@@ -350,10 +326,8 @@ public class GraphPatterns {
 
 	private boolean dfs(Map<Character, List<Character>> graph, Map<Character, Integer> visited, StringBuilder sb,
 			Character c) {
-		if (visited.get(c) == 1)
-			return true;
-		if (visited.get(c) == -1)
-			return false;
+		if (visited.get(c) == 1) return true;
+		if (visited.get(c) == -1) return false;
 
 		visited.put(c, -1);
 		for (char edgeNode : graph.get(c)) {
@@ -393,8 +367,7 @@ public class GraphPatterns {
 	}
 
 	/*************************** Type4: Graph Traversals(BFS/DFS/UF) *******************/
-	//	Minimum Height Trees - BFS
-	// Minimum Height Trees
+	//Minimum Height Trees - BFS
 	/*
 	some statement for tree in graph theory:
 	  (1) A tree is an undirected graph in which any two vertices are connected by exactly one path.
@@ -419,12 +392,10 @@ public class GraphPatterns {
 			leaves.add(0);
 			return leaves;
 		}
-		if (n == 0 || edges.length == 0 || edges[0].length == 0)
-			return leaves;
+		if (n == 0 || edges.length == 0 || edges[0].length == 0) return leaves;
 		List<Integer>[] adjList = buildAdjListUndirectedGraph(n, edges);
 		for (int i = 0; i < n; i++)
-			if (adjList[i].size() == 1)
-				leaves.add(i);
+			if (adjList[i].size() == 1) leaves.add(i);
 		List<Integer> newLeaves;
 		while (n > 2) {
 			n -= leaves.size();
@@ -432,8 +403,7 @@ public class GraphPatterns {
 			for (Integer node : leaves) {
 				int neighbor = adjList[node].iterator().next();
 				adjList[neighbor].remove(node);
-				if (adjList[neighbor].size() == 1)
-					newLeaves.add(neighbor);
+				if (adjList[neighbor].size() == 1) newLeaves.add(neighbor);
 			}
 			leaves = newLeaves;
 		}
@@ -442,8 +412,7 @@ public class GraphPatterns {
 
 	// d.Build undirected graph from given input(edges); where n - No of vertices, edges - Edge list
 	public LinkedList<Integer>[] buildAdjListUndirectedGraph(int n, int[][] edges) {
-		if (n == 0 || edges.length == 0)
-			return null;
+		if (n == 0 || edges.length == 0) return null;
 		LinkedList<Integer>[] adjList = new LinkedList[n];
 		for (int i = 0; i < n; i++)
 			adjList[i] = new LinkedList<>();
@@ -456,8 +425,7 @@ public class GraphPatterns {
 
 	// Same Solution, but Graph represented using Set instead of array
 	public List<Integer> findMinHeightTrees2(int n, int[][] edges) {
-		if (n == 1)
-			return Collections.singletonList(0);
+		if (n == 1) return Collections.singletonList(0);
 		List<Set<Integer>> adj = new ArrayList<>(n);
 		for (int i = 0; i < n; ++i)
 			adj.add(new HashSet<>());
@@ -467,16 +435,14 @@ public class GraphPatterns {
 		}
 		List<Integer> leaves = new ArrayList<>();
 		for (int i = 0; i < n; ++i)
-			if (adj.get(i).size() == 1)
-				leaves.add(i);
+			if (adj.get(i).size() == 1) leaves.add(i);
 		while (n > 2) {
 			n -= leaves.size();
 			List<Integer> newLeaves = new ArrayList<>();
 			for (int i : leaves) {
 				int j = adj.get(i).iterator().next();
 				adj.get(j).remove(i);
-				if (adj.get(j).size() == 1)
-					newLeaves.add(j);
+				if (adj.get(j).size() == 1) newLeaves.add(j);
 			}
 			leaves = newLeaves;
 		}
@@ -496,8 +462,7 @@ public class GraphPatterns {
 	 */
 	// Using Graph: Time Complexity: O(n^2)
 	public int celebrityProblem1(int[][] input, int n) {
-		if (n == 0)
-			return -1;
+		if (n == 0) return -1;
 
 		int[] indegree = new int[n], outdegree = new int[n];
 
@@ -512,16 +477,14 @@ public class GraphPatterns {
 		}
 
 		for (int i = 0; i < n; i++)
-			if (indegree[i] == n - 1 && outdegree[i] == 0)
-				return i;
+			if (indegree[i] == n - 1 && outdegree[i] == 0) return i;
 
 		return -1;
 	}
 
 	// Using Stack
 	public int celebrityProblem2(int[][] input, int n) {
-		if (n == 0)
-			return -1;
+		if (n == 0) return -1;
 
 		Stack<Integer> stack = new Stack<>();
 
@@ -534,10 +497,8 @@ public class GraphPatterns {
 			int a = stack.pop();
 			int b = stack.pop();
 
-			if (input[a][b] == 1)
-				stack.push(b);
-			else
-				stack.push(a);
+			if (input[a][b] == 1) stack.push(b);
+			else stack.push(a);
 		}
 
 		// Check the remained person in stack doesn’t have acquaintance with anyone else.
@@ -552,8 +513,7 @@ public class GraphPatterns {
 
 	// Efficient Approach(Without any data structure): Time Complexity: O(n)
 	public int celebrityProblem3(int[][] input, int n) {
-		if (n == 0)
-			return -1;
+		if (n == 0) return -1;
 
 		int celeb = 0;
 
@@ -574,8 +534,7 @@ public class GraphPatterns {
 	}
 
 	public int findJudge(int N, int[][] trust) {
-		if (N == 0)
-			return -1;
+		if (N == 0) return -1;
 		int[][] matrix = new int[N][N];
 
 		// Build the Matrix using edges
@@ -590,17 +549,14 @@ public class GraphPatterns {
 		while (stack.size() > 1) {
 			int i = stack.pop();
 			int j = stack.pop();
-			if (matrix[i][j] == 1)
-				stack.push(j);
-			else
-				stack.push(i);
+			if (matrix[i][j] == 1) stack.push(j);
+			else stack.push(i);
 		}
 
 		int judge = stack.pop();
 
 		for (int i = 0; i < N; i++) {
-			if (i != judge && (matrix[judge][i] == 1 || matrix[i][judge] != 1))
-				return -1;
+			if (i != judge && (matrix[judge][i] == 1 || matrix[i][judge] != 1)) return -1;
 		}
 
 		return judge + 1;

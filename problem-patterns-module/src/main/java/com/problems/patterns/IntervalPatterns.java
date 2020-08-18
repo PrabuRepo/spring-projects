@@ -65,14 +65,12 @@ public class IntervalPatterns {
 	 * false.
 	 */
 	public boolean canAttendAllMeetings(Interval[] intervals) {
-		if (intervals.length <= 1)
-			return true;
+		if (intervals.length <= 1) return true;
 
 		Arrays.sort(intervals, (ob1, ob2) -> ob1.start - ob2.start);
 
 		for (int i = 0; i < intervals.length - 1; i++) {
-			if (intervals[i].end > intervals[i + 1].start)
-				return false;
+			if (intervals[i].end > intervals[i + 1].start) return false;
 		}
 		return true;
 	}
@@ -115,7 +113,7 @@ public class IntervalPatterns {
 		queue.add(intervals[0].end);
 		int count = 1;
 		for (int i = 1; i < intervals.length - 1; i++) {
-			if (intervals[i].start < queue.peek()) {
+			if (queue.peek() > intervals[i].start) {
 				count++;
 			} else {
 				queue.poll();
@@ -154,8 +152,7 @@ public class IntervalPatterns {
 		Arrays.sort(dep, (a, b) -> a[0] - b[0]);
 		int platform = 1, i = 1, j = 0, result = 1;
 		while (i < arr.length && j < dep.length) {
-			// Additional 'or' condition to handle the
-			// train arrives & departure at the same time
+			// Additional 'or' condition to handle the train arrives & departure at the same time
 			if (arr[i][0] < dep[j][0] || (arr[i][0] == dep[j][0] && arr[i][1] == dep[j][1])) {
 				platform++;
 				i++;
@@ -215,11 +212,9 @@ public class IntervalPatterns {
 	public List<Interval> insert2(List<Interval> intervals, Interval newInterval) {
 		int i = 0;
 		// Linear Search to find the starting pos
-		while (i < intervals.size() && intervals.get(i).end < newInterval.start)
-			i++;
+		while (i < intervals.size() && intervals.get(i).end < newInterval.start) i++;
 		// or
-		// Binary Search is used to find the starting
-		// position to insert the interval
+		// Binary Search is used to find the starting position to insert the interval
 		int startingIndex = binarySearch(intervals, newInterval);
 		i = startingIndex;
 
@@ -286,8 +281,7 @@ public class IntervalPatterns {
 	 * Example 1: Input: [[1,3],[2,6],[8,10],[15,18]]; Output: [[1,6],[8,10],[15,18]]
 	 */
 	public List<Interval> merge(List<Interval> intervals) {
-		if (intervals.size() <= 1)
-			return intervals;
+		if (intervals.size() <= 1) return intervals;
 		Collections.sort(intervals, Comparator.comparing(i -> i.start));
 		// Merge the overlapping intervals
 		List<Interval> result = new ArrayList<>();

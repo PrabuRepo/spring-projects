@@ -1,10 +1,20 @@
 package com.problems.patterns.ds;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 import com.common.model.ListNode;
 
+/*
+ * Floyd's cycle-finding algorithm is a pointer algorithm that uses only two pointers, which move through the sequence at different speeds. 
+ * The idea is to move fast pointer twice as quickly as the slow pointer and the distance between them increases by 1 at each step. If at
+ * some point both meet, we found a cycle in the list, else we will reach the end of the list and no cycle is present. It is also 
+ * called as "Tortoise and Hare" algorithm.
+ */
 public class FastAndSlowPtrPatterns {
+
+	InPlaceReversalLLPatterns reversalLLPatterns = new InPlaceReversalLLPatterns();
 
 	// LinkedList Cycle: Floyd's Algorithm or Tortoise & Hare Algorithm
 	public boolean hasCycle(ListNode head) {
@@ -43,7 +53,10 @@ public class FastAndSlowPtrPatterns {
 	 * process until the number equals 1 (where it will stay), or it loops endlessly in a cycle which does not include 1.
 	 * Those numbers for which this process ends in 1 are happy numbers.
 	 */
-	public boolean isHappy(int n) {
+	/* Solution: Using floyd'd algorithm, we can find whether square number equals 1 (where it will stay), or it loops
+	 * endlessly in a cycle which does not include 1.
+	 */
+	public boolean isHappy1(int n) {
 		if (n == 0) return false;
 
 		int slow = n, fast = n;
@@ -63,6 +76,19 @@ public class FastAndSlowPtrPatterns {
 			n = n / 10;
 		}
 		return sum;
+	}
+
+	/* Using HashSet: The idea is to use one hash set to record sum of every digit square of every number occurred.
+	 * Once the current sum cannot be added to set, return false; once the current sum equals 1, return true;
+	 */
+	public boolean isHappy2(int n) {
+		Set<Integer> set = new HashSet<Integer>();
+		while (set.add(n)) {
+			int squareSum = squareSum(n);
+			if (squareSum == 1) return true;
+			n = squareSum;
+		}
+		return false;
 	}
 
 	// Find the Duplicate Number (easy)
@@ -138,9 +164,9 @@ public class FastAndSlowPtrPatterns {
 		}
 		prevNode.next = null;
 		ListNode secondHalf = slowPtr;
-		secondHalf = reverseList1(secondHalf);
+		secondHalf = reversalLLPatterns.reverseList1(secondHalf);
 		boolean flag = compare(head, secondHalf);
-		secondHalf = reverseList1(secondHalf);
+		secondHalf = reversalLLPatterns.reverseList1(secondHalf);
 		if (midNode != null) {
 			prevNode.next = midNode;
 			midNode.next = slowPtr;
@@ -156,82 +182,5 @@ public class FastAndSlowPtrPatterns {
 		return ((node1.data == node2.data) && compare(node1.next, node2.next));
 	}
 
-	//TODO: Move below to consolidated module
-	// Reverse a linked list I
-	// Iterative Approach
-	public ListNode reverseList1(ListNode head) {
-		ListNode curr = head, next, prev = null;
-		while (curr != null) {
-			next = curr.next;
-			curr.next = prev;
-			prev = curr;
-			curr = next;
-		}
-		return prev;
-	}
-
-	// Rearrange a LinkedList (medium)
-	/*
-	 * Reorder List:
-	 * Example 1: Given 1->2->3->4, reorder it to 1->4->2->3.
-	 * Example 2: Given 1->2->3->4->5, reorder it to 1->5->2->4->3.
-	 */
-	/* 3 Steps: 
-	 *    1. Find the middle node
-	 *    2. Reverse the 2nd half  
-	 *    3. Merge 2 list: 1st half & reversed 2nd half
-	 */
-	public void reorderList(ListNode head) {
-		if (head == null) return;
-		ListNode slowPtr = head, fastPtr = head;
-		while (fastPtr.next != null && fastPtr.next.next != null) {
-			slowPtr = slowPtr.next;
-			fastPtr = fastPtr.next.next;
-		}
-		ListNode rightHalf = reverseList1(slowPtr.next);
-		slowPtr.next = null;
-		ListNode leftHalf = head;
-		mergeList(leftHalf, rightHalf);
-	}
-
-	public void mergeList(ListNode leftHalf, ListNode rightHalf) {
-		while (rightHalf != null) {
-			ListNode rightHalfNext = rightHalf.next;
-			rightHalf.next = leftHalf.next;
-			leftHalf.next = rightHalf;
-			leftHalf = leftHalf.next.next;
-			rightHalf = rightHalfNext;
-		}
-	}
-
-	/*
-	 * Swap Nodes in Pairs:
-	 * Given a linked list, swap every two adjacent nodes and return its head.You may not modify the values in the list's 
-	 * nodes, only nodes itself may be changed.
-	 */
-	// Approach1: Iterative
-	public ListNode swapPairs1(ListNode head) {
-		ListNode dummy = new ListNode(0);
-		ListNode curr = dummy;
-		dummy.next = head;
-		while (curr.next != null && curr.next.next != null) {
-			ListNode first = curr.next;
-			ListNode second = curr.next.next;
-			first.next = second.next;
-			second.next = first;
-			curr.next = second;
-			curr = curr.next.next;
-		}
-		return dummy.next;
-	}
-
-	// Recursive solution
-	public ListNode swapPairs(ListNode head) {
-		if (head == null || head.next == null) return head;
-		ListNode second = head.next;
-		head.next = swapPairs(head.next.next);
-		second.next = head;
-		return second;
-	}
-	// Cycle in a Circular Array (hard) -> Refer "Circular Array Loop" problems in leetcode
+	//TODO: Cycle in a Circular Array (hard) -> Refer "Circular Array Loop" problems in leetcode
 }

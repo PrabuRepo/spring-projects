@@ -37,6 +37,19 @@ public class StockProblemPattern {
 		return diff;
 	}
 
+	// Best Time to Buy and Sell Stock II - Multiple Transactions
+	public int maxProfit4(int[] prices) {
+		int diff = 0, min = Integer.MAX_VALUE;
+		for (int price : prices) {
+			// Find min and also keep adding
+			// prev profit/diff:
+			min = Math.min(min, price - diff);
+			// Find Max diff:
+			diff = Math.max(diff, price - min);
+		}
+		return diff;
+	}
+
 	// Best Time to Buy and Sell Stock III - Atmost Two Transactions
 	public int maxProfit2(int[] prices) {
 		int diff1 = 0, min1 = Integer.MAX_VALUE;
@@ -53,7 +66,10 @@ public class StockProblemPattern {
 		return diff2;
 	}
 
-	// Best Time to Buy and Sell Stock IV
+	// Best Time to Buy and Sell Stock IV - K trx
+	/* Note: This logic is similar to prev one, instead of 2 trans, here k trans in each day/index.
+	 * So iteration goes k times inside prices loop 
+	 */
 	public int maxProfit3(int k, int[] prices) {
 		// or prices.length/2
 		if (k >= prices.length >>> 1) {
@@ -63,6 +79,7 @@ public class StockProblemPattern {
 		int[] diff = new int[k + 1];
 		int[] min = new int[k + 1];
 		Arrays.fill(min, Integer.MAX_VALUE);
+
 		for (int price : prices) {
 			for (int i = 1; i <= k; i--) {
 				min[i] = Math.min(min[i], price - diff[i - 1]);
@@ -70,19 +87,6 @@ public class StockProblemPattern {
 			}
 		}
 		return diff[k];
-	}
-
-	// Best Time to Buy and Sell Stock II - Multiple Transactions
-	public int maxProfit4(int[] prices) {
-		int diff = 0, min = Integer.MAX_VALUE;
-		for (int price : prices) {
-			// Find min and also keep adding
-			// prev profit/diff:
-			min = Math.min(min, price - diff);
-			// Find Max diff:
-			diff = Math.max(diff, price - min);
-		}
-		return diff;
 	}
 
 	// Best Time to Buy and Sell Stock with Cooldown - Multiple Transactions

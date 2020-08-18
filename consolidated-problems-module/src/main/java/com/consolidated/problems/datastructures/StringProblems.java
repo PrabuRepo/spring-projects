@@ -606,23 +606,6 @@ public class StringProblems {
 		return (num > Integer.MAX_VALUE / 10 || (num == Integer.MAX_VALUE / 10 && nextVal > expected));
 	}
 
-	/* Compare Version Numbers:
-	 * Compare two version numbers version1 and version2. 
-	 * If version1 > version2 return 1; if version1 < version2 return -1;otherwise return 0.
-	 */
-	public int compareVersion(String version1, String version2) {
-		if (version1.length() == 0 && version2.length() == 0) return 0;
-		String[] ver1 = version1.split("\\.");
-		String[] ver2 = version2.split("\\.");
-		for (int i = 0; i < Math.max(ver1.length, ver2.length); i++) {
-			int v1 = i < ver1.length ? Integer.valueOf(ver1[i]) : 0;
-			int v2 = i < ver2.length ? Integer.valueOf(ver2[i]) : 0;
-			if (v1 > v2) return 1;
-			if (v1 < v2) return -1;
-		}
-		return 0;
-	}
-
 	/*
 	 * Non-negative Integers without Consecutive Ones or Binary Strings with no Consecutive Ones:
 	 */

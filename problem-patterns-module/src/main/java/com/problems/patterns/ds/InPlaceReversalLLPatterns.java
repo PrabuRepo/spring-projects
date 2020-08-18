@@ -128,9 +128,8 @@ public class InPlaceReversalLLPatterns {
 			count++;
 		}
 		/* 2) Now head points to the kth node. So change next of head to (k+1)th node*/
-		if (head != null) {
-			head.next = curr;
-		}
+		if (head != null) head.next = curr;
+
 		/* 3) We do not want to reverse next k nodes. So move the curr pointer to skip next k nodes */
 		count = 0;
 		while (count < k - 1 && curr != null) {
@@ -170,15 +169,18 @@ public class InPlaceReversalLLPatterns {
 	 */
 	public ListNode rotateRight(ListNode head, int k) {
 		int size = listSize(head);
+
 		if (head == null || k <= 0 || k == size) return head;
 		if (k > size) k %= size;
+
 		int count = 1;
-		ListNode curr = head;
 		k = size - k;
+		ListNode curr = head;
 		while (count < k && curr != null) {
 			curr = curr.next;
 			count++;
 		}
+
 		ListNode nextHead = curr;
 		while (curr.next != null) curr = curr.next;
 		curr.next = head;

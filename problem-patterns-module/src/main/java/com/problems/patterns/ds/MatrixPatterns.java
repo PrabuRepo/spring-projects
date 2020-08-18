@@ -150,8 +150,7 @@ public class MatrixPatterns {
 		int r = matrix.length, c = matrix[0].length;
 		int[] result = new int[r * c];
 
-		if (matrix.length == 0 || matrix[0].length == 0)
-			return result;
+		if (matrix.length == 0 || matrix[0].length == 0) return result;
 		int left = 0, right = c - 1, top = 0, bottom = r - 1, index = 0;
 
 		while (top <= bottom && left <= right) {
@@ -163,8 +162,7 @@ public class MatrixPatterns {
 				result[index++] = matrix[i][right];
 			right--;
 
-			if (top > bottom || left > right)
-				break;
+			if (top > bottom || left > right) break;
 
 			for (int j = right; j >= left; j--)
 				result[index++] = matrix[bottom][j];
@@ -193,8 +191,7 @@ public class MatrixPatterns {
 			for (int i = t; i <= b; i++)
 				mat[i][r] = val++;
 			r--;
-			if (l > r || t > b)
-				break;
+			if (l > r || t > b) break;
 			for (int j = r; j >= l; j--)
 				mat[b][j] = val++;
 			b--;
@@ -213,8 +210,7 @@ public class MatrixPatterns {
 	 *   Time Complexity: O(log(m*n)) => O(logm) +O(logn)
 	 */
 	public boolean searchMatrixI(int[][] matrix, int target) {
-		if (matrix == null || matrix.length == 0 || matrix[0].length == 0)
-			return false;
+		if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return false;
 
 		int r = matrix.length, c = matrix[0].length;
 		int l = 0, h = r * c - 1, m, i, j;
@@ -223,12 +219,9 @@ public class MatrixPatterns {
 			m = (l + h) / 2;
 			i = m / c;
 			j = m % c;
-			if (matrix[i][j] == target)
-				return true;
-			else if (target > matrix[i][j])
-				l = m + 1;
-			else
-				h = m - 1;
+			if (matrix[i][j] == target) return true;
+			else if (target > matrix[i][j]) l = m + 1;
+			else h = m - 1;
 		}
 		return false;
 	}
@@ -239,17 +232,13 @@ public class MatrixPatterns {
 	 *  Time Complexity: O(m+n)
 	 */
 	public boolean searchMatrixII(int[][] matrix, int target) {
-		if (matrix == null || matrix.length == 0 || matrix[0].length == 0)
-			return false;
+		if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return false;
 		int r = matrix.length, c = matrix[0].length;
 		int i = r - 1, j = 0;
 		while (i >= 0 && j < c) {
-			if (target == matrix[i][j])
-				return true;
-			else if (target < matrix[i][j])
-				i--;
-			else
-				j++;
+			if (target == matrix[i][j]) return true;
+			else if (target < matrix[i][j]) i--;
+			else j++;
 		}
 		return false;
 	}
@@ -257,8 +246,7 @@ public class MatrixPatterns {
 	/************** Type4: Apply DP in Matrix ***************/
 	// Unique Paths: Recursive Approach
 	public int uniquePaths(int m, int n) {
-		if (m == 1 || n == 1)
-			return 1;
+		if (m == 1 || n == 1) return 1;
 
 		return uniquePaths(m - 1, n) + uniquePaths(n - 1, m);
 		// Including diagonal
@@ -266,8 +254,7 @@ public class MatrixPatterns {
 	}
 
 	public int uniquePathsDP(int m, int n) {
-		if (m == 0 && n == 0)
-			return 0;
+		if (m == 0 && n == 0) return 0;
 
 		int[][] dp = new int[m][n];
 		for (int i = 0; i < m; i++) {
@@ -288,37 +275,31 @@ public class MatrixPatterns {
 
 	public int uniquePathsWithObstacles(int[][] obstacleGrid) {
 		int r = obstacleGrid.length, c = obstacleGrid[0].length;
-		if (r == 0 && c == 0)
-			return 0;
+		if (r == 0 && c == 0) return 0;
 		return uniquePathsWithObstacles(obstacleGrid, 0, 0);
 	}
 
 	public int uniquePathsWithObstacles(int[][] a, int i, int j) {
 		int r = a.length, c = a[0].length;
 		// Here 1 means obstacle, 0 means empty path
-		if (i >= r || j >= c || a[i][j] == 1)
-			return 0;
+		if (i >= r || j >= c || a[i][j] == 1) return 0;
 
-		if (i == r - 1 && j == c - 1)
-			return 1;
+		if (i == r - 1 && j == c - 1) return 1;
 
 		return uniquePathsWithObstacles(a, i + 1, j) + uniquePathsWithObstacles(a, i, j + 1);
 	}
 
 	public int uniquePathsWithObstacles2(int[][] a) {
-		if (a.length == 0 && a[0].length == 0)
-			return 0;
+		if (a.length == 0 && a[0].length == 0) return 0;
 
 		int m = a.length, n = a[0].length;
-		if (a[0][0] == 1 || a[m - 1][n - 1] == 1)
-			return 0;
+		if (a[0][0] == 1 || a[m - 1][n - 1] == 1) return 0;
 		int[][] dp = new int[m][n];
 
 		for (int i = 0; i < m; i++) {
 			for (int j = 0; j < n; j++) {
 				// Here 1 means obstacle, 0 means empty path
-				if (a[i][j] == 1)
-					continue;
+				if (a[i][j] == 1) continue;
 
 				if (i == 0 && j == 0) {
 					dp[i][j] = 1;
@@ -339,25 +320,21 @@ public class MatrixPatterns {
 
 	// Recursive approach
 	public int minPathSum1(int[][] grid) {
-		if (grid.length == 0 && grid[0].length == 0)
-			return 0;
+		if (grid.length == 0 && grid[0].length == 0) return 0;
 		return minPathSum(grid, 0, 0);
 	}
 
 	public int minPathSum(int[][] grid, int i, int j) {
 		int r = grid.length, c = grid[0].length;
-		if (i < 0 || i >= r || j < 0 || j >= c)
-			return Integer.MAX_VALUE;
+		if (i < 0 || i >= r || j < 0 || j >= c) return Integer.MAX_VALUE;
 
-		if (i == r - 1 && j == c - 1)
-			return grid[i][j];
+		if (i == r - 1 && j == c - 1) return grid[i][j];
 		return grid[i][j] + Math.min(minPathSum(grid, i + 1, j), minPathSum(grid, i, j + 1));
 	}
 
 	// DP approach
 	public int minPathSum(int[][] grid) {
-		if (grid.length == 0 && grid[0].length == 0)
-			return 0;
+		if (grid.length == 0 && grid[0].length == 0) return 0;
 		int r = grid.length, c = grid[0].length;
 		int[][] dp = new int[r][c];
 
@@ -398,8 +375,7 @@ public class MatrixPatterns {
 	 */
 	public void floodFillAlg(int[][] m, int x, int y, int newColor) {
 		int rSize = m.length, cSize = m[0].length;
-		if (x < 0 || x >= rSize || y < 0 || y >= cSize)
-			return;
+		if (x < 0 || x >= rSize || y < 0 || y >= cSize) return;
 
 		floodFill(m, newColor, m[x][y], x, y);
 
@@ -411,8 +387,7 @@ public class MatrixPatterns {
 
 	public void floodFill(int[][] m, int newColor, int oldColor, int i, int j) {
 		int rSize = m.length, cSize = m[0].length;
-		if (i < 0 || i >= rSize || j < 0 || j >= cSize || m[i][j] != oldColor)
-			return;
+		if (i < 0 || i >= rSize || j < 0 || j >= cSize || m[i][j] != oldColor) return;
 
 		m[i][j] = newColor; // Apply the new color
 		floodFill(m, newColor, oldColor, i + 1, j);
@@ -427,8 +402,7 @@ public class MatrixPatterns {
 	 *  - Solved using, DFS, BFS & UnionFind  
 	 */
 	public void surroundedRegions(char[][] matrix) {
-		if (matrix.length == 0 || matrix[0].length == 0)
-			return;
+		if (matrix.length == 0 || matrix[0].length == 0) return;
 
 		int row = matrix.length, col = matrix[0].length;
 		for (int i = 0; i < row; i++) {
@@ -442,23 +416,21 @@ public class MatrixPatterns {
 			}
 		}
 
-		for (int i = 0; i < col; i++) {
-			if (matrix[0][i] == 'O') {
-				// surroundedRegionsDFS(matrix, 0, i);
-				surroundedRegionsBFS(matrix, 0, i);
+		for (int j = 0; j < col; j++) {
+			if (matrix[0][j] == 'O') {
+				// surroundedRegionsDFS(matrix, 0, j);
+				surroundedRegionsBFS(matrix, 0, j);
 			}
-			if (matrix[row - 1][i] == 'O') {
-				// surroundedRegionsDFS(matrix, row - 1, i);
-				surroundedRegionsBFS(matrix, row - 1, i);
+			if (matrix[row - 1][j] == 'O') {
+				// surroundedRegionsDFS(matrix, row - 1, j);
+				surroundedRegionsBFS(matrix, row - 1, j);
 			}
 		}
 
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
-				if (matrix[i][j] == 'O')
-					matrix[i][j] = 'X';
-				else if (matrix[i][j] == '#')
-					matrix[i][j] = 'O';
+				if (matrix[i][j] == 'O') matrix[i][j] = 'X';
+				else if (matrix[i][j] == '#') matrix[i][j] = 'O';
 			}
 		}
 
@@ -514,8 +486,7 @@ public class MatrixPatterns {
 	}
 
 	public void surroundedRegionsUF(char[][] matrix) {
-		if (matrix == null || matrix.length == 0)
-			return;
+		if (matrix == null || matrix.length == 0) return;
 
 		int rows = matrix.length;
 		int cols = matrix[0].length;
@@ -534,14 +505,18 @@ public class MatrixPatterns {
 					if (i == 0 || i == rows - 1 || j == 0 || j == cols - 1) {
 						uf.union(node(i, j, cols), dummyNode);
 					} else {
-						if (i > 0 && matrix[i - 1][j] == 'O')
+						if (i > 0 && matrix[i - 1][j] == 'O') {
 							uf.union(node(i, j, cols), node(i - 1, j, cols));
-						if (i < rows - 1 && matrix[i + 1][j] == 'O')
+						}
+						if (i < rows - 1 && matrix[i + 1][j] == 'O') {
 							uf.union(node(i, j, cols), node(i + 1, j, cols));
-						if (j > 0 && matrix[i][j - 1] == 'O')
+						}
+						if (j > 0 && matrix[i][j - 1] == 'O') {
 							uf.union(node(i, j, cols), node(i, j - 1, cols));
-						if (j < cols - 1 && matrix[i][j + 1] == 'O')
+						}
+						if (j < cols - 1 && matrix[i][j + 1] == 'O') {
 							uf.union(node(i, j, cols), node(i, j + 1, cols));
+						}
 					}
 				}
 			}
@@ -549,8 +524,7 @@ public class MatrixPatterns {
 
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-				if (!(uf.find(node(i, j, cols)) == uf.find(dummyNode)) && matrix[i][j] == 'O')
-					matrix[i][j] = 'X';
+				if (!(uf.find(node(i, j, cols)) == uf.find(dummyNode)) && matrix[i][j] == 'O') matrix[i][j] = 'X';
 			}
 		}
 
@@ -565,8 +539,7 @@ public class MatrixPatterns {
 
 	// Number of Islands I:
 	public int numIslands1(char[][] grid) {
-		if (grid.length == 0)
-			return 0;
+		if (grid.length == 0) return 0;
 
 		int row = grid.length, col = grid[0].length, count = 0;
 		for (int i = 0; i < row; i++) {
@@ -585,10 +558,9 @@ public class MatrixPatterns {
 	// Using DFS(left/right/up/down) movement; Time Complexity - O(m*n)
 	public void numIslandsDFS(char[][] matrix, int i, int j) {
 		int rSize = matrix.length, cSize = matrix[0].length;
-		if (i < 0 || i >= rSize || j < 0 || j >= cSize || matrix[i][j] == '0')
-			return;
+		if (i < 0 || i >= rSize || j < 0 || j >= cSize || matrix[i][j] == '0') return;
 
-		matrix[i][j] = '0'; // Apply the new color
+		matrix[i][j] = '0';
 
 		for (int dir = 0; dir < 4; dir++)
 			numIslandsDFS(matrix, i + rowSet4[dir], j + colSet4[dir]);
@@ -611,8 +583,7 @@ public class MatrixPatterns {
 			for (int dir = 0; dir < 4; dir++) {
 				i = r + rowSet4[dir];
 				j = c + colSet4[dir];
-				if (i < 0 || i >= rowSize || j < 0 || j >= colSize || grid[i][j] == '0')
-					continue;
+				if (i < 0 || i >= rowSize || j < 0 || j >= colSize || grid[i][j] == '0') continue;
 
 				grid[i][j] = '0';
 				queue.add((i) * colSize + j);
@@ -622,8 +593,7 @@ public class MatrixPatterns {
 
 	// Using DisJoint Set/Union-Find DS
 	public int numIslands(char[][] grid) {
-		if (grid == null || grid.length == 0 || grid[0].length == 0)
-			return 0;
+		if (grid == null || grid.length == 0 || grid[0].length == 0) return 0;
 
 		int m = grid.length;
 		int n = grid[0].length;
@@ -647,11 +617,9 @@ public class MatrixPatterns {
 					for (int dir = 0; dir < 4; dir++) {
 						int x = i + rowSet4[dir];
 						int y = j + colSet4[dir];
-						if (x < 0 || x >= m || y < 0 || y >= n || grid[x][y] == '0')
-							continue;
+						if (x < 0 || x >= m || y < 0 || y >= n || grid[x][y] == '0') continue;
 
-						if (union(parent, i * n + j, x * n + y))
-							count--;
+						if (!union(parent, i * n + j, x * n + y)) count--;
 					}
 				}
 			}
@@ -665,9 +633,9 @@ public class MatrixPatterns {
 		int root2 = find(parent, i2);
 		if (root1 != root2) { // If it doesn't have same parent
 			parent[root2] = root1;
-			return true; // Means pointed to same parent or union the two sets
+			return false; // Means point to same parent or union the two sets
 		}
-		return false; // Means already pointed to same parent, no need to combine or union the sets
+		return true; // Means already pointed to same parent, no need to combine or union the sets
 	}
 
 	public int find(int[] parent, int i) {
@@ -702,7 +670,7 @@ public class MatrixPatterns {
 		for (int k = 0; k < positions.length; k++) {
 			count++;
 			int[] p = positions[k];
-			int set1 = p[0] * n + p[1]; // row * colSize + col
+			int set1 = p[0] * n + p[1]; // i * rowSize + j
 			ds.parent[set1] = set1;// set root to be itself for each node
 
 			for (int dir = 0; dir < 4; dir++) {
@@ -710,10 +678,8 @@ public class MatrixPatterns {
 				int j = p[1] + colSet4[dir];
 				int set2 = i * n + j;
 				if (i >= 0 && j >= 0 && i < m && j < n && ds.parent[set2] != -1) {
-					if (!ds.union(set1, set2))
-						count--;
+					if (!ds.union(set1, set2)) count--;
 				}
-
 			}
 			result.add(count);
 		}
@@ -721,8 +687,7 @@ public class MatrixPatterns {
 	}
 
 	public int longestIncreasingPath1(int[][] matrix) {
-		if (matrix.length == 0 || matrix[0].length == 0)
-			return 0;
+		if (matrix.length == 0 || matrix[0].length == 0) return 0;
 		int max = 0, r = matrix.length, c = matrix[0].length;
 		for (int i = 0; i < r; i++) {
 			for (int j = 0; j < c; j++) {
@@ -734,10 +699,9 @@ public class MatrixPatterns {
 
 	public int longestIncreasingPath1(int[][] matrix, int i, int j, int prev) {
 		int r = matrix.length, c = matrix[0].length;
-		if (i < 0 || i >= r || j < 0 || j >= c)
-			return 0;
-		if (prev >= matrix[i][j])
-			return 0;
+		if (i < 0 || i >= r || j < 0 || j >= c) return 0;
+		if (prev >= matrix[i][j]) return 0;
+
 		int curr = matrix[i][j];
 		int result = 1 + Utils.max(longestIncreasingPath1(matrix, i + 1, j, curr),
 				longestIncreasingPath1(matrix, i, j + 1, curr), longestIncreasingPath1(matrix, i - 1, j, curr),
@@ -748,10 +712,10 @@ public class MatrixPatterns {
 
 	// DP Approach - Memoization
 	public int longestIncreasingPath2(int[][] matrix) {
-		if (matrix.length == 0 || matrix[0].length == 0)
-			return 0;
+		if (matrix.length == 0 || matrix[0].length == 0) return 0;
 		int max = 0, r = matrix.length, c = matrix[0].length;
 		int[][] lookup = new int[r][c];
+
 		for (int i = 0; i < r; i++) {
 			for (int j = 0; j < c; j++) {
 				max = Math.max(max, longestIncreasingPath2(matrix, i, j, Integer.MIN_VALUE, lookup));
@@ -762,14 +726,11 @@ public class MatrixPatterns {
 
 	public int longestIncreasingPath2(int[][] matrix, int i, int j, int prev, int[][] lookup) {
 		int r = matrix.length, c = matrix[0].length;
-		if (i < 0 || i >= r || j < 0 || j >= c)
-			return 0;
+		if (i < 0 || i >= r || j < 0 || j >= c) return 0;
 
-		if (prev >= matrix[i][j])
-			return 0;
+		if (prev >= matrix[i][j]) return 0;
 		// Lookup from the table
-		if (lookup[i][j] != 0)
-			return lookup[i][j];
+		if (lookup[i][j] != 0) return lookup[i][j];
 
 		int curr = matrix[i][j];
 		// Store the result in lookup table
@@ -810,11 +771,9 @@ public class MatrixPatterns {
 	public void dfs(int[][] grid, String s, int i, int j, List<String> result) {
 		int rSize = grid.length, cSize = grid[0].length;
 
-		if (i < 0 || i >= rSize || j < 0 || j >= cSize || grid[i][j] == 0 || grid[i][j] == Integer.MAX_VALUE)
-			return;
+		if (i < 0 || i >= rSize || j < 0 || j >= cSize || grid[i][j] == 0 || grid[i][j] == Integer.MAX_VALUE) return;
 
-		if (i == rSize - 1 && j == cSize - 1 && grid[i][j] == 1)
-			result.add(s);
+		if (i == rSize - 1 && j == cSize - 1 && grid[i][j] == 1) result.add(s);
 
 		grid[i][j] = Integer.MAX_VALUE;
 
@@ -842,10 +801,8 @@ public class MatrixPatterns {
 
 	private boolean hasPath1(int[][] maze, boolean[][] visited, int si, int sj, int di, int dj) {
 		int rSize = maze.length, cSize = maze[0].length;
-		if (visited[si][sj])
-			return false;
-		if (si == di && sj == dj)
-			return true;
+		if (visited[si][sj]) return false;
+		if (si == di && sj == dj) return true;
 
 		visited[si][sj] = true;
 		for (int[] d : directions) {
@@ -860,8 +817,7 @@ public class MatrixPatterns {
 			row -= d[0];
 			col -= d[1];
 
-			if (hasPath1(maze, visited, row, col, di, dj))
-				return true;
+			if (hasPath1(maze, visited, row, col, di, dj)) return true;
 		}
 
 		return false;
@@ -875,6 +831,7 @@ public class MatrixPatterns {
 
 		queue.add(new Point(start[0], start[1]));
 		visited[start[0]][start[1]] = true;
+
 		while (!queue.isEmpty()) {
 			Point curr = queue.poll();
 
@@ -889,10 +846,8 @@ public class MatrixPatterns {
 				row -= d[0];
 				col -= d[1];
 
-				if (row == destination[0] && col == destination[1])
-					return true;
-				if (visited[row][col])
-					continue;
+				if (row == destination[0] && col == destination[1]) return true;
+				if (visited[row][col]) continue;
 
 				visited[row][col] = true;
 				queue.add(new Point(row, col));
@@ -928,8 +883,7 @@ public class MatrixPatterns {
 	}
 
 	private void shortestDistance1(int[][] maze, int[][] distance, int si, int sj, int di, int dj) {
-		if (si == di && sj == dj)
-			return;
+		if (si == di && sj == dj) return;
 		int rSize = maze.length, cSize = maze[0].length;
 		for (int[] d : directions) {
 			int row = si, col = sj;
@@ -1052,16 +1006,14 @@ public class MatrixPatterns {
 	 * BFS is better than DFS for this problem
 	 */
 	public void wallsAndGatesBFS(int[][] rooms) {
-		if (rooms == null || rooms.length == 0)
-			return;
+		if (rooms == null || rooms.length == 0) return;
 
 		int r = rooms.length, c = rooms[0].length;
 		Queue<Point> queue = new LinkedList<>();
 
 		for (int i = 0; i < r; i++)
 			for (int j = 0; j < c; j++)
-				if (rooms[i][j] == 0)
-					queue.add(new Point(i, j, 0));
+				if (rooms[i][j] == 0) queue.add(new Point(i, j, 0));
 		/*for (int i = 0; i < r; i++)
 			for (int j = 0; j < c; j++)
 				if (rooms[i][j] == 0)
@@ -1090,8 +1042,7 @@ public class MatrixPatterns {
 	public void dfsSearch(int[][] rooms, int i, int j, int dist) {
 		int rSize = rooms.length, cSize = rooms[0].length;
 
-		if (i < 0 || i >= rSize || j < 0 || j >= cSize || rooms[i][j] < dist)
-			return;
+		if (i < 0 || i >= rSize || j < 0 || j >= cSize || rooms[i][j] < dist) return;
 
 		rooms[i][j] = dist;
 

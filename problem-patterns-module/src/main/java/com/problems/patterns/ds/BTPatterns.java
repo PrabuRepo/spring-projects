@@ -22,23 +22,26 @@ public class BTPatterns {
 
 	public int heightOfTree1(TreeNode root) {
 		if (root == null) return 0; // 0 means count the nodes, -1 means count the edges
-		return 1 + Math.max(heightOfTree1(root.left), heightOfTree1(root.right));
+		int left = heightOfTree1(root.left);
+		int right = heightOfTree1(root.right);
+		return 1 + Math.max(left, right);
 	}
 
 	// Approach 2: This approach avoids two recursive calls & check the tree 
 	// is balanced or not while calculating the height. Time Complexity: O(n);
 	public boolean isBinaryTreeBalanced2(TreeNode root) {
-		return checkHeight(root) != Integer.MIN_VALUE;
+		return heightOfTree2(root) != Integer.MIN_VALUE;
 	}
 
-	public int checkHeight(TreeNode root) {
+	//Modification of height of tree logic
+	public int heightOfTree2(TreeNode root) {
 		if (root == null) return 0;
 
-		int leftHeight = checkHeight(root.left);
-		if (leftHeight == Integer.MIN_VALUE) return Integer.MIN_VALUE;
-		int rightHeight = checkHeight(root.right);
-		if (rightHeight == Integer.MIN_VALUE) return Integer.MIN_VALUE;
-		return Math.abs(leftHeight - rightHeight) <= 1 ? Math.max(leftHeight, rightHeight) + 1 : Integer.MIN_VALUE;
+		int left = heightOfTree2(root.left);
+		if (left == Integer.MIN_VALUE) return Integer.MIN_VALUE;
+		int right = heightOfTree2(root.right);
+		if (right == Integer.MIN_VALUE) return Integer.MIN_VALUE;
+		return Math.abs(left - right) <= 1 ? 1 + Math.max(left, right) : Integer.MIN_VALUE;
 	}
 
 	/*********************** 5.BT Print, Path, Sum & LCA Problems ***************/
@@ -63,19 +66,19 @@ public class BTPatterns {
 	// Efficient Approach: Modification of Height calculation; Time Complexity-O(n)
 	public int diameterOfTree2(TreeNode root) {
 		if (root == null) return 0;
-		height2(root);
+		heightOfTree3(root);
 		return maxDiameter;
 	}
 
-	// Modification of Height
-	public int height2(TreeNode root) {
+	// Modification of height of tree logic
+	public int heightOfTree3(TreeNode root) {
 		if (root == null) return 0;
-		int left = height2(root.left);
-		int right = height2(root.right);
+		int left = heightOfTree3(root.left);
+		int right = heightOfTree3(root.right);
 
 		maxDiameter = Math.max(maxDiameter, left + right + 1);
 
-		return Math.max(left, right) + 1;
+		return 1 + Math.max(left, right);
 	}
 
 	// Lowest Common Ancestor of a BT
@@ -186,15 +189,16 @@ public class BTPatterns {
 	public int maxPathSum1(TreeNode root) {
 		if (root == null) return Integer.MIN_VALUE; // Here return MIN_VALUE to handle -ve val
 
-		int left = maxPathSumUtil(root.left);
-		int right = maxPathSumUtil(root.right);
+		int left = maxPathSumUtil1(root.left);
+		int right = maxPathSumUtil1(root.right);
 		return Math.max(left + right + root.val, Math.max(maxPathSum1(root.left), maxPathSum1(root.right)));
 	}
 
-	private int maxPathSumUtil(TreeNode root) {
+	//Find max path sum
+	private int maxPathSumUtil1(TreeNode root) {
 		if (root == null) return 0;
-		int left = maxPathSumUtil(root.left);
-		int right = maxPathSumUtil(root.right);
+		int left = maxPathSumUtil1(root.left);
+		int right = maxPathSumUtil1(root.right);
 
 		// Compare with zero to eliminate the -ve values
 		return Math.max(0, root.val + Math.max(left, right));
@@ -205,14 +209,15 @@ public class BTPatterns {
 
 	public int maxPathSum2(TreeNode root) {
 		maxValue = Integer.MIN_VALUE;
-		maxPathDown(root);
+		maxPathSumUtil2(root);
 		return maxValue;
 	}
 
-	private int maxPathDown(TreeNode node) {
+	//Modification of max path sum
+	private int maxPathSumUtil2(TreeNode node) {
 		if (node == null) return 0;
-		int left = maxPathDown(node.left);
-		int right = maxPathDown(node.right);
+		int left = maxPathSumUtil2(node.left);
+		int right = maxPathSumUtil2(node.right);
 		maxValue = Math.max(maxValue, left + right + node.val);
 		// Compare with zero to eliminate the -ve values
 		return Math.max(0, node.val + Math.max(left, right));
@@ -222,14 +227,15 @@ public class BTPatterns {
 	public int maxPathSum3(TreeNode root) {
 		int[] max = new int[1];
 		max[0] = Integer.MIN_VALUE;
-		maxPathDown(root, max);
+		maxPathSumUtil3(root, max);
 		return max[0];
 	}
 
-	private int maxPathDown(TreeNode node, int[] max) {
+	//Modification of max path sum
+	private int maxPathSumUtil3(TreeNode node, int[] max) {
 		if (node == null) return 0;
-		int left = maxPathDown(node.left, max);
-		int right = maxPathDown(node.right, max);
+		int left = maxPathSumUtil3(node.left, max);
+		int right = maxPathSumUtil3(node.right, max);
 		max[0] = Math.max(max[0], left + right + node.val);
 		// Compare with zero to eliminate the -ve values
 		return Math.max(0, node.val + Math.max(left, right));
@@ -452,31 +458,31 @@ public class BTPatterns {
 	 *    Traverse the nextRight ptr before the left & right ptr, then traverse getNextRight().
 	 */
 	// i.Approach30: Recursive approach
-	public void connectNodesAtSameLevel30(TreeNode root) {
+	public void connect(TreeNode root) {
 		if (root == null) return;
-		if (root.next != null) connectNodesAtSameLevel30(root.next);
+
 		if (root.left != null) {
 			if (root.right != null) {
 				root.left.next = root.right;
-				root.right.next = getNextRight(root);
 			} else {
-				root.left.next = getNextRight(root);
+				root.left.next = findNext(root);
 			}
-			connectNodesAtSameLevel30(root.left);
-		} else if (root.right != null) {
-			root.right.next = getNextRight(root);
-			connectNodesAtSameLevel30(root.right);
-		} else {
-			connectNodesAtSameLevel30(getNextRight(root));
 		}
+
+		if (root.right != null) {
+			root.right.next = findNext(root);
+		}
+
+		connect(root.right);
+		connect(root.left);
 	}
 
-	private TreeNode getNextRight(TreeNode node) {
-		TreeNode temp = node.next;
-		while (temp != null) {
-			if (temp.left != null) return temp.left;
-			if (temp.right != null) return temp.right;
-			temp = temp.next;
+	private TreeNode findNext(TreeNode node) {
+		TreeNode nextNode = node.next;
+		while (nextNode != null) {
+			if (nextNode.left != null) return nextNode.left;
+			if (nextNode.right != null) return nextNode.right;
+			nextNode = nextNode.next;
 		}
 		return null;
 	}

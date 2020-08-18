@@ -76,16 +76,20 @@ public class DivideAndConquerPatterns {
 		return 0;
 	}
 
-	//Note: This solution is not similar to same size problem. This is not elimination logic, its partition concept.
-	// Median of two sorted arrays(different Size) - Divide & Conquer Alg: Time Complexity- O(log(min(a,b)))
+	/* Median of two sorted arrays(different Size): Partition + Binary Search
+	 * Note: This solution is not similar to same size problem. This is not elimination logic, its partition concept.
+	 * Here we are doing binary search on minimum size array to find the median.
+	 * Time Complexity- O(log(min(a,b)))
+	 */
 	public double findMedianDiffSizeArray2(int[] X, int[] Y) {
-		int len1 = X.length, len2 = Y.length;
+		int lenX = X.length, lenY = Y.length;
 
-		if (len1 > len2) return findMedianDiffSizeArray2(Y, X);
+		if (lenX > lenY) return findMedianDiffSizeArray2(Y, X);
 
-		int maxLeftX, maxLeftY, minRightX, minRightY, low = 0, high = len1;
-		int totLength = len1 + len2;
+		int maxLeftX, minRightX, maxLeftY, minRightY, low = 0, high = lenX;
+		int totLength = lenX + lenY;
 		while (low <= high) {
+			//patitionX is mid element in the array X
 			int partitionX = (low + high) / 2;
 			//totLength+1 is used to handle the odd no elements. This make sure left side partition has additional one element in the left side.
 			int partitionY = ((totLength + 1) / 2) - partitionX;
@@ -102,8 +106,8 @@ public class DivideAndConquerPatterns {
 				} else { // For odd no of data
 					return (double) (Math.max(maxLeftX, maxLeftY));
 				}
-			} else if (maxLeftX > minRightY) { // we are too far on right side for partitionX. Go on left side(Reduce
-												// high value).
+			} else if (maxLeftX > minRightY) {
+				// we are too far on right side for partitionX. Go on left side(Reduce high value).
 				high = partitionX - 1;
 			} else {// we are too far on left side for partitionX. Go on right side(Increase low value).
 				low = partitionX + 1;
@@ -112,14 +116,14 @@ public class DivideAndConquerPatterns {
 		return 0.0;
 	}
 
-	// if partition is length of input then there is nothing on right side. Use +INF for minRightX
-	private int getRight(int[] arr, int partIndex) {
-		return partIndex == arr.length ? Integer.MAX_VALUE : arr[partIndex];
-	}
-
 	// if partition is 0 it means nothing is there on left side. Use -INF for maxLeftX
 	private int getLeft(int[] arr, int partIndex) {
 		return partIndex == 0 ? Integer.MIN_VALUE : arr[partIndex - 1];
+	}
+
+	// if partition is length of input then there is nothing on right side. Use +INF for minRightX
+	private int getRight(int[] arr, int partIndex) {
+		return partIndex == arr.length ? Integer.MAX_VALUE : arr[partIndex];
 	}
 
 	// K-th Element of Two Sorted Arrays

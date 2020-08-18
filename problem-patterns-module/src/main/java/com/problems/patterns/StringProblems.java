@@ -32,15 +32,6 @@ public class StringProblems {
 		return true;
 	}
 
-	public boolean isPalindrome(String s, int l, int r) {
-		while (l < r) {
-			if (s.charAt(l) != s.charAt(r)) return false;
-			l++;
-			r--;
-		}
-		return true;
-	}
-
 	/*
 	 * Valid Palindrome:Given a string, determine if it is a palindrome, 
 	 * considering only alphanumeric characters and ignoring cases.
@@ -52,12 +43,11 @@ public class StringProblems {
 			while (l < h && (!Character.isLetterOrDigit(str.charAt(l)))) l++;
 			while (l < h && (!Character.isLetterOrDigit(str.charAt(h)))) h--;
 			if (l == h) break;
-			if (Character.toLowerCase(str.charAt(l)) == Character.toLowerCase(str.charAt(h))) {
-				l++;
-				h--;
-			} else {
+			if (Character.toLowerCase(str.charAt(l)) != Character.toLowerCase(str.charAt(h))) {
 				return 0;
 			}
+			l++;
+			h--;
 		}
 		return 1;
 	}
@@ -120,6 +110,15 @@ public class StringProblems {
 		return false;
 	}
 
+	public boolean isPalindrome(String s, int l, int r) {
+		while (l < r) {
+			if (s.charAt(l) != s.charAt(r)) return false;
+			l++;
+			r--;
+		}
+		return true;
+	}
+
 	/*************** 3.Sting Pretty Print **************/
 	/* ZigZag Conversion:
 	 * The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of 
@@ -127,7 +126,30 @@ public class StringProblems {
 	 * Example 1: Input: s = "PAYPALISHIRING", numRows = 3; Output: "PAHNAPLSIIGYIR"
 	 * Example 2: Input: s = "PAYPALISHIRING", numRows = 4; Output: "PINALSIGYAHRPI"
 	 */
-	public String convert(String s, int numRows) {
+	public String convert1(String s, int numRows) {
+		if (numRows <= 1) return s;
+
+		String[] arr = new String[numRows];
+		Arrays.fill(arr, "");
+		int n = s.length(), row = 0;
+		boolean down = false;
+
+		for (int i = 0; i < n; i++) {
+			arr[row] += s.charAt(i);
+			if (row == 0) down = true;
+			if (row == numRows - 1) down = false;
+
+			if (down) row++;
+			else row--;
+		}
+
+		StringBuilder sb = new StringBuilder();
+		for (String str : arr)
+			sb.append(str);
+		return sb.toString();
+	}
+
+	public String convert2(String s, int numRows) {
 		if (numRows <= 1) return s;
 
 		StringBuilder sb = new StringBuilder();
@@ -152,29 +174,6 @@ public class StringProblems {
 		return sb.toString();
 	}
 
-	public String convert2(String s, int numRows) {
-		if (numRows <= 1) return s;
-
-		String[] arr = new String[numRows];
-		Arrays.fill(arr, "");
-		int n = s.length(), row = 0;
-		boolean down = false;
-
-		for (int i = 0; i < n; i++) {
-			arr[row] += s.charAt(i);
-			if (row == 0) down = true;
-			if (row == numRows - 1) down = false;
-
-			if (down) row++;
-			else row--;
-		}
-
-		StringBuilder sb = new StringBuilder();
-		for (String str : arr)
-			sb.append(str);
-		return sb.toString();
-	}
-
 	/************************* 4.String Math ************************/
 
 	/* Compare Version Numbers:
@@ -184,7 +183,7 @@ public class StringProblems {
 	 */
 	public int compareVersion(String version1, String version2) {
 		if (version1.length() == 0 && version2.length() == 0) return 0;
-		String[] ver1 = version1.split("\\.");
+		String[] ver1 = version1.split("[.]"); //or split("\\.")
 		String[] ver2 = version2.split("\\.");
 		for (int i = 0; i < Math.max(ver1.length, ver2.length); i++) {
 			int v1 = i < ver1.length ? Integer.valueOf(ver1[i]) : 0;
@@ -209,8 +208,7 @@ public class StringProblems {
 	public String encode(List<String> strs) {
 		StringBuilder output = new StringBuilder();
 		for (String str : strs) {
-			output.append(String.valueOf(str.length()) + "#");
-			output.append(str);
+			output.append(String.valueOf(str.length())).append("#").append(str);
 		}
 		return output.toString();
 	}

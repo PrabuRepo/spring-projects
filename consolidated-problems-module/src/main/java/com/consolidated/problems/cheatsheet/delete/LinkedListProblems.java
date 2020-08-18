@@ -6,14 +6,11 @@ import java.util.Random;
 import java.util.Stack;
 
 import com.common.model.ListNode;
-import com.common.model.ListNode;
-import com.common.model.ListNode;
 
 public class LinkedListProblems {
 	/************************* Type1: DS Manipulations **********************************/
 	// Insert an element at specific position in the list
-	public ListNode insert(ListNode head, int data,
-			int pos) {
+	public ListNode insert(ListNode head, int data, int pos) {
 		ListNode newLLNode = new ListNode(data);
 		if (head == null) {
 			head = newLLNode;
@@ -39,8 +36,7 @@ public class LinkedListProblems {
 	}
 
 	// Inserting a Node into a Sorted Doubly Linked List
-	ListNode SortedInsert(ListNode head,
-			int data) {
+	ListNode SortedInsert(ListNode head, int data) {
 		ListNode newNode = new ListNode(data);
 		if (head == null) {
 			head = newNode;
@@ -77,8 +73,7 @@ public class LinkedListProblems {
 	}
 
 	// Remove Linked List Elements
-	public ListNode removeElements(ListNode head,
-			int val) {
+	public ListNode removeElements(ListNode head, int val) {
 		if (head == null) return null;
 		ListNode temp = new ListNode(0);
 		temp.next = head;
@@ -94,14 +89,11 @@ public class LinkedListProblems {
 	}
 
 	// Remove Duplicates from Sorted List
-	public ListNode deleteDuplicates(
-			ListNode head) {
-		if (head == null || head.next == null)
-			return head;
+	public ListNode deleteDuplicates(ListNode head) {
+		if (head == null || head.next == null) return head;
 		ListNode curr = head;
 		while (curr != null) {
-			if (curr.next != null
-					&& curr.data == curr.next.data) {
+			if (curr.next != null && curr.data == curr.next.data) {
 				curr.next = curr.next.next;
 			} else {
 				curr = curr.next;
@@ -113,8 +105,7 @@ public class LinkedListProblems {
 	// Finding middle element in a linked list
 	public ListNode middleNode(ListNode head) {
 		ListNode slowPtr = head, fastPtr = head;
-		while (fastPtr != null
-				&& fastPtr.next != null) {
+		while (fastPtr != null && fastPtr.next != null) {
 			slowPtr = slowPtr.next;
 			fastPtr = fastPtr.next.next;
 		}
@@ -124,8 +115,7 @@ public class LinkedListProblems {
 	public ListNode middleNode2(ListNode head) {
 		if (head == null) return null;
 		ListNode slowPtr = head, fastPtr = head;
-		while (fastPtr.next != null
-				&& fastPtr.next.next != null) {
+		while (fastPtr.next != null && fastPtr.next.next != null) {
 			slowPtr = slowPtr.next;
 			fastPtr = fastPtr.next.next;
 		}
@@ -137,8 +127,7 @@ public class LinkedListProblems {
 		int count = 0, size = 0;
 		ListNode first = head, second = head;
 		while (first != null) {
-			if (count++ >= n)
-				second = second.next;
+			if (count++ >= n) second = second.next;
 			first = first.next;
 			size++;
 		}
@@ -146,11 +135,9 @@ public class LinkedListProblems {
 	}
 
 	// Remove Nth Node From End of List
-	public ListNode removeNthFromEnd(
-			ListNode head, int n) {
+	public ListNode removeNthFromEnd(ListNode head, int n) {
 		ListNode ptr1 = head, ptr2 = head;
-		while (n-- > 0 && ptr1 != null)
-			ptr1 = ptr1.next;
+		while (n-- > 0 && ptr1 != null) ptr1 = ptr1.next;
 		if (ptr1 == null) {
 			head = head.next;
 			return head;
@@ -173,8 +160,7 @@ public class LinkedListProblems {
 	}
 
 	// Print using recursive approach
-	public void displayReverseRecursive(
-			ListNode head) {
+	public void displayReverseRecursive(ListNode head) {
 		if (head == null) return;
 		displayReverseRecursive(head.next);
 		System.out.print(head.data + " ");
@@ -200,8 +186,7 @@ public class LinkedListProblems {
 		return helper(head, null);
 	}
 
-	public ListNode helper(ListNode head,
-			ListNode prev) {
+	public ListNode helper(ListNode head, ListNode prev) {
 		if (head == null) return prev;
 		ListNode next = head.next;
 		head.next = prev;
@@ -209,8 +194,7 @@ public class LinkedListProblems {
 	}
 
 	// Reverse a linked list II: Reverse a linked list from position m to n. Do it in one-pass.
-	public ListNode reverseBetween(ListNode head,
-			int m, int n) {
+	public ListNode reverseBetween(ListNode head, int m, int n) {
 		ListNode fakeHead = new ListNode(-1);
 		fakeHead.next = head;
 		ListNode prev = fakeHead;
@@ -262,8 +246,7 @@ public class LinkedListProblems {
 		int currMax = -1;
 		while (curr != null) {
 			System.out.print(currMax + " ");
-			currMax = Math.max(currMax,
-					curr.data);
+			currMax = Math.max(currMax, curr.data);
 			curr = curr.next;
 		}
 		head = reverseList1(revHead);
@@ -281,16 +264,14 @@ public class LinkedListProblems {
 		int currMax = -1;
 		while (!stack.isEmpty()) {
 			System.out.print(currMax + " ");
-			currMax = Math.max(currMax,
-					stack.pop());
+			currMax = Math.max(currMax, stack.pop());
 		}
 	}
 
 	/* Reverse Nodes in k-Group:
 	 * Given a linked list, reverse the nodes of a linked list k at a time and return its modified list.
 	 */
-	public ListNode reverseKGroup(ListNode head,
-			int k) {
+	public ListNode reverseKGroup(ListNode head, int k) {
 		if (head == null) return null;
 		ListNode curr = head;
 		int count = 0;
@@ -299,8 +280,7 @@ public class LinkedListProblems {
 			count++;
 		}
 		if (count == k) {
-			ListNode prev = reverseKGroup(curr,
-					k);
+			ListNode prev = reverseKGroup(curr, k);
 			while (count-- > 0) {
 				ListNode next = head.next;
 				head.next = prev;
@@ -332,24 +312,20 @@ public class LinkedListProblems {
 			count++;
 		}
 		if (current != null) {
-			current.next = kAltReverse(
-					current.next, k);
+			current.next = kAltReverse(current.next, k);
 		}
 		return prev;
 	}
 
 	// Rotate a Linked List
-	public ListNode rotateLinkedList(
-			ListNode head, int k) {
+	public ListNode rotateLinkedList(ListNode head, int k) {
 		if (k > 0) {
 			ListNode curr = head;
 			int count = 1;
-			while (count++ < k && curr != null)
-				curr = curr.next;
+			while (count++ < k && curr != null) curr = curr.next;
 			if (curr == null) return head;
 			ListNode nextHead = curr;
-			while (curr.next != null)
-				curr = curr.next;
+			while (curr.next != null) curr = curr.next;
 			curr.next = head;
 			head = nextHead.next;
 			nextHead.next = null;
@@ -368,8 +344,7 @@ public class LinkedListProblems {
 		if (head == null) return head;
 		ListNode odd = head, even = head.next;
 		ListNode oddHead = odd, evenHead = even;
-		while (even != null
-				&& even.next != null) {
+		while (even != null && even.next != null) {
 			odd.next = odd.next.next;
 			even.next = even.next.next;
 			odd = odd.next;
@@ -380,12 +355,10 @@ public class LinkedListProblems {
 	}
 
 	public ListNode oddEvenList2(ListNode head) {
-		if (head == null || head.next == null)
-			return head;
+		if (head == null || head.next == null) return head;
 		ListNode curr = null, odd, even;
 		int count = 3;
-		ListNode oddNode = head,
-				evenNode = head.next;
+		ListNode oddNode = head, evenNode = head.next;
 		odd = oddNode;
 		even = evenNode;
 		curr = evenNode.next;
@@ -415,8 +388,7 @@ public class LinkedListProblems {
 		ListNode dummy = new ListNode(0);
 		ListNode curr = dummy;
 		dummy.next = head;
-		while (curr.next != null
-				&& curr.next.next != null) {
+		while (curr.next != null && curr.next.next != null) {
 			ListNode first = curr.next;
 			ListNode second = curr.next.next;
 			first.next = second.next;
@@ -429,8 +401,7 @@ public class LinkedListProblems {
 
 	// Recursive solution
 	public ListNode swapPairs(ListNode head) {
-		if (head == null || head.next == null)
-			return head;
+		if (head == null || head.next == null) return head;
 		ListNode second = head.next;
 		head.next = swapPairs(head.next.next);
 		second.next = head;
@@ -445,8 +416,7 @@ public class LinkedListProblems {
 	 *  Input: head = 1->4->3->2->5->2, x = 3
 	 *  Output: 1->2->2->4->3->5
 	 */
-	public ListNode partition(ListNode head,
-			int x) {
+	public ListNode partition(ListNode head, int x) {
 		ListNode beforeXHead = new ListNode(0);
 		ListNode before = beforeXHead;
 		ListNode afterXHead = new ListNode(0);
@@ -479,20 +449,17 @@ public class LinkedListProblems {
 	public void reorderList(ListNode head) {
 		if (head == null) return;
 		ListNode slowPtr = head, fastPtr = head;
-		while (fastPtr.next != null
-				&& fastPtr.next.next != null) {
+		while (fastPtr.next != null && fastPtr.next.next != null) {
 			slowPtr = slowPtr.next;
 			fastPtr = fastPtr.next.next;
 		}
-		ListNode rightHalf = reverseList1(
-				slowPtr.next);
+		ListNode rightHalf = reverseList1(slowPtr.next);
 		slowPtr.next = null;
 		ListNode leftHalf = head;
 		mergeList(leftHalf, rightHalf);
 	}
 
-	public void mergeList(ListNode leftHalf,
-			ListNode rightHalf) {
+	public void mergeList(ListNode leftHalf, ListNode rightHalf) {
 		while (rightHalf != null) {
 			ListNode rightHalfNext = rightHalf.next;
 			rightHalf.next = leftHalf.next;
@@ -505,8 +472,7 @@ public class LinkedListProblems {
 	// Sort List:Sort a linked list in O(n log n) time using constant space complexity.
 	// Use mergesort
 	public ListNode sortList(ListNode head) {
-		if (head == null || head.next == null)
-			return head;
+		if (head == null || head.next == null) return head;
 		ListNode middle = middleNode2(head);
 		ListNode next = middle.next;
 		middle.next = null;
@@ -515,29 +481,24 @@ public class LinkedListProblems {
 		return merge(left, right);
 	}
 
-	public ListNode merge(ListNode head1,
-			ListNode head2) {
+	public ListNode merge(ListNode head1, ListNode head2) {
 		if (head1 == null) return head2;
 		if (head2 == null) return head1;
 		ListNode result = null;
 		if (head1.data < head2.data) {
 			result = head1;
-			result.next = merge(head1.next,
-					head2);
+			result.next = merge(head1.next, head2);
 		} else {
 			result = head2;
-			result.next = merge(head1,
-					head2.next);
+			result.next = merge(head1, head2.next);
 		}
 		return result;
 	}
 
 	// Sort List – Insertion List
-	public ListNode insertionSortList(
-			ListNode head) {
+	public ListNode insertionSortList(ListNode head) {
 		if (head == null) return head;
-		ListNode sortedList = null, next = null,
-				curr = head;
+		ListNode sortedList = null, next = null, curr = head;
 		while (curr != null) {
 			next = curr.next;
 			sortedList = sort(curr, sortedList);
@@ -546,17 +507,13 @@ public class LinkedListProblems {
 		return sortedList;
 	}
 
-	public ListNode sort(ListNode curr,
-			ListNode sortedList) {
-		if (sortedList == null
-				|| curr.data < sortedList.data) {
+	public ListNode sort(ListNode curr, ListNode sortedList) {
+		if (sortedList == null || curr.data < sortedList.data) {
 			curr.next = sortedList;
 			sortedList = curr;
 		} else {
 			ListNode temp = sortedList;
-			while (temp.next != null
-					&& temp.next.data < curr.data)
-				temp = temp.next;
+			while (temp.next != null && temp.next.data < curr.data) temp = temp.next;
 			curr.next = temp.next;
 			temp.next = curr;
 		}
@@ -576,19 +533,15 @@ public class LinkedListProblems {
 		Map<Integer, Node> map = new HashMap<>();
 		Node curr = head;
 		while (curr != null) {
-			map.put(curr.val, new Node(curr.val,
-					null, null));
+			map.put(curr.val, new Node(curr.val, null, null));
 			curr = curr.next;
 		}
 		curr = head;
 		Node cloneHead = map.get(head.val);
 		Node clone = cloneHead;
 		while (curr != null) {
-			clone.next = curr.next == null ? null
-					: map.get(curr.next.val);
-			clone.random = curr.random == null
-					? null
-					: map.get(curr.random.val);
+			clone.next = curr.next == null ? null : map.get(curr.next.val);
+			clone.random = curr.random == null ? null : map.get(curr.random.val);
 
 			curr = curr.next;
 			clone = clone.next;
@@ -601,8 +554,7 @@ public class LinkedListProblems {
 		if (head == null) return head;
 		Node curr = head, clone;
 		while (curr != null) {
-			clone = new Node(curr.val, curr.next,
-					null);
+			clone = new Node(curr.val, curr.next, null);
 			curr.next = clone;
 			curr = clone.next;
 		}
@@ -610,9 +562,7 @@ public class LinkedListProblems {
 		clone = null;
 		while (curr != null) {
 			clone = curr.next;
-			clone.random = curr.random == null
-					? null
-					: curr.random.next;
+			clone.random = curr.random == null ? null : curr.random.next;
 			curr = clone.next;
 		}
 		curr = head;
@@ -620,8 +570,7 @@ public class LinkedListProblems {
 		clone = cloneHead;
 		while (curr != null) {
 			curr.next = clone.next;
-			clone.next = clone.next == null ? null
-					: clone.next.next;
+			clone.next = clone.next == null ? null : clone.next.next;
 
 			clone = clone.next;
 			curr = curr.next;
@@ -633,8 +582,7 @@ public class LinkedListProblems {
 	// Linked List Cycle
 	public boolean hasCycle(ListNode head) {
 		ListNode slowPtr = head, fastPtr = head;
-		while (fastPtr != null
-				&& fastPtr.next != null) {
+		while (fastPtr != null && fastPtr.next != null) {
 			slowPtr = slowPtr.next;
 			fastPtr = fastPtr.next.next;
 			if (slowPtr == fastPtr) return true;
@@ -646,12 +594,9 @@ public class LinkedListProblems {
 	 null. */
 	// Linked List Cycle II
 	public ListNode detectCycle(ListNode head) {
-		if (head == null || head.next == null)
-			return null;
-		ListNode slow = head, fast = head,
-				entry = head;
-		while (fast.next != null
-				&& fast.next.next != null) {
+		if (head == null || head.next == null) return null;
+		ListNode slow = head, fast = head, entry = head;
+		while (fast.next != null && fast.next.next != null) {
 			slow = slow.next;
 			fast = fast.next.next;
 			if (slow == fast) {
@@ -670,8 +615,7 @@ public class LinkedListProblems {
 		ListNode slowPtr = head, fastPtr = head;
 		boolean flag = false;
 		int result = 0;
-		while (fastPtr != null
-				&& fastPtr.next != null) {
+		while (fastPtr != null && fastPtr.next != null) {
 			slowPtr = slowPtr.next;
 			fastPtr = fastPtr.next.next;
 			if (slowPtr == fastPtr) {
@@ -685,10 +629,12 @@ public class LinkedListProblems {
 				slowPtr = slowPtr.next;
 				count++;
 			} while (slowPtr != fastPtr);
+
 			slowPtr = head;
 			while (count-- > 0) {
 				slowPtr = slowPtr.next;
 			}
+
 			fastPtr = head;
 			while (slowPtr.next != fastPtr.next) {
 				slowPtr = slowPtr.next;
@@ -710,20 +656,16 @@ public class LinkedListProblems {
 		}
 		curr = head;
 		while (curr != null) {
-			if (curr.data != stack.pop().data)
-				return false;
+			if (curr.data != stack.pop().data) return false;
 			curr = curr.next;
 		}
 		return true;
 	}
 
 	public boolean isPalindrome2(ListNode head) {
-		if (head == null || head.next == null)
-			return true;
-		ListNode slowPtr = head, fastPtr = head,
-				prevNode = null;
-		while (fastPtr != null
-				&& fastPtr.next != null) {
+		if (head == null || head.next == null) return true;
+		ListNode slowPtr = head, fastPtr = head, prevNode = null;
+		while (fastPtr != null && fastPtr.next != null) {
 			prevNode = slowPtr;
 			slowPtr = slowPtr.next;
 			fastPtr = fastPtr.next.next;
@@ -747,15 +689,10 @@ public class LinkedListProblems {
 		return flag;
 	}
 
-	public boolean compare(ListNode node1,
-			ListNode node2) {
-		if (node1 == null && node2 == null)
-			return true;
-		if (node1 == null || node2 == null)
-			return false;
-		return ((node1.data == node2.data)
-				&& compare(node1.next,
-						node2.next));
+	public boolean compare(ListNode node1, ListNode node2) {
+		if (node1 == null && node2 == null) return true;
+		if (node1 == null || node2 == null) return false;
+		return ((node1.data == node2.data) && compare(node1.next, node2.next));
 	}
 
 	/*
@@ -768,35 +705,31 @@ public class LinkedListProblems {
 		Random random = new Random();
 		int count = 1, randomVal = 0;
 		while (curr != null) {
-			if (random.nextInt(count++) == 0)
-				randomVal = curr.data;
+			if (random.nextInt(count++) == 0) randomVal = curr.data;
 			curr = curr.next;
 		}
 		return randomVal;
 	}
 
-	/************************* Type4: DS manipulation on mulitple objects **********************************/
+	/*************************
+	 * Type4: DS manipulation on mulitple objects
+	 **********************************/
 
 	// Intersection of Two Linked Lists
-	public ListNode getIntersectionNode(
-			ListNode head1, ListNode head2) {
+	public ListNode getIntersectionNode(ListNode head1, ListNode head2) {
 		if (head1 != null && head2 != null) {
 			int len1 = length(head1);
 			int len2 = length(head2);
 			int diff;
 			if (len1 > len2) {
 				diff = len1 - len2;
-				while (diff-- > 0)
-					head1 = head1.next;
+				while (diff-- > 0) head1 = head1.next;
 			} else {
 				diff = len2 - len1;
-				while (diff-- > 0)
-					head2 = head2.next;
+				while (diff-- > 0) head2 = head2.next;
 			}
-			while (head1 != null
-					&& head2 != null) {
-				if (head1.data == head2.data)
-					return head1;
+			while (head1 != null && head2 != null) {
+				if (head1.data == head2.data) return head1;
 				head1 = head1.next;
 				head2 = head2.next;
 			}
@@ -811,26 +744,22 @@ public class LinkedListProblems {
 
 	// Merge Two Sorted Lists:
 	// Recursive Approach:
-	public ListNode mergeTwoLists1(ListNode l1,
-			ListNode l2) {
+	public ListNode mergeTwoLists1(ListNode l1, ListNode l2) {
 		if (l1 == null) return l2;
 		if (l2 == null) return l1;
 		ListNode result = null;
 		if (l1.data <= l2.data) {
 			result = l1;
-			result.next = mergeTwoLists(l1.next,
-					l2);
+			result.next = mergeTwoLists(l1.next, l2);
 		} else {
 			result = l2;
-			result.next = mergeTwoLists(l1,
-					l2.next);
+			result.next = mergeTwoLists(l1, l2.next);
 		}
 		return result;
 	}
 
 	// Iterative Approach
-	public ListNode mergeTwoLists(ListNode l1,
-			ListNode l2) {
+	public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
 		ListNode result = new ListNode(0);
 		ListNode curr = result;
 		while (l1 != null && l2 != null) {
@@ -850,38 +779,33 @@ public class LinkedListProblems {
 
 	// Flattening a Linked List:
 	FlattenNode flatten(FlattenNode root) {
-		if (root == null || root.next == null)
-			return root;
+		if (root == null || root.next == null) return root;
 		root.next = flatten(root.next);
 		root = merge(root, root.next);
 		return root;
 	}
 
-	public FlattenNode merge(FlattenNode node1,
-			FlattenNode node2) {
+	public FlattenNode merge(FlattenNode node1, FlattenNode node2) {
 		if (node1 == null) return node2;
 		if (node2 == null) return node1;
 		FlattenNode result = null;
 		if (node1.data < node2.data) {
 			result = node1;
-			result.bottom = merge(node1.bottom,
-					node2);
+			result.bottom = merge(node1.bottom, node2);
 		} else {
 			result = node2;
-			result.bottom = merge(node1,
-					node2.bottom);
+			result.bottom = merge(node1, node2.bottom);
 		}
 		return result;
 	}
 }
 
 class Node {
-	public int	val;
-	public Node	next;
-	public Node	random;
+	public int val;
+	public Node next;
+	public Node random;
 
-	public Node(int _val, Node _next,
-			Node _random) {
+	public Node(int _val, Node _next, Node _random) {
 		val = _val;
 		next = _next;
 		random = _random;
@@ -889,9 +813,9 @@ class Node {
 }
 
 class FlattenNode {
-	int			data;
-	FlattenNode	next;
-	FlattenNode	bottom;
+	int data;
+	FlattenNode next;
+	FlattenNode bottom;
 
 	public FlattenNode(int d) {
 		data = d;

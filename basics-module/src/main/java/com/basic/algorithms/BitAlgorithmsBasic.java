@@ -1,9 +1,26 @@
 package com.basic.algorithms;
+/*Practice tricks in below links:
+ ********************************
+    https://github.com/keon/awesome-bits
+	https://www.hackerearth.com/practice/notes/bit-manipulation/
+	https://www.quora.com/What-are-some-cool-bit-manipulation-tricks-hacks
+	https://stackoverflow.com/questions/1533131/what-useful-bitwise-operator-code-tricks-should-a-developer-know-about
+	https://gist.github.com/stephenLee/4024869
+	https://www.topcoder.com/community/data-science/data-science-tutorials/a-bit-of-fun-fun-with-bits/
+	
+Applications of bit operations:
+1) They are widely used in areas of graphics ,specially XOR(Exclusive OR) operations.
+2) They are widely used in the embedded systems, in situations, where we need to set/clear/toggle just one single bit of a specific 
+   register without modifying the other contents. We can do OR/AND/XOR operations with the appropriate mask for the bit position.
+3) Data structure like n-bit map can be used to allocate n-size resource pool to represent the current status.
+4) Bits are used in networking, framing the packets of numerous bits which is sent to another system generally through any type 
+   of serial interface.
+*/
 
-public class BitAlgorithms {
+public class BitAlgorithmsBasic {
 
 	public static void main(String[] args) {
-		BitAlgorithms ob = new BitAlgorithms();
+		BitAlgorithmsBasic ob = new BitAlgorithmsBasic();
 
 		ob.testBasicIdeas();
 
@@ -25,56 +42,6 @@ public class BitAlgorithms {
 		System.out.println("To undestand the some random value to 2th power and no of bytes");
 		findMemoryInfo(1000000000); // 1000000000 - 1billion bytes
 	}
-
-	public void testSimpleTricks() {
-		System.out.println("Integer.MAX_VALUE: " + intMaxValue());
-		System.out.println("Integer.MIN_VALUE: " + intMinValue());
-		System.out.println("Long.MAX_VALUE: " + longMaxValue());
-		System.out.println("Long.MIN_VALUE: " + longMinValue());
-		System.out.println("Set nth bit:" + setNthBit(3, 2));
-		System.out.println("Check whether nth bit is set or not? " + isSetBit(16, 5));
-		System.out.println("UnSet nth bit:" + unSetNthBit(15, 3));
-		System.out.println("Toggle Nth bit:" + toggleNthBit(10, 3));
-		System.out.println("Left Rotations:" + leftRotation(128, 3));
-		System.out.println("Right Rotations:" + rightRotation(128, 3));
-		System.out.println("2^n(2 power n) Value:" + twoPowerOfN(5));
-		System.out.println("Check the Power of 2:" + checkPowerOfTwo(64));
-		System.out.println("Given numbers are equal? " + checkEquality(24, 24));
-		System.out.println("Is even number? " + isEven(7));
-		System.out.println("Is Odd number? " + isOdd1(21));
-		System.out.println("Is Odd number? " + isOdd2(21));
-		System.out.println("Off the right most bit: " + offRightMost(14));
-		System.out.println("Rightmost 1 in binary representation: " + rightMostSetBit1(12));
-		System.out.println("Find first set bit: " + findFirstSetBit(12));
-		System.out.println("Number of ones(Hamming Weight):" + hammingWeight1(424732));
-		System.out.println("Number of ones(Hamming Weight): " + hammingWeight2(424732));
-		System.out.println("Number of ones(Hamming Weight): " + hammingWeight3(424732));
-		System.out.println("Count no of set bits 1 to given number:" + countAllSetBits(4));
-		System.out.println("Find Min:" + findMin(200, 90));
-		System.out.println("Find Max:" + findMax(200, 90));
-		System.out.println("Swap without using temp variable1:");
-		swap1(2905, 6079);
-		System.out.println("Swap without using temp variable2:");
-		swap2(2905, 6079);
-	}
-
-	/*Practice tricks in below links:
-	 ********************************
-	    https://github.com/keon/awesome-bits
-		https://www.hackerearth.com/practice/notes/bit-manipulation/
-		https://www.quora.com/What-are-some-cool-bit-manipulation-tricks-hacks
-		https://stackoverflow.com/questions/1533131/what-useful-bitwise-operator-code-tricks-should-a-developer-know-about
-		https://gist.github.com/stephenLee/4024869
-		https://www.topcoder.com/community/data-science/data-science-tutorials/a-bit-of-fun-fun-with-bits/
-		
-	Applications of bit operations:
-	1) They are widely used in areas of graphics ,specially XOR(Exclusive OR) operations.
-	2) They are widely used in the embedded systems, in situations, where we need to set/clear/toggle just one single bit of a specific 
-	   register without modifying the other contents. We can do OR/AND/XOR operations with the appropriate mask for the bit position.
-	3) Data structure like n-bit map can be used to allocate n-size resource pool to represent the current status.
-	4) Bits are used in networking, framing the packets of numerous bits which is sent to another system generally through any type 
-	   of serial interface.
-	*/
 
 	/*********** Bit Manipulations - Basics Ideas ******************/
 
@@ -195,6 +162,37 @@ public class BitAlgorithms {
 	}
 
 	/************** Bit Manipulations - Simple tricks ******************/
+	public void testSimpleTricks() {
+		System.out.println("Integer.MAX_VALUE: " + intMaxValue());
+		System.out.println("Integer.MIN_VALUE: " + intMinValue());
+		System.out.println("Long.MAX_VALUE: " + longMaxValue());
+		System.out.println("Long.MIN_VALUE: " + longMinValue());
+		System.out.println("Set nth bit:" + setNthBit(3, 2));
+		System.out.println("Check whether nth bit is set or not? " + isSetBit(16, 5));
+		System.out.println("UnSet nth bit:" + unSetNthBit(15, 3));
+		System.out.println("Toggle Nth bit:" + toggleNthBit(10, 3));
+		System.out.println("Left Rotations:" + leftRotation(128, 3));
+		System.out.println("Right Rotations:" + rightRotation(128, 3));
+		System.out.println("2^n(2 power n) Value:" + twoPowerOfN(5));
+		System.out.println("Check the Power of 2:" + checkPowerOfTwo(64));
+		System.out.println("Given numbers are equal? " + checkEquality(24, 24));
+		System.out.println("Is even number? " + isEven(7));
+		System.out.println("Is Odd number? " + isOdd1(21));
+		System.out.println("Is Odd number? " + isOdd2(21));
+		System.out.println("Off the right most bit: " + offRightMost(14));
+		System.out.println("Rightmost 1 in binary representation: " + rightMostSetBit1(8));
+		System.out.println("Find first set bit: " + findFirstSetBit(8));
+		System.out.println("Number of ones(Hamming Weight):" + hammingWeight1(424732));
+		System.out.println("Number of ones(Hamming Weight): " + hammingWeight2(424732));
+		System.out.println("Number of ones(Hamming Weight): " + hammingWeight3(424732));
+		System.out.println("Count no of set bits 1 to given number:" + countAllSetBits(4));
+		System.out.println("Find Min:" + findMin(200, 90));
+		System.out.println("Find Max:" + findMax(200, 90));
+		System.out.println("Swap without using temp variable1:");
+		swap1(2905, 6079);
+		System.out.println("Swap without using temp variable2:");
+		swap2(2905, 6079);
+	}
 
 	public int intMaxValue() {
 		int max = 0;
@@ -348,8 +346,7 @@ public class BitAlgorithms {
 
 	// Returns the rightmost 1 in binary representation of x;
 	public int findFirstSetBit(int data) {
-		if (data == 0)
-			return 0;
+		if (data == 0) return 0;
 
 		int bit = 1;
 		int count = 1;
@@ -399,8 +396,7 @@ public class BitAlgorithms {
 
 	// Recursive Approach
 	public int countSetBits3(int n) {
-		if (n == 0)
-			return 0;
+		if (n == 0) return 0;
 		return (n % 2 == 1 ? 1 : 0) + countSetBits3(n / 2);
 	}
 

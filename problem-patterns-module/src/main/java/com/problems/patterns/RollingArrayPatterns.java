@@ -27,8 +27,7 @@ public class RollingArrayPatterns {
 	// 1.Fibonacci numbers: Two variable approach:
 	//Refer DynamicProgramming.java in Basic Module approach
 	public int fibonacci4(int n) {
-		if (n == 0)
-			return 0;
+		if (n == 0) return 0;
 		int prev = 1, curr = 1;
 		for (int i = 2; i < n; i++) {
 			int tmp = curr;
@@ -41,12 +40,9 @@ public class RollingArrayPatterns {
 	//Staircase/Climbing Stairs/Triple Step/ Davis' Staircase/Count number of ways to cover a distance
 	//Refer DynamicProgramming.java in Basic Module approach
 	public int tripleSteps4(int n) {
-		if (n <= 0)
-			return 0;
-		else if (n == 1)
-			return 1;
-		else if (n == 2)
-			return 2;
+		if (n <= 0) return 0;
+		else if (n == 1) return 1;
+		else if (n == 2) return 2;
 
 		int prev1 = 1, prev2 = 1, curr = 2;
 		for (int i = 3; i <= n; i++) {
@@ -73,8 +69,7 @@ public class RollingArrayPatterns {
 	}
 
 	public int maxSubsetSum(int[] arr) {
-		if (arr.length == 0)
-			return 0;
+		if (arr.length == 0) return 0;
 		int incl = 0, excl = 0, temp = 0;
 		for (int a : arr) {
 			temp = incl;
@@ -124,8 +119,7 @@ public class RollingArrayPatterns {
 	}
 
 	private int rob1(int[] nums, int i) {
-		if (i < 0)
-			return 0;
+		if (i < 0) return 0;
 		return Math.max(rob1(nums, i - 2) + nums[i], rob1(nums, i - 1));
 	}
 
@@ -139,10 +133,8 @@ public class RollingArrayPatterns {
 	}
 
 	private int rob2(int[] nums, int i) {
-		if (i < 0)
-			return 0;
-		if (memo[i] >= 0)
-			return memo[i];
+		if (i < 0) return 0;
+		if (memo[i] >= 0) return memo[i];
 		memo[i] = Math.max(rob2(nums, i - 2) + nums[i], rob2(nums, i - 1));
 		return memo[i];
 	}
@@ -150,11 +142,9 @@ public class RollingArrayPatterns {
 	/* Java Solution 3- Dynamic Programming The key is to find the relation dp[i]=Math.max(dp[i-1],dp[i-2]+nums[i]).
 	 */
 	public int houseRob13(int[] nums) {
-		if (nums == null || nums.length == 0)
-			return 0;
+		if (nums == null || nums.length == 0) return 0;
 		int n = nums.length;
-		if (n == 1)
-			return nums[0];
+		if (n == 1) return nums[0];
 		int[] dp = new int[n];
 		dp[0] = nums[0];
 		dp[1] = Math.max(nums[0], nums[1]);
@@ -166,8 +156,7 @@ public class RollingArrayPatterns {
 
 	// 4:Bottom Up: Two variable approach:
 	public int houseRob14(int[] nums) {
-		if (nums.length == 0)
-			return 0;
+		if (nums.length == 0) return 0;
 		int prev = 0, curr = 0;
 		for (int i = 0; i < nums.length; i++) {
 			int tmp = curr;
@@ -181,8 +170,7 @@ public class RollingArrayPatterns {
 	 * array.You can use the following example to walk through the code.
 	 */
 	public int houseRob15(int[] num) {
-		if (num == null || num.length == 0)
-			return 0;
+		if (num == null || num.length == 0) return 0;
 		int even = 0;
 		int odd = 0;
 		for (int i = 0; i < num.length; i++) {
@@ -213,10 +201,8 @@ public class RollingArrayPatterns {
 	 */
 
 	public int houseRob2(int[] nums) {
-		if (nums == null || nums.length == 0)
-			return 0;
-		if (nums.length == 1)
-			return nums[0];
+		if (nums == null || nums.length == 0) return 0;
+		if (nums.length == 1) return nums[0];
 		int max1 = findMax1(nums, 0, nums.length - 2);
 		int max2 = findMax1(nums, 1, nums.length - 1);
 		return Math.max(max1, max2);
@@ -235,8 +221,7 @@ public class RollingArrayPatterns {
 
 	//Time Complexity: O(n); Space Complexity: O(n)
 	public int findMax2(int[] nums, int l, int h) {
-		if (l == h)
-			return nums[l];
+		if (l == h) return nums[l];
 		int[] dp = new int[nums.length];
 		dp[l] = nums[l];
 		dp[l + 1] = Math.max(nums[l], nums[l + 1]);
@@ -253,8 +238,7 @@ public class RollingArrayPatterns {
 	 * the maximum value when a root if NOT selected.
 	 */
 	public int houseRob3(TreeNode root) {
-		if (root == null)
-			return 0;
+		if (root == null) return 0;
 		int[] result = helper(root);
 		return Math.max(result[0], result[1]);
 	}
@@ -275,21 +259,20 @@ public class RollingArrayPatterns {
 	//Decode Ways/Count Number of Encodings of a digit string
 	// Approach1: Using Recursion
 	public int numDecodings1(String s) {
-		if (s.length() == 0)
-			return 0;
+		if (s.length() == 0) return 0;
 		return numDecodings(s, 0);
 	}
 
 	public int numDecodings(String s, int i) {
 		int n = s.length();
-		if (i == n)
-			return 1;
-		if (i > n || s.charAt(i) == '0')
-			return 0;
+		if (i == n) return 1;
+		if (i > n || s.charAt(i) == '0') return 0;
 		int sum = numDecodings(s, i + 1);
-		if (i + 1 < n)
-			if (s.charAt(i) == '1' || (s.charAt(i) == '2' && s.charAt(i + 1) <= '6'))
+		if (i + 1 < n) {
+			if (s.charAt(i) == '1' || (s.charAt(i) == '2' && s.charAt(i + 1) <= '6')) {
 				sum += numDecodings(s, i + 2);
+			}
+		}
 		return sum;
 	}
 
@@ -307,8 +290,7 @@ public class RollingArrayPatterns {
 			int second = Integer.valueOf(s.substring(i - 2, i));
 			if (first >= 1 && first <= 9) //if(first!=0)
 				dp[i] += dp[i - 1];
-			if (second >= 10 && second <= 26)
-				dp[i] += dp[i - 2];
+			if (second >= 10 && second <= 26) dp[i] += dp[i - 2];
 		}
 		return dp[n];
 	}
@@ -319,20 +301,16 @@ public class RollingArrayPatterns {
 	 * just use two variable prev1, prev2 instead? This can reduce the 
 	 * space to O(1) */
 	public int numDecodings4(String s) {
-		if (s.charAt(0) == '0')
-			return 0;
+		if (s.charAt(0) == '0') return 0;
 		int prev = 1, curr = 1;
 		for (int i = 1; i < s.length(); i++) {
 			// if prev & curr are zero, we can jump out of the loop earlier
-			if (prev == 0 && curr == 0)
-				return 0;
+			if (prev == 0 && curr == 0) return 0;
 
 			int tmp = curr;
-			if (s.charAt(i) == '0')
-				curr = 0;
+			if (s.charAt(i) == '0') curr = 0;
 			int num = Integer.valueOf(s.substring(i - 1, i + 1));
-			if (num >= 10 && num <= 26)
-				curr += prev;
+			if (num >= 10 && num <= 26) curr += prev;
 			prev = tmp;
 		}
 		return curr;
@@ -347,8 +325,7 @@ public class RollingArrayPatterns {
 	public boolean canJump(int[] nums) {
 		int max = 0;
 		for (int i = 0; i < nums.length; i++) {
-			if (i > max)
-				return false;
+			if (i > max) return false;
 			max = Math.max(max, i + nums[i]);
 		}
 
@@ -369,10 +346,8 @@ public class RollingArrayPatterns {
 
 	// Returns minimum number of jumps to reach arr[h] from arr[l]
 	public int minJumps(int arr[], int index, int n) {
-		if (index >= n)
-			return 0;
-		if (arr[index] == 0)
-			return Integer.MAX_VALUE;
+		if (index >= n) return 0;
+		if (arr[index] == 0) return Integer.MAX_VALUE;
 		int minJumps = Integer.MAX_VALUE;
 		for (int i = index + 1; i <= n && i <= index + arr[index]; i++) {
 			int currJump = minJumps(arr, i, n);
@@ -404,8 +379,7 @@ public class RollingArrayPatterns {
 			currMax = Math.max(currMax, i + nums[i]);
 			if (i == currEnd) {
 				//Edge case: if jumps are not reachable to last position
-				if (i >= currMax)
-					return Integer.MAX_VALUE;
+				if (i >= currMax) return Integer.MAX_VALUE;
 				jumps++;
 				currEnd = currMax;
 			}
@@ -415,8 +389,7 @@ public class RollingArrayPatterns {
 
 	//TODO: Check this solution later
 	public int minJumps41(int[] A) {
-		if (A == null || A.length == 0)
-			return -1;
+		if (A == null || A.length == 0) return -1;
 		int jumps = 0, currMax = 0, currEnd = 0;
 		for (int i = 0; i < A.length && i <= currEnd; i++) {
 			if (i > currMax) {
@@ -425,8 +398,7 @@ public class RollingArrayPatterns {
 			}
 			currEnd = Math.max(currEnd, i + A[i]);
 		}
-		if (currEnd < A.length - 1)
-			return -1;
+		if (currEnd < A.length - 1) return -1;
 		return jumps;
 	}
 
