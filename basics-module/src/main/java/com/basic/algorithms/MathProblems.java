@@ -63,6 +63,12 @@ public class MathProblems {
 		return true;
 	}
 
+	public int factorial(int n) {
+		if (n == 1) return 1;
+
+		return factorial(n - 1) * n;
+	}
+
 	// Pow(x, n)
 	public double myPow(double x, int n) {
 		return (n < 0) ? 1 / pow(x, -n) : pow(x, n);
@@ -155,7 +161,8 @@ public class MathProblems {
 	 */
 	public int gcd1(int a, int b) {
 		if (b == 0) return a;
-		return gcd1(b, a % b);
+		int rem = a % b;
+		return gcd1(b, rem);
 	}
 
 	// GCD is calculated using Euclid's algorithm(Iterative)

@@ -382,11 +382,15 @@ public class DynamicProgramming {
 			if (str.charAt(i) == str.charAt(j)) return dp[i][j] = 3;
 			else return dp[i][j] = 2;
 		}
-		if (i == j) return dp[1][j] = 1;
-		else if (str.charAt(i) == str.charAt(j)) return dp[i][j] = countPalindromicSubseq2(str, i + 1, j, dp)
-				+ countPalindromicSubseq2(str, i, j - 1, dp) + 1;
-		else return dp[i][j] = countPalindromicSubseq2(str, i + 1, j, dp) + countPalindromicSubseq2(str, i, j - 1, dp)
-				- countPalindromicSubseq2(str, i + 1, j - 1, dp);
+		if (i == j) {
+			return dp[1][j] = 1;
+		} else if (str.charAt(i) == str.charAt(j)) {
+			return dp[i][j] = countPalindromicSubseq2(str, i + 1, j, dp) + countPalindromicSubseq2(str, i, j - 1, dp)
+					+ 1;
+		} else {
+			return dp[i][j] = countPalindromicSubseq2(str, i + 1, j, dp) + countPalindromicSubseq2(str, i, j - 1, dp)
+					- countPalindromicSubseq2(str, i + 1, j - 1, dp);
+		}
 
 	}
 
@@ -411,6 +415,7 @@ public class DynamicProgramming {
 		return cps[0][N - 1];
 	}
 
+	//TODO: Change the logic using only one 2D array
 	// Count of Palindromic Substrings
 	public int CountPalindromicSubstrings(String str) {
 		int n = str.length();

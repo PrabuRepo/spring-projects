@@ -5,26 +5,49 @@ import java.util.List;
 
 import com.common.utilities.Utils;
 
-/*
+/* 
  * Recursion:
- * 1. It needs base or exit condition; without that recursive func never ends. 
- * 2. For an input n, recursive function invokes n+1 times 
- * 
+ *   Recursion is an algorithmic technique where a function, in order to accomplish a task, calls itself with some part of the task.
+ *   A recursive function calls itself on a simpler version of the problem in an attempt to simplify the problem to a point where it 
+ *   can be solved. With this smaller problem solved, it can work backwards to solve each slightly larger problem until the entire 
+ *   problem has been solved.
  * To solve a problem using recursion, then we need to make sure that:
  *   - The problem can broken down into smaller problems of same type.
  *   - Problem has some base case(s).
  *   - Base case is reached before the stack size limit exceeds.
+ *   
+ * Types:
+ *  1.Linear Recursion: A linear recursive function is a function that only makes a single call to itself each time the function runs
+ *  2.Tail Recursion: Tail recursion is a form of linear recursion. In tail recursion, the recursive call is the last thing the function
+ *  does. Often, the value of the recursive call is returned. As such, tail recursive functions can often be easily implemented in an 
+ *  iterative manner; by taking out the recursive call and replacing it with a loop, the same effect can generally be achieved. In fact, 
+ *  a good compiler can recognize tail recursion and convert it to iteration in order to optimize the performance of the code.
+ *  3.Binary Recursion: Some recursive functions don't just have one call to themself, they have two (or more). Functions with two recursive
+ *    calls are referred to as binary recursive functions.
+ *  4.Exponential Recursion: An exponential recursive function is one that, if you were to draw out a representation of all the function calls,
+ *    would have an exponential number of calls in relation to the size of the data set (exponential meaning if there were n elements, there
+ *    would be O(an) function calls where a is a positive number).
+ * 
  *   
  * When you hear a problem beginning with the following statements, it's often (though not always) a good candidate for recursion:
  *  - "Design an algorithm to compute the nth .. :;  
  *  - "Write code to list the first n .. :; 
  *  - "Implement a method to compute all..:; and so on.
  *  
- *  
- *  Recursion is useful for permutation, because it generates all combinations and tree-based questions
+ * Recursive Problems Categorized by "ByteByBye" website:
+ *  - Iteration - Iterate over a variety of data structures using recursion, both in one and multiple dimensions; Eg: Insert Element at the Bottom of a Stack, Generating All Substrings of a String, Flattening a 2D Array, and more
+ *  - SubProblems - Most fundamental pattern in all of recursion: Subproblems; Eg: Stair Stepping, Towers of Hanoi, Is String a Palindrome, and more
+ *  - Selection - Pattern related to DP & Combination Problems. Eg: Find All Combinations, 0-1 Knapsack, String Interleaving, and more
+ *  - Ordering - Pattern related to permutations & similar problems;  Eg: Find All Permutations, N-digit Numbers, BST Arrays, and more
+ *  - Divide & Conquer - solve problems by breaking them into smaller pieces, grouping subpattern of difficult problems; Eg: Binary Search, Unique BSTs, String Compression, Rotated Arrays, and more
+ *  - Depth First Search - Mostly applied to Tree, Graph & Matrix; Eg: DFS in Trees and Graphs, Find all Combinations via DFS, and more
+
  */
-//TODO: Add Recursion Pattern Problems: Only one prob per pattern 
 public class Recursion {
+
+	Backtracking backtracking = new Backtracking();
+
+	MathProblems math = new MathProblems();
 
 	public static int count = 0;
 
@@ -40,7 +63,15 @@ public class Recursion {
 			headRecursiveCall(n - 1);
 			System.out.print(n + " ");
 		}
+	}
 
+	//Example for linear recursion: Factorial , sqrt
+	public void factorial(int n) {
+		math.factorial(n);
+	}
+
+	public void sqrt(int a, int b) {
+		math.gcd1(a, b);
 	}
 
 	// single recursion: tail recursive type
@@ -54,10 +85,14 @@ public class Recursion {
 		}
 	}
 
+	//Example for a tail recursive function is GCD
+	public void gcd(int a, int b) {
+		math.gcd1(a, b);
+	}
+
 	// Example1: Factorial of n
 	public long factRecursive(int n) {
-		if (n == 0 || n == 1)
-			return 1;
+		if (n == 0 || n == 1) return 1;
 		return n * factRecursive(n - 1);
 	}
 
@@ -73,8 +108,7 @@ public class Recursion {
 	// Example2: Decimal to Binary Conversion
 	public int decimalToBin(int n) {
 		String data = "";
-		if (n == 0 || n == 1)
-			return n;
+		if (n == 0 || n == 1) return n;
 
 		data += decimalToBin(n / 2);
 		data += n % 2;
@@ -104,15 +138,13 @@ public class Recursion {
 
 	// Example1: Fibonacci Series
 	public long fibRecursive(int n) {
-		if (n <= 1)
-			return n;
+		if (n <= 1) return n;
 		return fibRecursive(n - 1) + fibRecursive(n - 2);
 	}
 
 	// Fibonacci series: 0,1,1,2,3,5,8,13,21,34...
 	public long fibIterative(int n) {
-		if (n <= 1)
-			return n;
+		if (n <= 1) return n;
 		long f1 = 0, f2 = 1;
 		System.out.print("Fibonacci series: ");
 		System.out.print(f1 + " " + f2 + " ");
@@ -150,7 +182,12 @@ public class Recursion {
 		return j;
 	}
 
-	/*************** 3.Iterative Vs Recursive ********************/
+	/*************** 3.Exponential Recursion ********************/
+	public void permutation(int[] nums) {
+		backtracking.permute2(nums);
+	}
+
+	/*************** 4.Iterative Vs Recursive ********************/
 	// Single Iteration
 	public void singleIteration(int n) {
 		for (int i = 1; i <= n; i++)
@@ -159,8 +196,7 @@ public class Recursion {
 
 	// Single Recursion
 	public void singleRecursion(int i, int n) {
-		if (i > n)
-			return;
+		if (i > n) return;
 		System.out.print(i + ", ");
 		singleRecursion(i + 1, n);
 	}
@@ -181,8 +217,7 @@ public class Recursion {
 	}
 
 	private void doubleRecursion(int index, int n) {
-		if (index >= n)
-			return;
+		if (index >= n) return;
 
 		dualRecursionCount++;
 		System.out.print(index + ", ");
@@ -200,8 +235,7 @@ public class Recursion {
 	}
 
 	public void oneIterAndRecursion(int index, int n) {
-		if (index >= n)
-			return;
+		if (index >= n) return;
 		// System.out.print(i + ", ");
 		for (int j = index; j < n; j++) {
 			oneIterAndRecurCount++;
@@ -211,8 +245,7 @@ public class Recursion {
 	}
 
 	public void oneIterAndRecursion2(int n) {
-		if (n <= 0)
-			return;
+		if (n <= 0) return;
 		// System.out.print(i + ", ");
 		for (int i = 0; i < n; i++) {
 			oneIterAndRecurCount++;
@@ -253,8 +286,7 @@ public class Recursion {
 		// System.out.print(i + "-" + sum + ", ");
 		sumOfSequences(i + 1, n, sum, seq);
 
-		if (!seq.isEmpty())
-			seq.remove(seq.size() - 1);
+		if (!seq.isEmpty()) seq.remove(seq.size() - 1);
 
 		sumOfSequences(i + 1, n, sum - i, seq);
 	}
@@ -271,8 +303,7 @@ public class Recursion {
 
 	/*Three Recursion -> No of executions: PrevValue+3^(n-1); Series: 1,4,13,40,121,364....*/
 	public void tripleRecursion(int i, int n) {
-		if (i > n)
-			return;
+		if (i > n) return;
 
 		System.out.print(i + ", ");
 		tripleRecursionCount++;
@@ -297,14 +328,12 @@ public class Recursion {
 	}
 
 	public int combinationSum41(int[] nums, int target) {
-		if (target == 0)
-			return 1;
+		if (target == 0) return 1;
 
 		int count = 0;
 		for (int i = 0; i < nums.length; i++) {
 			//System.out.print(i + " ");
-			if (target >= nums[i])
-				count += combinationSum41(nums, target - nums[i]);
+			if (target >= nums[i]) count += combinationSum41(nums, target - nums[i]);
 		}
 		return count;
 	}
@@ -314,10 +343,8 @@ public class Recursion {
 	}
 
 	public int combinationSum4(int[] nums, int target, int i) {
-		if (target == 0)
-			return 1;
-		if (target < 0 || i < 0)
-			return 0;
+		if (target == 0) return 1;
+		if (target < 0 || i < 0) return 0;
 
 		return combinationSum4(nums, target - nums[i], i) + combinationSum4(nums, target, i - 1);
 	}
@@ -334,15 +361,12 @@ public class Recursion {
 			count++;
 			return 0;
 		}
-		if (i < 0)
-			return Integer.MAX_VALUE;
+		if (i < 0) return Integer.MAX_VALUE;
 
-		if (amount < coins[i])
-			return change(amount, coins, i - 1);
+		if (amount < coins[i]) return change(amount, coins, i - 1);
 
 		int minVal = Math.min(change(amount - coins[i], coins, i), change(amount, coins, i - 1));
-		if (minVal != Integer.MAX_VALUE && i == 0)
-			System.out.println(minVal);
+		if (minVal != Integer.MAX_VALUE && i == 0) System.out.println(minVal);
 		return minVal == Integer.MAX_VALUE ? minVal : minVal + 1;
 	}
 

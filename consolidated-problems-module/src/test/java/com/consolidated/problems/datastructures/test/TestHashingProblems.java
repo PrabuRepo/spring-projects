@@ -26,6 +26,6 @@ public class TestHashingProblems extends HashingProblems {
 		System.out.println("Zero Sum Array: " + Arrays.toString(zeroSumSubArray(arr2)));
 
 		int[] arr3 = { 1, 3, -1, -3, 5, 3, 6, 7 };
-		System.out.println("Max Sliding Window: " + Arrays.toString(maxSlidingWindow(arr3, 3)));
+		//System.out.println("Max Sliding Window: " + Arrays.toString(maxSlidingWindow(arr3, 3)));
 	}
 }

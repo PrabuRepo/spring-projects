@@ -28,16 +28,16 @@ import com.common.utilities.DisjointSet;
  */
 public class Graph {
 	public static void main(String[] args) {
-		/*GraphOperations graphMatrix = new GraphImpl().new GraphAdjMatrix();
+		/*GraphOperations graphMatrix = new Graph().new GraphAdjMatrix();
 		CommonUtil.testGraph(graphMatrix);
-		*/
+		
 		GraphOperations graphAdjList = new Graph().new GraphAdjList();
 		CommonUtil.testGraph(graphAdjList);
-
-		/*GraphOperations graphAdjMap = new GraphImpl().new GraphAdjListUsingMap();
+		*/
+		GraphOperations graphAdjMap = new Graph().new GraphAdjListUsingMap();
 		CommonUtil.testGraph(graphAdjMap);
-		
-		GraphOperations graphEdgeList = new GraphImpl().new GraphEdgeList();
+
+		/*GraphOperations graphEdgeList = new Graph().new GraphEdgeList();
 		CommonUtil.testGraph(graphEdgeList);*/
 	}
 
@@ -111,8 +111,7 @@ public class Graph {
 
 		@Override
 		public List<Integer> dfsRecursive(int source) {
-			if (adjMatrix.length == 0 || adjMatrix[0].length == 0)
-				return null;
+			if (adjMatrix.length == 0 || adjMatrix[0].length == 0) return null;
 			boolean[] visited = new boolean[N];
 			List<Integer> result = new ArrayList<>();
 			dfsUtil(adjMatrix, visited, N, result);
@@ -137,8 +136,7 @@ public class Graph {
 
 		@Override
 		public int dfsDisconnectedGraph() {
-			if (adjMatrix.length == 0)
-				return 0;
+			if (adjMatrix.length == 0) return 0;
 			List<Integer> result = new ArrayList<>();
 			int groups = 0;
 			boolean[] visited = new boolean[N];
@@ -153,8 +151,7 @@ public class Graph {
 
 		@Override
 		public List<Integer> bfsIterative(int source) {
-			if (adjMatrix.length == 0 || adjMatrix[0].length == 0)
-				return null;
+			if (adjMatrix.length == 0 || adjMatrix[0].length == 0) return null;
 			boolean[] visited = new boolean[N];
 			List<Integer> result = new ArrayList<>();
 			bfsUtil(adjMatrix, visited, source, result);
@@ -171,16 +168,14 @@ public class Graph {
 				visited[top] = true;
 				result.add(top);
 				for (int j = 0; j < n; j++) {
-					if (!visited[j] && j != s && adjMatrix[top][j] == 1)
-						queue.add(j);
+					if (!visited[j] && j != s && adjMatrix[top][j] == 1) queue.add(j);
 				}
 			}
 		}
 
 		@Override
 		public int bfsDisconnectedGraph() {
-			if (adjMatrix.length == 0)
-				return 0;
+			if (adjMatrix.length == 0) return 0;
 			List<Integer> result = new ArrayList<>();
 			int groups = 0;
 			boolean[] visited = new boolean[N];
@@ -318,10 +313,8 @@ public class Graph {
 			System.out.println("Following matrix shows the shortest distances between every pair of vertices");
 			for (int i = 0; i < n; ++i) {
 				for (int j = 0; j < n; ++j) {
-					if (dist[i][j] == Integer.MAX_VALUE)
-						System.out.print("INF ");
-					else
-						System.out.print(dist[i][j] + "   ");
+					if (dist[i][j] == Integer.MAX_VALUE) System.out.print("INF ");
+					else System.out.print(dist[i][j] + "   ");
 				}
 				System.out.println();
 			}
@@ -333,6 +326,18 @@ public class Graph {
 			for (int i = 0; i < n; i++) {
 				System.out.println("    " + i + "   -    " + weight[i]);
 			}
+		}
+
+		@Override
+		public int sccKosarajuAlg() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public int sccTarjanAlg() {
+			// TODO Auto-generated method stub
+			return 0;
 		}
 
 	}
@@ -396,8 +401,7 @@ public class Graph {
 			for (int i = 0; i < N; i++) {
 				System.out.println("\nEdges from Vertex: " + i + "->");
 				ListIterator<Integer> iterator = adjList[i].listIterator();
-				while (iterator.hasNext())
-					System.out.print(iterator.next() + ", ");
+				while (iterator.hasNext()) System.out.print(iterator.next() + ", ");
 			}
 		}
 
@@ -505,11 +509,9 @@ public class Graph {
 		//This solution is DFS Algorithm + Detect Cycle Algo
 		private boolean topoSortUtil(int v, boolean[] visited, boolean[] recursionStack, LinkedList<Integer> result) {
 			// If this condition satisfies, then graph contains cycle
-			if (recursionStack[v])
-				return true;
+			if (recursionStack[v]) return true;
 
-			if (visited[v])
-				return false;
+			if (visited[v]) return false;
 
 			// Mark vertex as visited and set recursion stack
 			visited[v] = true;
@@ -519,8 +521,7 @@ public class Graph {
 			ListIterator<Integer> listIterator = adjList[v].listIterator();
 			while (listIterator.hasNext()) {
 				int next = listIterator.next();
-				if (topoSortUtil(next, visited, recursionStack, result))
-					return true;
+				if (topoSortUtil(next, visited, recursionStack, result)) return true;
 			}
 
 			result.addFirst(v);
@@ -541,8 +542,7 @@ public class Graph {
 
 			// Step-2: Pick all the vertices with in-degree as 0 and add them into a queue
 			for (int i = 0; i < N; i++)
-				if (indegree[i] == 0)
-					queue.add(i);
+				if (indegree[i] == 0) queue.add(i);
 
 			// Step-3:Remove a vertex from the queue
 			while (!queue.isEmpty()) {
@@ -555,9 +555,8 @@ public class Graph {
 				ListIterator<Integer> iter = adjList[vertex].listIterator();
 				while (iter.hasNext()) {
 					int data = iter.next();
-					if (--indegree[data] == 0)
-						queue.add(data); // 3.If in-degree of a neighboring nodes is reduced to zero,
-											// then add it to the queue.
+					if (--indegree[data] == 0) queue.add(data); // 3.If in-degree of a neighboring nodes is reduced to zero,
+																// then add it to the queue.
 				}
 			}
 			// Step-4:If count of visited nodes is equal to the number of nodes in the graph then print the topological sort
@@ -575,8 +574,7 @@ public class Graph {
 			boolean[] visited = new boolean[N], recursionStack = new boolean[N];
 			for (int i = 0; i < N; i++) {
 				if (!visited[i]) {
-					if (hasCycle(i, visited, recursionStack))
-						return true;
+					if (hasCycle(i, visited, recursionStack)) return true;
 				}
 			}
 			return false;
@@ -584,11 +582,9 @@ public class Graph {
 
 		private boolean hasCycle(int vertex, boolean[] visited, boolean[] recursionStack) {
 			// If this condition satisfies, then graph contains cycle
-			if (recursionStack[vertex])
-				return true;
+			if (recursionStack[vertex]) return true;
 
-			if (visited[vertex])
-				return false;
+			if (visited[vertex]) return false;
 
 			// Mark vertex as visited and set recursion stack
 			visited[vertex] = true;
@@ -598,8 +594,7 @@ public class Graph {
 				ListIterator<Integer> iter = adjList[vertex].listIterator();
 				while (iter.hasNext()) {
 					int adjVertex = iter.next();
-					if (hasCycle(adjVertex, visited, recursionStack))
-						return true;
+					if (hasCycle(adjVertex, visited, recursionStack)) return true;
 				}
 			}
 			// Reset the recursion stack array
@@ -613,8 +608,7 @@ public class Graph {
 			for (int i = 0; i < n; i++)
 				ds.parent[i] = i;
 			for (int i = 0; i < e; i++) {
-				if (ds.union(edges[i].src, edges[i].src))
-					return true;
+				if (ds.union(edges[i].src, edges[i].src)) return true;
 			}
 			return false;
 		}
@@ -624,8 +618,7 @@ public class Graph {
 			boolean[] visited = new boolean[N];
 			for (int i = 0; i < N; i++) {
 				if (!visited[i]) {
-					if (hasCycleInUndirectedGraph(i, visited, -1))
-						return true;
+					if (hasCycleInUndirectedGraph(i, visited, -1)) return true;
 				}
 			}
 			return false;
@@ -638,10 +631,8 @@ public class Graph {
 			while (iter.hasNext()) {
 				int adjVertex = iter.next();
 				if (!visited[adjVertex]) {
-					if (hasCycleInUndirectedGraph(adjVertex, visited, vertex))
-						return true;
-				} else if (adjVertex != parent)
-					return true;
+					if (hasCycleInUndirectedGraph(adjVertex, visited, vertex)) return true;
+				} else if (adjVertex != parent) return true;
 			}
 			return false;
 		}
@@ -666,8 +657,7 @@ public class Graph {
 				GraphNode src = queue.poll();
 				visited[src.vertex] = true;
 				Iterator<GraphNode> iter = adjListW[src.vertex].iterator();
-				if (iter == null)
-					continue;
+				if (iter == null) continue;
 				while (iter.hasNext()) {
 					GraphNode adjNode = iter.next();
 					if (!visited[adjNode.vertex]) {
@@ -706,8 +696,7 @@ public class Graph {
 				GraphNode src = queue.poll();
 				visited[src.vertex] = true;
 				Iterator<GraphNode> iter = adjListW[src.vertex].iterator();
-				if (iter == null)
-					continue;
+				if (iter == null) continue;
 				while (iter.hasNext()) {
 					GraphNode adjNode = iter.next();
 					if (!visited[adjNode.vertex]) {
@@ -737,8 +726,7 @@ public class Graph {
 			for (int i = 0; i < n; i++) {
 				if (adjList[i].size() > 0) {
 					ListIterator<Integer> iterator = adjList[i].listIterator();
-					while (iterator.hasNext())
-						indegree[iterator.next()]++;
+					while (iterator.hasNext()) indegree[iterator.next()]++;
 				}
 			}
 			return indegree;
@@ -750,6 +738,18 @@ public class Graph {
 			for (int i = 0; i < n; i++) {
 				System.out.println("    " + i + "   -    " + weight[i]);
 			}
+		}
+
+		@Override
+		public int sccKosarajuAlg() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public int sccTarjanAlg() {
+			// TODO Auto-generated method stub
+			return 0;
 		}
 
 	}
@@ -774,10 +774,11 @@ public class Graph {
 			// Create the instance for each node
 			adjMap = new HashMap<>();
 
+			this.N = findNumberOfNodes(edges);
+
 			// Add edges in the adjList
 			for (int[] edge : edges) {
-				if (!adjMap.containsKey(edge[0]))
-					adjMap.put(edge[0], new HashSet<>());
+				if (!adjMap.containsKey(edge[0])) adjMap.put(edge[0], new HashSet<>());
 				adjMap.get(edge[0]).add(edge[1]);
 			}
 		}
@@ -811,8 +812,7 @@ public class Graph {
 		public void printGraph() {
 			for (int i = 0; i < N; i++) {
 				System.out.println("\nEdges from Vertex: " + i + "->");
-				if (adjMap.get(i) != null)
-					adjMap.get(i).forEach(k -> System.out.print(k + " "));
+				if (adjMap.get(i) != null) adjMap.get(i).forEach(k -> System.out.print(k + " "));
 			}
 		}
 
@@ -828,11 +828,9 @@ public class Graph {
 		private void dfs1(int v, boolean[] visited, List<Integer> result) {
 			visited[v] = true;
 			result.add(v);
-			if (adjMap.get(v) == null)
-				return;
+			if (adjMap.get(v) == null) return;
 			for (int adjNode : adjMap.get(v)) {
-				if (!visited[adjNode])
-					dfs1(adjNode, visited, result);
+				if (!visited[adjNode]) dfs1(adjNode, visited, result);
 			}
 		}
 
@@ -851,11 +849,9 @@ public class Graph {
 			while (!stack.isEmpty()) {
 				int v = stack.pop();
 				result.add(v);
-				if (adjMap.get(v) == null)
-					continue;
+				if (adjMap.get(v) == null) continue;
 				for (int adjNode : adjMap.get(v)) {
-					if (visited[adjNode])
-						continue;
+					if (visited[adjNode]) continue;
 					visited[adjNode] = true;
 					stack.push(adjNode);
 				}
@@ -878,8 +874,7 @@ public class Graph {
 			while (!queue.isEmpty()) {
 				int v = queue.poll();
 				result.add(v);
-				if (adjMap.get(v) == null)
-					continue;
+				if (adjMap.get(v) == null) continue;
 				for (int adjNode : adjMap.get(v)) {
 					if (!visited[adjNode]) {
 						visited[adjNode] = true;
@@ -902,8 +897,7 @@ public class Graph {
 			LinkedList<Integer> result = new LinkedList<>();
 			for (int i = 0; i < N; i++) {
 				if (!visited.contains(i)) {
-					if (topoSortUtil(i, visited, recStack, result))
-						return null;
+					if (topoSortUtil(i, visited, recStack, result)) return null;
 				}
 			}
 			return result;
@@ -912,11 +906,9 @@ public class Graph {
 		//This solution is DFS Algorithm + Detect Cycle Algo
 		private boolean topoSortUtil(int v, Set<Integer> visited, Set<Integer> recStack, LinkedList<Integer> result) {
 			// If this condition satisfies, then adjMap contains cycle
-			if (recStack.contains(v))
-				return true;
+			if (recStack.contains(v)) return true;
 
-			if (visited.contains(v))
-				return false;
+			if (visited.contains(v)) return false;
 
 			// Mark vertex as visited and set recursion stack
 			visited.add(v);
@@ -924,8 +916,7 @@ public class Graph {
 
 			if (adjMap.get(v) != null) {
 				for (int adjVertex : adjMap.get(v)) {
-					if (topoSortUtil(adjVertex, visited, recStack, result))
-						return true;
+					if (topoSortUtil(adjVertex, visited, recStack, result)) return true;
 				}
 			}
 			result.addFirst(v);
@@ -947,8 +938,7 @@ public class Graph {
 
 			// Step-2: Pick all the vertices with in-degree as 0 and add them into a queue
 			for (int i = 0; i < N; i++)
-				if (indegree[i] == 0)
-					queue.add(i);
+				if (indegree[i] == 0) queue.add(i);
 
 			// Step-3:Remove a vertex from the queue
 			while (!queue.isEmpty()) {
@@ -958,12 +948,10 @@ public class Graph {
 				count++;
 
 				// 2.Decrease in-degree by 1 for all its neighboring nodes
-				if (adjMap.get(vertex) == null)
-					continue;
+				if (adjMap.get(vertex) == null) continue;
 				for (int adjNode : adjMap.get(vertex)) {
 					// 3.If in-degree of a neighboring nodes is reduced to zero, then add it to the queue.
-					if (--indegree[adjNode] == 0)
-						queue.add(adjNode);
+					if (--indegree[adjNode] == 0) queue.add(adjNode);
 				}
 			}
 			// Step-4:If count of visited nodes is equal to the number of nodes in the graph then print the topological sort
@@ -980,8 +968,7 @@ public class Graph {
 			Set<Integer> visited = new HashSet<>(), recStack = new HashSet<>();
 			for (int i = 0; i < N; i++) {
 				if (!visited.contains(i)) {
-					if (hasCycle(i, visited, recStack))
-						return false;
+					if (hasCycle(i, visited, recStack)) return false;
 				}
 			}
 
@@ -990,11 +977,9 @@ public class Graph {
 
 		private boolean hasCycle(int v, Set<Integer> visited, Set<Integer> recStack) {
 			// If this condition satisfies, then adjMap contains cycle
-			if (recStack.contains(v))
-				return true;
+			if (recStack.contains(v)) return true;
 
-			if (visited.contains(v))
-				return false;
+			if (visited.contains(v)) return false;
 
 			// Mark vertex as visited and set recursion stack
 			visited.add(v);
@@ -1002,8 +987,7 @@ public class Graph {
 
 			if (adjMap.get(v) != null) {
 				for (int adjVertex : adjMap.get(v)) {
-					if (hasCycle(adjVertex, visited, recStack))
-						return true;
+					if (hasCycle(adjVertex, visited, recStack)) return true;
 				}
 			}
 			// Reset the recursion stack 
@@ -1052,8 +1036,7 @@ public class Graph {
 			int[] indegree = new int[n];
 
 			for (Map.Entry<Integer, Set<Integer>> entry : adjMap.entrySet()) {
-				if (entry.getValue() == null)
-					continue;
+				if (entry.getValue() == null) continue;
 				for (int adjNode : entry.getValue())
 					indegree[adjNode]++;
 			}
@@ -1061,6 +1044,177 @@ public class Graph {
 			return indegree;
 		}
 
+		//TODO: Rewrite this
+
+		@Override
+		public int sccKosarajuAlg() {
+			/*//it holds vertices by finish time in reverse order.
+			Stack<Integer> stack = new Stack<>();
+			//holds visited vertices for DFS.
+			Set<Integer> visited = new HashSet<>();
+			
+			//populate stack with vertices with vertex finishing last at the top.
+			for (Integer vertex : adjMap.keySet()) {
+				if (visited.contains(vertex)) continue;
+				DFSUtil(vertex, visited, stack);
+			}
+			
+			//reverse the graph.
+			Map<Integer, Set<Integer>> reverseMap = reverseGraph();
+			
+			//Do a DFS based off vertex finish time in decreasing order on reverse graph..
+			visited.clear();
+			List<Set<Integer>> result = new ArrayList<>();
+			while (!stack.isEmpty()) {
+				Integer vertex = reverseGraph.getVertex(stack.poll().getId());
+				if (visited.contains(vertex)) {
+					continue;
+				}
+				Set<Integer> set = new HashSet<>();
+				DFSUtilForReverseGraph(vertex, visited, set);
+				result.add(set);
+			}
+			return result;
+			*/
+			return 0;
+		}
+
+		private Map<Integer, Set<Integer>> reverseGraph() {
+			Map<Integer, Set<Integer>> reverseGraph = new HashMap<>();
+			/*
+			for (Edge<Integer> edge : graph.getAllEdges()) {
+			reverseGraph.addEdge(edge.getVertex2().getId(), edge.getVertex1().getId(), edge.getWeight());
+			}
+			*/
+			return reverseGraph;
+		}
+
+		private void DFSUtil(Integer vertex, Set<Integer> visited, Stack<Integer> stack) {
+			/*
+			visited.add(vertex);
+			for (Integer v : vertex.getAdjacentVertexes()) {
+			if (visited.contains(v)) {
+			continue;
+			}
+			DFSUtil(v, visited, stack);
+			}
+			stack.push(vertex);
+			*/}
+
+		private void DFSUtilForReverseGraph(Integer vertex, Set<Integer> visited, Set<Integer> set) {
+			/*
+			visited.add(vertex);
+			set.add(vertex);
+			for (Integer v : vertex.getAdjacentVertexes()) {
+			if (visited.contains(v)) {
+			continue;
+			}
+			DFSUtilForReverseGraph(v, visited, set);
+			}
+			*/}
+
+		int time, sccCount;
+
+		@Override
+		public int sccTarjanAlg() {
+			Stack<Integer> stack = new Stack<>();
+			Set<Integer> onStack = new HashSet<>();
+			Map<Integer, Integer> visitedTime = new HashMap<>();
+			Map<Integer, Integer> lowTime = new HashMap<>();
+
+			for (int vertex : adjMap.keySet()) {
+				if (!visitedTime.containsKey(vertex)) {
+					dfsTarjan(vertex, visitedTime, lowTime, onStack, stack);
+				}
+			}
+			lowTime.forEach((k, v) -> System.out.println(k + " - " + v));
+			return sccCount;
+		}
+
+		private void dfsTarjan(int currVertex, Map<Integer, Integer> visitedTime, Map<Integer, Integer> lowTime,
+				Set<Integer> onStack, Stack<Integer> stack) {
+			stack.push(currVertex);
+			onStack.add(currVertex);
+			visitedTime.put(currVertex, time);
+			lowTime.put(currVertex, time);
+			time++;
+
+			if (adjMap.get(currVertex) != null) {
+				for (int adjVertex : adjMap.get(currVertex)) {
+					if (!visitedTime.containsKey(adjVertex)) {
+						dfsTarjan(adjVertex, visitedTime, lowTime, onStack, stack);
+					}
+					if (onStack.contains(adjVertex)) {
+						lowTime.put(currVertex, Math.min(lowTime.get(currVertex), lowTime.get(adjVertex)));
+					}
+				}
+			}
+
+			// On recursive callback, if we're at the root node (start of SCC). Empty the seen stack until back to root.
+			if (visitedTime.get(currVertex).equals(lowTime.get(currVertex))) {
+				while (!stack.isEmpty()) {
+					int node = stack.pop();
+					onStack.remove(node);
+					if (node == currVertex) break;
+				}
+				sccCount++;
+			}
+		}
+
+		//Find the articulation point Tarjan's Algorithm
+		public Set<Integer> findarticulationPoints() {
+			time = 0;
+			Set<Integer> visited = new HashSet<>();
+			Set<Integer> articulationPoints = new HashSet<>();
+
+			Map<Integer, Integer> visitedTime = new HashMap<>();
+			Map<Integer, Integer> lowTime = new HashMap<>();
+			Map<Integer, Integer> parent = new HashMap<>();
+
+			for (int vertex : adjMap.keySet()) {
+				DFS(visited, articulationPoints, vertex, visitedTime, lowTime, parent);
+			}
+			return articulationPoints;
+		}
+
+		private void DFS(Set<Integer> visited, Set<Integer> articulationPoints, Integer vertex,
+				Map<Integer, Integer> visitedTime, Map<Integer, Integer> lowTime, Map<Integer, Integer> parent) {
+			visited.add(vertex);
+			visitedTime.put(vertex, time);
+			lowTime.put(vertex, time);
+			time++;
+			int childCount = 0;
+			boolean isArticulationPoint = false;
+			for (Integer adj : adjMap.get(vertex)) {
+				//if adj is same as parent then just ignore this vertex.
+				if (adj.equals(parent.get(vertex))) {
+					continue;
+				}
+				//if adj has not been visited then visit it.
+				if (!visited.contains(adj)) {
+					parent.put(adj, vertex);
+					childCount++;
+					DFS(visited, articulationPoints, adj, visitedTime, lowTime, parent);
+
+					if (visitedTime.get(vertex) <= lowTime.get(adj)) {
+						isArticulationPoint = true;
+					} else {
+						//below operation basically does lowTime[vertex] = min(lowTime[vertex], lowTime[adj]);
+						lowTime.compute(vertex, (currentVertex, time) -> Math.min(time, lowTime.get(adj)));
+					}
+
+				} else { //if adj is already visited see if you can get better low time.
+					//below operation basically does lowTime[vertex] = min(lowTime[vertex], visitedTime[adj]);
+					lowTime.compute(vertex, (currentVertex, time) -> Math.min(time, visitedTime.get(adj)));
+				}
+			}
+
+			//checks if either condition 1 or condition 2 meets). If yes then it is articulation point.
+			if ((parent.get(vertex) == null && childCount >= 2) || parent.get(vertex) != null && isArticulationPoint) {
+				articulationPoints.add(vertex);
+			}
+
+		}
 	}
 
 	/**
@@ -1291,6 +1445,18 @@ public class Graph {
 				System.out.println("Src: " + edge.src + " Dest: " + edge.dest + " Weight: " + edge.weight);
 		}
 
+		@Override
+		public int sccKosarajuAlg() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public int sccTarjanAlg() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
 	}
 
 	static class MockData {
@@ -1343,6 +1509,12 @@ public class Graph {
 			return edges;
 		}
 
+		public static int[][] mockEdges5() {
+			int[][] edges = { { 0, 1 }, { 1, 2 }, { 2, 0 }, { 5, 0 }, { 5, 6 }, { 6, 0 }, { 6, 2 }, { 6, 4 }, { 4, 5 },
+					{ 3, 4 }, { 7, 5 }, { 3, 7 }, { 7, 3 } };
+			return edges;
+		}
+
 		public static int[][] mockWeightedEdge1() {
 			int[][] edges = { { 0, 1, -1 }, { 0, 2, 4 }, { 1, 2, 3 }, { 1, 3, 2 }, { 1, 4, 2 }, { 3, 2, 5 },
 					{ 3, 1, 1 }, { 4, 3, -3 } };
@@ -1355,10 +1527,8 @@ public class Graph {
 		public static Set<Integer> findNumberOfNodes(int[][] edges) {
 			HashSet<Integer> set = new HashSet<>();
 			for (int[] edge : edges) {
-				if (!set.contains(edge[0]))
-					set.add(edge[0]);
-				if (!set.contains(edge[1]))
-					set.add(edge[1]);
+				if (!set.contains(edge[0])) set.add(edge[0]);
+				if (!set.contains(edge[1])) set.add(edge[1]);
 			}
 			return set;
 		}
@@ -1366,10 +1536,8 @@ public class Graph {
 		public static Set<Integer> findNumberOfNodes(EdgeNode[] edges) {
 			HashSet<Integer> set = new HashSet<>();
 			for (EdgeNode edge : edges) {
-				if (!set.contains(edge.src))
-					set.add(edge.src);
-				if (!set.contains(edge.dest))
-					set.add(edge.dest);
+				if (!set.contains(edge.src)) set.add(edge.src);
+				if (!set.contains(edge.dest)) set.add(edge.dest);
 			}
 			return set;
 		}
@@ -1387,11 +1555,12 @@ public class Graph {
 				System.out.println("5.Detect Cycle:");
 				System.out.println("6.MST Algorithm: Prim's, Kruskal's Alg:");
 				System.out.println("7.SP Algorithm: Dijikstras, Bellmanford, Floydwarshall:");
+				System.out.println("8.SCC Algorithm: Kosaraju, Tarjan:");
 				System.out.print("Enter option:");
 				input = in.nextInt();
 				switch (input) {
 				case 1:
-					graph.buildDirectedGraph(MockData.mockEdges1());
+					graph.buildDirectedGraph(MockData.mockEdges5());
 					// graph.buildUndirectedGraph(MockData.mockEdges1());
 					// graph.buildWeightedDG(MockData.mockEdges1());
 					// graph.buildWeightedUG(MockData.mockEdges1());
@@ -1426,6 +1595,10 @@ public class Graph {
 					graph.spDijikstraAlg(in.nextInt());
 					// graph.spBellmanFordAlg(in.nextInt());
 					// graph.spFloydWarshallAlg();
+					break;
+				case 8:
+					//graph.sccKosarajuAlg();
+					graph.sccTarjanAlg();
 					break;
 				default:
 					System.out.println("Please enter the valid option!!!");

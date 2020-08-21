@@ -78,4 +78,30 @@ public interface GraphOperations {
 	 */
 	public void spFloydWarshallAlg();
 
+	/* Strongly Connected Components(SCC) in a graph:
+	 * A directed graph is strongly connected if there is a path between all pairs of vertices. A graph is said to be strongly connected if every
+	 * vertex is reachable from every other vertex. The strongly connected components of an arbitrary directed graph form a partition into subgraphs 
+	 * that are themselves strongly connected.
+	 * These two algorithms are used to find the SCC of a directed graph:
+	 *   - Kosaraju Algorithm
+	 *   - Tarjan Algorithm 
+	 */
+
+	/*
+	 * Kosaraju's algorithm uses two passes of depth first search. The first, in the original graph, is used to choose the order in which the outer 
+	 * loop of the second depth first search tests vertices for having been visited already and recursively explores them if not. The second depth 
+	 * first search is on the transpose graph of the original graph, and each recursive exploration finds a single new strongly connected component.
+	 * Time: 3*O(V+E) => O(V+E); Space: O(V+E)
+	 */
+	public int sccKosarajuAlg();
+
+	/* 
+	 * Tarjan's strongly connected components algorithm performs a single pass of depth first search. It maintains a stack of vertices that have been
+	 * explored by the search but not yet assigned to a component, and calculates "low numbers" of each vertex (an index number of the highest ancestor
+	 * reachable in one step from a descendant of the vertex) which it uses to determine when a set of vertices should be popped off the stack into 
+	 * a new component.
+	 * Time: O(V+E) => O(V+E); Space: O(V+E)
+	 */
+	public int sccTarjanAlg();
+
 }

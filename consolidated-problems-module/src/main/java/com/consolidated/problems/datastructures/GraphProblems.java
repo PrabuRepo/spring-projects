@@ -28,15 +28,13 @@ public class GraphProblems {
 	 *  2) The graph is connected.
 	 */
 	public boolean isTree(int n, int[][] edges) {
-		if (n == 0 || edges.length == 0)
-			return false;
+		if (n == 0 || edges.length == 0) return false;
 		LinkedList<Integer>[] adjList = buildAdjListUndirectedGraph(n, edges);
 		boolean[] visited = new boolean[n];
 		boolean isCycle = hasCycleInUndirectedGraphUtil(adjList, 0, visited, -1);
 		if (!isCycle) {
 			for (int i = 0; i < n; i++)
-				if (!visited[i])
-					return false;
+				if (!visited[i]) return false;
 		}
 		return !isCycle;
 	}
@@ -49,18 +47,15 @@ public class GraphProblems {
 		while (iter.hasNext()) {
 			int adjVertex = iter.next();
 			if (!visited[adjVertex]) {
-				if (hasCycleInUndirectedGraphUtil(adjList, adjVertex, visited, vertex))
-					return true;
-			} else if (adjVertex != parent)
-				return true;
+				if (hasCycleInUndirectedGraphUtil(adjList, adjVertex, visited, vertex)) return true;
+			} else if (adjVertex != parent) return true;
 		}
 		return false;
 	}
 
 	// d.Build undirected graph from given input(edges); where n - No of vertices, edges - Edge list
 	public LinkedList<Integer>[] buildAdjListUndirectedGraph(int n, int[][] edges) {
-		if (n == 0 || edges.length == 0)
-			return null;
+		if (n == 0 || edges.length == 0) return null;
 		LinkedList<Integer>[] adjList = new LinkedList[n];
 		for (int i = 0; i < n; i++)
 			adjList[i] = new LinkedList<>();
@@ -83,8 +78,7 @@ public class GraphProblems {
 		Arrays.fill(vis, false);
 		int ans = 0;
 		for (int i = 0; i < n; i++) {
-			if (vis[i] || arrpos.get(i).val == i)
-				continue;
+			if (vis[i] || arrpos.get(i).val == i) continue;
 			int cycle_size = 0;
 			int j = i;
 			while (!vis[j]) {
@@ -136,8 +130,7 @@ public class GraphProblems {
 		int count = 0;
 		indegree = indegree2(adjList, n);
 		for (int i = 0; i < n; i++)
-			if (indegree[i] == 0)
-				queue.add(intToChar(i));
+			if (indegree[i] == 0) queue.add(intToChar(i));
 		while (!queue.isEmpty()) {
 			char vertex = queue.poll();
 			linearOrder.add(vertex);
@@ -145,8 +138,7 @@ public class GraphProblems {
 			ListIterator<Character> iter = adjList[charToInt(vertex)].listIterator();
 			while (iter.hasNext()) {
 				char data = iter.next();
-				if (--indegree[charToInt(data)] == 0)
-					queue.add(data);
+				if (--indegree[charToInt(data)] == 0) queue.add(data);
 			}
 		}
 		if (count == n) {
@@ -161,8 +153,7 @@ public class GraphProblems {
 		for (int i = 0; i < n; i++) {
 			if (adjList[i].size() > 0) {
 				ListIterator<Character> iterator = adjList[i].listIterator();
-				while (iterator.hasNext())
-					indegree[charToInt(iterator.next())]++;
+				while (iterator.hasNext()) indegree[charToInt(iterator.next())]++;
 			}
 		}
 		return indegree;
@@ -202,10 +193,8 @@ public class GraphProblems {
 		boolean[] visited = new boolean[n];
 		Stack<Integer> stack = new Stack<>();
 		for (int i = 0; i < n; i++)
-			if (!visited[i])
-				topoSortUtil(adjList, i, visited, stack);
-		while (!stack.isEmpty())
-			System.out.print((char) (stack.pop() + 'a') + "-");
+			if (!visited[i]) topoSortUtil(adjList, i, visited, stack);
+		while (!stack.isEmpty()) System.out.print((char) (stack.pop() + 'a') + "-");
 	}
 
 	private void topoSortUtil(LinkedList<Integer>[] adjList, int v, boolean[] visited, Stack<Integer> stack) {
@@ -213,8 +202,7 @@ public class GraphProblems {
 		ListIterator<Integer> listIterator = adjList[v].listIterator();
 		while (listIterator.hasNext()) {
 			int next = listIterator.next();
-			if (!visited[next])
-				topoSortUtil(adjList, next, visited, stack);
+			if (!visited[next]) topoSortUtil(adjList, next, visited, stack);
 		}
 		stack.push(v);
 	}
@@ -225,8 +213,7 @@ public class GraphProblems {
 	StringBuffer sb = new StringBuffer();
 
 	public String alienDictionary2(String[] words) {
-		if (words == null || words.length == 0)
-			return "";
+		if (words == null || words.length == 0) return "";
 
 		// Build graph, and visited map.
 		buildGraph(words);
@@ -234,8 +221,7 @@ public class GraphProblems {
 		// Topological sort with dfs
 		for (char c : graph.keySet()) {
 			//If there is any cycle return empty string
-			if (!dfs(c))
-				return "";
+			if (!dfs(c)) return "";
 		}
 
 		return sb.toString();
@@ -271,10 +257,8 @@ public class GraphProblems {
 
 	//It handles cycle in graph as well. 0 -> Not visited, -1->In Progress & 1-> visited 
 	private boolean dfs(Character c) {
-		if (visited.get(c) == 1)
-			return true;
-		if (visited.get(c) == -1)
-			return false;
+		if (visited.get(c) == 1) return true;
+		if (visited.get(c) == -1) return false;
 
 		visited.put(c, -1);
 		for (char edgeNode : graph.get(c)) {
@@ -304,8 +288,7 @@ public class GraphProblems {
 	private void buildGraph(String[] words, Map<Character, Set<Character>> graph, int[] inDegree) {
 		for (String word : words) {
 			for (char c : word.toCharArray()) {
-				if (graph.containsKey(c))
-					continue;
+				if (graph.containsKey(c)) continue;
 				graph.put(c, new HashSet<>());
 			}
 		}
@@ -355,8 +338,7 @@ public class GraphProblems {
 	public List<String> findItinerary(String[][] tickets) {
 		Map<String, PriorityQueue<String>> map = new HashMap<>();
 		for (String[] ticket : tickets) {
-			if (map.get(ticket[0]) == null)
-				map.put(ticket[0], new PriorityQueue<>());
+			if (map.get(ticket[0]) == null) map.put(ticket[0], new PriorityQueue<>());
 			map.get(ticket[0]).add(ticket[1]);
 		}
 		LinkedList<String> result = new LinkedList<>();
@@ -367,8 +349,7 @@ public class GraphProblems {
 	// Using DFS, but remove the visted data from the priority queue
 	public void reconstructItinerary(String s, Map<String, PriorityQueue<String>> map, LinkedList<String> result) {
 		PriorityQueue<String> queue = map.get(s);
-		while (queue != null && !queue.isEmpty())
-			reconstructItinerary(queue.poll(), map, result);
+		while (queue != null && !queue.isEmpty()) reconstructItinerary(queue.poll(), map, result);
 		result.addFirst(s);
 	}
 
@@ -400,12 +381,10 @@ public class GraphProblems {
 			leaves.add(0);
 			return leaves;
 		}
-		if (n == 0 || edges.length == 0 || edges[0].length == 0)
-			return leaves;
+		if (n == 0 || edges.length == 0 || edges[0].length == 0) return leaves;
 		List<Integer>[] adjList = buildAdjListUndirectedGraph(n, edges);
 		for (int i = 0; i < n; i++)
-			if (adjList[i].size() == 1)
-				leaves.add(i);
+			if (adjList[i].size() == 1) leaves.add(i);
 		List<Integer> newLeaves;
 		while (n > 2) {
 			n -= leaves.size();
@@ -413,8 +392,7 @@ public class GraphProblems {
 			for (Integer node : leaves) {
 				int neighbor = adjList[node].iterator().next();
 				adjList[neighbor].remove(node);
-				if (adjList[neighbor].size() == 1)
-					newLeaves.add(neighbor);
+				if (adjList[neighbor].size() == 1) newLeaves.add(neighbor);
 			}
 			leaves = newLeaves;
 		}
@@ -423,8 +401,7 @@ public class GraphProblems {
 
 	// Same Solution, but Graph represented using Set instead of array
 	public List<Integer> findMinHeightTrees2(int n, int[][] edges) {
-		if (n == 1)
-			return Collections.singletonList(0);
+		if (n == 1) return Collections.singletonList(0);
 		List<Set<Integer>> adj = new ArrayList<>(n);
 		for (int i = 0; i < n; ++i)
 			adj.add(new HashSet<>());
@@ -434,16 +411,14 @@ public class GraphProblems {
 		}
 		List<Integer> leaves = new ArrayList<>();
 		for (int i = 0; i < n; ++i)
-			if (adj.get(i).size() == 1)
-				leaves.add(i);
+			if (adj.get(i).size() == 1) leaves.add(i);
 		while (n > 2) {
 			n -= leaves.size();
 			List<Integer> newLeaves = new ArrayList<>();
 			for (int i : leaves) {
 				int j = adj.get(i).iterator().next();
 				adj.get(j).remove(i);
-				if (adj.get(j).size() == 1)
-					newLeaves.add(j);
+				if (adj.get(j).size() == 1) newLeaves.add(j);
 			}
 			leaves = newLeaves;
 		}
@@ -524,8 +499,7 @@ public class GraphProblems {
 				}
 		int count = 0;
 		for (int i = 0; i < row; i++)
-			if (ds.parent[i] == i)
-				count++;
+			if (ds.parent[i] == i) count++;
 		return count;
 	}
 
@@ -539,13 +513,11 @@ public class GraphProblems {
 			int i1 = find(nodes, edge[0]);
 			int i2 = find(nodes, edge[1]);
 			// Union Operation
-			if (i1 != i2)
-				nodes[i2] = i1;
+			if (i1 != i2) nodes[i2] = i1;
 		}
 		int count = 0;
 		for (int i = 0; i < n; i++)
-			if (nodes[i] == i)
-				count++;
+			if (nodes[i] == i) count++;
 		return count;
 	}
 
@@ -559,8 +531,7 @@ public class GraphProblems {
 
 	// Friend Circles: DFS/BFS/UF
 	public int findFriendCircleNum(int[][] M) {
-		if (M.length == 0 || M[0].length == 0)
-			return 0;
+		if (M.length == 0 || M[0].length == 0) return 0;
 		// DFS
 		//return disConnectedGraphDFS(M, M.length);
 		// BFS
@@ -571,8 +542,7 @@ public class GraphProblems {
 
 	// 1.Using DFS algorithm(Adjacency Matrix)
 	public int disConnectedGraphDFS(int[][] adjMatrix, int n) {
-		if (adjMatrix.length == 0)
-			return 0;
+		if (adjMatrix.length == 0) return 0;
 		int groups = 0;
 		boolean[] visited = new boolean[n];
 		for (int i = 0; i < n; i++) {
@@ -597,8 +567,7 @@ public class GraphProblems {
 
 	// 2.ii.Using BFS algorithm(Adjacency Matrix)
 	public int disConnectedGraphBFS(int[][] adjMatrix, int n) {
-		if (adjMatrix.length == 0)
-			return 0;
+		if (adjMatrix.length == 0) return 0;
 		int groups = 0;
 		boolean[] visited = new boolean[n];
 		for (int i = 0; i < n; i++) {
@@ -619,8 +588,7 @@ public class GraphProblems {
 			visited[top] = true;
 			System.out.print(top + "-");
 			for (int j = 0; j < n; j++) {
-				if (!visited[j] && j != v && adjMatrix[top][j] == 1)
-					queue.add(j);
+				if (!visited[j] && j != v && adjMatrix[top][j] == 1) queue.add(j);
 			}
 		}
 	}
@@ -669,15 +637,13 @@ public class GraphProblems {
 		ListIterator<Integer> iter = adjList[s].listIterator();
 		while (iter.hasNext()) {
 			int node = iter.next();
-			if (!visited[node])
-				dfs(adjList, node, visited, adjCities);
+			if (!visited[node]) dfs(adjList, node, visited, adjCities);
 		}
 	}
 
 	// Routing bw Node: BFS Approach
 	public boolean routeBwNodes(LinkedList<Integer>[] adjList, int start, int end) {
-		if (adjList.length == 0)
-			return false;
+		if (adjList.length == 0) return false;
 		Queue<Integer> queue = new LinkedList<>();
 		boolean[] visited = new boolean[adjList.length];
 		visited[start] = true;
@@ -688,8 +654,7 @@ public class GraphProblems {
 			while (iter.hasNext()) {
 				int adjNode = iter.next();
 				if (!visited[adjNode]) {
-					if (adjNode == end)
-						return true;
+					if (adjNode == end) return true;
 					visited[adjNode] = true;
 					queue.add(adjNode);
 				}
@@ -713,8 +678,7 @@ public class GraphProblems {
 		boolean[] visited = new boolean[n];
 		Queue<Integer> queue = new LinkedList<>();
 		int level = 0, distance = 0;
-		if (startId < 0 || startId >= n)
-			return distances;
+		if (startId < 0 || startId >= n) return distances;
 		visited[startId] = true;
 		queue.add(startId);
 		while (!queue.isEmpty()) {
@@ -758,8 +722,7 @@ public class GraphProblems {
 		visited[s] = true;
 		while (!queue.isEmpty()) {
 			GraphNode node = queue.poll();
-			if (node.vertex != s && node.color == val)
-				minDist = Math.min(minDist, node.dist);
+			if (node.vertex != s && node.color == val) minDist = Math.min(minDist, node.dist);
 			Iterator<Integer> iter = adjList[node.vertex].iterator();
 			while (iter.hasNext()) {
 				int adjNode = iter.next();
@@ -798,8 +761,7 @@ public class GraphProblems {
 		queue.add(query);
 		while (!queue.isEmpty()) {
 			String top = queue.poll();
-			if (dict.contains(top))
-				return query.length() - top.length();
+			if (dict.contains(top)) return query.length() - top.length();
 			for (int i = 0; i < top.length(); i++) {
 				String subStr = top.substring(0, i) + top.substring(i + 1, top.length());
 				if (subStr.length() > 0 && !visited.contains(subStr)) {
@@ -823,8 +785,7 @@ public class GraphProblems {
 		int n = 0;
 		for (String[] eqn : equations)
 			for (String str : eqn)
-				if (!map.containsKey(str))
-					map.put(str, n++);
+				if (!map.containsKey(str)) map.put(str, n++);
 		double[][] T = new double[n][n];
 		for (int i = 0; i < n; i++)
 			for (int j = 0; j < n; j++)
@@ -837,15 +798,12 @@ public class GraphProblems {
 		for (int v = 0; v < n; v++)
 			for (int i = 0; i < n; i++)
 				for (int j = 0; j < n; j++)
-					if (T[i][v] >= 0d && T[v][j] >= 0d)
-						T[i][j] = T[i][v] * T[v][j];
+					if (T[i][v] >= 0d && T[v][j] >= 0d) T[i][j] = T[i][v] * T[v][j];
 		double[] result = new double[queries.length];
 		for (int i = 0; i < queries.length; i++) {
 			String[] query = queries[i];
-			if (!map.containsKey(query[0]) || !map.containsKey(query[1]))
-				result[i] = -1d;
-			else
-				result[i] = T[map.get(query[0])][map.get(query[1])];
+			if (!map.containsKey(query[0]) || !map.containsKey(query[1])) result[i] = -1d;
+			else result[i] = T[map.get(query[0])][map.get(query[1])];
 		}
 		return result;
 	}
@@ -860,8 +818,7 @@ public class GraphProblems {
 		}
 		for (int i = 0; i < query.length; ++i) {
 			String[] keys = query[i];
-			if (!words.contains(keys[0]) || !words.contains(keys[1]))
-				result[i] = -1.0d;
+			if (!words.contains(keys[0]) || !words.contains(keys[1])) result[i] = -1.0d;
 			else {
 				Stack<Integer> stack = new Stack<>();
 				result[i] = helper(equations, values, keys, stack);
@@ -875,10 +832,8 @@ public class GraphProblems {
 		for (int i = 0; i < eqn.length; ++i) {
 			from = eqn[i][0];
 			to = eqn[i][1];
-			if (from.equals(query[0]) && to.equals(query[1]))
-				return values[i];
-			if (from.equals(query[1]) && to.equals(query[0]))
-				return 1 / values[i];
+			if (from.equals(query[0]) && to.equals(query[1])) return values[i];
+			if (from.equals(query[1]) && to.equals(query[0])) return 1 / values[i];
 		}
 		for (int i = 0; i < eqn.length; ++i) {
 			from = eqn[i][0];
@@ -886,28 +841,130 @@ public class GraphProblems {
 			if (!stack.contains(i) && query[0].equals(from)) {
 				stack.push(i);
 				double temp = values[i] * helper(eqn, values, new String[] { to, query[1] }, stack);
-				if (temp > 0)
-					return temp;
-				else
-					stack.pop();
+				if (temp > 0) return temp;
+				else stack.pop();
 			}
 			if (!stack.contains(i) && query[0].equals(to)) {
 				stack.push(i);
 				double temp = helper(eqn, values, new String[] { from, query[1] }, stack) / values[i];
-				if (temp > 0)
-					return temp;
-				else
-					stack.pop();
+				if (temp > 0) return temp;
+				else stack.pop();
 			}
 		}
 		return -1.0d;
-	}/************************ Type5: Connectivity *******************************************/
+	}
+
+	/************************ Type5: Connectivity *******************************************/
 	/* Circle of Strings - Euler Circuit
-	 * Strongly Connected Components(Kosaraju Alg)
 	 * Is Graph Bipartite
 	 * https://www.geeksforgeeks.org/euler-circuit-directed-graph/
 	 */
 
+	//Critical Connections in a Network - Solved using Trajan Algorithm
+	/*
+	 * There are n servers numbered from 0 to n-1 connected by undirected server-to-server connections forming a network where
+	 * connections[i] = [a, b] represents a connection between servers a and b. Any server can reach any other server directly 
+	 * or indirectly through the network.
+	 * A critical connection is a connection that, if removed, will make some server unable to reach some other server.
+	 * Return all critical connections in the network in any order.
+	 */
+	public List<List<Integer>> criticalConnections1(int n, List<List<Integer>> connections) {
+		Map<Integer, Set<Integer>> graph = new HashMap<>();
+		List<List<Integer>> result = new ArrayList<>();
+
+		buildGraph(connections, graph);
+
+		int[] visitedTime = new int[n];
+		int[] lowTime = new int[n];
+		Arrays.fill(visitedTime, -1);
+
+		for (int i = 0; i < n; i++) {
+			if (visitedTime[i] == -1) dfs(connections, graph, i, i, visitedTime, lowTime, result);
+		}
+
+		return result;
+	}
+
+	int time = 0;
+
+	public void buildGraph(List<List<Integer>> connections, Map<Integer, Set<Integer>> graph) {
+		for (List<Integer> conn : connections) {
+			graph.putIfAbsent(conn.get(0), new HashSet<Integer>());
+			graph.putIfAbsent(conn.get(1), new HashSet<Integer>());
+			graph.get(conn.get(0)).add(conn.get(1));
+			graph.get(conn.get(1)).add(conn.get(0));
+		}
+	}
+
+	private void dfs(List<List<Integer>> connections, Map<Integer, Set<Integer>> graph, int u, int parent,
+			int[] visitedTime, int[] lowTime, List<List<Integer>> result) {
+		visitedTime[u] = lowTime[u] = time++;
+
+		for (int v : graph.get(u)) {
+			if (v == parent) continue;
+
+			if (visitedTime[v] == -1) {
+				dfs(connections, graph, v, u, visitedTime, lowTime, result);
+				lowTime[u] = Math.min(lowTime[u], lowTime[v]);
+
+				if (lowTime[v] > visitedTime[u]) {
+					result.add(Arrays.asList(u, v));
+				}
+			} else {
+				lowTime[u] = Math.min(lowTime[u], visitedTime[v]);
+			}
+		}
+	}
+
+	/*
+	Basically, it uses dfs to travel through the graph to find if current vertex u, can travel back to u or previous vertex
+	low[u] records the lowest vertex u can reach
+	disc[u] records the time when u was discovered
+	*/
+
+	public List<List<Integer>> criticalConnections2(int n, List<List<Integer>> connections) {
+		int[] disc = new int[n], low = new int[n];
+		// use adjacency list instead of matrix will save some memory, adjmatrix will cause MLE
+		List<Integer>[] graph = new ArrayList[n];
+		List<List<Integer>> res = new ArrayList<>();
+		Arrays.fill(disc, -1); // use disc to track if visited (disc[i] == -1)
+		for (int i = 0; i < n; i++) {
+			graph[i] = new ArrayList<>();
+		}
+		// build graph
+		for (int i = 0; i < connections.size(); i++) {
+			int from = connections.get(i).get(0), to = connections.get(i).get(1);
+			graph[from].add(to);
+			graph[to].add(from);
+		}
+
+		for (int i = 0; i < n; i++) {
+			if (disc[i] == -1) {
+				dfs(i, low, disc, graph, res, i);
+			}
+		}
+		return res;
+	}
+
+	private void dfs(int u, int[] low, int[] disc, List<Integer>[] graph, List<List<Integer>> res, int pre) {
+		disc[u] = low[u] = ++time; // discover u
+		for (int j = 0; j < graph[u].size(); j++) {
+			int v = graph[u].get(j);
+			if (v == pre) {
+				continue; // if parent vertex, ignore
+			}
+			if (disc[v] == -1) { // if not discovered
+				dfs(v, low, disc, graph, res, u);
+				low[u] = Math.min(low[u], low[v]);
+				if (low[v] > disc[u]) {
+					// u - v is critical, there is no path for v to reach back to u or previous vertices of u
+					res.add(Arrays.asList(u, v));
+				}
+			} else { // if v discovered and is not parent of u, update low[u], cannot use low[v] because u is not subtree of v
+				low[u] = Math.min(low[u], disc[v]);
+			}
+		}
+	}
 }
 
 class Pair {
