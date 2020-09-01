@@ -11,6 +11,13 @@ import com.common.utilities.Utils;
 
 /*
  * Backtracking: Subsequence, Subsets, Combination, and Permutation.
+ * These recursion problems can be solved using Auxiliary Buffer technique.
+ * 	1.Termination case: If the size reaches the specific condition, 
+ *    then print or add aux buffer into the result
+ * 	2.Find the candidates/num from starting index
+ *  3.Place the candidate/num into the aux buffer 
+ *  4.Recurse to the next index.  
+ * 
  */
 public class Backtracking {
 
@@ -23,12 +30,12 @@ public class Backtracking {
 		return res;
 	}
 
-	private void backtrack1(List<List<Integer>> res, List<Integer> tmp, int[] nums, int start) {
-		res.add(new ArrayList<>(tmp));
-		for (int i = start; i < nums.length; i++) {
-			tmp.add(nums[i]);
-			backtrack1(res, tmp, nums, i + 1);
-			tmp.remove(tmp.size() - 1);
+	private void backtrack1(List<List<Integer>> res, List<Integer> buffer, int[] nums, int startIndex) {
+		res.add(new ArrayList<>(buffer));
+		for (int i = startIndex; i < nums.length; i++) {
+			buffer.add(nums[i]);
+			backtrack1(res, buffer, nums, i + 1);
+			buffer.remove(buffer.size() - 1);
 		}
 	}
 
@@ -58,13 +65,13 @@ public class Backtracking {
 		return res;
 	}
 
-	private void backtrack2(List<List<Integer>> res, List<Integer> tmp, int[] nums, int start) {
-		res.add(new ArrayList<>(tmp));
-		for (int i = start; i < nums.length; i++) {
-			if (i > start && nums[i] == nums[i - 1]) continue;
-			tmp.add(nums[i]);
-			backtrack2(res, tmp, nums, i + 1);
-			tmp.remove(tmp.size() - 1);
+	private void backtrack2(List<List<Integer>> res, List<Integer> buffer, int[] nums, int startIndex) {
+		res.add(new ArrayList<>(buffer));
+		for (int i = startIndex; i < nums.length; i++) {
+			if (i > startIndex && nums[i] == nums[i - 1]) continue;
+			buffer.add(nums[i]);
+			backtrack2(res, buffer, nums, i + 1);
+			buffer.remove(buffer.size() - 1);
 		}
 	}
 
@@ -76,12 +83,12 @@ public class Backtracking {
 		return res;
 	}
 
-	public void subSeq(List<List<Character>> res, List<Character> tmp, String str, int start) {
-		res.add(new ArrayList<>(tmp));
-		for (int i = start; i < str.length(); i++) {
-			tmp.add(str.charAt(i));
-			subSeq(res, tmp, str, i + 1);
-			tmp.remove(tmp.size() - 1);
+	public void subSeq(List<List<Character>> res, List<Character> buffer, String str, int startIndex) {
+		res.add(new ArrayList<>(buffer));
+		for (int i = startIndex; i < str.length(); i++) {
+			buffer.add(str.charAt(i));
+			subSeq(res, buffer, str, i + 1);
+			buffer.remove(buffer.size() - 1);
 		}
 	}
 
@@ -95,14 +102,14 @@ public class Backtracking {
 		return res;
 	}
 
-	public void backtrack3(int n, int k, int start, List<Integer> list, List<List<Integer>> res) {
-		if (list.size() == k) {
-			res.add(new ArrayList<>(list));
+	public void backtrack3(int n, int k, int startIndex, List<Integer> buffer, List<List<Integer>> res) {
+		if (buffer.size() == k) {
+			res.add(new ArrayList<>(buffer));
 		} else {
-			for (int i = start; i <= n; i++) {
-				list.add(i);
-				backtrack3(n, k, i + 1, list, res);
-				list.remove(list.size() - 1);
+			for (int i = startIndex; i <= n; i++) {
+				buffer.add(i);
+				backtrack3(n, k, i + 1, buffer, res);
+				buffer.remove(buffer.size() - 1);
 			}
 		}
 	}
@@ -116,14 +123,14 @@ public class Backtracking {
 		return res;
 	}
 
-	private void backtrack4(List<List<Integer>> res, List<Integer> tmp, int[] nums, int target, int start) {
+	private void backtrack4(List<List<Integer>> res, List<Integer> buffer, int[] nums, int target, int startIndex) {
 		if (target < 0) return;
-		else if (target == 0) res.add(new ArrayList<>(tmp));
+		else if (target == 0) res.add(new ArrayList<>(buffer));
 		else {
-			for (int i = start; i < nums.length; i++) {
-				tmp.add(nums[i]);
-				backtrack4(res, tmp, nums, target - nums[i], i);
-				tmp.remove(tmp.size() - 1);
+			for (int i = startIndex; i < nums.length; i++) {
+				buffer.add(nums[i]);
+				backtrack4(res, buffer, nums, target - nums[i], i);
+				buffer.remove(buffer.size() - 1);
 			}
 		}
 	}
@@ -137,15 +144,15 @@ public class Backtracking {
 		return res;
 	}
 
-	private void backtrack8(List<List<Integer>> res, List<Integer> tmp, int[] nums) {
-		if (tmp.size() == nums.length) {
-			res.add(new ArrayList<>(tmp));
+	private void backtrack8(List<List<Integer>> res, List<Integer> buffer, int[] nums) {
+		if (buffer.size() == nums.length) {
+			res.add(new ArrayList<>(buffer));
 		} else {
 			for (int i = 0; i < nums.length; i++) {
-				if (tmp.contains(nums[i])) continue;
-				tmp.add(nums[i]);
-				backtrack8(res, tmp, nums);
-				tmp.remove(tmp.size() - 1);
+				if (buffer.contains(nums[i])) continue;
+				buffer.add(nums[i]);
+				backtrack8(res, buffer, nums);
+				buffer.remove(buffer.size() - 1);
 			}
 		}
 	}
@@ -181,17 +188,17 @@ public class Backtracking {
 		return list;
 	}
 
-	private void backtrack10(List<List<Integer>> list, List<Integer> tmp, int[] nums, boolean[] used) {
-		if (tmp.size() == nums.length) {
-			list.add(new ArrayList<>(tmp));
+	private void backtrack10(List<List<Integer>> list, List<Integer> buffer, int[] nums, boolean[] used) {
+		if (buffer.size() == nums.length) {
+			list.add(new ArrayList<>(buffer));
 		} else {
 			for (int i = 0; i < nums.length; i++) {
 				if (used[i] || i > 0 && nums[i] == nums[i - 1] && !used[i - 1]) continue;
 				used[i] = true;
-				tmp.add(nums[i]);
-				backtrack10(list, tmp, nums, used);
+				buffer.add(nums[i]);
+				backtrack10(list, buffer, nums, used);
 				used[i] = false;
-				tmp.remove(tmp.size() - 1);
+				buffer.remove(buffer.size() - 1);
 			}
 		}
 	}

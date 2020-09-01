@@ -11,7 +11,7 @@ import java.util.Queue;
 
 public class BacktrackingPatterns {
 
-	/********************* 1.Backtracking template-1 ***********************/
+	/********************* 1.Backtracking – Auxiliary Buffer Technique I ***********************/
 	// Combination Sum-II
 	public List<List<Integer>> combinationSum2(int[] nums, int target) {
 		List<List<Integer>> res = new ArrayList<>();
@@ -21,15 +21,15 @@ public class BacktrackingPatterns {
 		return res;
 	}
 
-	private void backtrack5(List<List<Integer>> res, List<Integer> tmp, int[] nums, int target, int start) {
+	private void backtrack5(List<List<Integer>> res, List<Integer> buffer, int[] nums, int target, int startIndex) {
 		if (target < 0) return;
-		else if (target == 0) res.add(new ArrayList<>(tmp));
+		else if (target == 0) res.add(new ArrayList<>(buffer));
 		else {
-			for (int i = start; i < nums.length; i++) {
-				if (i > start && nums[i] == nums[i - 1]) continue;
-				tmp.add(nums[i]);
-				backtrack5(res, tmp, nums, target - nums[i], i + 1);
-				tmp.remove(tmp.size() - 1);
+			for (int i = startIndex; i < nums.length; i++) {
+				if (i > startIndex && nums[i] == nums[i - 1]) continue;
+				buffer.add(nums[i]);
+				backtrack5(res, buffer, nums, target - nums[i], i + 1);
+				buffer.remove(buffer.size() - 1);
 			}
 		}
 	}
@@ -42,11 +42,11 @@ public class BacktrackingPatterns {
 		return res;
 	}
 
-	public void backtrack6(int sum, int k, int start, List<Integer> list, List<List<Integer>> res) {
+	public void backtrack6(int sum, int k, int startIndex, List<Integer> list, List<List<Integer>> res) {
 		if (list.size() == k && sum == 0) res.add(new ArrayList<>(list));
 		else if (list.size() >= k || sum < 0) return;
 		else {
-			for (int i = start; i <= 9; i++) {
+			for (int i = startIndex; i <= 9; i++) {
 				list.add(i);
 				backtrack6(sum - i, k, i + 1, list, res);
 				list.remove(list.size() - 1);
@@ -62,15 +62,15 @@ public class BacktrackingPatterns {
 		return res;
 	}
 
-	public void backtrack7(int n, int start, List<List<Integer>> res, List<Integer> tmp) {
+	public void backtrack7(int n, int startIndex, List<List<Integer>> res, List<Integer> buffer) {
 		if (n == 1) {
-			res.add(new ArrayList<>(tmp));
+			res.add(new ArrayList<>(buffer));
 		} else {
-			for (int i = start; i <= n; i++) {
+			for (int i = startIndex; i <= n; i++) {
 				if (n % i != 0) continue;
-				tmp.add(i);
-				backtrack7(n / i, i, res, tmp);
-				tmp.remove(tmp.size() - 1);
+				buffer.add(i);
+				backtrack7(n / i, i, res, buffer);
+				buffer.remove(buffer.size() - 1);
 			}
 		}
 	}
@@ -136,7 +136,7 @@ public class BacktrackingPatterns {
 		return new ArrayList<String>(set);
 	}
 
-	/********************* 2.Backtracking template -1 problems ***********************/
+	/********************* 2.Backtracking – Auxiliary Buffer Technique problems ***********************/
 	/* Palindrome Partitioning: 
 	 * Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome
 	 *  partitioning of s.
@@ -150,14 +150,14 @@ public class BacktrackingPatterns {
 		return res;
 	}
 
-	public void backtrack12(List<List<String>> res, List<String> tmp, String s, int start) {
-		if (start == s.length()) res.add(new ArrayList<>(tmp));
+	public void backtrack12(List<List<String>> res, List<String> buffer, String s, int startIndex) {
+		if (startIndex == s.length()) res.add(new ArrayList<>(buffer));
 		else {
-			for (int i = start; i < s.length(); i++) {
-				if (isPalindrome(s, start, i)) {
-					tmp.add(s.substring(start, i + 1));
-					backtrack12(res, tmp, s, i + 1);
-					tmp.remove(tmp.size() - 1);
+			for (int i = startIndex; i < s.length(); i++) {
+				if (isPalindrome(s, startIndex, i)) {
+					buffer.add(s.substring(startIndex, i + 1));
+					backtrack12(res, buffer, s, i + 1);
+					buffer.remove(buffer.size() - 1);
 				}
 			}
 		}
@@ -190,13 +190,13 @@ public class BacktrackingPatterns {
 	}
 
 	public void backtrackPartition(boolean[][] dp, String s, List<List<String>> result, List<String> tempList,
-			int start) {
-		if (s.length() == start) {
+			int startIndex) {
+		if (s.length() == startIndex) {
 			result.add(new ArrayList<>(tempList));
 		} else {
-			for (int i = start; i < s.length(); i++) {
-				if (dp[start][i]) {
-					tempList.add(s.substring(start, i + 1));
+			for (int i = startIndex; i < s.length(); i++) {
+				if (dp[startIndex][i]) {
+					tempList.add(s.substring(startIndex, i + 1));
 					backtrackPartition(dp, s, result, tempList, i + 1);
 					tempList.remove(tempList.size() - 1);
 				}
@@ -225,16 +225,20 @@ public class BacktrackingPatterns {
 		return res;
 	}
 
-	private void backtrack13(String num, int index, Map<Character, String> phoneNoMap, StringBuilder combinations,
+	private void backtrack13(String num, int index, Map<Character, String> phoneNoMap, StringBuilder buffer,
 			List<String> res) {
+		//1.Termination Case
 		if (index >= num.length()) {
-			res.add(combinations.toString());
+			res.add(buffer.toString());
 		} else {
+			//2.Find candidates
 			String letters = phoneNoMap.get(num.charAt(index));
+			//3.Place candidate in buffer
 			for (int i = 0; i < letters.length(); i++) {
-				combinations.append(letters.charAt(i));
-				backtrack13(num, index + 1, phoneNoMap, combinations, res);
-				combinations.deleteCharAt(index);
+				buffer.append(letters.charAt(i));
+				//4.Recurse to next index
+				backtrack13(num, index + 1, phoneNoMap, buffer, res);
+				buffer.deleteCharAt(index);
 			}
 		}
 	}
