@@ -33,6 +33,28 @@ public class CollectionAPI {
 		ob.testCollectionAPIs();
 	}
 
+	public void basicsOfJavaSorting() {
+		System.out.println("Basic of Java Sorting Algorithms: ");
+		//0 => val1==val2, -ve => val1 < val2, +ve => val1 > val2
+		//Asc order sorting: Comparator/Comparable takes two values at a time and swaps when value is +ve.
+
+		String str1 = "A";
+		String str2 = "B";
+		String str3 = "C";
+
+		Integer val1 = 1;
+		Integer val2 = 2;
+		Integer val3 = 3;
+
+		System.out.println(val1.compareTo(val2));
+		System.out.println(Integer.compare(val1, val2));
+		System.out.println(val3.compareTo(val1));
+
+		System.out.println(str1.compareTo(str2));
+		System.out.println(str2.compareTo(str3));
+		System.out.println(str3.compareTo(str1));
+	}
+
 	private void collectionOverallIdeas() {
 		/*
 		 * Note: All the collection methods in this class follows this order:
@@ -650,16 +672,14 @@ public class CollectionAPI {
 	}
 
 	void iteratorDisplay(Iterator<Integer> iterator) {
-		while (iterator.hasNext())
-			System.out.print(iterator.next() + " ");
+		while (iterator.hasNext()) System.out.print(iterator.next() + " ");
 		System.out.println();
 	}
 
 	public void listDisplay(List<Integer> list) {
 		ListIterator<Integer> iter = list.listIterator();
 		// list.forEach(System.out::print);
-		while (iter.hasNext())
-			System.out.print(iter.next() + " ");
+		while (iter.hasNext()) System.out.print(iter.next() + " ");
 		System.out.println();
 	}
 
@@ -689,8 +709,7 @@ public class CollectionAPI {
 	int mostFreqElement(int[] arr) {
 		Map<Integer, Integer> map = new HashMap<>();
 		for (int val : arr) {
-			if (map.get(val) == null)
-				map.put(val, 0);
+			if (map.get(val) == null) map.put(val, 0);
 			map.put(val, map.get(val) + 1);
 		}
 
@@ -871,8 +890,7 @@ class PriorityQueueAPI {
 		// Printing all elements
 		System.out.println("The queue elements:");
 		Iterator itr = pQueue.iterator();
-		while (itr.hasNext())
-			System.out.print(itr.next() + ", ");
+		while (itr.hasNext()) System.out.print(itr.next() + ", ");
 
 		// Printing the most priority element
 		System.out.println("\nHead value using peek function:" + pQueue.peek());
@@ -881,12 +899,10 @@ class PriorityQueueAPI {
 		// printing the modified pQueue
 		System.out.println("After removing an element with poll function: " + pQueue.poll());
 		Iterator<String> itr2 = pQueue.iterator();
-		while (itr2.hasNext())
-			System.out.print(itr2.next() + ", ");
+		while (itr2.hasNext()) System.out.print(itr2.next() + ", ");
 		System.out.println("\nAfter removing an element with poll function: " + pQueue.poll());
 		Iterator<String> itr3 = pQueue.iterator();
-		while (itr3.hasNext())
-			System.out.print(itr3.next() + ", ");
+		while (itr3.hasNext()) System.out.print(itr3.next() + ", ");
 
 		/*	
 		
