@@ -3,6 +3,7 @@ package com.basic.datastructures.adv;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.basic.datastructures.operations.TrieOperations;
 import com.common.model.TrieNode;
 
 /*
@@ -37,34 +38,34 @@ public class Trie {
 
 		System.out.println("Insert the list of strings: ");
 		for (int i = 0; i < keys.length; i++)
-			trie.insert(keys[i]);
+			trie.add(keys[i]);
 
 		System.out.println("Search the words: ");
-		System.out.println("the --- " + trie.wordSearch("the"));
-		System.out.println("these --- " + trie.wordSearch("these"));
-		System.out.println("their --- " + trie.wordSearch("their"));
-		System.out.println("thaw --- " + trie.wordSearch("thaw"));
+		System.out.println("the --- " + trie.search("the"));
+		System.out.println("these --- " + trie.search("these"));
+		System.out.println("their --- " + trie.search("their"));
+		System.out.println("thaw --- " + trie.search("thaw"));
 
 		System.out.println("Search the prefix: ");
-		System.out.println("an --- " + trie.wordSearch("an"));
-		System.out.println("an --- " + trie.startsWith("an"));
-		System.out.println("by --- " + trie.wordSearch("th"));
-		System.out.println("by --- " + trie.startsWith("th"));
+		System.out.println("an --- " + trie.search("an"));
+		System.out.println("an --- " + trie.prefixSearch("an"));
+		System.out.println("by --- " + trie.search("th"));
+		System.out.println("by --- " + trie.prefixSearch("th"));
 
 		System.out.println("Wildcard Match: Search with special chars: ");
 		System.out.println(".he --- " + trie.wildcardMatch(".he"));
 		System.out.println("t.e --- " + trie.wildcardMatch("t.e"));
 
 		System.out.println("Auto Suggestions/Auto Complete: ");
-		trie.printAutoSuggestions("th");
-		trie.printAutoSuggestions("yrt");
-		trie.printAutoSuggestions("bye");
-		trie.printAutoSuggestions("a");
+		trie.typeAheadSearch("th");
+		trie.typeAheadSearch("yrt");
+		trie.typeAheadSearch("bye");
+		trie.typeAheadSearch("a");
 
 		System.out.println("Delete the string: ");
-		trie.delete("mhe");
+		trie.remove("mhe");
 		System.out.println("after deletion..");
-		System.out.println("an --- " + trie.wordSearch("mhe"));
+		System.out.println("an --- " + trie.search("mhe"));
 
 	}
 
@@ -74,59 +75,48 @@ public class Trie {
 		String keys[] = { "the", "mhe", "a", "these", "answer", "any", "by", "bye", "their" };
 
 		for (int i = 0; i < keys.length; i++)
-			trie.insertIterative(keys[i]);
+			trie.add(keys[i]);
 
 		// Search for different keys
-		if (trie.searchIterative("the") == true)
-			System.out.println("the --- " + "Present in trie");
-		else
-			System.out.println("the --- " + "Not present in trie");
+		if (trie.search("the") == true) System.out.println("the --- " + "Present in trie");
+		else System.out.println("the --- " + "Not present in trie");
 
-		if (trie.searchIterative("these") == true)
-			System.out.println("these --- " + "Present in trie");
-		else
-			System.out.println("these --- " + "Not present in trie");
+		if (trie.search("these") == true) System.out.println("these --- " + "Present in trie");
+		else System.out.println("these --- " + "Not present in trie");
 
-		if (trie.searchIterative("their") == true)
-			System.out.println("their --- " + "Present in trie");
-		else
-			System.out.println("their --- " + "Not present in trie");
+		if (trie.search("their") == true) System.out.println("their --- " + "Present in trie");
+		else System.out.println("their --- " + "Not present in trie");
 
-		if (trie.searchIterative("thaw") == true)
-			System.out.println("thaw --- " + "Present in trie");
-		else
-			System.out.println("thaw --- " + "Not present in trie");
+		if (trie.search("thaw") == true) System.out.println("thaw --- " + "Present in trie");
+		else System.out.println("thaw --- " + "Not present in trie");
 
 		// Delete Operation
 		System.out.println("After delete operation");
-		trie.delete("the");
+		trie.remove("the");
 
-		if (trie.searchIterative("the") == true)
-			System.out.println("the --- " + "Present in trie");
-		else
-			System.out.println("the --- " + "Not present in trie");
+		if (trie.search("the") == true) System.out.println("the --- " + "Present in trie");
+		else System.out.println("the --- " + "Not present in trie");
 
-		trie.delete("these");
+		trie.remove("these");
 
-		if (trie.searchIterative("these") == true)
-			System.out.println("these --- " + "Present in trie");
-		else
-			System.out.println("these --- " + "Not present in trie");
+		if (trie.search("these") == true) System.out.println("these --- " + "Present in trie");
+		else System.out.println("these --- " + "Not present in trie");
 	}
 }
 
 /**
  * Trie Implementation using Array:
  */
-class Trie1 {
+class Trie1 implements TrieOperations {
+
 	TrieNode root;
 
 	public Trie1() {
 		root = new TrieNode();
 	}
 
-	/** Insert: Inserts a word into the trie. */
-	public void insert(String word) {
+	@Override
+	public void add(String word) {
 		int index;
 		TrieNode current = root;
 		for (int i = 0; i < word.length(); i++) {
@@ -141,78 +131,60 @@ class Trie1 {
 		current.word = word;
 	}
 
-	/** Search Whole Word: Returns if the word is in the trie. */
-	public boolean wordSearch(String word) {
-		TrieNode result = search(word);
+	@Override
+	public boolean search(String word) {
+		TrieNode result = wordSearch(word);
 		return result == null ? false : (result != null && result.isEndOfWord);
-
 	}
 
-	/** Prefix Search: Returns if there is any word in the trie that starts with the given prefix. */
-	public boolean startsWith(String prefix) {
-		TrieNode result = search(prefix);
+	@Override
+	public boolean prefixSearch(String prefix) {
+		TrieNode result = wordSearch(prefix);
 		return result == null ? false : true;
 	}
 
-	public TrieNode search(String word) {
+	private TrieNode wordSearch(String word) {
 		int index;
 		TrieNode current = root;
 
 		for (int i = 0; i < word.length(); i++) {
 			index = word.charAt(i) - 'a';
-			if (current.children[index] == null)
-				return null;
+			if (current.children[index] == null) return null;
 
 			current = current.children[index];
 		}
 		return current;
 	}
 
-	/**
-	 * Wildcard Match: Returns if the word is in the data structure. A word could contain the dot
-	 * character '.' to represent any one letter.
-	 */
+	@Override
 	public boolean wildcardMatch(String word) {
-		return dfsSearch(root, word, 0);
+		return dfs(root, word, 0);
 	}
 
-	public boolean dfsSearch(TrieNode node, String word, int index) {
-		if (node.isEndOfWord && word.length() == index)
-			return true;
+	private boolean dfs(TrieNode node, String word, int index) {
+		if (node.isEndOfWord && word.length() == index) return true;
 
-		if (index >= word.length())
-			return false;
+		if (index >= word.length()) return false;
 
 		char ch = word.charAt(index);
 
 		if ('.' == ch) {
 			for (int i = 0; i < 26; i++) {
 				if (node.children[i] != null) {
-					if (dfsSearch(node.children[i], word, index + 1))
-						return true;
+					if (dfs(node.children[i], word, index + 1)) return true;
 				}
 			}
 		} else {
 			TrieNode next = node.children[ch - 'a'];
-			if (next != null)
-				return dfsSearch(next, word, index + 1);
+			if (next != null) return dfs(next, word, index + 1);
 		}
 
 		return false;
 	}
 
-	/** Auto Suggestions: Auto-complete feature using Trie */
-	/*Auto-complete feature using Trie:
-	 * We are given a Trie with a set of strings stored in it. Now the user types in a prefix of his search query, we
-	 * need to give him all recommendations to auto-complete his query based on the strings stored in the Trie. We
-	 * assume that the Trie stores past searches by the users.
-	 * For example if the Trie store {“abc”, “abcd”, “aa”, “abbbaba”} and the User types in “ab” 
-	 * then he must be shown {“abc”, “abcd”, “abbbaba”}.
-	 * Time: O(prefixLen + noOfStringInDictionary);
-	 */
-
-	public void printAutoSuggestions(String prefix) {
-		TrieNode node = search(prefix);
+	@Override
+	public void typeAheadSearch(String prefix) {
+		TrieNode node = wordSearch(prefix);
 
 		if (node == null) {
 			System.out.println("Prefix not found!");
@@ -225,11 +197,9 @@ class Trie1 {
 	}
 
 	// Autocomplete or Autosuggestions
-	public void autoSuggestions(TrieNode node, List<String> suggestions) {
-		if (node == null)
-			return;
-		if (node.isEndOfWord)
-			suggestions.add(node.word);
+	private void autoSuggestions(TrieNode node, List<String> suggestions) {
+		if (node == null) return;
+		if (node.isEndOfWord) suggestions.add(node.word);
 
 		for (int i = 0; i < 26; i++) {
 			if (node.children[i] != null) {
@@ -238,51 +208,48 @@ class Trie1 {
 		}
 	}
 
-	/** Remove: Remove the given string. */
-	public void delete(String str) {
-		delete(root, str, 0);
+	@Override
+	public void remove(String word) {
+		delete(root, word, 0);
 	}
 
 	public TrieNode delete(TrieNode node, String str, int index) {
-		if (node == null)
-			return null;
+		if (node == null) return null;
 
 		if (index == str.length()) {
 			node.isEndOfWord = false;
-			if (!node.isEndOfWord && isEmpty(node))
-				node = null;
+			if (!node.isEndOfWord && isEmpty(node)) node = null;
 			return node;
 		}
 
 		int chIndex = str.charAt(index) - 'a';
 		node.children[chIndex] = delete(node.children[chIndex], str, index + 1);
 
-		if (!node.isEndOfWord && isEmpty(node))
-			node = null;
+		if (!node.isEndOfWord && isEmpty(node)) node = null;
 
 		return node;
 	}
 
 	private boolean isEmpty(TrieNode root) {
-		if (root == null)
-			return true;
+		if (root == null) return true;
 
 		for (int i = 0; i < 26; i++)
-			if (root.children[i] != null)
-				return false;
+			if (root.children[i] != null) return false;
 
 		return true;
 	}
+
 }
 
-class Trie2 {
+class Trie2 implements TrieOperations {
 	private TrieNode root; // Using Map Impl
 
 	public Trie2() {
 		root = new TrieNode();
 	}
 
-	public void insertIterative(String word) {
+	@Override
+	public void add(String word) {
 		TrieNode curr = root;
 		for (int i = 0; i < word.length(); i++) {
 			char ch = word.charAt(i);
@@ -297,26 +264,39 @@ class Trie2 {
 		curr.isEndOfWord = true;
 	}
 
-	public boolean searchIterative(String word) {
+	@Override
+	public boolean search(String word) {
 		TrieNode current = root;
 		for (int i = 0; i < word.length(); i++) {
 			TrieNode childNode = current.childNodes.get(word.charAt(i));
-			if (childNode == null)
-				return false;
+			if (childNode == null) return false;
 			current = childNode;
 		}
 		return current.isEndOfWord;
 	}
 
-	public void delete(String word) {
+	@Override
+	public boolean prefixSearch(String prefix) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean wildcardMatch(String word) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void remove(String word) {
 		delete(root, word, 0);
 	}
 
 	public boolean delete(TrieNode current, String word, int index) {
 		if (word.length() == index) {
 			// If EOW is false, then word is not present in the Trie DS
-			if (!current.isEndOfWord)
-				return false;
+			/*if (!current.isEndOfWord)
+				return false;*/
 			// Reset EOW to false
 			current.isEndOfWord = false;
 			/*If last node of the word has childNodes, then simple reset the EOW.
@@ -327,8 +307,7 @@ class Trie2 {
 		char ch = word.charAt(index);
 		TrieNode next = current.childNodes.get(ch);
 		// if char is not present in the node, then next will be null.
-		if (next == null)
-			return false;
+		if (next == null) return false;
 
 		// Recursive call for every char in the word
 		boolean deleteNodeFlag = delete(next, word, index + 1);
@@ -340,4 +319,11 @@ class Trie2 {
 
 		return false;
 	}
+
+	@Override
+	public void typeAheadSearch(String prefix) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

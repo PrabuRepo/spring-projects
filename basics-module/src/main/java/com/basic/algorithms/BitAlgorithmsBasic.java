@@ -229,14 +229,25 @@ public class BitAlgorithmsBasic {
 		return (data & (1 << n)) > 0;
 	}
 
+	//Get nth bit
+	public int getNthBit(int data, int n) {
+		return ((data >> n) & 1);
+	}
+
 	// Set nth bit:
 	public int setNthBit(int data, int n) {
-		return (data | (1 << n));
+		return ((1 << n) | data);
 	}
 
 	// Turn off nth bit:
 	public int unSetNthBit(int data, int n) {
-		return (data & ~(1 << n));
+		return (~(1 << n) & data);
+	}
+
+	//Set bit '0' or '1'
+	public int setBit(int data, int n, int bit) {
+		if (bit == 1) return ((1 << n) | data); //Set nth to 1
+		else return (~(1 << n) & data); //Set nth bit to 0
 	}
 
 	// Toggle the nth bit:
@@ -250,6 +261,14 @@ public class BitAlgorithmsBasic {
 			data = data ^ testBit;
 			testBit <<= 1;
 			l++;
+		}
+		return data;
+	}
+
+	public int swapBits(int data, int i, int j) {
+		//If two bits not equal, swap the bits
+		if (getNthBit(data, i) != getNthBit(data, j)) {
+			return (data ^ (1 << i | 1 << j));
 		}
 		return data;
 	}

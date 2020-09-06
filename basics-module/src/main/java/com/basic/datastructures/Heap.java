@@ -3,7 +3,7 @@ package com.basic.datastructures;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import com.basic.datastructures.operations.QueueOperations;
+import com.basic.datastructures.operations.HeapOperations;
 
 /*
  * Priority Queue Impl using Heap:
@@ -14,7 +14,7 @@ public class Heap {
 
 }
 
-class MaxBinaryHeap implements QueueOperations {
+class MaxBinaryHeap implements HeapOperations {
 
 	int heapSize;
 	int capacity;
@@ -128,14 +128,11 @@ class MaxBinaryHeap implements QueueOperations {
 			right = right(i);
 			maxIndex = i;
 
-			if (left < heapSize && elements[left] > elements[maxIndex])
-				maxIndex = left;
+			if (left < heapSize && elements[left] > elements[maxIndex]) maxIndex = left;
 
-			if (right < heapSize && elements[right] > elements[maxIndex])
-				maxIndex = right;
+			if (right < heapSize && elements[right] > elements[maxIndex]) maxIndex = right;
 
-			if (maxIndex == i)
-				break;
+			if (maxIndex == i) break;
 			swap(i, maxIndex);
 			i = maxIndex;
 		}
@@ -148,11 +145,9 @@ class MaxBinaryHeap implements QueueOperations {
 		int right = right(i);
 		int maxIndex = i;
 
-		if (left < heapSize && elements[left] > elements[maxIndex])
-			maxIndex = left;
+		if (left < heapSize && elements[left] > elements[maxIndex]) maxIndex = left;
 
-		if (right < heapSize && elements[right] > elements[maxIndex])
-			maxIndex = right;
+		if (right < heapSize && elements[right] > elements[maxIndex]) maxIndex = right;
 
 		if (i != maxIndex) {
 			swap(i, maxIndex);
@@ -204,8 +199,7 @@ class MaxBinaryHeap implements QueueOperations {
 			case 1:
 				System.out.println("Enter no of data to be inserted:");
 				int t = in.nextInt();
-				while (t-- > 0)
-					binaryHeap.add(in.nextInt());
+				while (t-- > 0) binaryHeap.add(in.nextInt());
 
 				System.out.println("Elements are inserted!");
 				break;
@@ -240,7 +234,7 @@ class MaxBinaryHeap implements QueueOperations {
 
 }
 
-class MinBinaryHeap implements QueueOperations {
+class MinBinaryHeap implements HeapOperations {
 	Integer[] elements;
 	int capacity;
 	int currSize;
@@ -268,8 +262,7 @@ class MinBinaryHeap implements QueueOperations {
 	@Override
 	public boolean contains(int data) {
 		for (int i = 0; i < currSize; i++) {
-			if (elements[i] == data)
-				return true;
+			if (elements[i] == data) return true;
 		}
 		return false;
 	}
@@ -282,8 +275,7 @@ class MinBinaryHeap implements QueueOperations {
 	// Time Complexity: O(logn)
 	@Override
 	public int poll() {
-		if (isEmpty())
-			return -1;
+		if (isEmpty()) return -1;
 		// Get the min element from 0th position
 		Integer element = elements[0];
 		if (currSize == 1) {
@@ -365,11 +357,9 @@ class MinBinaryHeap implements QueueOperations {
 		int right = rightChild(index);
 		int smallest = index;
 
-		if (left < currSize && elements[left] < elements[smallest])
-			smallest = left;
+		if (left < currSize && elements[left] < elements[smallest]) smallest = left;
 
-		if (right < currSize && elements[right] < elements[smallest])
-			smallest = right;
+		if (right < currSize && elements[right] < elements[smallest]) smallest = right;
 
 		if (smallest != index) {
 			swap(index, smallest);
@@ -429,8 +419,7 @@ class MinBinaryHeap implements QueueOperations {
 			case 1:
 				System.out.println("Enter no of elements to be inserted:");
 				int t = in.nextInt();
-				while (t-- > 0)
-					binaryHeap.add(in.nextInt());
+				while (t-- > 0) binaryHeap.add(in.nextInt());
 
 				System.out.println("Elements are inserted!");
 				break;
@@ -530,11 +519,9 @@ class PriorityQueue {
 			int rightChild = rightChild(startIndex);
 			int minIndex = startIndex;
 
-			if (leftChild < currSize && a[leftChild] < a[minIndex])
-				minIndex = leftChild;
+			if (leftChild < currSize && a[leftChild] < a[minIndex]) minIndex = leftChild;
 
-			if (rightChild < currSize && a[rightChild] < a[minIndex])
-				minIndex = rightChild;
+			if (rightChild < currSize && a[rightChild] < a[minIndex]) minIndex = rightChild;
 
 			if (startIndex != minIndex) {
 				swap(elements, startIndex, minIndex);

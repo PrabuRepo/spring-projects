@@ -9,15 +9,13 @@ public class BitAlgorithms {
 	/*************************** Type1: Check/Scan the bits *******************/
 	// Check whether K-th bit is set or not
 	public static String checkKthBit(int data, int k) {
-		if ((data & (1 << k)) >= 1)
-			return "Yes";
+		if ((data & (1 << k)) >= 1) return "Yes";
 		return "No";
 	}
 
 	// Find first set bit
 	public static int findFirstSetBit(int data) {
-		if (data == 0)
-			return 0;
+		if (data == 0) return 0;
 
 		int bit = 1;
 		int count = 1;
@@ -35,8 +33,7 @@ public class BitAlgorithms {
 			while (count < 32) {
 				count++;
 				temp = data & testBit;
-				if (temp == testBit)
-					return count;
+				if (temp == testBit) return count;
 
 				testBit <<= 1;
 			}
@@ -180,8 +177,7 @@ public class BitAlgorithms {
 	 */
 	//Similar to prev problem efficient approach - But it has thrown heap memory space issue
 	public int solve3(int A) {
-		if (A <= 2)
-			return A;
+		if (A <= 2) return A;
 		int[] dp = new int[A + 1];
 		int count = 0, prev = 1, twoPow = 1;
 
@@ -290,8 +286,7 @@ public class BitAlgorithms {
 		/* If c is 0, then n is a sequence of 1s followed by a sequence of 0s. This is already the biggest
 		 * number with c1 ones. Return error.
 		 */
-		if (c0 + c1 == 31 || c0 + c1 == 0)
-			return -1;
+		if (c0 + c1 == 31 || c0 + c1 == 0) return -1;
 
 		/* Arithmetically:
 		 * 2^c0 = 1 << c0
@@ -311,8 +306,7 @@ public class BitAlgorithms {
 		/* If temp is 0, then the number is a sequence of 0s followed by a sequence of 1s. This is already
 		 * the smallest number with c1 ones. Return -1 for an error.
 		 */
-		if (temp == 0)
-			return -1;
+		if (temp == 0) return -1;
 
 		while ((temp & 1) == 0 && (temp != 0)) {
 			c0++;
@@ -341,8 +335,7 @@ public class BitAlgorithms {
 	 */
 
 	public int flipBitToWin(int n) {
-		if (n == -1)
-			return Integer.BYTES * 8; // 4 * 8 = 32
+		if (n == -1) return Integer.BYTES * 8; // 4 * 8 = 32
 		int maxLen = 0, prevLen = 0, currLen = 0;
 
 		while (n != 0) {
@@ -365,8 +358,7 @@ public class BitAlgorithms {
 	public int toggleBits(int data) {
 		int result = 0, setBit = 1;
 		while (data > 0) {
-			if ((data & 1) == 0)
-				result |= setBit;
+			if ((data & 1) == 0) result |= setBit;
 			setBit <<= 1;
 			data >>= 1;
 		}
@@ -431,15 +423,13 @@ public class BitAlgorithms {
 	static int CLEAR_BITS = (-1 >>> BITS);
 
 	public static int rotateLeft(int n, int d) {
-		if (d > 16)
-			d = d % BITS;
+		if (d > 16) d = d % BITS;
 
 		return ((n << d) | (n >> BITS - d)) & 0xFFFF;
 	}
 
 	public static int rotateRight(int n, int d) {
-		if (d > 16)
-			d = d % BITS;
+		if (d > 16) d = d % BITS;
 		return ((n >> d) | (n << BITS - d)) & CLEAR_BITS;
 	}
 
@@ -452,9 +442,7 @@ public class BitAlgorithms {
 		while (count >= 0) {
 			int bit = n & 1;
 			bit <<= count;
-			if (bit != 0) {
-				result |= bit;
-			}
+			if (bit != 0) result |= bit;
 			n >>>= 1;
 			count--;
 		}
@@ -475,6 +463,25 @@ public class BitAlgorithms {
 		rev <<= count;
 		// System.out.println("Ouput: " + Integer.toBinaryString(rev));
 		return rev;
+	}
+
+	//TODO: Reverse the bits till last set bit. Eg: 1011 -> 1101; Here should consider only 4 bits
+	//Approach using reverse cache 
+	public int reverseBits() {
+		return 0;
+	}
+
+	//Compliment of given input only till last set bit.
+	public int compliment(int n) {
+		//Find the last set bit
+		int lastSetBit = (int) (Math.log(n) / Math.log(2));
+
+		//Add '1' is to move one additional left shift 
+		//Subract '1' is to get all set bit from the last set bit
+		int val = (1 << lastSetBit + 1) - 1;
+
+		//Perform xor b/w n and val to get the compliment 
+		return n ^ val;
 	}
 
 	/*************************** Type3: Apply the Bit Magic to Problems *******************/
@@ -559,10 +566,8 @@ public class BitAlgorithms {
 		while (left < right) {
 			mid = (left + right) / 2;
 			// Modification: Compare mid with mid index element.
-			if (nums[mid] > mid)
-				right = mid;
-			else
-				left = mid + 1;
+			if (nums[mid] > mid) right = mid;
+			else left = mid + 1;
 		}
 		return left;
 	}
@@ -587,8 +592,7 @@ public class BitAlgorithms {
 		List<String> result = new ArrayList<>();
 		for (int h = 0; h < 12; h++)
 			for (int m = 0; m < 60; m++)
-				if (Integer.bitCount(h) + Integer.bitCount(m) == num)
-					result.add(h + (m < 10 ? ":0" : ":") + m);
+				if (Integer.bitCount(h) + Integer.bitCount(m) == num) result.add(h + (m < 10 ? ":0" : ":") + m);
 
 		return result;
 	}
@@ -599,8 +603,7 @@ public class BitAlgorithms {
 	 */
 	// Approach1:
 	public int rangeBitwiseAnd1(int m, int n) {
-		while (m < n)
-			n = n & (n - 1);
+		while (m < n) n = n & (n - 1);
 
 		return n;
 	}
@@ -686,8 +689,7 @@ public class BitAlgorithms {
 				}
 			}
 
-			if (maxEle == -2147483648)
-				continue;
+			if (maxEle == -2147483648) continue;
 
 			int temp = set[index];
 			set[index] = set[maxInd];
@@ -696,8 +698,7 @@ public class BitAlgorithms {
 			maxInd = index;
 
 			for (int j = 0; j < n; j++) {
-				if (j != maxInd && (set[j] & (1 << i)) != 0)
-					set[j] = set[j] ^ set[maxInd];
+				if (j != maxInd && (set[j] & (1 << i)) != 0) set[j] = set[j] ^ set[maxInd];
 			}
 
 			index++;
@@ -749,17 +750,12 @@ public class BitAlgorithms {
 
 		for (int d : data) {
 			if (count == 0) {
-				if (d >> 5 == 0b110)
-					count = 1; // 2 Bytes data, Remaining :1 - '10' starting should be there
-				else if (d >> 4 == 0b1110)
-					count = 2; // 3 Bytes, Remaining :2 - '10' starting should be there
-				else if (d >> 3 == 0b11110)
-					count = 3; // 4 Bytes, Remaining :3 - '10' starting should be there
-				else if (d >> 7 != 0)
-					return false; // More than 4 Bytes -> return false
+				if (d >> 5 == 0b110) count = 1; // 2 Bytes data, Remaining :1 - '10' starting should be there
+				else if (d >> 4 == 0b1110) count = 2; // 3 Bytes, Remaining :2 - '10' starting should be there
+				else if (d >> 3 == 0b11110) count = 3; // 4 Bytes, Remaining :3 - '10' starting should be there
+				else if (d >> 7 != 0) return false; // More than 4 Bytes -> return false
 			} else {
-				if (d >> 6 != 0b10)
-					return false;
+				if (d >> 6 != 0b10) return false;
 				count--;
 			}
 		}

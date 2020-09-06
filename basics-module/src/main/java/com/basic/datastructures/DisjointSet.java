@@ -3,6 +3,8 @@ package com.basic.datastructures;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.basic.datastructures.operations.DisjointSetOperations;
+
 /*
  *  Disjoint-set data structure (also called a union–find data structure or merge–find set) is a data structure that tracks a set of
  *  elements partitioned into a number of disjoint (non-overlapping) subsets. It provides near-constant-time operations to add new sets,
@@ -40,29 +42,24 @@ public class DisjointSet implements DisjointSetOperations {
 		int root2 = find(set2);
 		if (root1 != root2) { // If it doesn't have same parent
 			parent[root2] = root1;
-			return false; // Means pointed to same parent or union the two sets
+			return false;
 		}
 		return true; // Means already pointed to same parent, no need to combine or union the sets
 	}
 
 	public int find(int i) {
 		while (parent[i] != i) {
-			parent[i] = parent[parent[i]]; // Is that mandatory??
+			parent[i] = parent[parent[i]]; // Path Compression
 			i = parent[i];
 		}
-
 		return i;
 	}
 
 	public int find1(int node) {
-		if (parent[node] == node)
-			return node;
+		if (parent[node] == node) return node;
 
 		parent[node] = find1(parent[node]);
 		return parent[node];
-	}
-
-	public static void main(String[] args) {
 	}
 
 	@Override
@@ -123,11 +120,12 @@ class DisjointSetUsingArray implements DisjointSetOperations {
 
 	@Override
 	public int findParentIterative(int node) {
-		while (disJointSets[node].parent != node)
+		while (disJointSets[node].parent != node) {
 			node = disJointSets[node].parent;
-
-		disJointSets[node].parent = node;
-		return disJointSets[node].parent;
+		}
+		//TODO: Check below line
+		//disJointSets[node].parent = node;
+		return node;
 	}
 
 	@Override
@@ -135,12 +133,11 @@ class DisjointSetUsingArray implements DisjointSetOperations {
 		int parent1 = findParentRecursive(n1);
 		int parent2 = findParentRecursive(n2);
 
-		// Return false, if node is already in same set
-		if (parent1 == parent2)
+		// Return false, if node is not in same set
+		if (parent1 != parent2) {
+			disJointSets[parent2].parent = parent1;
 			return false;
-
-		disJointSets[parent2].parent = parent1;
-
+		}
 		return true;
 	}
 
@@ -150,8 +147,7 @@ class DisjointSetUsingArray implements DisjointSetOperations {
 		int parent2 = findParentRecursive(n2);
 
 		// Return false, if node is already in same set
-		if (parent1 == parent2)
-			return false;
+		if (parent1 == parent2) return false;
 
 		if (disJointSets[parent1].rank > disJointSets[parent2].rank) {
 			disJointSets[parent2].parent = parent1;
@@ -171,8 +167,7 @@ class DisjointSetUsingArray implements DisjointSetOperations {
 		int parent2 = findParentRecursive(n2);
 
 		// Return false, if node is already in same set
-		if (parent1 == parent2)
-			return false;
+		if (parent1 == parent2) return false;
 
 		if (disJointSets[parent2].size > disJointSets[parent2].size) {
 			disJointSets[parent1].parent = parent2;
@@ -193,7 +188,7 @@ class DisjointSetUsingMap implements DisjointSetOperations {
 
 	class SetNode {
 		public int val;
-		public SetNode parent;
+		public int parent;
 		public int rank;
 		public int size;
 	}
@@ -208,71 +203,88 @@ class DisjointSetUsingMap implements DisjointSetOperations {
 		SetNode node = new SetNode();
 		node.val = val;
 		node.rank = 0;
-		node.parent = node;
+		node.parent = val;
 		map.put(val, node);
 	}
 
-	public SetNode findSet(SetNode node) {
+	/*public SetNode findSet(SetNode node) {
 		SetNode parent = node.parent;
 		// Here find the parent recursively & compress the path(Point all the sub node to parent)
 		if (node != parent) // Path compression technique: To reduce the height of the tree/path.(Rank == height)
 			node.parent = findSet(node.parent);
 		return node.parent;
-	}
+	}*/
 
-	public int findSet(int data) {
-		return findSet(map.get(data)).val;
-	}
+	/*	public int findSet(int data) {
+			return findSet(map.get(data)).val;
+		}*/
 
 	@Override
 	public boolean unionByRank(int n1, int n2) {
-		SetNode parent1 = findSet(map.get(n1));
-		SetNode parent2 = findSet(map.get(n2));
+		int parent1 = findParentRecursive(n1);
+		int parent2 = findParentRecursive(n2);
 
-		if (parent1 == parent2)
-			return false;
+		//If both nodes in same parent(or same partition)
+		if (parent1 == parent2) return true;
+
+		SetNode parentNode1 = map.get(parent1);
+		SetNode parentNode2 = map.get(parent2);
 
 		// Merge the node based on rank
-		if (parent1.rank > parent2.rank) {
-			parent2.parent = parent1;
-		} else if (parent2.rank > parent1.rank) {
-			parent1.parent = parent2;
+		if (parentNode1.rank > parentNode2.rank) {
+			parentNode2.parent = parent1;
+		} else if (parentNode2.rank > parentNode1.rank) {
+			parentNode1.parent = parent2;
 		} else {
-			parent1.rank = parent1.rank + 1;
-			parent2.parent = parent1;
+			parentNode1.rank = parentNode1.rank + 1;
+			parentNode2.parent = parent1;
 		}
-		return true;
+
+		//Both nodes have different parent and performed union operation to set into same parent
+		return false;
 	}
 
 	@Override
 	public boolean unionBySize(int n1, int n2) {
-		SetNode parent1 = findSet(map.get(n1));
-		SetNode parent2 = findSet(map.get(n2));
+		int parent1 = findParentRecursive(n1);
+		int parent2 = findParentRecursive(n2);
 
-		if (parent1 == parent2)
-			return false;
+		//If both nodes in same parent(or same partition)
+		if (parent1 == parent2) return true;
+
+		SetNode parentNode1 = map.get(parent1);
+		SetNode parentNode2 = map.get(parent2);
 
 		// Merge the node based on size
-		if (parent2.size > parent1.size) {
-			parent1.parent = parent2;
-			parent2.size += parent1.size;
+		if (parentNode2.size > parentNode1.size) {
+			parentNode1.parent = parent2;
+			parentNode2.size += parentNode1.size;
 		} else {
-			parent2.parent = parent1;
-			parent1.size += parent2.size;
+			parentNode2.parent = parent1;
+			parentNode1.size += parentNode2.size;
 		}
-		return true;
+
+		//Both nodes have different parent and performed union operation to set into same parent
+		return false;
 	}
 
 	@Override
 	public int findParentRecursive(int node) {
-		// TODO Auto-generated method stub
-		return 0;
+		SetNode currNode = map.get(node);
+		// Here find the parent recursively & compress the path(Point all the sub node to parent)
+		if (node != currNode.parent) // Path compression technique: To reduce the height of the tree/path.(Rank == height)
+			currNode.parent = findParentRecursive(currNode.parent);
+
+		return node;
 	}
 
 	@Override
 	public int findParentIterative(int node) {
-		// TODO Auto-generated method stub
-		return 0;
+		while (node != map.get(node).parent) {
+			node = map.get(node).parent;
+		}
+		return node;
+
 	}
 
 	@Override
@@ -280,39 +292,4 @@ class DisjointSetUsingMap implements DisjointSetOperations {
 		// TODO Auto-generated method stub
 		return false;
 	}
-}
-
-interface DisjointSetOperations {
-	/* Find & path compression logic:
-	 * 	 1.Find: Find(x) follows the chain of parent pointers from x up the tree until it reaches a root element, whose parent is itself.
-	 *     This root element is the representative member of the set to which x belongs, and may be x itself.
-	 * 	 2.Path compression: Path compression flattens the structure of the tree by making every node point to the root whenever Find is
-	 *     used on it. This is valid, since each element visited on the way to a root is part of the same set. The resulting flatter tree
-	 *     speeds up future operations not only on these elements, but also on those referencing them.
-	 */
-	// Recursive Approach
-	public int findParentRecursive(int node);
-
-	// Iterative Approach
-	public int findParentIterative(int node);
-
-	public void createNode(int node);
-
-	/*
-	 * Union(x,y) uses Find to determine the roots of the trees x and y belong to. If the roots are distinct, the trees are combined
-	 * by attaching the root of one to the root of the other.  union by rank or union by size is uses to implement this.
-	 * Note: Union operation return type should be void. But boolean will be useful to apply in problems
-	 */
-	public boolean union(int n1, int n2);
-
-	/*
-	 * Union by rank always attaches the shorter tree to the root of the taller tree. Thus, the resulting tree is no taller than the 
-	 * originals unless they were of equal height, in which case the resulting tree is taller by one node.
-	 */
-	public boolean unionByRank(int n1, int n2);
-
-	/*
-	 * Union by size always attaches the tree with fewer elements to the root of the tree having more elements.
-	 */
-	public boolean unionBySize(int n1, int n2);
 }

@@ -15,10 +15,10 @@ import java.util.Arrays;
  * DP Quote: "Those who cannot remember the past are condemned to repeat it" 
  * 
  * Characteristics of Dynamic Programming:
- * 	  1.Overlapping Subproblems: Subproblems are smaller versions of the original problem. Any problem has overlapping sub-problems if 
- *      finding its solution involves solving the same subproblem multiple times. 
- *    2.Optimal Substructure Property: Any problem has optimal substructure property if its overall optimal solution can be constructed 
- *      from the optimal solutions of its subproblems. 
+ * 	1.Optimal Substructure Property - Use sub problems: Any problem has optimal substructure property if its overall optimal solution can 
+ * 	  be constructed from the optimal solutions of its subproblems.   
+ * 	2.Overlapping Subproblems - Reuse sub problems: Subproblems are smaller versions of the original problem. Any problem has overlapping 
+ *    sub-problems if finding its solution involves solving the same subproblem multiple times. 
  *      Eg: Fibonacci numbers, as we know, Fib(n) = Fib(n-1) + Fib(n-2). This clearly shows that a problem of size ‘n’ has been reduced
  *      to subproblems of size ‘n-1’ and ‘n-2’. Therefore, Fibonacci numbers have optimal substructure property.
  *   
@@ -46,8 +46,7 @@ public class DynamicProgramming {
 	// Fibonacci Number calculation:
 	// 1.using recursive function
 	public int fibonacci1(int n) {
-		if (n <= 1)
-			return n;
+		if (n <= 1) return n;
 		return fibonacci1(n - 1) + fibonacci1(n - 2);
 	}
 
@@ -59,8 +58,7 @@ public class DynamicProgramming {
 	}
 
 	public int fibonacci2(int n, int[] dp) {
-		if (dp[n] != -1)
-			return dp[n];
+		if (dp[n] != -1) return dp[n];
 		if (n <= 1) {
 			dp[n] = n;
 		} else {
@@ -81,8 +79,7 @@ public class DynamicProgramming {
 
 	// 4.Two variable approach:
 	public int fibonacci4(int n) {
-		if (n == 0)
-			return 0;
+		if (n == 0) return 0;
 		int prev = 1, curr = 1;
 		for (int i = 2; i < n; i++) {
 			int tmp = curr;
@@ -95,26 +92,21 @@ public class DynamicProgramming {
 	// Staircase/Climbing Stairs/Triple Step/ Davis' Staircase/Count number of ways to cover a distance
 	// 1.Recursive Solution
 	public int tripleSteps1(int n) {
-		if (n < 0)
-			return 0;
-		else if (n == 0)
-			return 1;
+		if (n < 0) return 0;
+		else if (n == 0) return 1;
 		return tripleSteps1(n - 1) + tripleSteps1(n - 2) + tripleSteps1(n - 3);
 	}
 
 	// 2. DP- Top down: Memoization
 	public int tripleSteps2(int n) {
-		if (n <= 0)
-			return 0;
+		if (n <= 0) return 0;
 		int[] dp = new int[n + 1];
 		return tripleStepsUtil(n, dp);
 	}
 
 	public int tripleStepsUtil(int n, int[] dp) {
-		if (n < 0)
-			return 0;
-		else if (n == 0)
-			return 1;
+		if (n < 0) return 0;
+		else if (n == 0) return 1;
 		if (dp[n] == 0) {
 			dp[n] = tripleStepsUtil(n - 1, dp) + tripleStepsUtil(n - 2, dp) + tripleStepsUtil(n - 3, dp);
 		}
@@ -123,14 +115,10 @@ public class DynamicProgramming {
 
 	// 3. DP- Bottom up: Tabulation
 	public int tripleSteps3(int n) {
-		if (n <= 0)
-			return 0;
-		else if (n == 1)
-			return 1;
-		else if (n == 2)
-			return 2;
-		else if (n == 3)
-			return 4;
+		if (n <= 0) return 0;
+		else if (n == 1) return 1;
+		else if (n == 2) return 2;
+		else if (n == 3) return 4;
 		int[] dp = new int[n + 1];
 		dp[0] = 1;
 		dp[1] = 1;
@@ -142,12 +130,9 @@ public class DynamicProgramming {
 
 	// 4. DP- Bottom up: Tabulation
 	public int tripleSteps4(int n) {
-		if (n <= 0)
-			return 0;
-		else if (n == 1)
-			return 1;
-		else if (n == 2)
-			return 2;
+		if (n <= 0) return 0;
+		else if (n == 1) return 1;
+		else if (n == 2) return 2;
 
 		int prev1 = 1, prev2 = 1, curr = 2;
 		for (int i = 3; i <= n; i++) {
