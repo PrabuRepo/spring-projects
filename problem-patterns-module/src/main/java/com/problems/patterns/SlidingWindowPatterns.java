@@ -216,7 +216,7 @@ public class SlidingWindowPatterns {
 	 * Longest Substring with At Most K Distinct Characters:
 	 */
 	//Follows the pattern
-	public int lengthOfLongestSubstringKDistinct1(String s) {
+	public int lengthOfLongestSubstringKDistinct1(String s, int k) {
 		int[] hash = new int[128];
 		int l = 0, r = 0, maxLen = 0, counter = 0;
 
@@ -225,7 +225,7 @@ public class SlidingWindowPatterns {
 			if (hash[c1] == 0) counter++;
 			hash[c1]++;
 
-			while (counter > 2) {
+			while (counter > k) {
 				char c2 = s.charAt(l);
 				if (hash[c2] == 1) counter--;
 				hash[c2]--;
@@ -341,7 +341,9 @@ public class SlidingWindowPatterns {
 		int[] charCount = new int[26];
 		int l = 0, r = 0, maxCharCount = 0, maxLength = 0;
 		while (r < s.length()) {
-			maxCharCount = Math.max(maxCharCount, ++charCount[s.charAt(r) - 'A']);
+			char ch = s.charAt(r);
+			charCount[ch - 'A']++;
+			maxCharCount = Math.max(maxCharCount, charCount[ch - 'A']);
 			while ((r - l + 1) - maxCharCount > k) {
 				charCount[s.charAt(l) - 'A']--;
 				l++;
@@ -436,22 +438,22 @@ public class SlidingWindowPatterns {
 	 */
 	public void subArrayWithGivenSum(int[] arr, int sum) {
 
-		int currSum = arr[0], start = 0, end = 0, n = arr.length, i;
+		int currSum = arr[0], l = 0, r = 0, n = arr.length, i;
 		for (i = 1; i < n; i++) {
 			currSum += arr[i];
 
-			while (currSum > sum && start < i - 1) {
-				currSum = currSum - arr[start];
-				start++;
+			while (currSum > sum && l < i - 1) {
+				currSum = currSum - arr[l];
+				l++;
 			}
 
 			if (currSum == sum) {
-				end = i;
+				r = i;
 				break;
 			}
 		}
 
-		if (sum == currSum) System.out.println((start + 1) + " " + (end + 1));
+		if (sum == currSum) System.out.println((l + 1) + " " + (r + 1));
 		else System.out.println("-1");
 	}
 

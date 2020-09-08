@@ -1,5 +1,6 @@
 package com.basic.datastructures;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -155,8 +156,13 @@ class BinarySearchTree implements TreeOperations {
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+		return sizeOfTree(root);
+	}
+
+	private int sizeOfTree(TreeNode node) {
+		if (node == null) return 0;
+
+		return 1 + sizeOfTree(node.left) + sizeOfTree(node.right);
 	}
 
 	@Override
@@ -212,79 +218,99 @@ class BinarySearchTree implements TreeOperations {
 
 	@Override
 	public void preorderIterative(TreeNode root) {
-		if (root == null) return;
+		preorderTraversal(root);
+
+		preorderTraversal2(root);
+	}
+
+	public List<Integer> preorderTraversal(TreeNode root) {
+		List<Integer> result = new ArrayList<>();
+		if (root == null) return result;
+
+		TreeNode curr = root;
+		java.util.Deque<TreeNode> stack = new ArrayDeque<>();
+
+		while (!stack.isEmpty() || curr != null) {
+			if (curr != null) {
+				result.add(curr.val); // Add before going to children
+				stack.push(curr);
+				curr = curr.left;
+			} else {
+				curr = stack.pop();
+				curr = curr.right;
+			}
+		}
+		return result;
+	}
+
+	public List<Integer> preorderTraversal2(TreeNode root) {
+		List<Integer> result = new ArrayList<>();
+		if (root == null) return result;
+
 		java.util.Stack<TreeNode> stack = new java.util.Stack<>();
 		stack.push(root);
 		while (!stack.isEmpty()) {
 			root = stack.pop();
-			System.out.print(root.val + " ");
+			result.add(root.val);
 			if (root.right != null) stack.push(root.right);
 			if (root.left != null) stack.push(root.left);
 		}
+
+		return result;
 	}
 
 	@Override
 	public void inorderIterative(TreeNode root) {
-		if (root == null) return;
-		java.util.Stack<TreeNode> stack = new java.util.Stack<>();
-		while (true) {
-			if (root != null) {
-				stack.push(root);
-				root = root.left;
+		inorderTraversal(root);
+	}
+
+	public List<Integer> inorderTraversal(TreeNode root) {
+		List<Integer> result = new ArrayList<>();
+		if (root == null) return result;
+
+		TreeNode curr = root;
+		java.util.Deque<TreeNode> stack = new ArrayDeque<>();
+
+		while (!stack.isEmpty() || curr != null) {
+			if (curr != null) {
+				stack.push(curr);
+				curr = curr.left;
 			} else {
-				if (stack.isEmpty()) break;
-				root = stack.pop();
-				System.out.print(root.val + " ");
-				root = root.right;
+				curr = stack.pop();
+				result.add(curr.val); // Add after all left children
+				curr = curr.right;
 			}
 		}
+
+		return result;
 	}
 
 	@Override
 	public void postorderIterative(TreeNode root) {
-		postOrderUsing2Stack(root);
-
-		postOrderUsingStack(root);
+		postorderTraversal(root);
 	}
 
-	// Reverse logic of Preorder iterative approach
-	private void postOrderUsing2Stack(TreeNode root) {
-		if (root == null) return;
-		java.util.Stack<TreeNode> s1 = new java.util.Stack<>();
-		java.util.Stack<Integer> s2 = new java.util.Stack<>();
-		s1.push(root);
-		while (!s1.isEmpty()) {
-			root = s1.pop();
-			s2.push(root.val);
-			if (root.left != null) s1.push(root.left);
-			if (root.right != null) s1.push(root.right);
-		}
+	public List<Integer> postorderTraversal(TreeNode root) {
+		java.util.LinkedList<Integer> result = new java.util.LinkedList<>();
+		//List<Integer> result = new ArrayList<>();
+		if (root == null) return result;
 
-		while (!s2.isEmpty()) System.out.print(s2.pop() + " ");
-	}
+		TreeNode curr = root;
+		java.util.Deque<TreeNode> stack = new ArrayDeque<>();
 
-	private void postOrderUsingStack(TreeNode root) {
-		if (root == null) return;
-		TreeNode current = root, rightNode, topNode;
-		java.util.Stack<TreeNode> stack = new java.util.Stack<>();
-		while (current != null || !stack.isEmpty()) {
-			if (current != null) {
-				stack.push(current);
-				current = current.left;
+		while (!stack.isEmpty() || curr != null) {
+			if (curr != null) {
+				result.addFirst(curr.val); // Reverse the process of preorder
+				// result.add(0, curr.val); //for ArrayList
+				stack.push(curr);
+				curr = curr.right; // Reverse the process of preorder
 			} else {
-				rightNode = stack.peek().right;
-				if (rightNode != null) {
-					current = rightNode;
-				} else {
-					topNode = stack.pop();
-					System.out.print(topNode.val + " ");
-					while (!stack.isEmpty() && topNode == stack.peek().right) {
-						topNode = stack.pop();
-						System.out.print(topNode.val + " ");
-					}
-				}
+				curr = stack.pop();
+				curr = curr.left; // Reverse the process of preorder
 			}
 		}
+
+		return result;
 	}
 
 	//Recursive

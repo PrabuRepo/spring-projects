@@ -57,10 +57,10 @@ public class BTProblems implements TreeProperties, TreePaths {
 	 */
 	@Override
 	public int countNodes1(TreeNode root) {
-		int leftHeight = findLeft(root);
-		int rightHeight = findRight(root);
+		int lh = leftHeight(root);
+		int rh = rightHeight(root);
 
-		if (leftHeight == rightHeight) return (1 << leftHeight) - 1; // or return (int)Math.pow(2, leftHeight) -1;
+		if (lh == rh) return (1 << lh) - 1; // or return (int)Math.pow(2, lh) -1;
 
 		return 1 + countNodes1(root.left) + countNodes1(root.right);
 	}
@@ -104,14 +104,14 @@ public class BTProblems implements TreeProperties, TreePaths {
 	}
 
 	// Required Methods for countNodes - start
-	private int findLeft(TreeNode root) {
+	private int leftHeight(TreeNode root) {
 		if (root == null) return 0;
-		return findLeft(root.left) + 1;
+		return leftHeight(root.left) + 1;
 	}
 
-	private int findRight(TreeNode root) {
+	private int rightHeight(TreeNode root) {
 		if (root == null) return 0;
-		return findRight(root.right) + 1;
+		return rightHeight(root.right) + 1;
 	}
 
 	private int height(TreeNode root) {
@@ -158,21 +158,6 @@ public class BTProblems implements TreeProperties, TreePaths {
 	// Using BFS version 1
 	public int minDepthOfTree2(TreeNode root) {
 		if (root == null) return 0;
-		Queue<QueuePack1> queue = new LinkedList<>();
-		queue.add(new QueuePack1(root, 1));
-		while (!queue.isEmpty()) {
-			QueuePack1 queuePack = queue.poll();
-			TreeNode curr = queuePack.node;
-			if (curr.left == null && curr.right == null) return queuePack.depth;
-			if (curr.left != null) queue.add(new QueuePack1(curr.left, queuePack.depth + 1));
-			if (curr.right != null) queue.add(new QueuePack1(curr.right, queuePack.depth + 1));
-		}
-		return 0;
-	}
-
-	// Using BFS version 2
-	public int minDepthOfTree22(TreeNode root) {
-		if (root == null) return 0;
 		Queue<TreeNode> queue = new LinkedList<>();
 		queue.add(root);
 		int level = 1;
@@ -185,6 +170,21 @@ public class BTProblems implements TreeProperties, TreePaths {
 				if (node.right != null) queue.add(node.right);
 			}
 			level++;
+		}
+		return 0;
+	}
+
+	// Using BFS version 2
+	public int minDepthOfTree22(TreeNode root) {
+		if (root == null) return 0;
+		Queue<QueuePack1> queue = new LinkedList<>();
+		queue.add(new QueuePack1(root, 1));
+		while (!queue.isEmpty()) {
+			QueuePack1 queuePack = queue.poll();
+			TreeNode curr = queuePack.node;
+			if (curr.left == null && curr.right == null) return queuePack.depth;
+			if (curr.left != null) queue.add(new QueuePack1(curr.left, queuePack.depth + 1));
+			if (curr.right != null) queue.add(new QueuePack1(curr.right, queuePack.depth + 1));
 		}
 		return 0;
 	}
@@ -554,6 +554,7 @@ public class BTProblems implements TreeProperties, TreePaths {
 	// Vertical View1: DFS Approach
 	public void verticalViewTraversal1(TreeNode root) {
 		if (root != null) {
+			//TODO: Change this to Hashmap; Becaue Treemap takes logn time to insert/update the data
 			Map<Integer, ArrayList<Integer>> map = new TreeMap<>();
 			verticalOrder(root, map, 0);
 
@@ -582,6 +583,7 @@ public class BTProblems implements TreeProperties, TreePaths {
 
 	// Vertical View1: BFS Approach
 	public void verticalViewTraversal2(TreeNode root) {
+		//TODO: Change this to Hashmap; Becaue Treemap takes logn time to insert/update the data
 		TreeMap<Integer, ArrayList<Integer>> map = new TreeMap<>();
 		Queue<QueuePack> queue = new LinkedList<>();
 		QueuePack queuePack;
@@ -719,6 +721,21 @@ public class BTProblems implements TreeProperties, TreePaths {
 		leftViewOfTree2(root.right, level + 1);
 	}
 
+	public List<Integer> leftViewOfTree3(TreeNode root) {
+		List<Integer> result = new ArrayList<>();
+		leftViewOfTree3(root, result, 0);
+		return result;
+	}
+
+	public void leftViewOfTree3(TreeNode root, List<Integer> result, int level) {
+		if (root == null) return;
+		if (level == result.size()) // Add one element per level
+			result.add(root.val);
+
+		leftViewOfTree3(root.left, result, level + 1);
+		leftViewOfTree3(root.right, result, level + 1);
+	}
+
 	/*
 	 * Right View of Tree - BFS Approach: The Right view contains all nodes that are
 	 * last nodes in their levels. A simple solution is to do level order traversal
@@ -769,6 +786,60 @@ public class BTProblems implements TreeProperties, TreePaths {
 	//	TODO: Print Left View of Binary Tree
 
 	//	TODO: How to print all diagonal's sums for a given binary tree
+
+	public List<Integer> boundaryOfBinaryTree(TreeNode root) {
+		List<Integer> result = new ArrayList<>();
+		if (root == null) return result;
+
+		//1.Add root
+		if (!isLeaf(root)) result.add(root.val);
+
+		//2.Add left boundary
+		leftBoundary(root.left, result);
+
+		//3.Add leaf nodes(Bottom boundary)
+		leafNodes(root, result);
+
+		//4.Add right boundary
+		List<Integer> rightView = new ArrayList<>();
+		rightBoundary(root.right, rightView);
+		//Print result in reverse 
+		for (int i = rightView.size() - 1; i >= 0; i--)
+			result.add(rightView.get(i));
+
+		return result;
+	}
+
+	private boolean isLeaf(TreeNode root) {
+		return root.left == null && root.right == null;
+	}
+
+	private void leftBoundary(TreeNode curr, List<Integer> result) {
+		while (curr != null) {
+			if (!isLeaf(curr)) result.add(curr.val);
+
+			if (curr.left != null) curr = curr.left;
+			else curr = curr.right;
+		}
+	}
+
+	private void rightBoundary(TreeNode curr, List<Integer> rightView) {
+		while (curr != null) {
+			if (!isLeaf(curr)) rightView.add(curr.val);
+
+			if (curr.right != null) curr = curr.right;
+			else curr = curr.left;
+		}
+	}
+
+	private void leafNodes(TreeNode curr, List<Integer> result) {
+		if (curr == null) return;
+
+		if (curr.left == null && curr.right == null) result.add(curr.val);
+
+		leafNodes(curr.left, result);
+		leafNodes(curr.right, result);
+	}
 
 	/************************ Type4: BT Checking ************************/
 	//	Write Code to Determine if Two Trees are Identical/Same Tree

@@ -1,4 +1,4 @@
-package com.problems.patterns;
+package com.problems.patterns.recursion;
 
 import java.util.Arrays;
 
@@ -70,13 +70,13 @@ public class RollingArrayPatterns {
 
 	public int maxSubsetSum(int[] arr) {
 		if (arr.length == 0) return 0;
-		int incl = 0, excl = 0, temp = 0;
+		int curr = 0, prev = 0, temp = 0;
 		for (int a : arr) {
-			temp = incl;
-			incl = Math.max(incl, excl + a);
-			excl = temp;
+			temp = curr;
+			curr = Math.max(curr, prev + a);
+			prev = temp;
 		}
-		return incl;
+		return curr;
 	}
 
 	/*
@@ -160,7 +160,7 @@ public class RollingArrayPatterns {
 		int prev = 0, curr = 0;
 		for (int i = 0; i < nums.length; i++) {
 			int tmp = curr;
-			curr = Math.max(curr, nums[i] + prev);
+			curr = Math.max(curr, prev + nums[i]);
 			prev = tmp;
 		}
 		return curr;

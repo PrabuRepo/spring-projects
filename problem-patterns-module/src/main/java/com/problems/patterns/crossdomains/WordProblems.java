@@ -26,14 +26,11 @@ public class WordProblems {
 	public int shortestDistanceI(String[] words, String word1, String word2) {
 		int min = Integer.MAX_VALUE, index1 = -1, index2 = -1;
 		for (int i = 0; i < words.length; i++) {
-			if (words[i].equals(word1))
-				index1 = i;
+			if (words[i].equals(word1)) index1 = i;
 
-			if (words[i].equals(word2))
-				index2 = i;
+			if (words[i].equals(word2)) index2 = i;
 
-			if (index1 != -1 && index2 != -1)
-				min = Math.min(min, Math.abs(index1 - index2));
+			if (index1 != -1 && index2 != -1) min = Math.min(min, Math.abs(index1 - index2));
 		}
 		return min;
 	}
@@ -43,25 +40,21 @@ public class WordProblems {
 	 */
 	//Using Map & Set - Time: O(n), Space: O(2n) = O(n)
 	public boolean wordPattern1(String pattern, String str) {
-		if (str == null || str.length() == 0 || pattern.length() == 0)
-			return false;
+		if (str == null || str.length() == 0 || pattern.length() == 0) return false;
 
 		Map<Character, String> map = new HashMap<>();
 		Set<String> set = new HashSet<>();
 		String[] words = str.split(" ");
 
-		if (pattern.length() != words.length)
-			return false;
+		if (pattern.length() != words.length) return false;
 
 		for (int i = 0; i < words.length; i++) {
 			char ch = pattern.charAt(i);
 			if (!map.containsKey(ch)) {
-				if (!set.add(words[i]))
-					return false;
+				if (!set.add(words[i])) return false;
 				map.put(ch, words[i]);
 			} else {
-				if (!map.get(ch).equals(words[i]))
-					return false;
+				if (!map.get(ch).equals(words[i])) return false;
 			}
 		}
 
@@ -70,25 +63,20 @@ public class WordProblems {
 
 	//Using Map to store the index - Time: O(n), Space: O(2n) = O(n)
 	public boolean wordPattern(String pattern, String str) {
-		if (str == null || str.length() == 0 || pattern.length() == 0)
-			return false;
+		if (str == null || str.length() == 0 || pattern.length() == 0) return false;
 
 		//Use HashMap without specifying data type
 		Map map = new HashMap();
 		String[] words = str.split(" ");
 
-		if (pattern.length() != words.length)
-			return false;
+		if (pattern.length() != words.length) return false;
 
 		for (int i = 0; i < words.length; i++) {
 			char ch = pattern.charAt(i);
-			if (!map.containsKey(ch))
-				map.put(ch, i);
-			if (!map.containsKey(words[i]))
-				map.put(words[i], i);
+			if (!map.containsKey(ch)) map.put(ch, i);
+			if (!map.containsKey(words[i])) map.put(words[i], i);
 
-			if (!map.get(ch).equals(map.get(words[i])))
-				return false;
+			if (!map.get(ch).equals(map.get(words[i]))) return false;
 		}
 
 		return true;
@@ -102,21 +90,17 @@ public class WordProblems {
 	 * 				pattern = "aabb", str = "xyzabcxzyabc" should return false.
 	 */
 	public boolean wordPatternMatch1(String pattern, String str) {
-		if (pattern.length() == 0 && str.length() == 0)
-			return true;
-		if (pattern.length() == 0)
-			return false;
+		if (pattern.length() == 0 && str.length() == 0) return true;
+		if (pattern.length() == 0) return false;
 
 		HashMap<Character, String> map = new HashMap<Character, String>();
 		return helper(pattern, str, 0, 0, map);
 	}
 
 	public boolean helper(String pattern, String str, int i, int j, HashMap<Character, String> map) {
-		if (i == pattern.length() && j == str.length())
-			return true;
+		if (i == pattern.length() && j == str.length()) return true;
 
-		if (i >= pattern.length() || j >= str.length())
-			return false;
+		if (i >= pattern.length() || j >= str.length()) return false;
 
 		char pat = pattern.charAt(i); // pattern char
 		for (int k = j + 1; k <= str.length(); k++) {
@@ -124,14 +108,12 @@ public class WordProblems {
 			if (!map.containsKey(pat) && !map.containsValue(sub)) {
 				map.put(pat, sub);
 
-				if (helper(pattern, str, i + 1, k, map))
-					return true;
+				if (helper(pattern, str, i + 1, k, map)) return true;
 
 				// Backtracking, remove and check from next index
 				map.remove(pat);
 			} else if (map.containsKey(pat) && map.get(pat).equals(sub)) {
-				if (helper(pattern, str, i + 1, k, map))
-					return true;
+				if (helper(pattern, str, i + 1, k, map)) return true;
 			}
 		}
 
@@ -142,10 +124,8 @@ public class WordProblems {
 	 * set which leads to time complexity of O(1):
 	 */
 	public boolean wordPatternMatch2(String pattern, String str) {
-		if (pattern.length() == 0 && str.length() == 0)
-			return true;
-		if (pattern.length() == 0)
-			return false;
+		if (pattern.length() == 0 && str.length() == 0) return true;
+		if (pattern.length() == 0) return false;
 
 		HashMap<Character, String> map = new HashMap<Character, String>();
 		HashSet<String> set = new HashSet<String>();
@@ -154,11 +134,9 @@ public class WordProblems {
 
 	public boolean helper(String pattern, String str, int i, int j, HashMap<Character, String> map,
 			HashSet<String> set) {
-		if (i == pattern.length() && j == str.length())
-			return true;
+		if (i == pattern.length() && j == str.length()) return true;
 
-		if (i >= pattern.length() || j >= str.length())
-			return false;
+		if (i >= pattern.length() || j >= str.length()) return false;
 
 		char c = pattern.charAt(i);
 		for (int k = j + 1; k <= str.length(); k++) {
@@ -166,13 +144,11 @@ public class WordProblems {
 			if (!map.containsKey(c) && !set.contains(sub)) {
 				map.put(c, sub);
 				set.add(sub);
-				if (helper(pattern, str, i + 1, k, map, set))
-					return true;
+				if (helper(pattern, str, i + 1, k, map, set)) return true;
 				map.remove(c);
 				set.remove(sub);
 			} else if (map.containsKey(c) && map.get(c).equals(sub)) {
-				if (helper(pattern, str, i + 1, k, map, set))
-					return true;
+				if (helper(pattern, str, i + 1, k, map, set)) return true;
 			}
 		}
 
@@ -194,20 +170,17 @@ public class WordProblems {
 		return wordBreakHelper(s, wordDict, 0);
 	}
 
-	public boolean wordBreakHelper(String s, List<String> dict, int start) {
-		if (start == s.length())
-			return true;
+	public boolean wordBreakHelper(String s, List<String> dict, int index) {
+		if (index == s.length()) return true;
 
 		for (String word : dict) {
-			int end = start + word.length();
+			int len = index + word.length();
 
-			if (end > s.length())
-				continue;
+			if (len > s.length()) continue;
 
-			String substr = s.substring(start, end);
+			String substr = s.substring(index, len);
 			if (substr.equals(word)) {
-				if (wordBreakHelper(s, dict, end))
-					return true;
+				if (wordBreakHelper(s, dict, len)) return true;
 			}
 		}
 
@@ -221,14 +194,13 @@ public class WordProblems {
 		lookup[0] = true;
 
 		for (int i = 0; i < n; i++) {
-			if (!lookup[i])
-				continue;
+			if (!lookup[i]) continue;
 			for (String word : wordDict) {
-				int end = i + word.length();
-				if (end > s.length() || lookup[end])
-					continue;
-				if (s.substring(i, end).equals(word))
-					lookup[end] = true;
+				int len = i + word.length();
+				if (len > s.length() || lookup[len]) continue;
+				if (s.substring(i, len).equals(word)) {
+					lookup[len] = true;
+				}
 			}
 		}
 		return lookup[n];
@@ -275,12 +247,10 @@ public class WordProblems {
 		for (String word : dict) {
 			int end = start + word.length();
 
-			if (end > s.length())
-				continue;
+			if (end > s.length()) continue;
 
 			String substr = s.substring(start, end);
-			if (substr.equals(word))
-				wordBreakHelper(s, dict, end, str + " " + substr, result);
+			if (substr.equals(word)) wordBreakHelper(s, dict, end, str + " " + substr, result);
 
 		}
 	}
@@ -296,8 +266,7 @@ public class WordProblems {
 				for (int j = i + 1; j <= n; j++) {
 					String subStr = s.substring(i, j);
 					if (wordDict.contains(subStr)) {
-						if (lookup[j] == null)
-							lookup[j] = new ArrayList<>();
+						if (lookup[j] == null) lookup[j] = new ArrayList<>();
 						lookup[j].add(subStr);
 					}
 				}
@@ -305,8 +274,7 @@ public class WordProblems {
 		}
 
 		List<String> result = new ArrayList<>();
-		if (lookup[n] == null)
-			return result;
+		if (lookup[n] == null) return result;
 		dfs(lookup, result, "", s.length());
 
 		return result;
@@ -331,14 +299,12 @@ public class WordProblems {
 	 * l a d y
 	 */
 	public boolean validWordSquare(List<String> words) {
-		if (words == null || words.size() == 0)
-			return true;
+		if (words == null || words.size() == 0) return true;
 		int m = words.size();
 		for (int i = 0; i < m; i++) {
 			int n = words.get(i).length();
 			for (int j = 0; j < n; j++)
-				if (j >= m || m != n || words.get(i).charAt(j) != words.get(j).charAt(i))
-					return false;
+				if (j >= m || m != n || words.get(i).charAt(j) != words.get(j).charAt(i)) return false;
 		}
 
 		return true;
@@ -353,8 +319,7 @@ public class WordProblems {
 
 	public List<List<String>> wordSquares(String[] words) {
 		List<List<String>> ans = new ArrayList<>();
-		if (words == null || words.length == 0)
-			return ans;
+		if (words == null || words.length == 0) return ans;
 		int len = words[0].length();
 		// Build Trie
 		buildTrie(words);
@@ -375,8 +340,7 @@ public class WordProblems {
 			TrieNode cur = root;
 			for (char ch : w.toCharArray()) {
 				int idx = ch - 'a';
-				if (cur.children[idx] == null)
-					cur.children[idx] = new TrieNode();
+				if (cur.children[idx] == null) cur.children[idx] = new TrieNode();
 				cur.children[idx].startWith.add(w);
 				cur = cur.children[idx];
 			}
@@ -406,8 +370,7 @@ public class WordProblems {
 		TrieNode cur = root;
 		for (char ch : prefix.toCharArray()) {
 			int idx = ch - 'a';
-			if (cur.children[idx] == null)
-				return ans;
+			if (cur.children[idx] == null) return ans;
 
 			cur = cur.children[idx];
 		}
@@ -426,16 +389,15 @@ public class WordProblems {
 	 * Given word = "SEE", return true.
 	 */
 	public static boolean wordSearchI(char[][] board, String str) {
-		if (str.length() == 0 || board.length == 0 || board[0].length == 0)
-			return false;
+		if (str.length() == 0 || board.length == 0 || board[0].length == 0) return false;
 
 		int row = board.length, col = board[0].length;
 
 		for (int i = 0; i < row; i++)
 			for (int j = 0; j < col; j++)
-				if (str.charAt(0) == board[i][j])
-					if (dfsSearch(board, str, i, j, 0))
-						return true;
+				if (str.charAt(0) == board[i][j]) {
+					if (dfsSearch(board, str, i, j, 0)) return true;
+				}
 
 		return false;
 	}
@@ -446,8 +408,7 @@ public class WordProblems {
 				|| board[i][j] == '#')
 			return false;
 
-		if (index == word.length() - 1)
-			return true;
+		if (index == word.length() - 1) return true;
 		char temp = board[i][j];
 		board[i][j] = '#'; // Avoid to revisit the same value
 
@@ -474,13 +435,13 @@ public class WordProblems {
 	// Approach1: Using DFS -> Time Complexity: O(len*m*n) where len- no of words, m- row size, n-colSize
 	public static List<String> wordSearchII1(char[][] board, String[] words) {
 		List<String> result = new ArrayList<>();
-		if (words.length == 0 || board.length == 0 || board[0].length == 0)
-			return result;
+		if (words.length == 0 || board.length == 0 || board[0].length == 0) return result;
 
 		HashSet<String> set = new HashSet<>(); // Set is used to remove the duplicate word
 		for (String word : words)
-			if (!set.add(word) && wordSearchI(board, word))
+			if (!set.add(word) && wordSearchI(board, word)) {
 				result.add(word);
+			}
 
 		result.stream().forEach(k -> System.out.print(k + " "));
 		return result;
@@ -523,8 +484,7 @@ public class WordProblems {
 			TrieNode curr = root;
 			for (int i = 0; i < word.length(); i++) {
 				int index = word.charAt(i) - 'a';
-				if (curr.children[index] == null)
-					curr.children[index] = new TrieNode();
+				if (curr.children[index] == null) curr.children[index] = new TrieNode();
 				curr = curr.children[index];
 			}
 			curr.word = word;
@@ -539,8 +499,7 @@ public class WordProblems {
 			TrieNode curr = root;
 			for (int i = 0; i < word.length(); i++) {
 				int index = word.charAt(i) - 'a';
-				if (curr.children[index] == null)
-					curr.children[index] = new TrieNode();
+				if (curr.children[index] == null) curr.children[index] = new TrieNode();
 				curr = curr.children[index];
 			}
 			curr.isEndOfWord = true;
@@ -551,12 +510,10 @@ public class WordProblems {
 	public static void dfsSearch1(char[][] board, TrieNode root, int i, int j, List<String> result) {
 		int rSize = board.length, cSize = board[0].length;
 		// Row & col Validation
-		if (i < 0 || i >= rSize || j < 0 || j >= cSize)
-			return;
+		if (i < 0 || i >= rSize || j < 0 || j >= cSize) return;
 		// Trie Validation
 		char ch = board[i][j];
-		if (ch == '#' || root.children[ch - 'a'] == null)
-			return;
+		if (ch == '#' || root.children[ch - 'a'] == null) return;
 
 		root = root.children[ch - 'a'];
 		if (root.word != null) {
@@ -577,12 +534,10 @@ public class WordProblems {
 	public static void dfsSearch2(char[][] board, TrieNode root, int i, int j, StringBuilder sb, List<String> result) {
 		int rSize = board.length, cSize = board[0].length;
 		// Row & col Validation
-		if (i < 0 || i >= rSize || j < 0 || j >= cSize)
-			return;
+		if (i < 0 || i >= rSize || j < 0 || j >= cSize) return;
 		// Trie Validation
 		char ch = board[i][j];
-		if (ch == '#' || root.children[ch - 'a'] == null)
-			return;
+		if (ch == '#' || root.children[ch - 'a'] == null) return;
 
 		root = root.children[ch - 'a'];
 
@@ -613,6 +568,11 @@ public class WordProblems {
 	 *    Explanation: As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog", return its length 5.
 	 */
 	//Approach1: Using BFS and WordNode
+	/*
+	 * Time complexity: O(wordList.size() * 26 * wordLength^2) time. Every word gets added and removed from the queue at most once, for every word
+	 * we find all unseen words that differ by exactly one character which takes O(26 * wordLength^2) time.
+	 * Space complexity: O(wordList.size()) space. Because we add all words into a HashSet, and queue and seen set can't have more than wordList.size() elements.
+	 */
 	public static int wordLadderI1(String beginWord, String endWord, List<String> wordList) {
 		LinkedList<WordNode> queue = new LinkedList<>();
 		queue.add(new WordNode(beginWord, 1));
@@ -620,15 +580,13 @@ public class WordProblems {
 
 		while (!queue.isEmpty()) {
 			WordNode curr = queue.poll();
-			if (curr.word.equals(endWord))
-				return curr.count;
+			if (curr.word.equals(endWord)) return curr.count;
 
 			char[] arr = curr.word.toCharArray();
 			for (int i = 0; i < arr.length; i++) {
 				char temp = arr[i];
 				for (char ch = 'a'; ch <= 'z'; ch++) {
-					if (arr[i] == ch)
-						continue;
+					if (arr[i] == ch) continue;
 					arr[i] = ch;
 					String newStr = new String(arr);
 					if (wordDict.contains(newStr)) {
@@ -644,8 +602,7 @@ public class WordProblems {
 
 	//Approach2: Using BFS and String
 	public static int wordLadderI2(String beginWord, String endWord, List<String> wordList) {
-		if (beginWord == null || endWord == null || wordList == null || wordList.size() == 0)
-			return 0;
+		if (beginWord == null || endWord == null || wordList == null || wordList.size() == 0) return 0;
 
 		LinkedList<String> queue = new LinkedList<>();
 		Set<String> wordDict = new HashSet<>(wordList);
@@ -656,13 +613,11 @@ public class WordProblems {
 			int size = queue.size();
 			while (size-- > 0) {
 				String top = queue.poll();
-				if (top.equals(endWord))
-					return ladderLen;
+				if (top.equals(endWord)) return ladderLen;
 				char[] arr = top.toCharArray();
 				for (int i = 0; i < arr.length; i++) {
 					for (char c = 'a'; c <= 'z'; c++) {
-						if (arr[i] == c)
-							continue;
+						if (arr[i] == c) continue;
 						char temp = arr[i];
 						arr[i] = c;
 						String newStr = new String(arr);
@@ -707,8 +662,7 @@ public class WordProblems {
 			int currNumSteps = top.count;
 
 			if (word.equals(end)) {
-				if (minStep == 0)
-					minStep = top.count;
+				if (minStep == 0) minStep = top.count;
 
 				if (top.count == minStep && minStep != 0) {
 					// nothing
@@ -725,8 +679,7 @@ public class WordProblems {
 			}
 
 			// Why this???
-			if (preNumSteps < currNumSteps)
-				unvisited.removeAll(visited);
+			if (preNumSteps < currNumSteps) unvisited.removeAll(visited);
 
 			preNumSteps = currNumSteps;
 
@@ -765,8 +718,7 @@ public class WordProblems {
 
 	public String getAbbrevation(String word) {
 		int n = word.length();
-		if (n <= 2)
-			return word;
+		if (n <= 2) return word;
 
 		return String.valueOf(word.charAt(0) + Integer.toString(n - 2) + word.charAt(n - 1));
 	}
@@ -777,10 +729,8 @@ public class WordProblems {
 		for (String str : strings) {
 			String abb = getAbbrevation(str);
 			// If there is any duplicate str, put empty or put str
-			if (map.containsKey(abb))
-				map.put(abb, "");
-			else
-				map.put(abb, str);
+			if (map.containsKey(abb)) map.put(abb, "");
+			else map.put(abb, str);
 		}
 
 		return map;
@@ -816,10 +766,8 @@ public class WordProblems {
 					break;
 				}
 			}
-			if (conflict)
-				generateAbbr(target, abbr, visited, q);
-			else
-				return NumAbbr(abbr);
+			if (conflict) generateAbbr(target, abbr, visited, q);
+			else return NumAbbr(abbr);
 		}
 
 		return null;
@@ -827,8 +775,7 @@ public class WordProblems {
 
 	boolean isConflict(String abbr, String str) {
 		for (int i = 0; i < abbr.length(); i++)
-			if (abbr.charAt(i) != '*' && str.charAt(i) != abbr.charAt(i))
-				return false;
+			if (abbr.charAt(i) != '*' && str.charAt(i) != abbr.charAt(i)) return false;
 		return true;
 	}
 
@@ -874,8 +821,7 @@ public class WordProblems {
 				count++;
 			}
 		}
-		if (count > 0)
-			ret += count;
+		if (count > 0) ret += count;
 		return ret;
 	}
 
@@ -938,16 +884,14 @@ public class WordProblems {
 
 	// Approach2: using Map & Heap -> Time Complexity - O(nlogk)
 	public List<String> topKFrequent2(String[] words, int k) {
-		if (words.length == 0 || k == 0)
-			return null;
+		if (words.length == 0 || k == 0) return null;
 
 		HashMap<String, Integer> map = new HashMap<>();
 		for (String word : words)
 			map.put(word, map.getOrDefault(word, 0) + 1);
 
 		PriorityQueue<Map.Entry<String, Integer>> queue = new PriorityQueue<>((a, b) -> {
-			if (a.getValue() == b.getValue())
-				return a.getKey().compareTo(b.getKey());
+			if (a.getValue() == b.getValue()) return a.getKey().compareTo(b.getKey());
 			return b.getValue() - a.getValue();
 		});
 
@@ -971,12 +915,9 @@ public class WordProblems {
 	static final int[] C_OFFSETS = { 1, 0 };
 
 	public char[][] search(char[][] grid, Set<String> words, int r, int c, int direction) {
-		if (r == SIZE)
-			return grid;
-		if (c == SIZE)
-			return search(grid, words, r + 1, 0, 0);
-		if (direction == R_OFFSETS.length)
-			return search(grid, words, r, c + 1, 0);
+		if (r == SIZE) return grid;
+		if (c == SIZE) return search(grid, words, r + 1, 0, 0);
+		if (direction == R_OFFSETS.length) return search(grid, words, r, c + 1, 0);
 
 		// Count the length of the path in the grid
 		int insertLength = countInsertLength(grid, r, c, direction);
@@ -1001,8 +942,7 @@ public class WordProblems {
 
 					char[][] subResult = search(grid, words, r, c, direction + 1);
 
-					if (subResult != null)
-						return subResult;
+					if (subResult != null) return subResult;
 
 					// Backtracking: Reassign the values
 					words.add(word);
@@ -1027,8 +967,7 @@ public class WordProblems {
 		int prevRow = r - R_OFFSETS[direction];
 		int prevCol = c - C_OFFSETS[direction];
 
-		if (prevRow >= 0 && prevRow < SIZE && prevCol >= 0 && prevCol < SIZE && grid[prevRow][prevCol] != '+')
-			return 0;
+		if (prevRow >= 0 && prevRow < SIZE && prevCol >= 0 && prevCol < SIZE && grid[prevRow][prevCol] != '+') return 0;
 
 		int insertLength = 0;
 		while (r >= 0 && r < SIZE && c >= 0 && c < SIZE && grid[r][c] != '+') {
@@ -1040,14 +979,12 @@ public class WordProblems {
 	}
 
 	public boolean canInsertWord1(char[][] grid, int r, int c, int direction, int insertLength, String word) {
-		if (word.length() != insertLength)
-			return false;
+		if (word.length() != insertLength) return false;
 
 		for (int k = 0; k < word.length(); k++) {
 			int row = r + R_OFFSETS[direction] * k;
 			int col = c + C_OFFSETS[direction] * k;
-			if (grid[row][col] != '-' && grid[row][col] != word.charAt(k))
-				return false;
+			if (grid[row][col] != '-' && grid[row][col] != word.charAt(k)) return false;
 		}
 
 		return true;
@@ -1077,8 +1014,7 @@ public class WordProblems {
 		queue.add(query);
 		while (!queue.isEmpty()) {
 			String top = queue.poll();
-			if (dict.contains(top))
-				return query.length() - top.length();
+			if (dict.contains(top)) return query.length() - top.length();
 			// Check for all the substring
 			for (int i = 0; i < top.length(); i++) {
 				String subStr = top.substring(0, i) + top.substring(i + 1, top.length());

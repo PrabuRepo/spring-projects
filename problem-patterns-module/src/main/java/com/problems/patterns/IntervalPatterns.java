@@ -12,6 +12,10 @@ import com.common.model.Interval;
 
 public class IntervalPatterns {
 	/********************* Interval Patterns - Selection Problems **************************/
+	/*
+	 * All the below problems are mostly identifying the overlap in the points.
+	 * Overlapping points = No of meeting rooms required/No of platforms required/No of activites done
+	 */
 	/* Activity Selection Problem:
 	 *  Select the maximum number of activities that can be performed by a single person, assuming that a person can only work
 	 *  on a single activity at a time.
@@ -307,10 +311,10 @@ public class IntervalPatterns {
 	 */
 	public int eraseOverlapIntervals(Interval[] intervals) {
 		Arrays.sort(intervals, Comparator.comparingInt(i -> i.end));
-		int max = 0, lastend = Integer.MIN_VALUE;
+		int max = 0, prevEnd = Integer.MIN_VALUE;
 		for (Interval in : intervals) {
-			if (lastend <= in.start) {
-				lastend = in.end;
+			if (prevEnd <= in.start) {
+				prevEnd = in.end;
 				max++;
 			}
 		}

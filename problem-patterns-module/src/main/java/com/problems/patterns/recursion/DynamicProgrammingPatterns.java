@@ -11,6 +11,10 @@ import com.common.utilities.Utils;
  *    2.DP: Top Down Approach or Memoization - Time and space complexity is same as memoization array size.
  *    3.DP: Bottom Up Approach or Tabulation - Time & space complexity is O(n^2) or O(n)
  *    4.Memory Optimization - This will be same time as Bottom up approach, but space efficient. Eg: Two variable approach
+ *    
+ *  Imp Note: All the recursion problems needs below two points
+ *  		1. Base case -> Its common for Recursion solution, memoization and bottom up approach
+ *  		2. Recursive function(Sub problems solution)
  */
 public class DynamicProgrammingPatterns {
 
@@ -66,7 +70,6 @@ public class DynamicProgrammingPatterns {
 	 * is the cost of painting house 0 with color 0; costs[1][2] is the cost of painting house 1 with color 2, and so on... 
 	 * Find the minimum cost to paint all houses.
 	 * 
-	 * 	Ref: http://buttercola.blogspot.com/2015/09/leetcode-paint-house-ii.html
 	 */
 	//Approach1: Time: O(n*k^2); Space:O(nk)
 	public int minCostToPaintHouseII1(int[][] costs) {
@@ -167,6 +170,12 @@ public class DynamicProgrammingPatterns {
 	/*Note:
 	 * 	0/1 Knapsack: Combinations without repeating the same data 
 	 *  Unbounded Knapsack: Combination with repeating the same data
+	 *  
+	 *Common formula for these 2 knapsack pattern problems:
+	 *	 dp[j] = Math.max(dp[j], val[i] + dp[j - wt[i]]);
+	 *   dp[j] = Math.min(dp[j], dp[j - 1 + coins[i]] + 1);
+	 *   dp[j] = dp[j] || dp[j - arr[i]];
+	 *   dp[j] = dp[j] + dp[j - coins[i]];
 	 */
 	public int knapsack1(int val[], int wt[], int W) {
 		return knapsack1(W, wt, val, wt.length - 1);
@@ -224,7 +233,7 @@ public class DynamicProgrammingPatterns {
 
 	boolean isSubsetSum1(int arr[], int i, int sum) {
 		if (sum == 0) return true;
-		if (i < 0) return false;
+		if (i < 0 || sum < 0) return false;
 		if (arr[i] > sum) return isSubsetSum1(arr, i - 1, sum);
 		return isSubsetSum1(arr, i - 1, sum) || isSubsetSum1(arr, i - 1, sum - arr[i]);
 	}
@@ -262,9 +271,9 @@ public class DynamicProgrammingPatterns {
 	 * Find out how many ways to assign symbols to make sum of integers equal to target S.
 	 */
 	// Aproach1: Recursive Algorithm; Time Complexity: O(2^n)
-	public int findTargetSumWays1(int[] num, int s) {
+	public int findTargetSumWays1(int[] num, int target) {
 		if (num == null || num.length == 0) return 0;
-		return noOfWays(num, s, 0, 0);
+		return noOfWays(num, target, 0, 0);
 	}
 
 	public int noOfWays(int[] nums, int target, int sum, int index) {
@@ -276,10 +285,10 @@ public class DynamicProgrammingPatterns {
 	int result = 0;
 
 	// Aproach2: Top Down DP or Memoization
-	public int findTargetSumWays2(int[] num, int s) {
+	public int findTargetSumWays2(int[] num, int target) {
 		if (num == null || num.length == 0) return 0;
 		Map<String, Integer> memo = new HashMap<>();
-		return noOfWays(num, memo, s, 0, 0);
+		return noOfWays(num, memo, target, 0, 0);
 	}
 
 	public int noOfWays(int[] nums, Map<String, Integer> memo, int target, int sum, int index) {
@@ -288,7 +297,7 @@ public class DynamicProgrammingPatterns {
 		if (nums.length == index) return target == sum ? 1 : 0;
 		int add = noOfWays(nums, target, sum + nums[index], index + 1);
 		int sub = noOfWays(nums, target, sum - nums[index], index + 1);
-		memo.put(serializedKey, add + sum);
+		memo.put(serializedKey, add + sub);
 		return add + sub;
 	}
 
@@ -301,11 +310,11 @@ public class DynamicProgrammingPatterns {
 	 * So the original problem has been converted to a subset sum problem as follows:
 	 *  Find a subset P of nums such that sum(P) = (target + sum(nums)) / 2
 	 */
-	public int findTargetSumWays3(int[] num, int s) {
+	public int findTargetSumWays3(int[] num, int target) {
 		int sum = 0;
 		for (int n : num)
 			sum += n;
-		return sum < s || (s + sum) % 2 != 0 ? 0 : noOfWays(num, (sum + s) / 2);
+		return sum < target || (target + sum) % 2 != 0 ? 0 : noOfWays(num, (sum + target) / 2);
 	}
 
 	public int noOfWays(int[] num, int sum) {
@@ -313,7 +322,7 @@ public class DynamicProgrammingPatterns {
 		dp[0] = 1;
 		for (int i = 0; i < num.length; i++)
 			for (int j = sum; j >= num[i]; j--)
-				dp[j] += dp[j - num[i]];
+				dp[j] = dp[j] + dp[j - num[i]];
 
 		return dp[sum];
 	}
@@ -353,7 +362,7 @@ public class DynamicProgrammingPatterns {
 
 	public int coinChange1(int[] coins, int i, int amt) {
 		if (amt == 0) return 1;
-		if (i < 0) return 0;
+		if (i < 0 || amt < 0) return 0;
 		if (coins[i] > amt) return coinChange1(coins, i - 1, amt);
 
 		return coinChange1(coins, i - 1, amt) + coinChange1(coins, i, amt - coins[i]);
@@ -365,12 +374,12 @@ public class DynamicProgrammingPatterns {
 		dp[0] = 1;
 		for (int i = 0; i < coins.length; i++)
 			for (int j = coins[i]; j <= amt; j++)
-				dp[j] += dp[j - coins[i]];
+				dp[j] = dp[j] + dp[j - coins[i]];
 
 		return dp[amt];
 	}
 
-	//Min Coins:
+	//Coin Change: Min Coins-
 	//Simple Recursive approach:
 	public int minCoins11(int[] coins, int amt) {
 		int result = minCoins11(amt, coins, coins.length - 1, 0);
@@ -379,7 +388,7 @@ public class DynamicProgrammingPatterns {
 
 	public int minCoins11(int amt, int[] coins, int i, int count) {
 		if (amt == 0) return count;
-		if (i < 0) return Integer.MAX_VALUE;
+		if (i < 0 || amt < 0) return Integer.MAX_VALUE;
 
 		if (amt < coins[i]) return minCoins11(amt, coins, i - 1, count);
 
@@ -423,8 +432,22 @@ public class DynamicProgrammingPatterns {
 		return dp[amt - 1];
 	}
 
-	// DP(Bottom up): Time Complexity: O(S*n)
-	public int coinChange(int[] coins, int amount) {
+	//DP(Bottom up): Time Complexity: O(S*n)
+	public int minCoins31(int[] coins, int amount) {
+		int max = amount + 1;
+		int[] dp = new int[max];
+		Arrays.fill(dp, max);
+		dp[0] = 0;
+
+		for (int i = 0; i < coins.length; i++)
+			for (int j = coins[i]; j <= amount; j++)
+				dp[j] = Math.min(dp[j], 1 + dp[j - coins[i]]);
+
+		return dp[amount] > amount ? -1 : dp[amount];
+	}
+
+	// DP(Bottom up): Time Complexity: O(S*n) - Other approach
+	public int coinChange32(int[] coins, int amount) {
 		int max = amount + 1;
 		int[] dp = new int[max];
 		Arrays.fill(dp, max);
@@ -438,19 +461,6 @@ public class DynamicProgrammingPatterns {
 	}
 
 	//TODO: Check this
-	//DP(Bottom up): Time Complexity: O(S*n)
-	public int minCoins3(int[] coins, int amt) {
-		int max = amt + 1;
-		int[] dp = new int[max];
-		Arrays.fill(dp, max);
-		dp[0] = 0;
-
-		for (int i = 0; i < coins.length; i++)
-			for (int j = coins[i]; j <= amt; j++)
-				dp[j] = Math.min(dp[j], dp[j - coins[i]] + 1);
-
-		return dp[amt] > amt ? -1 : dp[amt];
-	}
 
 	// Combination Sum IV  - Permutation Problem
 	/* Eg: nums = [1, 2, 3],  target = 4
@@ -606,8 +616,7 @@ public class DynamicProgrammingPatterns {
 				}
 			}
 		}
-		int maxLen = max + start;
-		return str.substring(start, maxLen);
+		return str.substring(start, start + max);
 	}
 
 	public boolean isPalindrome(String str) {
@@ -622,7 +631,8 @@ public class DynamicProgrammingPatterns {
 	 * Palindrome Partitioning II:
 	 *   Given a string s, partition s such that every substring of the partition is a palindrome. Return the minimum cuts needed for 
 	 *   a palindrome partitioning of s.*/
-	public int palindromicPartioningII(String s) {
+	//Approach 1: Time O(n^2), Space: O(n^2)
+	public int minCut1(String s) {
 		int n = s.length();
 		if (n <= 1) return 0;
 		boolean[][] dp = new boolean[n][n];
@@ -633,11 +643,43 @@ public class DynamicProgrammingPatterns {
 			for (int l = 0; l <= r; l++) {
 				if (s.charAt(l) == s.charAt(r) && (r - l <= 1 || dp[l + 1][r - 1])) {
 					dp[l][r] = true;
-					cut[r] = l > 0 ? Math.min(cut[r], cut[l - 1] + 1) : 0;
+					//if l == 0 means substring(0, r) is palindrome, so no cut is needed
+					if (l < 0) cut[r] = 0;
+					else cut[r] = Math.min(cut[r], cut[l - 1] + 1);
 				}
 			}
 		}
 		return cut[n - 1];
+	}
+
+	//Approach 2: Similiar to above approach, except boolean array to mainatain palindrome
+	//Time O(n^2), Space: O(n)
+	public int minCut2(String s) {
+		int n = s.length();
+		int[] cuts = new int[n];
+
+		for (int i = 0; i < n; i++)
+			cuts[i] = i;
+
+		for (int i = 0; i < n; i++) {
+			checkPalindrome(s, cuts, i, i); //To handle odd length palindrome
+			checkPalindrome(s, cuts, i, i + 1); //To handle even length palindrome
+		}
+
+		return cuts[n - 1];
+	}
+
+	private void checkPalindrome(String s, int[] cuts, int l, int r) {
+		int n = cuts.length;
+
+		while (l >= 0 && r < n && s.charAt(l) == s.charAt(r)) {
+			//if l == 0 means substring(0, r) is palindrome, so no cut is needed
+			if (l == 0) cuts[r] = 0;
+			else cuts[r] = Math.min(cuts[r], cuts[l - 1] + 1);
+
+			l--;
+			r++;
+		}
 	}
 
 	/************************** Pattern 6: String-Substring/Subsequence Probs *******************/
@@ -724,9 +766,7 @@ public class DynamicProgrammingPatterns {
 		int[][] dp = new int[m + 1][n + 1];
 		for (int i = 0; i <= m; i++) {
 			for (int j = 0; j <= n; j++) {
-				if (i == 0 || j == 0) {
-					dp[i][j] = 0;
-				} else if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
+				if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
 					dp[i][j] = 1 + dp[i - 1][j - 1];
 				} else {
 					dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
@@ -770,8 +810,10 @@ public class DynamicProgrammingPatterns {
 		if (i < 0) return j + 1;
 		if (j < 0) return i + 1;
 		if (s1.charAt(i) == s2.charAt(j)) return minDistance(s1, s2, i - 1, j - 1);
-		return 1 + Utils.min(minDistance(s1, s2, i, j - 1), minDistance(s1, s2, i - 1, j),
-				minDistance(s1, s2, i - 1, j - 1));
+
+		return 1 + Utils.min(minDistance(s1, s2, i, j - 1), //  represents insert operation
+				minDistance(s1, s2, i - 1, j), // represents delete operation
+				minDistance(s1, s2, i - 1, j - 1)); // represents replace operation
 	}
 
 	// DP-Bottom up Approach
@@ -826,8 +868,8 @@ public class DynamicProgrammingPatterns {
 				} else if (j == 0) {
 					dp[i][j] = dp[i - 1][j] && s1.charAt(i - 1) == s3.charAt(i + j - 1);
 				} else {
-					dp[i][j] = (dp[i - 1][j] && s1.charAt(i - 1) == s3.charAt(i + j - 1))
-							|| (dp[i][j - 1] && s2.charAt(j - 1) == s3.charAt(i + j - 1));
+					dp[i][j] = (dp[i][j - 1] && s2.charAt(j - 1) == s3.charAt(i + j - 1))
+							|| (dp[i - 1][j] && s1.charAt(i - 1) == s3.charAt(i + j - 1));
 				}
 			}
 		}
@@ -894,9 +936,12 @@ public class DynamicProgrammingPatterns {
 		int[] dp = new int[n];
 		Arrays.fill(dp, 1);
 		int max = dp[0];
+
 		for (int i = 1; i < n; i++) {
 			for (int j = 0; j < i; j++) {
-				if (arr[j] < arr[i] && dp[i] < dp[j] + 1) dp[i] = dp[j] + 1;
+				if (arr[j] < arr[i] && dp[i] < dp[j] + 1) {
+					dp[i] = dp[j] + 1;
+				}
 			}
 			max = Math.max(max, dp[i]);
 		}
@@ -907,14 +952,14 @@ public class DynamicProgrammingPatterns {
 	public int LIS4(int[] nums) {
 		int[] dp = new int[nums.length];
 		int size = 0;
-		for (int x : nums) {
+		for (int num : nums) {
 			int l = 0, h = size;
 			while (l != h) {
 				int m = (l + h) / 2;
-				if (dp[m] < x) l = m + 1;
+				if (num > dp[m]) l = m + 1;
 				else h = m;
 			}
-			dp[l] = x;
+			dp[l] = num;
 			if (l == size) ++size;
 		}
 		return size;

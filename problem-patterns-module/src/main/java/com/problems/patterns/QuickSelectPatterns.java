@@ -29,6 +29,24 @@ public class QuickSelectPatterns {
 		return i;
 	}
 
+	/* Reverse Partition:
+	 * Left side elements are greater than pivotIndex(i) and right side elements are less than pivotIndex(i)
+	 * Use reverse Partition to find the kth Largest Element;
+	 */
+	private int reversePartition(int[] a, int left, int right) {
+		int pivot = a[right];
+		int i = left, j = left;
+		while (j < right) {
+			if (a[j] > pivot) {
+				Utils.swap(a, i, j);
+				i++;
+			}
+			j++;
+		}
+		Utils.swap(a, i, right);
+		return i;
+	}
+
 	/* K’th Smallest Element in Unsorted Array: 
 	 * Using Quick sort Partitioning or Quick Select: Expect Linear Time complexity: O(n) 
 	 *   Partition or Quick Select: The partition subroutine of quicksort can also be used to solve this problem. 
@@ -50,24 +68,6 @@ public class QuickSelectPatterns {
 			else r = index - 1;
 		}
 		return -1;
-	}
-
-	/* Reverse Partition:
-	 * Left side elements are greater than pivotIndex(i) and right side elements are less than pivotIndex(i)
-	 * Use reverse Partition to find the kth Largest Element;
-	 */
-	private int reversePartition(int[] a, int left, int right) {
-		int pivot = a[right];
-		int i = left, j = left;
-		while (j < right) {
-			if (a[j] > pivot) {
-				Utils.swap(a, i, j);
-				i++;
-			}
-			j++;
-		}
-		Utils.swap(a, i, right);
-		return i;
 	}
 
 	// K largest elements in the array:
@@ -271,13 +271,13 @@ public class QuickSelectPatterns {
 		int n = a.length;
 		int l = 0, h = n - 1, curr = 0;
 		while (curr <= h) {
-			if (a[curr] == 0) {
+			if (a[curr] == 0) {//Left Boundary
 				Utils.swap(a, l, curr);
 				l++;
 				curr++;
-			} else if (a[curr] == 1) {
+			} else if (a[curr] == 1) {//Mid Boundary
 				curr++;
-			} else if (a[curr] == 2) {
+			} else if (a[curr] == 2) {//Right Boundary
 				Utils.swap(a, curr, h);
 				h--;
 			}
@@ -285,4 +285,28 @@ public class QuickSelectPatterns {
 
 		return a;
 	}
+
+	/*
+	 * Applying dutch flag algorithm to partition the array.
+	 * Eg: 
+	 * 	  Input: {3, 2, 8, 5, 1, 4, 6, 0}; Pivot = 4
+	 * 	  output: {3, 2, 0, 1, 4, 6, 5, 8}
+	 */
+	public int[] dutchFlagAlgSample(int[] arr, int pivot) {
+		int l = 0, h = arr.length - 1, curr = 0;
+		while (curr <= h) {
+			if (arr[curr] < pivot) { //Left Boundary
+				Utils.swap(arr, l, curr);
+				l++;
+				curr++;
+			} else if (arr[curr] == pivot) { //Mid Boundary
+				curr++;
+			} else if (arr[curr] > pivot) { //Right Boundary
+				Utils.swap(arr, curr, h);
+				h--;
+			}
+		}
+		return arr;
+	}
+
 }

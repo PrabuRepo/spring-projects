@@ -473,7 +473,7 @@ public class BitAlgorithms {
 
 	//Compliment of given input only till last set bit.
 	public int compliment(int n) {
-		//Find the last set bit
+		//Find the last set bit; Eg: 1001 => 9; log2(9) => 3; So last set bit is 3rd position
 		int lastSetBit = (int) (Math.log(n) / Math.log(2));
 
 		//Add '1' is to move one additional left shift 

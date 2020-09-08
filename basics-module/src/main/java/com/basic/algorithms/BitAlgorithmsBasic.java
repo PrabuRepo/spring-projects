@@ -265,6 +265,14 @@ public class BitAlgorithmsBasic {
 		return data;
 	}
 
+	/* Find the last set bit;
+	 * 	Eg: 1001 => 9; log2(9) => 3; So last set bit is in 3rd position
+	 *  Eg: 10111 => 18; log2(23) => 4; So last set bit is in 4th position 
+	 */
+	public int findLastSetBit(int n) {
+		return (int) (Math.log(n) / Math.log(2));
+	}
+
 	public int swapBits(int data, int i, int j) {
 		//If two bits not equal, swap the bits
 		if (getNthBit(data, i) != getNthBit(data, j)) {

@@ -1,3 +1,4 @@
+
 package com.consolidated.problems.algorithms.test;
 
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ import java.util.Stack;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import com.common.utilities.Utils;
+
 public class TestClass {
 	public static void main(String[] args) {
 
@@ -22,15 +25,40 @@ public class TestClass {
 
 		//test();
 
-		int[] arr = { 1, 2, 3, 4, 5 };
+		//int[] arr = { 1, 2, 3, 4, 5 };
 		//findClosestElements22(arr, 4, 3);
 
 		//isMatch("mississippi", "mis*is*ip*.");
 
 		//ob.cellCompete(new int[] { 1, 1, 1, 0, 1, 1, 1, 1 }, 2).forEach(k -> System.out.print(k + ","));
 
-		System.out.println(Arrays.toString(ob.zeroSumSubArray(new int[] { 1, -3, 2 })));
+		//System.out.println(Arrays.toString(ob.zeroSumSubArray(new int[] { 1, -3, 2 })));
 
+		int[] arr = { 3, 2, 8, 5, 1, 4, 6, 0 };
+		ob.dutchFlagAlgSample(arr, 4);
+		System.out.println(Arrays.toString(arr));
+
+		String str = "Bob hit a ball, the hit BALL flew far after it was hit.";
+		String[] words = str.toLowerCase().split("\\W+");
+		System.out.println(Arrays.toString(words));
+
+	}
+
+	public int[] dutchFlagAlgSample(int[] arr, int pivot) {
+		int l = 0, h = arr.length - 1, curr = 0;
+		while (curr <= h) {
+			if (arr[curr] < pivot) {
+				Utils.swap(arr, l, curr);
+				l++;
+				curr++;
+			} else if (arr[curr] == pivot) {
+				curr++;
+			} else if (arr[curr] > pivot) {
+				Utils.swap(arr, curr, h);
+				h--;
+			}
+		}
+		return arr;
 	}
 
 	public int[] zeroSumSubArray(int[] arr) {

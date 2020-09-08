@@ -675,6 +675,40 @@ public class HashingProblems {
 		return minLeft != -1 ? str.substring(minLeft, minLeft + minWindow) : "";
 	}
 
+	/* 
+	 * Partition Labels:
+	 * 	A string S of lowercase English letters is given. We want to partition this string into as many parts as possible so that each 
+	 *  letter appears in at most one part, and return a list of integers representing the size of these parts.
+	 *  Example 1:
+	 *  	Input: S = "ababcbacadefegdehijhklij"
+	 *  	Output: [9,7,8]
+	 *  	Explanation: The partition is "ababcbaca", "defegde", "hijhklij".
+	 */
+	public List<Integer> partitionLabels(String S) {
+		if (S.length() == 0) return null;
+
+		int n = S.length();
+		int[] lastIndices = new int[26];
+
+		//Update the last index of each char
+		for (int i = 0; i < n; i++) {
+			lastIndices[S.charAt(i) - 'a'] = i;
+		}
+
+		int l = 0, r = 0;
+		List<Integer> result = new ArrayList<>();
+		for (int i = 0; i < n; i++) {
+			r = Math.max(r, lastIndices[S.charAt(i) - 'a']);
+
+			if (i == r) {
+				result.add(r - l + 1);
+				l = r + 1;
+			}
+		}
+
+		return result;
+	}
+
 	/* Longest Substring Without Repeating Characters:
 	 * Given a string, find the length of the longest substring without repeating characters. 
 	 * Example 1: Input:"abcabcbb" Output: 3 Explanation: The answer is "abc", with the length of 3. 

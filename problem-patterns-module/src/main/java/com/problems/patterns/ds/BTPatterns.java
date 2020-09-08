@@ -405,8 +405,7 @@ public class BTPatterns {
 		return head;
 	}
 
-	// Convert a given Binary Tree to Doubly Linked List(using Level order
-	// Traversal) -> It's totally wrong
+	//TODO: Convert a given Binary Tree to Doubly Linked List(using Level order Traversal) -> It's totally wrong
 	public void convertBinaryTreeToDLL3(TreeNode root) {
 		if (root == null) return;
 		Queue<TreeNode> queue = new LinkedList<>();

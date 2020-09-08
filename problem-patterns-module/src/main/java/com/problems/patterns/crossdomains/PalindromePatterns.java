@@ -94,7 +94,8 @@ public class PalindromePatterns {
 
 	//Palindrome Partitioning II
 	public void palindromePartitioningII(String str) {
-		dpPatterns.palindromicPartioningII(str);
+		dpPatterns.minCut1(str);
+		dpPatterns.minCut2(str);
 	}
 
 	//TODO: Solve below problems

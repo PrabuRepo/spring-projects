@@ -41,6 +41,10 @@ import java.util.Arrays;
  *    2.DP: Top Down Approach or Memoization - Time and space complexity is same as memoization array size.
  *    3.DP: Bottom Up Approach or Tabulation - Time & space complexity is O(n^2) or O(n)
  *    4.Memory Optimization - This will be same time as Bottom up approach, but space efficient. Eg: Two variable approach
+ *    
+ * Imp Note: All the recursion problems needs below two points
+ * 		1. Base case -> Its common for Recursion solution, memoization and bottom up approach
+ * 		2. Recursive function(Sub problems solution)
  */
 public class DynamicProgramming {
 	// Fibonacci Number calculation:
