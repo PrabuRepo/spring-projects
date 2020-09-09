@@ -273,20 +273,20 @@ public class MatrixPatterns {
 		return dp[m - 1][n - 1];
 	}
 
-	public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+	//Recursive Approach:
+	public int uniquePathsWithObstacles1(int[][] obstacleGrid) {
 		int r = obstacleGrid.length, c = obstacleGrid[0].length;
 		if (r == 0 && c == 0) return 0;
-		return uniquePathsWithObstacles(obstacleGrid, 0, 0);
+		return uniquePathsWithObstacles(obstacleGrid, r - 1, c - 1);
 	}
 
 	public int uniquePathsWithObstacles(int[][] a, int i, int j) {
-		int r = a.length, c = a[0].length;
 		// Here 1 means obstacle, 0 means empty path
-		if (i >= r || j >= c || a[i][j] == 1) return 0;
+		if (i < 0 || j < 0 || a[i][j] == 1) return 0;
 
-		if (i == r - 1 && j == c - 1) return 1;
+		if (i == 0 && j == 0) return 1;
 
-		return uniquePathsWithObstacles(a, i + 1, j) + uniquePathsWithObstacles(a, i, j + 1);
+		return uniquePathsWithObstacles(a, i - 1, j) + uniquePathsWithObstacles(a, i, j - 1);
 	}
 
 	public int uniquePathsWithObstacles2(int[][] a) {
@@ -321,15 +321,14 @@ public class MatrixPatterns {
 	// Recursive approach
 	public int minPathSum1(int[][] grid) {
 		if (grid.length == 0 && grid[0].length == 0) return 0;
-		return minPathSum(grid, 0, 0);
+		return minPathSum(grid, grid.length - 1, grid[0].length - 1);
 	}
 
 	public int minPathSum(int[][] grid, int i, int j) {
-		int r = grid.length, c = grid[0].length;
-		if (i < 0 || i >= r || j < 0 || j >= c) return Integer.MAX_VALUE;
+		if (i < 0 || j < 0) return Integer.MAX_VALUE;
+		if (i == 0 && j == 0) return grid[i][j];
 
-		if (i == r - 1 && j == c - 1) return grid[i][j];
-		return grid[i][j] + Math.min(minPathSum(grid, i + 1, j), minPathSum(grid, i, j + 1));
+		return grid[i][j] + Math.min(minPathSum(grid, i - 1, j), minPathSum(grid, i, j - 1));
 	}
 
 	// DP approach
@@ -463,6 +462,7 @@ public class MatrixPatterns {
 			int r = top / col;
 			int c = top % col;
 
+			//TODO: Add single for loop to below logic
 			if (r - 1 >= 0 && matrix[r - 1][c] == 'O') {
 				matrix[r - 1][c] = '#';
 				queue.add((r - 1) * col + c);
@@ -852,7 +852,6 @@ public class MatrixPatterns {
 				visited[row][col] = true;
 				queue.add(new Point(row, col));
 			}
-
 		}
 
 		return false;

@@ -5,27 +5,27 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
-import com.common.model.UndirectedGraphNode;
+import com.common.model.GraphNode2;
 
 public class CloneProblems {
 
 	// Clone an Undirected Graph - DFS/BFS
 	// Using BFS traversal to clone the graph
-	public static UndirectedGraphNode cloneGraph1(UndirectedGraphNode root) {
+	public static GraphNode2 cloneGraph1(GraphNode2 root) {
 		if (root == null) return null;
-		Queue<UndirectedGraphNode> queue = new LinkedList<>();
+		Queue<GraphNode2> queue = new LinkedList<>();
 		// cloneMap: node, cloneNode
-		HashMap<UndirectedGraphNode, UndirectedGraphNode> cloneMap = new HashMap<>();
-		cloneMap.put(root, new UndirectedGraphNode(root.label));
+		HashMap<GraphNode2, GraphNode2> cloneMap = new HashMap<>();
+		cloneMap.put(root, new GraphNode2(root.label));
 		queue.add(root);
 		while (!queue.isEmpty()) {
-			UndirectedGraphNode currCloneNode, neighborClone, currNode;
+			GraphNode2 currCloneNode, neighborClone, currNode;
 			currNode = queue.poll();
 			currCloneNode = cloneMap.get(currNode);
-			for (UndirectedGraphNode neighbor : currNode.neighbors) {
+			for (GraphNode2 neighbor : currNode.neighbors) {
 				neighborClone = cloneMap.get(neighbor);
 				if (neighborClone == null) {
-					neighborClone = new UndirectedGraphNode(neighbor.label);
+					neighborClone = new GraphNode2(neighbor.label);
 					cloneMap.put(neighbor, neighborClone);
 					queue.add(neighbor);
 				}
@@ -36,21 +36,21 @@ public class CloneProblems {
 	}
 
 	// DFS traversal using stack & iterative
-	public static UndirectedGraphNode cloneGraph2(UndirectedGraphNode node) {
+	public static GraphNode2 cloneGraph2(GraphNode2 node) {
 		if (node == null) return null;
 
-		HashMap<UndirectedGraphNode, UndirectedGraphNode> hm = new HashMap<UndirectedGraphNode, UndirectedGraphNode>();
-		LinkedList<UndirectedGraphNode> stack = new LinkedList<UndirectedGraphNode>();
-		UndirectedGraphNode head = new UndirectedGraphNode(node.label);
+		HashMap<GraphNode2, GraphNode2> hm = new HashMap<GraphNode2, GraphNode2>();
+		LinkedList<GraphNode2> stack = new LinkedList<GraphNode2>();
+		GraphNode2 head = new GraphNode2(node.label);
 		hm.put(node, head);
 		stack.push(node);
 
 		while (!stack.isEmpty()) {
-			UndirectedGraphNode curnode = stack.pop();
-			for (UndirectedGraphNode aneighbor : curnode.neighbors) {// check each neighbor
+			GraphNode2 curnode = stack.pop();
+			for (GraphNode2 aneighbor : curnode.neighbors) {// check each neighbor
 				if (!hm.containsKey(aneighbor)) {// if not visited,then push to stack
 					stack.push(aneighbor);
-					UndirectedGraphNode newneighbor = new UndirectedGraphNode(aneighbor.label);
+					GraphNode2 newneighbor = new GraphNode2(aneighbor.label);
 					hm.put(aneighbor, newneighbor);
 				}
 
@@ -62,19 +62,19 @@ public class CloneProblems {
 	}
 
 	// Using DFS traversal recursive
-	public static UndirectedGraphNode cloneGraph3(UndirectedGraphNode root) {
+	public static GraphNode2 cloneGraph3(GraphNode2 root) {
 		if (root == null) return root;
 		// CloneMap: node label, Clone node
-		HashMap<Integer, UndirectedGraphNode> cloneMap = new HashMap<>();
+		HashMap<Integer, GraphNode2> cloneMap = new HashMap<>();
 		return cloneGraph(root, cloneMap);
 	}
 
-	private static UndirectedGraphNode cloneGraph(UndirectedGraphNode root,
-			HashMap<Integer, UndirectedGraphNode> cloneMap) {
-		UndirectedGraphNode clone = new UndirectedGraphNode(root.label);
+	private static GraphNode2 cloneGraph(GraphNode2 root,
+			HashMap<Integer, GraphNode2> cloneMap) {
+		GraphNode2 clone = new GraphNode2(root.label);
 		cloneMap.put(root.label, clone);
-		for (UndirectedGraphNode neigbhor : root.neighbors) {
-			UndirectedGraphNode neighborClone = cloneMap.get(neigbhor.label);
+		for (GraphNode2 neigbhor : root.neighbors) {
+			GraphNode2 neighborClone = cloneMap.get(neigbhor.label);
 			if (neighborClone != null) {
 				clone.neighbors.add(neighborClone);
 			} else {

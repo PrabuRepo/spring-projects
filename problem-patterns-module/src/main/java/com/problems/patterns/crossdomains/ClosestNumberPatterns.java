@@ -19,7 +19,7 @@ public class ClosestNumberPatterns {
 
 	// Find K Closest Elements
 	//Brute force approach: Time: O(n), Space: O(k)
-	public List<Integer> findClosestElements1(int[] arr, int k, int x) {
+	public List<Integer> findKClosestElements1(int[] arr, int k, int x) {
 		int lo = 0;
 		int hi = arr.length - 1;
 		while (hi - lo >= k) {
@@ -35,7 +35,7 @@ public class ClosestNumberPatterns {
 
 	//Binary Search: Here find the index position for the given element x. Then find the range 
 	//Time: O(log(n + k)), Space: O(k)
-	public List<Integer> findClosestElements2(int[] arr, int k, int x) {
+	public List<Integer> findKClosestElements2(int[] arr, int k, int x) {
 		//Find the index of the element
 		int index = binarySearch(arr, x);
 
@@ -64,7 +64,7 @@ public class ClosestNumberPatterns {
 	//Binary Search(Better than above): In this approach trying to find the starting index of the range
 	//Time: O(log(n-k)), Space: O(k)
 	//Refer this: https://leetcode.com/problems/find-k-closest-elements/discuss/106426/JavaC%2B%2BPython-Binary-Search-O(log(N-K)-%2B-K)
-	public List<Integer> findClosestElements3(int[] arr, int k, int x) {
+	public List<Integer> findKClosestElements3(int[] arr, int k, int x) {
 		int l = 0, h = arr.length - k, m = 0;
 
 		while (l < h) {
@@ -87,7 +87,7 @@ public class ClosestNumberPatterns {
 
 	//Approach4: Using minheap priority queue
 	//Time: O(n*logk), Space: O(k)
-	public List<Integer> findClosestElements4(int[] arr, int k, int x) {
+	public List<Integer> findKClosestElements4(int[] arr, int k, int x) {
 		PriorityQueue<Integer> pq = new PriorityQueue<>();
 		List<Integer> result = new ArrayList<>();
 		for (int i = 0; i < arr.length; i++) {
@@ -109,7 +109,7 @@ public class ClosestNumberPatterns {
 
 	//TODO: Learn how sorting works using functional programming/comparator implementation and understand the below 2 approaches
 	//Using maxheap priority queue
-	public List<Integer> findClosestElements5(int[] arr, int k, int x) {
+	public List<Integer> findKClosestElements5(int[] arr, int k, int x) {
 		// maxHeap, sort descendingly according to diff to x
 		PriorityQueue<Integer> maxHeap = new PriorityQueue<>(
 				(a, b) -> Math.abs(x - b) == Math.abs(x - a) ? b - a : Math.abs(x - b) - Math.abs(x - a));
@@ -128,13 +128,22 @@ public class ClosestNumberPatterns {
 	}
 
 	// Simple collection approach
-	public List<Integer> findClosestElements6(int[] arr, int k, int x) {
+	public List<Integer> findKClosestElements6(int[] arr, int k, int x) {
 		// convert int[] to List<Integer> for better implementation simplicity
 		List<Integer> list = Arrays.stream(arr).boxed().collect(Collectors.toList());
 		Collections.sort(list, (a, b) -> a == b ? a - b : Math.abs(a - x) - Math.abs(b - x));
 		list = list.subList(0, k);
 		Collections.sort(list);
 		return list;
+	}
+
+	/*
+	 * Search for closest the element – BS & record-and-move-on approach
+	 * Given the element is sorted
+	 */
+	public int searchClosestElement(int[] arr, int num) {
+
+		return 0;
 	}
 
 	/* 3Sum Closest:

@@ -70,6 +70,7 @@ public class GraphPatterns {
 		int[] indegree = new int[numCourses]; //or use Map
 
 		for (int[] pair : prerequisites) {
+			//src - pair[1], dest - pair[0]
 			graph.putIfAbsent(pair[1], new HashSet<Integer>());
 			graph.get(pair[1]).add(pair[0]);
 			indegree[pair[0]]++;
@@ -239,7 +240,9 @@ public class GraphPatterns {
 	// Using DFS, but remove the visted data from the priority queue
 	public void reconstructItinerary(String s, Map<String, PriorityQueue<String>> map, LinkedList<String> result) {
 		PriorityQueue<String> queue = map.get(s);
-		while (queue != null && !queue.isEmpty()) reconstructItinerary(queue.poll(), map, result);
+		while (queue != null && !queue.isEmpty()) {
+			reconstructItinerary(queue.poll(), map, result);
+		}
 		result.addFirst(s);
 	}
 
@@ -260,6 +263,7 @@ public class GraphPatterns {
 	}
 
 	private void build(Map<Character, Set<Character>> graph, Map<Character, Integer> inDegree, String[] words) {
+		//Initialize the graph and indegree map
 		for (String word : words) {
 			for (char ch : word.toCharArray()) {
 				graph.putIfAbsent(ch, new HashSet<>());

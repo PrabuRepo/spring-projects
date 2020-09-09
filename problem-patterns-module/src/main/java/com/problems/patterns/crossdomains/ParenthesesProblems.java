@@ -26,10 +26,10 @@ public class ParenthesesProblems {
 				stack.push(ch);
 			} else if (!stack.isEmpty() && ((ch == ')' && stack.peek() == '(') || (ch == ']' && stack.peek() == '[')
 					|| (ch == '}' && stack.peek() == '{'))) {
-				stack.pop();
-			} else {
-				return false;
-			}
+						stack.pop();
+					} else {
+						return false;
+					}
 		}
 
 		return stack.isEmpty();
@@ -40,8 +40,7 @@ public class ParenthesesProblems {
 	 * Write a function to generate all combinations of well-formed parentheses.
 	 */
 	public static List<String> generateParentheses(int n) {
-		if (n <= 0)
-			return null;
+		if (n <= 0) return null;
 		List<String> res = new ArrayList<>();
 		backtrack14(0, 0, n, res, "");
 		res.stream().forEach(k -> System.out.print(k + ", "));
@@ -49,14 +48,12 @@ public class ParenthesesProblems {
 	}
 
 	public static void backtrack14(int op, int cp, int n, List<String> res, String str) {
-		if (op == n && cp == n)
+		if (op == n && cp == n) {
 			res.add(str);
-		if (op < cp)
-			return;
-		if (op < n)
-			backtrack14(op + 1, cp, n, res, str + "(");
-		if (cp < n)
-			backtrack14(op, cp + 1, n, res, str + ")");
+		} else {
+			if (op < n) backtrack14(op + 1, cp, n, res, str + "(");
+			if (cp < op) backtrack14(op, cp + 1, n, res, str + ")"); //Closed paren should be less than open paren
+		}
 	}
 
 	//Longest Valid Parentheses - Stack/DP
@@ -81,8 +78,7 @@ public class ParenthesesProblems {
 		int[] dp = new int[n];
 
 		for (int i = 1; i < n; i++) {
-			if (s.charAt(i) == '(')
-				continue;
+			if (s.charAt(i) == '(') continue;
 
 			if (s.charAt(i - 1) == '(') { //This condition for "()()"
 				dp[i] = (i >= 2 ? dp[i - 2] : 0) + 2;
@@ -105,10 +101,8 @@ public class ParenthesesProblems {
 				stack.push(i);
 			} else {
 				stack.pop();
-				if (!stack.isEmpty())
-					max = Math.max(max, i - stack.peek());
-				else
-					stack.push(i);
+				if (!stack.isEmpty()) max = Math.max(max, i - stack.peek());
+				else stack.push(i);
 			}
 		}
 		return max;
@@ -121,15 +115,11 @@ public class ParenthesesProblems {
 		//Forward traversal -> for cases (())))
 		for (int i = 0; i < n; i++) {
 			char ch = s.charAt(i);
-			if (ch == '(')
-				l++;
-			if (ch == ')')
-				r++;
+			if (ch == '(') l++;
+			if (ch == ')') r++;
 
-			if (l == r)
-				max = Math.max(max, 2 * r); //2*l
-			else if (r > l)
-				l = r = 0;
+			if (l == r) max = Math.max(max, 2 * r); //2*l
+			else if (r > l) l = r = 0;
 		}
 
 		//Reverse traversal -> For cases: (((())
@@ -137,15 +127,11 @@ public class ParenthesesProblems {
 		l = r = 0;
 		for (int i = n - 1; i >= 0; i--) {
 			char ch = s.charAt(i);
-			if (ch == '(')
-				l++;
-			if (ch == ')')
-				r++;
+			if (ch == '(') l++;
+			if (ch == ')') r++;
 
-			if (l == r)
-				max = Math.max(max, 2 * r); //2*l
-			else if (l > r)
-				l = r = 0;
+			if (l == r) max = Math.max(max, 2 * r); //2*l
+			else if (l > r) l = r = 0;
 		}
 
 		return max;
@@ -194,12 +180,9 @@ public class ParenthesesProblems {
 	private void dfs(String s, List<String> result, int last_i, int last_j, char[] paren) {
 		int i = last_i, count = 0;
 		while (i < s.length()) {
-			if (s.charAt(i) == paren[0])
-				count++;
-			if (s.charAt(i) == paren[1])
-				count--;
-			if (count < 0)
-				break;
+			if (s.charAt(i) == paren[0]) count++;
+			if (s.charAt(i) == paren[1]) count--;
+			if (count < 0) break;
 			i++;
 		}
 
@@ -241,12 +224,10 @@ public class ParenthesesProblems {
 				level = true;
 			}
 
-			if (level)
-				continue;
+			if (level) continue;
 
 			for (int i = 0; i < curr.length(); i++) {
-				if (curr.charAt(i) != '(' && curr.charAt(i) != ')')
-					continue;
+				if (curr.charAt(i) != '(' && curr.charAt(i) != ')') continue;
 
 				String newStr = curr.substring(0, i) + curr.substring(i + 1);
 				if (!visited.contains(newStr)) {
@@ -273,12 +254,9 @@ public class ParenthesesProblems {
 			paren = curr.paren;
 
 			while (i < curr.str.length()) {
-				if (str.charAt(i) == paren[0])
-					count++;
-				if (str.charAt(i) == paren[1])
-					count--;
-				if (count < 0)
-					break;
+				if (str.charAt(i) == paren[0]) count++;
+				if (str.charAt(i) == paren[1]) count--;
+				if (count < 0) break;
 				i++;
 			}
 
@@ -307,10 +285,8 @@ public class ParenthesesProblems {
 
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
-			if (c == '(')
-				count++;
-			if (c == ')' && count-- == 0)
-				return false;
+			if (c == '(') count++;
+			if (c == ')' && count-- == 0) return false;
 		}
 
 		return count == 0;
