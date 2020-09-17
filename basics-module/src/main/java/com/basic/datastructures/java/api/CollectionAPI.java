@@ -689,6 +689,7 @@ public class CollectionAPI {
 		}
 	}
 
+	//TODO: Check this and move this from here
 	public int[] getMode(int[] A, int[][] B) {
 		List<Integer> list = new ArrayList<>();
 

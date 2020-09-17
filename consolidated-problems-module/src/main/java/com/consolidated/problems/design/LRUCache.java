@@ -31,7 +31,7 @@ import java.util.Map;
  *    where n is the capacity of the cache.
  */
 
-//TODO: LRU Cache: Add the element in the front and removing from the rear
+//LRU Cache: Add the element in the front and removing from the rear
 
 public class LRUCache {
 	public static void main(String[] args) {

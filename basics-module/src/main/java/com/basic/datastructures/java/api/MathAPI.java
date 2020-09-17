@@ -20,6 +20,7 @@ public class MathAPI {
 
 		System.out.println(Math.exp(1)); // 2.718
 		System.out.println(Math.log(8));
+		System.out.println(Math.log(8) / Math.log(2)); //log base 2 formula in Java
 		System.out.println(Math.log10(8));
 
 		System.out.println(Math.max(4, 8));

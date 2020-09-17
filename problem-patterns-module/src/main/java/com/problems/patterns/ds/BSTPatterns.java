@@ -9,9 +9,19 @@ import com.common.model.TreeNode;
 
 public class BSTPatterns {
 
-	/****************************
-	 * Type1:Basic/Checking/Construction/Conversion/Searching
-	 **************************/
+	/****************** Type1:Basic/Checking/Construction/Conversion/Searching ************************/
+
+	public boolean isValidBST(TreeNode root) {
+		return isValidBST(root, null, null);
+	}
+
+	private boolean isValidBST(TreeNode root, TreeNode min, TreeNode max) {
+		if (root == null) return true;
+		if (min != null && min.val >= root.val) return false;
+		else if (max != null && max.val <= root.val) return false;
+		return isValidBST(root.left, min, root) && isValidBST(root.right, root, max);
+	}
+
 	// Serialize & Deserialize - Uses Preorder
 	// 1.Serialize:Uses Tree to List
 	public ArrayList<Integer> serialize1(ArrayList<Integer> result, TreeNode root) {
@@ -25,8 +35,7 @@ public class BSTPatterns {
 
 	// 1.Deserialize: List to Tree
 	public TreeNode deserialize1(Integer[] preOrder, int low, int high) {
-		if (low > high)
-			return null;
+		if (low > high) return null;
 		TreeNode root = new TreeNode(preOrder[low]);
 		int mid = findRight(preOrder, root.val, low, high);
 		root.left = deserialize1(preOrder, low + 1, mid - 1);
@@ -37,16 +46,14 @@ public class BSTPatterns {
 	int findRight(Integer[] preOrder, int root, int low, int high) {
 		int i;
 		for (i = low; i <= high; i++) {
-			if (root < preOrder[i])
-				break;
+			if (root < preOrder[i]) break;
 		}
 		return i;
 	}
 
 	// 2. Serialize: Tree to String
 	public String serialize2(TreeNode root) {
-		if (root == null)
-			return "";
+		if (root == null) return "";
 		StringBuilder sb = new StringBuilder();
 		serialize2(root, sb);
 		System.out.println(sb.toString());
@@ -54,8 +61,7 @@ public class BSTPatterns {
 	}
 
 	public void serialize2(TreeNode root, StringBuilder sb) {
-		if (root == null)
-			return;
+		if (root == null) return;
 		sb.append(root.val + ",");
 		serialize2(root.left, sb);
 		serialize2(root.right, sb);
@@ -63,15 +69,13 @@ public class BSTPatterns {
 
 	// Decodes your encoded data to tree.
 	public TreeNode deserialize2(String data) {
-		if (data == null || data == "")
-			return null;
+		if (data == null || data == "") return null;
 		String[] str = data.split(",");
 		return deserialize2(str, 0, str.length - 1);
 	}
 
 	public TreeNode deserialize2(String[] str, int l, int h) {
-		if (l > h)
-			return null;
+		if (l > h) return null;
 		TreeNode root = new TreeNode(Integer.valueOf(str[l]));
 		int m = findMid(str, l, h, root.val);
 		root.left = deserialize2(str, l + 1, m - 1);
@@ -83,27 +87,23 @@ public class BSTPatterns {
 		int val, i;
 		for (i = l; i <= h; i++) {
 			val = Integer.valueOf(str[i]);
-			if (data < val)
-				break;
+			if (data < val) break;
 		}
 		return i;
 	}
 
 	// Similar to approach2
 	public TreeNode deserialize21(String data) {
-		if (data.isEmpty())
-			return null;
+		if (data.isEmpty()) return null;
 		Queue<String> q = new LinkedList<>(Arrays.asList(data.split(",")));
 		return deserialize21(q, Integer.MIN_VALUE, Integer.MAX_VALUE);
 	}
 
 	public TreeNode deserialize21(Queue<String> q, int lower, int upper) {
-		if (q.isEmpty())
-			return null;
+		if (q.isEmpty()) return null;
 		String s = q.peek();
 		int val = Integer.parseInt(s);
-		if (val < lower || val > upper)
-			return null;
+		if (val < lower || val > upper) return null;
 		q.poll();
 		TreeNode root = new TreeNode(val);
 		root.left = deserialize21(q, lower, val);
@@ -117,14 +117,12 @@ public class BSTPatterns {
 	 */
 
 	public TreeNode sortedArrayToBST(int[] nums) {
-		if (nums.length == 0)
-			return null;
+		if (nums.length == 0) return null;
 		return arrayToBST(nums, 0, nums.length - 1);
 	}
 
 	private TreeNode arrayToBST(int[] nums, int low, int high) {
-		if (low > high)
-			return null;
+		if (low > high) return null;
 		int mid = (low + high) / 2;
 		TreeNode root = new TreeNode(nums[mid]);
 		root.left = arrayToBST(nums, low, mid - 1);
@@ -146,8 +144,7 @@ public class BSTPatterns {
 	}
 
 	public int inOrderPredecessor(TreeNode root, int key) {
-		if (root == null)
-			return -1;
+		if (root == null) return -1;
 
 		if (key == root.val) {
 			TreeNode leftSubTree = root.left;
@@ -163,15 +160,13 @@ public class BSTPatterns {
 			return inOrderPredecessor(root.left, key);
 		} else {
 			int pred = inOrderPredecessor(root.right, key);
-			if (pred == -1) // If there is no element in leftSubtree, then root element should be previous element
-				pred = root.val;
-			return pred;
+			// If there is no element in leftSubtree, then root element should be previous element
+			return pred == -1 ? root.val : pred;
 		}
 	}
 
 	public int inOrderSuccessor(TreeNode root, int key) {
-		if (root == null)
-			return -1;
+		if (root == null) return -1;
 
 		if (key == root.val) {
 			// Find the next node in the right subtree
@@ -184,9 +179,8 @@ public class BSTPatterns {
 			return -1;
 		} else if (key < root.val) {
 			int successor = inOrderSuccessor(root.left, key);
-			if (successor == -1) // If there is no element in rightSubtree, then root element should be next element
-				successor = root.val;
-			return successor;
+			// If there is no element in rightSubtree, then root element should be next element
+			return successor == -1 ? root.val : successor;
 		} else {
 			return inOrderSuccessor(root.right, key);
 		}
@@ -205,13 +199,10 @@ public class BSTPatterns {
 	}
 
 	public void inorderTraversal(TreeNode root) {
-		if (root == null)
-			return;
+		if (root == null) return;
 		inorderTraversal(root.left);
-		if (firstNode == null && prevNode.val >= root.val)
-			firstNode = prevNode;
-		if (firstNode != null && prevNode.val >= root.val)
-			secondNode = root;
+		if (firstNode == null && prevNode.val >= root.val) firstNode = prevNode;
+		if (firstNode != null && prevNode.val >= root.val) secondNode = root;
 		prevNode = root;
 		inorderTraversal(root.right);
 	}

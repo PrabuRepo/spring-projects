@@ -10,6 +10,16 @@ import java.util.TreeMap;
 
 import com.common.model.Interval;
 
+/*
+ * Reason for sorting finishing time:
+ * https://www.freecodecamp.org/news/what-is-a-greedy-algorithm/
+ * 
+ * Sort based on start time:
+ * 	- To find the overlapping the intervals, insert the intervals, merge the overlapping intervals
+ * 
+ * Sort based on end time:
+ * 	- To find the maximum number of non-overlapping intervals. Eg: max activities, no of meeting rooms required,  
+ */
 public class IntervalPatterns {
 	/********************* Interval Patterns - Selection Problems **************************/
 	/*
@@ -71,7 +81,11 @@ public class IntervalPatterns {
 	public boolean canAttendAllMeetings(Interval[] intervals) {
 		if (intervals.length <= 1) return true;
 
+		//This problem is basically to find the overlapping b/w the interval
+		//So it can be sorted based on both start & finish time
 		Arrays.sort(intervals, (ob1, ob2) -> ob1.start - ob2.start);
+		//or 
+		//Arrays.sort(intervals, (ob1, ob2) -> ob1.end - ob2.end);
 
 		for (int i = 0; i < intervals.length - 1; i++) {
 			if (intervals[i].end > intervals[i + 1].start) return false;
@@ -197,6 +211,9 @@ public class IntervalPatterns {
 	// Approach1:
 	public List<Interval> insert1(List<Interval> intervals, Interval newInterval) {
 		List<Interval> result = new ArrayList<>();
+		//Sort based on start time, if input is not sorted
+		Collections.sort(intervals, (a, b) -> (a.start - b.start));
+
 		for (Interval interval : intervals) {
 			if (interval.end < newInterval.start) {
 				result.add(interval);
@@ -214,6 +231,9 @@ public class IntervalPatterns {
 
 	// Approach2: Simplified Code:In place solution
 	public List<Interval> insert2(List<Interval> intervals, Interval newInterval) {
+		//Sort based on start time, if input is not sorted
+		Collections.sort(intervals, (a, b) -> (a.start - b.start));
+
 		int i = 0;
 		// Linear Search to find the starting pos
 		while (i < intervals.size() && intervals.get(i).end < newInterval.start) i++;
@@ -309,16 +329,24 @@ public class IntervalPatterns {
 	 * Input: [ [1,2], [2,3], [3,4], [1,3] ]	Output: 1
 	 * Explanation: [1,3] can be removed and the rest of intervals are non-overlapping.
 	 */
-	public int eraseOverlapIntervals(Interval[] intervals) {
-		Arrays.sort(intervals, Comparator.comparingInt(i -> i.end));
-		int max = 0, prevEnd = Integer.MIN_VALUE;
-		for (Interval in : intervals) {
-			if (prevEnd <= in.start) {
-				prevEnd = in.end;
-				max++;
+	public int eraseOverlapIntervals(int[][] intervals) {
+		if (intervals.length <= 1) return 0;
+
+		//Sort the input intervals based on ending point 
+		Arrays.sort(intervals, (ob1, ob2) -> ob1[1] - ob2[1]);
+
+		//Count the overlapping intervals
+		int count = 0, prevIndex = 0;
+		for (int i = 1; i < intervals.length; i++) {
+			if (intervals[i][0] >= intervals[prevIndex][1]) {
+				prevIndex = i;
+			} else {
+				count++;
 			}
 		}
-		return intervals.length - max;
+
+		return count;
+
 	}
 
 }

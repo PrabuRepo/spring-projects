@@ -42,14 +42,14 @@ public class BacktrackingPatterns {
 		return res;
 	}
 
-	public void backtrack6(int sum, int k, int startIndex, List<Integer> list, List<List<Integer>> res) {
-		if (list.size() == k && sum == 0) res.add(new ArrayList<>(list));
-		else if (list.size() >= k || sum < 0) return;
+	public void backtrack6(int sum, int k, int startIndex, List<Integer> buffer, List<List<Integer>> res) {
+		if (buffer.size() == k && sum == 0) res.add(new ArrayList<>(buffer));
+		else if (buffer.size() >= k || sum < 0) return;
 		else {
 			for (int i = startIndex; i <= 9; i++) {
-				list.add(i);
-				backtrack6(sum - i, k, i + 1, list, res);
-				list.remove(list.size() - 1);
+				buffer.add(i);
+				backtrack6(sum - i, k, i + 1, buffer, res);
+				buffer.remove(buffer.size() - 1);
 			}
 		}
 	}
@@ -164,7 +164,7 @@ public class BacktrackingPatterns {
 	}
 
 	public boolean isPalindrome(String s, int low, int high) {
-		while (low < high) if (s.charAt(low++) != s.charAt(high--)) return false;
+		while (low < high) {if (s.charAt(low++) != s.charAt(high--)) return false;}
 		return true;
 	}
 

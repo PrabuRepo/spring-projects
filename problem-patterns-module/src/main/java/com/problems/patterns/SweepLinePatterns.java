@@ -47,10 +47,11 @@ public class SweepLinePatterns {
 		List<int[]> points = new ArrayList<>();
 		List<int[]> result = new ArrayList<>();
 		for (int[] building : buildings) {
-			points.add(new int[] { building[0], building[2] });
-			points.add(new int[] { building[1], -building[2] });
+			points.add(new int[] { building[0], building[2] }); //Start point
+			points.add(new int[] { building[1], -building[2] }); //End point
 		}
-		// Using lambda expression
+		// Sort: if start points are not equal, then sort(asc) based on point in 0th index
+		// else if start poits are equal, then sort(desc) based on height in the 1st index 
 		Collections.sort(points, (a, b) -> a[0] != b[0] ? a[0] - b[0] : b[1] - a[1]);
 
 		PriorityQueue<Integer> queue = new PriorityQueue<>(Collections.reverseOrder());
@@ -58,9 +59,9 @@ public class SweepLinePatterns {
 		int prevHeight = 0, currHeight = 0;
 		//Add the heights in queue one by one process it
 		for (int[] point : points) {
-			if (point[1] < 0) {
+			if (point[1] < 0) { //If it is end point(or negative), remove from queue
 				queue.remove(-point[1]);
-			} else {
+			} else { //If point is start point add it into the queue
 				queue.add(point[1]);
 			}
 			currHeight = queue.peek();

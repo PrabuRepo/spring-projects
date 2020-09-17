@@ -153,10 +153,15 @@ public class InPlaceReversalLLPatterns {
 		if (k <= 0) return head;
 		ListNode curr = head;
 		int count = 1;
-		while (count++ < k && curr != null) curr = curr.next;
+		while (count++ < k && curr != null) {
+			curr = curr.next;
+		}
 		if (curr == null) return head;
+
 		ListNode nextHead = curr;
-		while (curr.next != null) curr = curr.next;
+		while (curr.next != null) {
+			curr = curr.next;
+		}
 		curr.next = head;
 		head = nextHead.next;
 		nextHead.next = null;
@@ -176,13 +181,14 @@ public class InPlaceReversalLLPatterns {
 		int count = 1;
 		k = size - k;
 		ListNode curr = head;
-		while (count < k && curr != null) {
+		while (count++ < k && curr != null) {
 			curr = curr.next;
-			count++;
 		}
 
 		ListNode nextHead = curr;
-		while (curr.next != null) curr = curr.next;
+		while (curr.next != null) {
+			curr = curr.next;
+		}
 		curr.next = head;
 		head = nextHead.next;
 		nextHead.next = null;

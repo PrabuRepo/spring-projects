@@ -1,4 +1,4 @@
-package com.problems.patterns;
+package com.problems.patterns.crossdomains;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,9 +11,12 @@ import com.common.utilities.Utils;
 
 /* 
  * Number Problems: Its collection of Cyclic Sort, Marker Approach, Bitwise XOR, Floyd's Algorithm(Fast & Slow Ptr), Binary Search alg problems
+ * 
+ * Note: This is consolidation of common number problems. Need not to add separately in problem patterns sheet
  *  
  */
 
+//TODO: Remove all the methods, just refer the methods in corresponding  class. And also move this to cross domain section
 public class NumberProblems {
 	// 1.Find the Duplicate Number (easy)
 	/* Solution:

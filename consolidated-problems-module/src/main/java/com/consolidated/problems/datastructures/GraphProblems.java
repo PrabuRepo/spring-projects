@@ -911,7 +911,7 @@ public class GraphProblems {
 					result.add(Arrays.asList(u, v));
 				}
 			} else {
-				lowTime[u] = Math.min(lowTime[u], visitedTime[v]);
+				lowTime[u] = Math.min(lowTime[u], lowTime[v]);
 			}
 		}
 	}

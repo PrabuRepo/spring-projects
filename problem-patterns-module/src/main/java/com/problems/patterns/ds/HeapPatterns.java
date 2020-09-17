@@ -14,6 +14,7 @@ import java.util.function.Supplier;
 import com.common.model.Cell;
 import com.common.model.ListNode;
 import com.common.model.TreeNode;
+import com.problems.patterns.crossdomains.KthElementPattern;
 
 public class HeapPatterns {
 
@@ -204,34 +205,11 @@ public class HeapPatterns {
 		return diff;
 	}
 
-	/* Kth Smallest Element in a Sorted Matrix: 
-	 * Given a n x n matrix where each of the rows and columns are sorted in ascending order, find the kth smallest element in the matrix.
-	 * Note that it is the kth smallest element in the sorted order, not the kth distinct element.
-	 * 	Example:
-	 * 	matrix = [[ 1,  5,  9],	[10, 11, 13],[12, 13, 15]], k = 8, return 13.
-	 */
-	public int kthSmallest2(int[][] matrix, int k) {
-		if (matrix == null || matrix.length == 0) return 0;
-		int r = matrix.length, c = matrix[0].length;
-		if (k > r * c) return 0;
+	private KthElementPattern kthElementPattern;
 
-		// Priority Queue arranged based on val
-		PriorityQueue<Cell> queue = new PriorityQueue<>((ob1, ob2) -> ob1.data - ob2.data);
-
-		// Add 1st row in the matrix: TC: O(n)( Build a min heap which takes O(n) time)
-		for (int j = 0; j < c; j++)
-			queue.add(new Cell(0, j, matrix[0][j]));
-
-		// Remove one by one and next row element corresponding to val; TC:O(klogn)(Heapify k times which takes O(kLogn)
-		// time.)
-		for (int i = 1; i < k; i++) {
-			Cell cell = queue.poll();
-			if (cell.i < r - 1) {
-				queue.add(new Cell(cell.i + 1, cell.j, matrix[cell.i + 1][cell.j]));
-			}
-		}
-
-		return queue.peek().data;
+	public void kthSmallestInMatrix(int[][] matrix, int k) {
+		kthElementPattern.kthSmallestInMatrix1(matrix, k);
+		kthElementPattern.kthSmallestInMatrix2(matrix, k);
 	}
 
 	/* Find K Pairs with Smallest Sums: 
@@ -436,10 +414,12 @@ public class HeapPatterns {
 		for (char c : map.keySet())
 			queue.offer(c);
 
+		// or queue.addAll(map.keySet());
+
 		StringBuilder sb = new StringBuilder();
 		int len = str.length();
 		while (!queue.isEmpty()) {
-			ArrayList<Character> temp = new ArrayList<>();
+			List<Character> waitingQueue = new ArrayList<>();
 			for (int i = 0; i < Math.min(k, len); i++) {
 				if (queue.isEmpty()) return "";
 
@@ -447,12 +427,12 @@ public class HeapPatterns {
 				sb.append(String.valueOf(c));
 
 				map.put(c, map.get(c) - 1);
-				if (map.get(c) > 0) temp.add(c);
+				if (map.get(c) > 0) waitingQueue.add(c);
 
 				len--;
 			}
 
-			queue.addAll(temp);
+			queue.addAll(waitingQueue);
 		}
 
 		return sb.toString();
@@ -483,8 +463,41 @@ public class HeapPatterns {
 			}
 		}
 		int minimum = (maxChar - 1) * (n + 1) + maxCharCnt;
-		if (tasks.length > minimum) return tasks.length;
-		else return minimum;
+		return (tasks.length > minimum) ? tasks.length : minimum;
+	}
+
+	/*
+	Steps:
+	First count the number of occurrences of each element.
+	Let the max frequency seen be M for element E. //maxFreq -> M
+	Run through the frequency dictionary and for every element which has frequency == M, add 1 cycle to result. //maxFreqCount
+	We can schedule the first M-1 occurrences of E, each E will be followed by at least N CPU cycles in between successive schedules of E
+	Total CPU cycles after scheduling M-1 occurrences of E = (M-1) * (N + 1) // 1 comes for the CPU cycle for E itself
+	Now schedule the final round of tasks. We will need at least 1 CPU cycle of the last occurrence of E. If there are multiple tasks with frequency M, they will all need 1 more cycle.
+	If we have more number of tasks than the max slots we need as computed above we will return the length of the tasks array as we need at least those many CPU cycles.
+	 */
+
+	public int leastInterval11(char[] tasks, int n) {
+		int[] cnt = new int[26];
+		int maxFreq = 0;
+		for (char c : tasks) {
+			//First count the number of occurrences of each element.
+			cnt[c - 'A']++;
+			//Find max frequency of element in the tasks
+			maxFreq = Math.max(maxFreq, cnt[c - 'A']);
+		}
+
+		//Find no of times max freq in cnt[] array
+		int maxFreqCount = 0;
+		for (int i = 0; i < 26; i++) {
+			if (cnt[i] == maxFreq) maxFreqCount++;
+		}
+
+		int result = (maxFreq - 1) * (n + 1) + maxFreqCount;
+
+		//return Math.max(result, tasks.length);
+
+		return (tasks.length > result) ? tasks.length : result;
 	}
 
 	// Approach-2

@@ -36,7 +36,6 @@ public class FastAndSlowPtrPatterns {
 			slow = slow.next;
 			fast = fast.next.next;
 			if (slow == fast) {
-				//TODO: Check how this is working
 				while (slow != start) {
 					slow = slow.next;
 					start = start.next;
@@ -103,9 +102,9 @@ public class FastAndSlowPtrPatterns {
 		} while (tortoise != hare);
 
 		// Find the "entrance" to the cycle.
-		tortoise = 0;
-		while (tortoise != hare) {
-			hare = nums[hare];
+		int start = 0;
+		while (tortoise != start) {
+			start = nums[start];
 			tortoise = nums[tortoise];
 		}
 		return tortoise;

@@ -47,6 +47,7 @@ public class DataTypes {
 		char ch = Character.toLowerCase('A');
 		ch = Character.toUpperCase('a');
 		String str = Character.toString(ch);
+		int num = Character.getNumericValue('3');
 		System.out.println(str);
 	}
 

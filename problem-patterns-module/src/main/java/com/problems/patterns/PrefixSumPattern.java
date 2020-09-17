@@ -99,10 +99,11 @@ public class PrefixSumPattern {
 		if (a.length == 1) return 1;
 		for (int i = 0; i < a.length; i++)
 			sum += a[i];
-		for (int j = 0; j < a.length; j++) {
-			sum -= a[j];
-			if (leftSum == sum) return j + 1;
-			leftSum += a[j];
+
+		for (int i = 0; i < a.length; i++) {
+			sum -= a[i];
+			if (leftSum == sum) return i + 1;
+			leftSum += a[i];
 		}
 		return -1;
 	}

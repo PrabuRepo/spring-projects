@@ -539,7 +539,7 @@ public class StackPatterns {
 		return minIndex;
 	}
 
-	// Using Stack
+	// Using Stack -> using Monotonic increasing stack 
 	public int largestRectangleArea3(int[] heights) {
 		if (heights == null || heights.length == 0) return 0;
 
@@ -556,7 +556,7 @@ public class StackPatterns {
 		return maxArea;
 	}
 
-	//Trapping Rain Water -using Monotonic Stack 
+	//Trapping Rain Water -using Monotonic decreasing stack 
 	public int trappingRainWater(int[] height) {
 		if (height.length <= 1) return 0;
 

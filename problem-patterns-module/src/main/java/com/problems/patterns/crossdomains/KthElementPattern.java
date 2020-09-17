@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.PriorityQueue;
 import java.util.Stack;
 
+import com.common.model.Cell;
 import com.common.model.TreeNode;
 import com.common.utilities.Utils;
 
@@ -69,20 +70,16 @@ public class KthElementPattern {
 	 */
 	// This is simpler than kthSmallestElementInArray32
 	public int kthSmallestElementInArray31(int[] nums, int k) {
-		if (nums.length == 0 || k == 0)
-			return 0;
+		if (nums.length == 0 || k == 0) return 0;
 
 		int l = 0, r = nums.length - 1;
 
 		while (l <= r) {
 			int index = partition(nums, l, r); // Here partition being invoked all the condition
 
-			if (index == k - 1)
-				return nums[index];
-			else if (index < k - 1)
-				l = index + 1;
-			else
-				r = index - 1;
+			if (index == k - 1) return nums[index];
+			else if (index < k - 1) l = index + 1;
+			else r = index - 1;
 		}
 
 		return -1;
@@ -129,10 +126,101 @@ public class KthElementPattern {
 
 	public int add(int val) {
 		queue.add(val);
-		if (queue.size() > k)
-			queue.poll();
+		if (queue.size() > k) queue.poll();
 
 		return queue.size() < k ? -1 : queue.peek();
+	}
+
+	/* Kth Smallest Element in a Sorted Matrix: 
+	 * Given a n x n matrix where each of the rows and columns are sorted in ascending order, find the kth smallest element in the matrix.
+	 * Note that it is the kth smallest element in the sorted order, not the kth distinct element.
+	 * 	Example:
+	 * 	matrix = [[ 1,  5,  9],	[10, 11, 13],[12, 13, 15]], k = 8, return 13.
+	 */
+	public int kthSmallestInMatrix1(int[][] matrix, int k) {
+		if (matrix == null || matrix.length == 0) return 0;
+		int r = matrix.length, c = matrix[0].length;
+		if (k > r * c) return 0;
+
+		// Priority Queue arranged based on val
+		PriorityQueue<Cell> queue = new PriorityQueue<>((ob1, ob2) -> ob1.data - ob2.data);
+
+		// Add 1st row in the matrix: TC: O(n)( Build a min heap which takes O(n) time)
+		for (int j = 0; j < c; j++)
+			queue.add(new Cell(0, j, matrix[0][j]));
+
+		// Remove one by one and next row element corresponding to val; TC:O(klogn)(Heapify k times which takes O(kLogn)
+		// time.)
+		for (int i = 1; i < k; i++) {
+			Cell cell = queue.poll();
+			if (cell.i < r - 1) {
+				queue.add(new Cell(cell.i + 1, cell.j, matrix[cell.i + 1][cell.j]));
+			}
+		}
+
+		return queue.peek().data;
+	}
+
+	//Using Binary Search:
+	/* 1.Since we are given 1 <= k <= n^2, the kth number must exist in [lo, hi] range.
+	 * 2.We use binary search to find the minimum number A, such that the count of ( numbers satisfying num <= A ) is >= k.
+	 */
+	public int kthSmallestInMatrix2(int[][] matrix, int k) {
+		if (matrix == null || matrix.length == 0) return 0;
+		int r = matrix.length, c = matrix[0].length;
+		if (k > r * c) return 0;
+
+		int l = matrix[0][0], h = matrix[r - 1][c - 1];
+		while (l < h) {
+			int m = (l + h) / 2;
+			int count = count1(matrix, m);
+			// int count = count2(matrix, m); 
+			System.out.println(m + " - " + count);
+			if (count < k) l = m + 1;
+			else h = m;
+		}
+		return l;
+	}
+
+	//Count no elements less equal to target
+	public int count1(int[][] matrix, int target) {
+		int r = matrix.length, c = matrix[0].length;
+		int i = r - 1, j = 0, count = 0;
+		while (i >= 0 && j < c) {
+			if (matrix[i][j] <= target) {
+				count += i + 1;
+				j++;
+			} else {
+				i--;
+			}
+		}
+		return count;
+	}
+
+	//binary search to find the count.
+	private int count2(int[][] matrix, int target) {
+		int m = matrix.length;
+		int n = matrix[0].length;
+		int count = 0;
+		for (int i = 0; i < m; i++) {
+			// binary search, speed up a little bit.
+			int left = 0;
+			int right = n - 1;
+			int mid = (left + right) / 2; // may overflow
+			while (left < right) {
+				mid = (left + right + 1) / 2;
+				if (matrix[i][mid] > target) {
+					right = mid - 1;
+				} else {
+					left = mid;
+				}
+			}
+			count += (left + 1);
+			if (matrix[i][left] > target) {
+				count--;
+			}
+		}
+		return count;
 	}
 
 	//	Kth Smallest/Largest Element in a BST 
@@ -152,16 +240,14 @@ public class KthElementPattern {
 	 */
 	// Approach1: i.Using Inorder Traversal
 	public int kthSmallest11(TreeNode root, int k) {
-		if (root == null || k == 0)
-			return 0;
+		if (root == null || k == 0) return 0;
 		ArrayList<Integer> list = new ArrayList<>();
 		kthSmallest(root, list);
 		return list.get(k - 1);
 	}
 
 	public void kthSmallest(TreeNode root, ArrayList<Integer> list) {
-		if (root == null)
-			return;
+		if (root == null) return;
 		kthSmallest(root.left, list);
 		list.add(root.val);
 		kthSmallest(root.right, list);
@@ -177,8 +263,7 @@ public class KthElementPattern {
 	}
 
 	public void traverse(TreeNode root, int k) {
-		if (root == null)
-			return;
+		if (root == null) return;
 		traverse(root.left, k);
 		count++;
 		if (count == k) {
@@ -199,8 +284,7 @@ public class KthElementPattern {
 				p = p.left;
 			} else {
 				TreeNode node = stack.pop();
-				if (++count == k)
-					return node.val;
+				if (++count == k) return node.val;
 				p = node.right;
 			}
 		}
@@ -209,19 +293,16 @@ public class KthElementPattern {
 
 	// Approach2: Using Heap
 	public int kthSmallest2(TreeNode root, int k) {
-		if (root == null)
-			return 0;
+		if (root == null) return 0;
 		PriorityQueue<Integer> queue = new PriorityQueue<>(Collections.reverseOrder());
 		kthSmallest(root, queue, k);
 		return queue.peek();
 	}
 
 	public void kthSmallest(TreeNode root, PriorityQueue<Integer> queue, int k) {
-		if (root == null)
-			return;
+		if (root == null) return;
 		if (queue.isEmpty() || queue.size() < k || root.val < queue.peek()) {
-			if (queue.size() == k)
-				queue.remove();
+			if (queue.size() == k) queue.remove();
 			queue.add(root.val);
 		}
 		kthSmallest(root.left, queue, k);
@@ -259,8 +340,7 @@ public class KthElementPattern {
 
 		for (int[] point : points) {
 			queue.add(point);
-			if (queue.size() > k)
-				queue.poll();
+			if (queue.size() > k) queue.poll();
 		}
 		int[][] result = new int[k][2];
 
@@ -278,8 +358,7 @@ public class KthElementPattern {
 		int len = points.length, l = 0, r = len - 1;
 		while (l <= r) {
 			int mid = helper(points, l, r);
-			if (mid == K - 1)
-				break;
+			if (mid == K - 1) break;
 			if (mid < K) {
 				l = mid + 1;
 			} else {
