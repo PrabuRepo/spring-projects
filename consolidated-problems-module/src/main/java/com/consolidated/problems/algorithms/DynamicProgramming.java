@@ -770,6 +770,171 @@ public class DynamicProgramming {
 	}
 
 	/******************************* Others: Uncategorized ********************/
+	/*
+	 * Text Justification - Leetcode:
+	 * Given an array of words and a width maxWidth, format the text such that each line has exactly maxWidth characters 
+	 * and is fully (left and right) justified.
+	 * You should pack your words in a greedy approach; that is, pack as many words as you can in each line. Pad extra 
+	 * spaces ' ' when necessary so that each line has exactly maxWidth characters.
+	 */
+	//Time: O(n*maxWidth); Space: O(lines*maxWidth); where n - no of words; lines - no of lines in the result
+	public List<String> fullJustify(String[] words, int maxWidth) {
+		int l = 0, r = 0, n = words.length;
+		List<String> result = new ArrayList<>();
+		while (l < n) {
+			//1.Find the right pointer of words based on maxWidth
+			int len = words[l].length();
+			r = l + 1;
+			//Here r-l-1 denotes no of space between words
+			while (r < n && (len + words[r].length() + (r - l - 1)) < maxWidth) {
+				len += words[r].length();
+				r++;
+			}
+
+			//2.Justify the words
+			result.add(justify(words, l, r - 1, len, maxWidth));
+			l = r;
+		}
+		return result;
+	}
+
+	private String justify(String[] words, int l, int r, int wordsLength, int maxWidth) {
+		//If it is single word in a line
+		if (r - l == 0) return padResult(words[l], maxWidth);
+
+		boolean isLastLine = r == words.length - 1;
+		int numSpaces = r - l;
+		int totalSpace = maxWidth - wordsLength;
+
+		String space = isLastLine ? " " : whitespace(totalSpace / numSpaces);
+		int extraSpace = isLastLine ? 0 : totalSpace % numSpaces;
+
+		StringBuilder result = new StringBuilder();
+		for (int i = l; i <= r; i++) {
+			result.append(words[i]).append(space).append(extraSpace-- > 0 ? " " : "");
+		}
+
+		return padResult(result.toString().trim(), maxWidth);
+	}
+
+	private String padResult(String word, int maxWidth) {
+		return word + whitespace(maxWidth - word.length());
+	}
+
+	public String whitespace(int numSpaces) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < numSpaces; i++) {
+			sb.append(" ");
+		}
+		return sb.toString();
+	}
+
+	/*
+	 * Text Justification/Word Wrap Problem - GeeksforGeeks:
+	 * Given a sequence of words, and a limit on the number of characters that can be put in one line (line width). Put line breaks in the
+	 * given sequence such that the lines are printed neatly. Assume that the length of each word is smaller than the line width. 
+	 * The word processors like MS Word do task of placing line breaks. The idea is to have balanced lines. In other words, not have few 
+	 * lines with lots of extra spaces and some lines with small amount of extra spaces.
+	 * Eg: For example, consider the following string and line width M = 15
+	 *        "Geeks for Geeks presents word wrap problem"
+	 *     Following is the optimized arrangement of words in 3 lines
+	 *     		Geeks for Geeks
+	 *     		presents word
+	 *     		wrap problem 
+	 */
+	/*
+	 * Approach1: The greedy solution is to place as many words as possible in the first line. Then do the same thing for the second line 
+	 * and so on until all words are placed. This solution gives optimal solution for many cases, but doesn’t give optimal solution in all cases. 
+	 * Despite being sub-optimal in some cases, the greedy approach is used by many word processors like MS Word and OpenOffice.org Writer.
+	 * 
+	 * Approach2: Recursive & DP
+	 * The problem is to minimize the following total cost.
+	 *  	Cost of a line = (Number of extra spaces in the line)^3 or (Number of extra spaces in the line)^2
+	 *  	Total Cost = Sum of costs for all lines
+	 * Please note that the total cost function is not sum of extra spaces, but sum of cubes (or square is also used) of extra spaces. 
+	 * The idea behind this cost function is to balance the spaces among lines. For example, consider the following two arrangement of same 
+	 * set of words: 
+	 * 	1. There are 3 lines. One line has 3 extra spaces and all other lines have 0 extra spaces. Total extra spaces = 3 + 0 + 0 = 3. 
+	 * 	   Total cost = 3*3*3 + 0*0*0 + 0*0*0 = 27.
+	 * 	2. There are 3 lines. Each of the 3 lines has one extra space. Total extra spaces = 1 + 1 + 1 = 3. Total cost = 1*1*1 + 1*1*1 + 1*1*1 = 3.
+	 * Ref: https://www.geeksforgeeks.org/word-wrap-problem-dp-19/
+	 */
+
+	//Using Greedy Algorithm:
+	public String justify1(String words[], int width) {
+		StringBuilder result = new StringBuilder();
+
+		int i = 0, j = 0, n = words.length;
+		while (i < n) {
+			int len = words[i].length();
+			result.append(words[i]);
+			j = i + 1;
+			while (j < n && len + words[j].length() + (j - i - 1) < width) {
+				result.append(" ").append(words[j]);
+				len += words[j].length();
+				j++;
+			}
+			if (j != n) result.append(" ");
+			result.append("\n");
+			i = j;
+		}
+
+		return result.toString();
+	}
+
+	//Using DP:
+	public String justify2(String words[], int width) {
+		int cost[][] = new int[words.length][words.length];
+
+		//next 2 for loop is used to calculate cost of putting words from i to j in one line. If words don't fit in one line then we put
+		//Integer.MAX_VALUE there.
+		for (int i = 0; i < words.length; i++) {
+			cost[i][i] = width - words[i].length();
+			for (int j = i + 1; j < words.length; j++) {
+				cost[i][j] = cost[i][j - 1] - words[j].length() - 1;
+			}
+		}
+
+		for (int i = 0; i < words.length; i++) {
+			for (int j = i; j < words.length; j++) {
+				cost[i][j] = cost[i][j] < 0 ? Integer.MAX_VALUE : (int) Math.pow(cost[i][j], 2);
+			}
+		}
+
+		//minCost from i to len is found by trying j between i to len and checking which one has min value
+		int minCost[] = new int[words.length];
+		int result[] = new int[words.length];
+		for (int i = words.length - 1; i >= 0; i--) {
+			minCost[i] = cost[i][words.length - 1];
+			result[i] = words.length;
+			for (int j = words.length - 1; j > i; j--) {
+				if (cost[i][j - 1] == Integer.MAX_VALUE) continue;
+
+				if (minCost[i] > minCost[j] + cost[i][j - 1]) {
+					minCost[i] = minCost[j] + cost[i][j - 1];
+					result[i] = j;
+				}
+			}
+		}
+		System.out.println("Minimum cost is " + minCost[0]);
+		return getResult(words, result);
+	}
+
+	private String getResult(String[] words, int[] result) {
+		int i = 0;
+		int j;
+		//finally put all words with new line added in string buffer and print it.
+		StringBuilder builder = new StringBuilder();
+		do {
+			j = result[i];
+			for (int k = i; k < j; k++) {
+				builder.append(words[k] + " ");
+			}
+			builder.append("\n");
+			i = j;
+		} while (j < words.length);
+		return builder.toString();
+	}
 
 	/***************************** Methods for reusage *******************/
 	// Time: O(n*sum); Space: O(sum)

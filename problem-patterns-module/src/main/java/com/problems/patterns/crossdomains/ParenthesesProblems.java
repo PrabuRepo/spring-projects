@@ -11,13 +11,59 @@ import java.util.Stack;
 public class ParenthesesProblems {
 	public static void main(String[] args) {
 		//System.out.println(balancedParentheses("()[]{}"));
-
 		generateParentheses(3);
 	}
 
-	//Valid Parentheses/Balanced Brackets
+	/* Valid or Well Formed Parentheses
+	 *   You have been asked to Write an algorithm to find Whether Given the Sequence of parentheses are well formed. 
+	 * Eg:
+	 *  Is {}{ well formed ??? :false
+	 *  Is }{ well formed ??? :false
+	 *  Is {{{{}}}}{}{}{}{}{}{}{}{}{}{}{{{}}} well formed ??? :true
+	 *   
+	 * Approach:(This solution works only for same type of symbols. Eg: { or ( or [) 
+	 * 	Idea is to have two counters, one for open parentheses '{' and one for close '}'
+	 *  Read one character at a time and increment one of the counters
+	 *  If any given point of time count of close parentheses is greater than the open one, return false
+	 *  If at the end both counters are equal, return true 
+	 */
+
+	//Using Counter:
+	public Boolean isWellFormed1(String strParentheses) {
+		if (strParentheses == null) return false;
+		int openParenCounter = 0;
+		int closeParenCounter = 0;
+		for (int i = 0; i < strParentheses.length(); i++) {
+			char x = strParentheses.charAt(i);
+			if (x == '{') openParenCounter++;
+			else if (x == '}') closeParenCounter++;
+
+			if (closeParenCounter > openParenCounter) return false;
+		}
+
+		return (openParenCounter == closeParenCounter) ? true : false;
+	}
+
+	//Using Stack:
+	public Boolean isWellFormed2(String str) {
+		if (str == null) return false;
+		Stack<Character> stack = new Stack<>();
+		for (int i = 0; i < str.length(); i++) {
+			char c = str.charAt(i);
+			if (c == '{') {
+				stack.push(c);
+			} else if (c == '}') {
+				if (stack.isEmpty()) return false;
+				else stack.pop();
+			}
+		}
+
+		return stack.isEmpty() ? true : false;
+	}
+
+	//Valid Multiple Parentheses/Balanced Brackets 
 	//Using stack: Time-O(n), Space-O(n)
-	public static boolean balancedParentheses(String s) {
+	public boolean balancedParentheses1(String s) {
 		Stack<Character> stack = new Stack<>();
 		char ch;
 		for (int i = 0; i < s.length(); i++) {
@@ -33,7 +79,26 @@ public class ParenthesesProblems {
 		}
 
 		return stack.isEmpty();
+	}
 
+	public boolean balancedParentheses2(String input) {
+		Stack<Character> stack = new Stack<>();
+		for (int i = 0; i < input.length(); i++) {
+			char c = input.charAt(i);
+			if (c == '(') {
+				stack.push(')');
+			}
+			if (c == '[') {
+				stack.push(']');
+			}
+			if (c == '{') {
+				stack.push('}');
+			} else if (c == ')' || c == '}' || c == ']') {
+				if (stack.isEmpty() || stack.pop() != c) return false;
+			}
+		}
+		//if stack is empty at this point, return true
+		return stack.isEmpty();
 	}
 
 	/* Generate Parentheses - Backtracking 
