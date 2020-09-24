@@ -8,13 +8,12 @@ import java.util.List;
 public class BitAlgorithms {
 	/*************************** Type1: Check/Scan the bits *******************/
 	// Check whether K-th bit is set or not
-	public static String checkKthBit(int data, int k) {
-		if ((data & (1 << k)) >= 1) return "Yes";
-		return "No";
+	public String checkKthBit(int data, int k) {
+		return ((data & (1 << k)) >= 1) ? "Yes" : "No";
 	}
 
 	// Find first set bit
-	public static int findFirstSetBit(int data) {
+	public int findFirstSetBit(int data) {
 		if (data == 0) return 0;
 
 		int bit = 1;
@@ -42,7 +41,7 @@ public class BitAlgorithms {
 	}
 
 	// Rightmost different bit
-	public static int rightMostDifferentBit(int m, int n) {
+	public int rightMostDifferentBit(int m, int n) {
 		int xorValue = m ^ n;
 		return findFirstSetBit(xorValue);
 	}
@@ -60,7 +59,7 @@ public class BitAlgorithms {
 		return count;
 	}
 
-	public static int hammingWeight2(int n) {
+	public int hammingWeight2(int n) {
 		int ones = 0;
 		while (n != 0) {
 			ones = ones + (n & 1);
@@ -70,7 +69,7 @@ public class BitAlgorithms {
 	}
 
 	// Count total set bits
-	public static int countAllSetBits(int n) {
+	public int countAllSetBits(int n) {
 		int count = 0;
 		if (n > 0) {
 			for (int i = 1; i <= n; i++) {
@@ -80,7 +79,7 @@ public class BitAlgorithms {
 		return count;
 	}
 
-	public static int countSetBits1(int n) {
+	public int countSetBits1(int n) {
 		int count = 0;
 		if (n > 0) {
 			while (n > 0) {
@@ -265,12 +264,12 @@ public class BitAlgorithms {
 	}
 
 	// Next Number
-	public static void getNextAndPrevNum(int n) {
+	public void getNextAndPrevNum(int n) {
 		System.out.println("Next Number: " + getNextArith(n));
 		System.out.println("Prev Number: " + getPrevArith(n));
 	}
 
-	public static int getNextArith(int n) {
+	public int getNextArith(int n) {
 		int c = n, c0 = 0, c1 = 0;
 
 		while (((c & 1) == 0) && (c != 0)) {
@@ -322,7 +321,7 @@ public class BitAlgorithms {
 
 	/*************************** Type2: Modify the bits *******************/
 	// Set kth bit
-	public static int setKthBit(int data, int k) {
+	public int setKthBit(int data, int k) {
 		int testBit = 1 << k;
 		return (data | testBit);
 	}
@@ -378,7 +377,7 @@ public class BitAlgorithms {
 
 	// Swap all odd and even bits/Pairwise Swap
 	// Simple Approach
-	public static int swapBits1(int n) {
+	public int swapBits1(int n) {
 		int evenBits = n & 0xAAAAAAAA;
 		int oddBits = n & 0x55555555;
 		evenBits >>>= 1;
@@ -387,7 +386,7 @@ public class BitAlgorithms {
 	}
 
 	// One line code of previous one
-	public static int swapBits2(int n) {
+	public int swapBits2(int n) {
 		return ((n & 0xAAAAAAAA) >>> 1 | (n & 0x55555555) << 1);
 	}
 
@@ -412,7 +411,7 @@ public class BitAlgorithms {
 		int mask = left | right;
 		// 2.Shift M so that it lines up with bits j through i
 		M = M << i;
-		// 3.Merge M and N
+		// 3.Merge M and N 
 		N = N & mask;
 		N = N | M;
 		System.out.println("Result: " + Integer.toBinaryString(N));
@@ -486,7 +485,7 @@ public class BitAlgorithms {
 
 	/*************************** Type3: Apply the Bit Magic to Problems *******************/
 	// Alone in a couple/Single Number I, II, III
-	public static int findAloneInCouple(int[] arr) {
+	public int findAloneInCouple(int[] arr) {
 		int result = arr[0];
 		for (int i = 1; i < arr.length; i++)
 			result ^= arr[i];
@@ -653,7 +652,7 @@ public class BitAlgorithms {
 	 * Given a set of positive integers. The task is to complete the function maxSubarrayXOR which returns an 
 	 * integer denoting the maximum XOR subset value in the given set.
 	 */
-	public static int maxSubarrayXOR1(int[] nums, int n) {
+	public int maxSubarrayXOR1(int[] nums, int n) {
 		int mask = 0, currMax = 0, max = 0;
 		HashSet<Integer> set;
 		for (int i = 31; i >= 0; i--) {
@@ -676,7 +675,7 @@ public class BitAlgorithms {
 		return max;
 	}
 
-	static int maxSubarrayXOR(int set[], int n) {
+	int maxSubarrayXOR(int set[], int n) {
 		int index = 0;
 
 		for (int i = 31; i >= 0; i--) {

@@ -20,7 +20,7 @@ import com.common.utilities.Utils;
 public class HeapProblems {
 
 	/********************* Type1: Search Kth element *************************/
-	// K’th Smallest Element in Unsorted Array
+	// Kth Smallest Element in Unsorted Array
 	/* Find the kth Smallest element in an unsorted array. Note that it is the kth largest element in the sorted order,
 	 * not the kth distinct element.
 	 * Example 1: Input: [3,2,1,5,6,4] and k = 2; Output: 2
@@ -72,20 +72,16 @@ public class HeapProblems {
 	 */
 	// This is simpler than kthSmallestElementInArray32
 	public int kthSmallestElementInArray31(int[] nums, int k) {
-		if (nums.length == 0 || k == 0)
-			return 0;
+		if (nums.length == 0 || k == 0) return 0;
 
 		int l = 0, r = nums.length - 1;
 
 		while (l <= r) {
 			int index = partition(nums, l, r); // Here partition being invoked all the condition
 
-			if (index == k - 1)
-				return nums[index];
-			else if (index < k - 1)
-				l = index + 1;
-			else
-				r = index - 1;
+			if (index == k - 1) return nums[index];
+			else if (index < k - 1) l = index + 1;
+			else r = index - 1;
 		}
 
 		return -1;
@@ -113,8 +109,7 @@ public class HeapProblems {
 	public void kLargestElementsInArray1(int[] a, int k) {
 		for (int i = 0; i < k; i++) {
 			for (int j = a.length - 1; j > 0; j--) {
-				if (a[j - 1] < a[j])
-					Utils.swap(a, j, j - 1);
+				if (a[j - 1] < a[j]) Utils.swap(a, j, j - 1);
 			}
 		}
 		for (int i = 0; i < k; i++)
@@ -132,13 +127,11 @@ public class HeapProblems {
 	// Using MinHeap1: Time Complexity: O(nlogk)
 	public int findKthLargest2(int[] nums, int k) {
 		int n = nums.length;
-		if (n == 0 || n < k)
-			return 0;
+		if (n == 0 || n < k) return 0;
 		PriorityQueue<Integer> queue = new PriorityQueue<>();
 		for (int i = 0; i < n; i++) {
 			queue.add(nums[i]);
-			if (queue.size() > k)
-				queue.poll();
+			if (queue.size() > k) queue.poll();
 		}
 		return queue.peek();
 	}
@@ -147,17 +140,13 @@ public class HeapProblems {
 	 * Using Quick sort Partitioning: Worst Case Linear Time complexity: O(n) 
 	 */
 	public int kthLargestElementsInArray31(int[] nums, int k) {
-		if (nums.length == 0 || k == 0)
-			return 0;
+		if (nums.length == 0 || k == 0) return 0;
 		int l = 0, r = nums.length - 1;
 		while (l <= r) {
 			int index = reversePartition(nums, l, r);
-			if (index == k - 1)
-				return nums[index];
-			else if (index < k - 1)
-				l = index + 1;
-			else
-				r = index - 1;
+			if (index == k - 1) return nums[index];
+			else if (index < k - 1) l = index + 1;
+			else r = index - 1;
 		}
 		return -1;
 	}
@@ -204,8 +193,7 @@ public class HeapProblems {
 
 	public int add(int val) {
 		queue.add(val);
-		if (queue.size() > k)
-			queue.poll();
+		if (queue.size() > k) queue.poll();
 
 		return queue.size() < k ? -1 : queue.peek();
 	}
@@ -226,16 +214,14 @@ public class HeapProblems {
 	 */
 	// Approach1: i.Using Inorder Traversal
 	public int kthSmallest11(TreeNode root, int k) {
-		if (root == null || k == 0)
-			return 0;
+		if (root == null || k == 0) return 0;
 		ArrayList<Integer> list = new ArrayList<>();
 		kthSmallest(root, list);
 		return list.get(k - 1);
 	}
 
 	public void kthSmallest(TreeNode root, ArrayList<Integer> list) {
-		if (root == null)
-			return;
+		if (root == null) return;
 		kthSmallest(root.left, list);
 		list.add(root.val);
 		kthSmallest(root.right, list);
@@ -251,8 +237,7 @@ public class HeapProblems {
 	}
 
 	public void traverse(TreeNode root, int k) {
-		if (root == null)
-			return;
+		if (root == null) return;
 		traverse(root.left, k);
 		count++;
 		if (count == k) {
@@ -273,8 +258,7 @@ public class HeapProblems {
 				p = p.left;
 			} else {
 				TreeNode node = stack.pop();
-				if (++count == k)
-					return node.val;
+				if (++count == k) return node.val;
 				p = node.right;
 			}
 		}
@@ -283,19 +267,16 @@ public class HeapProblems {
 
 	// Approach2: Using Heap
 	public int kthSmallest2(TreeNode root, int k) {
-		if (root == null)
-			return 0;
+		if (root == null) return 0;
 		PriorityQueue<Integer> queue = new PriorityQueue<>(Collections.reverseOrder());
 		kthSmallest(root, queue, k);
 		return queue.peek();
 	}
 
 	public void kthSmallest(TreeNode root, PriorityQueue<Integer> queue, int k) {
-		if (root == null)
-			return;
+		if (root == null) return;
 		if (queue.isEmpty() || queue.size() < k || root.val < queue.peek()) {
-			if (queue.size() == k)
-				queue.remove();
+			if (queue.size() == k) queue.remove();
 			queue.add(root.val);
 		}
 		kthSmallest(root.left, queue, k);
@@ -338,8 +319,7 @@ public class HeapProblems {
 	 */
 	public ListNode mergeKSortedLinkedList1(ListNode[] lists) {
 		int k = lists.length;
-		if (k == 0)
-			return null;
+		if (k == 0) return null;
 
 		ListNode result = null;
 		for (int i = 0; i < k; i++)
@@ -348,10 +328,8 @@ public class HeapProblems {
 	}
 
 	public ListNode merge(ListNode head1, ListNode head2) {
-		if (head1 == null)
-			return head2;
-		if (head2 == null)
-			return head1;
+		if (head1 == null) return head2;
+		if (head2 == null) return head1;
 
 		ListNode result = null;
 		if (head1.data < head2.data) {
@@ -366,22 +344,18 @@ public class HeapProblems {
 
 	// Using Min Heap: O(NLogk); where N = nk; k = no of linked list; n = no of elements in the list
 	public ListNode mergeKSortedLinkedList2(ListNode[] nodes, int k) {
-		if (k == 0)
-			return null;
-		if (k == 1)
-			return nodes[0];
+		if (k == 0) return null;
+		if (k == 1) return nodes[0];
 		PriorityQueue<ListNode> queue = new PriorityQueue<>((o1, o2) -> o1.data - o2.data);
 		for (int i = 0; i < k; i++)
-			if (nodes[i] != null)
-				queue.add(nodes[i]);
+			if (nodes[i] != null) queue.add(nodes[i]);
 
 		ListNode dummy = new ListNode(0);
 		ListNode temp = dummy;
 		while (!queue.isEmpty()) {
 			ListNode curr = queue.poll();
 			// Add next val in the queue
-			if (curr.next != null)
-				queue.add(curr.next);
+			if (curr.next != null) queue.add(curr.next);
 			temp.next = curr;
 			temp = temp.next;
 		}
@@ -427,8 +401,7 @@ public class HeapProblems {
 		while (!queue.isEmpty()) {
 			Cell curr = queue.poll();
 			result[index++] = curr.data;
-			if (curr.j < arr[curr.i].length - 1)
-				queue.add(new Cell(curr.i, curr.j + 1, arr[curr.i][curr.j + 1]));
+			if (curr.j < arr[curr.i].length - 1) queue.add(new Cell(curr.i, curr.j + 1, arr[curr.i][curr.j + 1]));
 		}
 
 		System.out.println("After merge:" + Arrays.toString(result));
@@ -451,8 +424,7 @@ public class HeapProblems {
 	// Apply Merge K List Algorithm
 	public int[] smallestRange(List<List<Integer>> nums) {
 		int[] result = new int[2];
-		if (nums.size() == 0)
-			return result;
+		if (nums.size() == 0) return result;
 
 		PriorityQueue<int[]> queue = new PriorityQueue<>((a, b) -> a[2] - b[2]); // i,j,val
 		int max = Integer.MIN_VALUE, minRange = Integer.MAX_VALUE;
@@ -477,8 +449,7 @@ public class HeapProblems {
 			// Check next value from the top element
 			j++;
 
-			if (nums.get(i) != null && j >= nums.get(i).size())
-				continue;
+			if (nums.get(i) != null && j >= nums.get(i).size()) continue;
 
 			int nextVal = nums.get(i).get(j);
 			max = Math.max(max, nextVal);
@@ -499,13 +470,8 @@ public class HeapProblems {
 	 */
 	public static int minAbsoluteDiff(ArrayList<Integer> A, ArrayList<Integer> B, ArrayList<Integer> C) {
 		int diff = Integer.MAX_VALUE;
-		int i = 0;
-		int j = 0;
-		int k = 0;
-		int p = A.size();
-		int q = B.size();
-		int r = C.size();
-
+		int i = 0, j = 0, k = 0;
+		int p = A.size(), q = B.size(), r = C.size();
 		while (i < p && j < q && k < r) {
 			int maximum = Math.max(A.get(i), Math.max(B.get(j), C.get(k)));
 			int minimum = Math.min(A.get(i), Math.min(B.get(j), C.get(k)));
@@ -514,15 +480,11 @@ public class HeapProblems {
 				diff = maximum - minimum;
 			}
 
-			if (diff == 0)
-				break;
+			if (diff == 0) break;
 
-			if (A.get(i) == minimum)
-				i++;
-			else if (B.get(j) == minimum)
-				j++;
-			else
-				k++;
+			if (A.get(i) == minimum) i++;
+			else if (B.get(j) == minimum) j++;
+			else k++;
 		}
 
 		return diff;
@@ -535,11 +497,9 @@ public class HeapProblems {
 	 * 	matrix = [[ 1,  5,  9],	[10, 11, 13],[12, 13, 15]], k = 8, return 13.
 	 */
 	public int kthSmallest2(int[][] matrix, int k) {
-		if (matrix == null || matrix.length == 0)
-			return 0;
+		if (matrix == null || matrix.length == 0) return 0;
 		int r = matrix.length, c = matrix[0].length;
-		if (k > r * c)
-			return 0;
+		if (k > r * c) return 0;
 
 		// Priority Queue arranged based on val
 		PriorityQueue<Cell> queue = new PriorityQueue<>((ob1, ob2) -> ob1.data - ob2.data);
@@ -552,8 +512,7 @@ public class HeapProblems {
 		// time.)
 		for (int i = 1; i < k; i++) {
 			Cell cell = queue.poll();
-			if (cell.i < r - 1)
-				queue.add(new Cell(cell.i + 1, cell.j, matrix[cell.i + 1][cell.j]));
+			if (cell.i < r - 1) queue.add(new Cell(cell.i + 1, cell.j, matrix[cell.i + 1][cell.j]));
 		}
 
 		return queue.peek().data;
@@ -570,8 +529,7 @@ public class HeapProblems {
 	// Approach1: Brute Force using Binary Min Heap
 	public List<int[]> kSmallestPairs1(int[] nums1, int[] nums2, int k) {
 		List<int[]> result = new ArrayList<>();
-		if (nums1.length == 0 || nums2.length == 0 || k == 0)
-			return result;
+		if (nums1.length == 0 || nums2.length == 0 || k == 0) return result;
 		PriorityQueue<int[]> minHeap = new PriorityQueue<>((a, b) -> (a[2] - b[2]));
 		for (int i = 0; i < nums1.length; i++)
 			for (int j = 0; j < nums2.length; j++)
@@ -589,8 +547,7 @@ public class HeapProblems {
 		PriorityQueue<Cell> pq = new PriorityQueue<Cell>((a, b) -> a.data - b.data);
 		int m = nums1.length, n = nums2.length;
 		List<int[]> res = new ArrayList<int[]>();
-		if (nums1 == null || nums1.length == 0 || nums2 == null || nums2.length == 0 || k <= 0)
-			return res;
+		if (nums1 == null || nums1.length == 0 || nums2 == null || nums2.length == 0 || k <= 0) return res;
 
 		for (int j = 0; j <= n - 1; j++)
 			pq.offer(new Cell(0, j, nums1[0] + nums2[j]));
@@ -598,8 +555,7 @@ public class HeapProblems {
 		for (int i = 0; i < Math.min(k, m * n); i++) {
 			Cell t = pq.poll();
 			res.add(new int[] { nums1[t.i], nums2[t.j] });
-			if (t.i == m - 1)
-				continue;
+			if (t.i == m - 1) continue;
 			pq.offer(new Cell(t.i + 1, t.j, nums1[t.i + 1] + nums2[t.j]));
 		}
 		return res;
@@ -609,8 +565,7 @@ public class HeapProblems {
 	// Ref:https://leetcode.com/problems/find-k-pairs-with-smallest-sums/discuss/84551/simple-Java-O(KlogK)-solution-with-explanation
 	public List<int[]> kSmallestPairs3(int[] nums1, int[] nums2, int k) {
 		List<int[]> res = new ArrayList();
-		if (nums1.length == 0 || nums2.length == 0 || k == 0)
-			return res;
+		if (nums1.length == 0 || nums2.length == 0 || k == 0) return res;
 		// Heap -- n[0] x, n[1] y
 		PriorityQueue<int[]> minIndexHeap = new PriorityQueue<>(
 				(a, b) -> nums1[a[0]] + nums2[a[1]] - nums1[b[0]] - nums2[b[1]]);
@@ -620,11 +575,9 @@ public class HeapProblems {
 			int[] min = minIndexHeap.poll();
 			res.add(new int[] { nums1[min[0]], nums2[min[1]] });
 
-			if (min[1] != len2 - 1)
-				minIndexHeap.offer(new int[] { min[0], min[1] + 1 });
+			if (min[1] != len2 - 1) minIndexHeap.offer(new int[] { min[0], min[1] + 1 });
 
-			if (min[1] == 0 && min[0] != len1 - 1)
-				minIndexHeap.offer(new int[] { min[0] + 1, 0 });
+			if (min[1] == 0 && min[0] != len1 - 1) minIndexHeap.offer(new int[] { min[0] + 1, 0 });
 		}
 		return res;
 	}
@@ -641,8 +594,7 @@ public class HeapProblems {
 	// Approach1: Using Hashmap & Heap; Time Complexity: O(nlogk)
 	public List<Integer> topKFrequent1(int[] nums, int k) {
 		int n = nums.length;
-		if (n == 0 || k == 0)
-			return null;
+		if (n == 0 || k == 0) return null;
 
 		// Count the frequency of elements
 		Map<Integer, Integer> map = new HashMap<>();
@@ -655,14 +607,12 @@ public class HeapProblems {
 		// Insert the elements one by one in queue and maintain k elements in PQ
 		for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
 			queue.add(entry);
-			if (queue.size() > k)
-				queue.poll();
+			if (queue.size() > k) queue.poll();
 		}
 
 		// Insert the queue values in result
 		List<Integer> result = new ArrayList<>();
-		while (!queue.isEmpty())
-			result.add(queue.poll().getKey());
+		while (!queue.isEmpty()) result.add(queue.poll().getKey());
 
 		Collections.reverse(result);
 
@@ -673,8 +623,7 @@ public class HeapProblems {
 	// Approach2: Using Hashmap & Bucket Sort; Time Complexity: O(n)
 	public List<Integer> topKFrequent2(int[] nums, int k) {
 		int n = nums.length;
-		if (n == 0 || k == 0)
-			return null;
+		if (n == 0 || k == 0) return null;
 
 		// Count the frequency of elements
 		Map<Integer, Integer> map = new HashMap<>();
@@ -689,8 +638,7 @@ public class HeapProblems {
 		// Bucket Sorting
 		ArrayList<Integer>[] buckets = new ArrayList[max + 1];
 		for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-			if (buckets[entry.getValue()] == null)
-				buckets[entry.getValue()] = new ArrayList<>();
+			if (buckets[entry.getValue()] == null) buckets[entry.getValue()] = new ArrayList<>();
 			buckets[entry.getValue()].add(entry.getKey());
 		}
 
@@ -737,16 +685,14 @@ public class HeapProblems {
 
 	// Approach2: using Map & Heap -> Time Complexity - O(nlogk)
 	public List<String> topKFrequent2(String[] words, int k) {
-		if (words.length == 0 || k == 0)
-			return null;
+		if (words.length == 0 || k == 0) return null;
 
 		HashMap<String, Integer> map = new HashMap<>();
 		for (String word : words)
 			map.put(word, map.getOrDefault(word, 0) + 1);
 
 		PriorityQueue<Map.Entry<String, Integer>> queue = new PriorityQueue<>((a, b) -> {
-			if (a.getValue() == b.getValue())
-				return a.getKey().compareTo(b.getKey());
+			if (a.getValue() == b.getValue()) return a.getKey().compareTo(b.getKey());
 			return b.getValue() - a.getValue();
 		});
 
@@ -771,8 +717,7 @@ public class HeapProblems {
 	// Using Priority Queue
 	public String frequencySort1(String s) {
 		int n = s.length();
-		if (n <= 1)
-			return s;
+		if (n <= 1) return s;
 
 		Map<Character, Integer> map = new HashMap<>();
 		for (int i = 0; i < n; i++) {
@@ -796,8 +741,7 @@ public class HeapProblems {
 	// Using TreeSet(Balanced BST)
 	public String frequencySort(String s) {
 		int n = s.length();
-		if (n <= 1)
-			return s;
+		if (n <= 1) return s;
 
 		Map<Character, Integer> map = new HashMap<>();
 		for (int i = 0; i < n; i++) {
@@ -808,8 +752,7 @@ public class HeapProblems {
 		List<Character>[] bucket = new ArrayList[s.length() + 1];
 		for (char ch : map.keySet()) {
 			int freq = map.get(ch);
-			if (bucket[freq] == null)
-				bucket[freq] = new ArrayList<>();
+			if (bucket[freq] == null) bucket[freq] = new ArrayList<>();
 			bucket[freq].add(ch);
 		}
 
@@ -849,17 +792,14 @@ public class HeapProblems {
 			}
 		}
 		int minimum = (maxChar - 1) * (n + 1) + maxCharCnt;
-		if (tasks.length > minimum)
-			return tasks.length;
-		else
-			return minimum;
+		if (tasks.length > minimum) return tasks.length;
+		else return minimum;
 	}
 
 	// Approach-2
 	// Java PriorityQueue solution - Similar problem Rearrange string K distance apart
 	public int leastInterval2(char[] tasks, int n) {
-		if (tasks == null || tasks.length == 0)
-			return -1;
+		if (tasks == null || tasks.length == 0) return -1;
 		// build map to sum the amount of each task
 		HashMap<Character, Integer> map = new HashMap<>();
 		for (char ch : tasks)
@@ -892,12 +832,10 @@ public class HeapProblems {
 			// update the value in the map
 			for (Map.Entry<Character, Integer> entry : list) {
 				// when there is left task
-				if (entry.getValue() > 0)
-					queue.offer(entry);
+				if (entry.getValue() > 0) queue.offer(entry);
 			}
 			// job done
-			if (queue.isEmpty())
-				break;
+			if (queue.isEmpty()) break;
 			// if interval is > 0, then the machine can only be idle
 			cnt += interval;
 		}
@@ -913,8 +851,7 @@ public class HeapProblems {
 	 * The same letters are at least distance 3 from each other.
 	 */
 	public String rearrangeString(String str, int k) {
-		if (k == 0)
-			return str;
+		if (k == 0) return str;
 
 		// initialize the counter for each character
 		final HashMap<Character, Integer> map = new HashMap<Character, Integer>();
@@ -951,8 +888,7 @@ public class HeapProblems {
 			ArrayList<Character> temp = new ArrayList<Character>();
 
 			for (int i = 0; i < cnt; i++) {
-				if (queue.isEmpty())
-					return "";
+				if (queue.isEmpty()) return "";
 
 				char c = queue.poll();
 				sb.append(String.valueOf(c));
@@ -1001,8 +937,7 @@ public class HeapProblems {
 
 	public void findMedianInStream3(int[] a) {
 		int n = a.length;
-		if (n == 0)
-			return;
+		if (n == 0) return;
 		lower = new PriorityQueue<>(Collections.reverseOrder());
 		upper = new PriorityQueue<>();
 		for (int i = 0; i < n; i++) {
@@ -1013,21 +948,17 @@ public class HeapProblems {
 
 	public void addNum(int num) {
 		// Here first data should be in upper part, to maintain upper > lower
-		if (!lower.isEmpty() && num < lower.peek())
-			lower.add(num);
-		else
-			upper.add(num);
+		if (!lower.isEmpty() && num < lower.peek()) lower.add(num);
+		else upper.add(num);
 
 		balanceHeap();
 	}
 
 	// If size is odd, Upper should have one elements more than Lower
 	private void balanceHeap() {
-		if (lower.size() > upper.size())
-			upper.add(lower.poll());
+		if (lower.size() > upper.size()) upper.add(lower.poll());
 
-		if (upper.size() - lower.size() > 1)
-			lower.add(upper.poll());
+		if (upper.size() - lower.size() > 1) lower.add(upper.poll());
 	}
 
 	// Returns the median of current data stream
@@ -1037,10 +968,8 @@ public class HeapProblems {
 	}
 
 	public void removeNum(int num) {
-		if (!lower.isEmpty() && num <= lower.peek())
-			lower.remove(num);
-		else
-			upper.remove(num);
+		if (!lower.isEmpty() && num <= lower.peek()) lower.remove(num);
+		else upper.remove(num);
 		balanceHeap();
 	}
 
@@ -1061,8 +990,7 @@ public class HeapProblems {
 	 */
 	public double[] medianSlidingWindow1(int[] nums, int k) {
 		int n = nums.length;
-		if (n == 0)
-			return new double[0];
+		if (n == 0) return new double[0];
 
 		lower = new PriorityQueue<>(Collections.reverseOrder());
 		upper = new PriorityQueue<>();
@@ -1075,8 +1003,7 @@ public class HeapProblems {
 				removeNum(nums[i - k]);
 			}
 
-			if (i < n)
-				addNum(nums[i]);
+			if (i < n) addNum(nums[i]);
 		}
 
 		return result;
@@ -1099,38 +1026,30 @@ public class HeapProblems {
 				removeNum(lower, upper, nums[n - k]);
 			}
 
-			if (i < n)
-				addNum(lower, upper, nums[i]);
+			if (i < n) addNum(lower, upper, nums[i]);
 		}
 		return result;
 	}
 
 	public void addNum(TreeSet<Integer> lower, TreeSet<Integer> upper, int num) {
-		if (!lower.isEmpty() && num < lower.first())
-			lower.add(num);
-		else
-			upper.add(num);
+		if (!lower.isEmpty() && num < lower.first()) lower.add(num);
+		else upper.add(num);
 		balanceTreeSet(lower, upper);
 	}
 
 	public void removeNum(TreeSet<Integer> lower, TreeSet<Integer> upper, int num) {
-		if (!lower.isEmpty() && num < lower.first())
-			lower.remove(num);
-		else
-			upper.remove(num);
+		if (!lower.isEmpty() && num < lower.first()) lower.remove(num);
+		else upper.remove(num);
 		balanceTreeSet(lower, upper);
 	}
 
 	public void balanceTreeSet(TreeSet<Integer> lower, TreeSet<Integer> upper) {
-		if (lower.size() > upper.size())
-			upper.add(lower.pollFirst());
-		if (upper.size() - lower.size() > 1)
-			lower.add(upper.pollFirst());
+		if (lower.size() > upper.size()) upper.add(lower.pollFirst());
+		if (upper.size() - lower.size() > 1) lower.add(upper.pollFirst());
 	}
 
 	public double findMedian(TreeSet<Integer> lower, TreeSet<Integer> upper) {
-		if (lower.size() == upper.size())
-			return ((double) (lower.first() + upper.first()) * 0.5);
+		if (lower.size() == upper.size()) return ((double) (lower.first() + upper.first()) * 0.5);
 		return upper.first();
 	}
 
@@ -1147,10 +1066,8 @@ public class HeapProblems {
 
 		// Function to balance lefts size and rights size (if not equal then right will be larger by one)
 		Runnable balance = () -> {
-			if (left.size() > right.size())
-				right.add(left.pollFirst());
-			if (right.size() - left.size() > 1)
-				left.add(right.pollFirst());
+			if (left.size() > right.size()) right.add(left.pollFirst());
+			if (right.size() - left.size() > 1) left.add(right.pollFirst());
 		};
 
 		double[] result = new double[nums.length - k + 1];
@@ -1159,21 +1076,16 @@ public class HeapProblems {
 			if (i >= k) {
 				result[j++] = median.get();
 				// Remove the elements
-				if (!left.isEmpty() && nums[i - k] <= nums[left.first()])
-					left.remove(i - k);
-				else
-					right.remove(i - k);
+				if (!left.isEmpty() && nums[i - k] <= nums[left.first()]) left.remove(i - k);
+				else right.remove(i - k);
 				balance.run();
 			}
 
-			if (i >= nums.length)
-				continue;
+			if (i >= nums.length) continue;
 
 			// Add the elements
-			if (!left.isEmpty() && nums[i] < nums[left.first()])
-				left.add(i);
-			else
-				right.add(i);
+			if (!left.isEmpty() && nums[i] < nums[left.first()]) left.add(i);
+			else right.add(i);
 			balance.run();
 		}
 
@@ -1187,8 +1099,7 @@ public class HeapProblems {
 	 */
 	public int activityNotifications1(int[] expenditure, int k) {
 		int n = expenditure.length;
-		if (n == 0)
-			return 0;
+		if (n == 0) return 0;
 
 		lower = new PriorityQueue<>(Collections.reverseOrder());
 		// maxHeap = new PriorityQueue<>((a,b)->(b.compareTo(a)));
@@ -1198,8 +1109,7 @@ public class HeapProblems {
 		for (int i = 0; i < n; i++) {
 			if (i >= k) {
 				double median = findMedian();
-				if (expenditure[i] >= 2 * median)
-					count++;
+				if (expenditure[i] >= 2 * median) count++;
 				removeNum(expenditure[i - k]);
 			}
 
@@ -1216,8 +1126,7 @@ public class HeapProblems {
 		for (int i = 0; i < n; i++) {
 			if (i >= k) {
 				double median = findMedian2(freq, k);
-				if (expenditure[i] >= 2 * median)
-					count++;
+				if (expenditure[i] >= 2 * median) count++;
 				freq[expenditure[i - k]]--;
 			}
 
@@ -1233,11 +1142,9 @@ public class HeapProblems {
 		if (k % 2 == 0) {
 			int m1 = -1, m2 = -1;
 			for (int i = 0; i < freq.length; i++) {
-				if (freq[i] == 0)
-					continue;
+				if (freq[i] == 0) continue;
 				count += freq[i];
-				if (m1 == -1 && count >= k / 2)
-					m1 = i;
+				if (m1 == -1 && count >= k / 2) m1 = i;
 				if (m2 == -1 && count >= (k / 2) + 1) {
 					m2 = i;
 					break;
@@ -1246,8 +1153,7 @@ public class HeapProblems {
 			median = (m1 + m2) / 2.0;
 		} else {
 			for (int i = 0; i < freq.length; i++) {
-				if (freq[i] == 0)
-					continue;
+				if (freq[i] == 0) continue;
 				count += freq[i];
 				if (count > k / 2) {
 					median = i;
@@ -1269,19 +1175,16 @@ public class HeapProblems {
 	public int nthUglyNumber1(int n) {
 		int count = 0;
 		for (int i = 1; count < n; i++) {
-			if (isUgly(i))
-				count++;
+			if (isUgly(i)) count++;
 
-			if (count == n)
-				return i;
+			if (count == n) return i;
 		}
 		return count;
 	}
 
 	// Approach2-1: Using DP-1
 	public int nthUglyNumber21(int n) {
-		if (n <= 1)
-			return n;
+		if (n <= 1) return n;
 		int[] dp = new int[n];
 		dp[0] = 1;
 		int t2 = 0, t3 = 0, t5 = 0;
@@ -1290,12 +1193,9 @@ public class HeapProblems {
 			dp[i] = Math.min(Math.min(dp[t2] * 2, dp[t3] * 3), dp[t5] * 5);
 
 			// Update the t2, t3 & t5
-			if (dp[i] == 2 * dp[t2])
-				t2++;
-			if (dp[i] == 3 * dp[t3])
-				t3++;
-			if (dp[i] == 5 * dp[t5])
-				t5++;
+			if (dp[i] == 2 * dp[t2]) t2++;
+			if (dp[i] == 3 * dp[t3]) t3++;
+			if (dp[i] == 5 * dp[t5]) t5++;
 		}
 
 		return dp[n - 1];
@@ -1303,8 +1203,7 @@ public class HeapProblems {
 
 	// Approach2-2: Using DP-2
 	public int nthUglyNumber22(int n) {
-		if (n <= 1)
-			return n;
+		if (n <= 1) return n;
 		int[] dp = new int[n];
 		dp[0] = 1;
 		int min = 0;
@@ -1318,8 +1217,7 @@ public class HeapProblems {
 			dp[i] = min;
 
 			for (int j = 0; j < primeIndex.length; j++)
-				if (dp[i] == dp[primeIndex[j]] * primes[j])
-					primeIndex[j]++;
+				if (dp[i] == dp[primeIndex[j]] * primes[j]) primeIndex[j]++;
 		}
 
 		return dp[n - 1];
@@ -1327,8 +1225,7 @@ public class HeapProblems {
 
 	// Approach3: Using Heap
 	public int nthUglyNumber(int n) {
-		if (n <= 1)
-			return n;
+		if (n <= 1) return n;
 
 		int[] result = new int[n];
 		result[0] = 1;
@@ -1352,14 +1249,10 @@ public class HeapProblems {
 
 	public boolean isUgly(int num) {
 		while (num > 1) {
-			if (num % 2 == 0)
-				num /= 2;
-			else if (num % 3 == 0)
-				num /= 3;
-			else if (num % 5 == 0)
-				num /= 5;
-			else
-				break;
+			if (num % 2 == 0) num /= 2;
+			else if (num % 3 == 0) num /= 3;
+			else if (num % 5 == 0) num /= 5;
+			else break;
 		}
 		return num == 1 ? true : false;
 	}
@@ -1373,8 +1266,7 @@ public class HeapProblems {
 	 */
 	// Approach1: Using DP
 	public int nthSuperUglyNumber1(int n, int[] primes) {
-		if (n <= 1)
-			return n;
+		if (n <= 1) return n;
 		int[] dp = new int[n];
 		int min = 0;
 		int[] primeIndex = new int[primes.length];
@@ -1387,16 +1279,14 @@ public class HeapProblems {
 			dp[i] = min;
 
 			for (int j = 0; j < primeIndex.length; j++)
-				if (dp[i] == dp[primeIndex[j]] * primes[j])
-					primeIndex[j]++;
+				if (dp[i] == dp[primeIndex[j]] * primes[j]) primeIndex[j]++;
 		}
 		return dp[n - 1];
 	}
 
 	// Approach2: Using Heap
 	public int nthSuperUglyNumber(int n, int[] primes) {
-		if (n <= 1)
-			return n;
+		if (n <= 1) return n;
 		int[] result = new int[n];
 		result[0] = 1;
 		PriorityQueue<int[]> minHeap = new PriorityQueue<>((a, b) -> a[2] - b[2]); // 0-Prime, 1=Index, 2=Val
@@ -1418,8 +1308,7 @@ public class HeapProblems {
 	 It should be a complete tree (i.e. all levels except last should be full).
 	Every node’s value should be greater than or equal to its child node (considering max-heap).*/
 	public boolean isBinaryHeap(TreeNode root) {
-		if (root == null)
-			return true;
+		if (root == null) return true;
 		// Count no of nodes
 		int count = sizeOfBinaryTree(root);
 
@@ -1428,18 +1317,15 @@ public class HeapProblems {
 	}// Size of a BT - Recursive Approach
 
 	public int sizeOfBinaryTree(TreeNode root) {
-		if (root == null)
-			return 0;
+		if (root == null) return 0;
 		return 1 + sizeOfBinaryTree(root.left) + sizeOfBinaryTree(root.right);
 	}
 
 	// Check Complete property
 	private boolean isCompleteProperty(TreeNode root, int index, int count) {
-		if (root == null)
-			return true;
+		if (root == null) return true;
 
-		if (index >= count)
-			return false;
+		if (index >= count) return false;
 
 		return isCompleteProperty(root.left, (2 * index) + 1, count)
 				&& isCompleteProperty(root.right, (2 * index) + 2, count);
@@ -1447,11 +1333,9 @@ public class HeapProblems {
 
 	// Check Max Binary Heap Property
 	private boolean isMaxBinaryHeap(TreeNode root) {
-		if (root.left == null && root.right == null)
-			return true;
+		if (root.left == null && root.right == null) return true;
 
-		if (root.right == null)
-			return (root.val > root.left.val);
+		if (root.right == null) return (root.val > root.left.val);
 
 		return (root.val >= root.left.val && root.val >= root.right.val) && isMaxBinaryHeap(root.left)
 				&& isMaxBinaryHeap(root.right);

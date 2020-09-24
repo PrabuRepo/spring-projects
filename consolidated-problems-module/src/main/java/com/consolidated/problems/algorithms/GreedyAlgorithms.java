@@ -5,7 +5,6 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.PriorityQueue;
-import java.util.Stack;
 import java.util.TreeMap;
 
 import com.common.model.HuffmanCode;
@@ -206,38 +205,6 @@ public class GreedyAlgorithms {
 			if (nums1[start1] < nums2[start2]) return false;
 		}
 		return start1 != nums1.length;
-	}
-
-	/* Remove K Digits: 
-	 * Given a non-negative integer num represented as a string, remove k digits from the number so that the 
-	 * new number is the smallest possible. 
-	 * Note: The length of num is less than 10002 and will be >= k. The given num does not contain any leading zero.
-	 * Input: num = "1432219", k = 3; Output: "1219"
-	 * Input: num = "10200", k = 1; Output: "200"
-	 */public String removeKdigits(String num, int k) {
-		Stack<Character> stack = new Stack<>();
-		for (int i = 0; i < num.length(); i++) {
-			while (!stack.isEmpty() && k > 0 && stack.peek() > num.charAt(i)) {
-				stack.pop();
-				k--;
-			}
-			stack.push(num.charAt(i));
-		}
-
-		// For corner cases same number like "44444"
-		while (k > 0) {
-			stack.pop();
-			k--;
-		}
-
-		StringBuilder sb = new StringBuilder();
-		for (char ch : stack)
-			sb.append(ch);
-
-		// Remove leading zeros
-		while (sb.length() > 1 && sb.charAt(0) == '0') sb.deleteCharAt(0);
-
-		return sb.length() == 0 ? "0" : sb.toString();
 	}
 
 	/*************************** Type4: Other Greedy Problems ******************/

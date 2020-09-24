@@ -241,7 +241,7 @@ public class ArrayProblems {
 	2. Using sorting: O(nlogn+mlogm)
 	3. Hashing : O(n), but takes additional space
 	*/
-	// Approach2:
+	// Approach2: Using sorting: O(nlogn+mlogm)
 	public int[] intersectII1(int[] nums1, int[] nums2) {
 		ArrayList<Integer> list = new ArrayList<>();
 		Arrays.sort(nums1);
@@ -265,7 +265,7 @@ public class ArrayProblems {
 		return result;
 	}
 
-	// Approach3:
+	// Approach3: Hashing : O(n)
 	// This solution works for data: [1] [1,1]
 	public int[] intersectII2(int[] nums1, int[] nums2) {
 		ArrayList<Integer> list = new ArrayList<>();
@@ -361,8 +361,20 @@ public class ArrayProblems {
 	 * Given an unsorted array of size N. Find the first element in array such that all of its left elements are smaller and 
 	 * all right elements to it are greater than it.
 	 * Note: Left and right side elements can be equal to required element. And extreme elements cannot be required element.
+	 * Approach1: Brute Force Approach
+	 *    	A simple solution is to consider every element one by one. For every element, compare it with all elements on the left
+	 *  and all elements on right. Time complexity of this solution is O(n^2).
+	 * Approach2: Efficient Approach
+	 * 	   Create two arrays leftMax[] and rightMin[].Traverse input array from left to right and fill leftMax[] such that leftMax[i] 
+	 * contains maximum element from 0 to i-1 in input array. Traverse input array from right to left and fill rightMin[] such that
+	 * rightMin[i] contains minimum element from to n-1 to i+1 in input array. Traverse input array. For every element arr[i], check
+	 * if arr[i] is greater than leftMax[i] and smaller than rightMin[i]. If yes, return i.
+	 * Approach3:
+	 * 		Further Optimization to the above approach is to use only one extra array and traverse input array only twice. The first 
+	 * traversal is the same as above and fills leftMax[]. Next traversal traverses from the right and keeps track of the minimum. 
+	 * The second traversal also finds the required element.
 	 */
-	// TC: O(n) & SC: O(2n)
+	// Approach3: TC: O(n) & SC: O(2n)
 	public static int findElement1(int[] arr) {
 		int n = arr.length;
 		int[] leftMax = new int[n];

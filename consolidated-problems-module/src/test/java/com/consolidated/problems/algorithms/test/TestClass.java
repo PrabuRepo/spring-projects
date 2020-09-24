@@ -38,14 +38,91 @@ public class TestClass {
 
 		int[] arr = { 3, 2, 8, 5, 1, 4, 6, 0 };
 		ob.dutchFlagAlgSample(arr, 4);
-		System.out.println(Arrays.toString(arr));
+		//System.out.println(Arrays.toString(arr));
 
 		String str = "Bob hit a ball, the hit BALL flew far after it was hit.";
 		String[] words = str.toLowerCase().split("\\W+");
-		System.out.println(Arrays.toString(words));
+		//System.out.println(Arrays.toString(words));
 
-		int[][] grid = { { 1 }, { 2 }, { 1 }, { 1 } };
+		String words1[] = { "Tushar", "likes", "to", "write", "code", "at", "free", "time" };
+		System.out.println(ob.justify1(words1, 12));
 
+		System.out.println(ob.justify2(words1, 12));
+	}
+
+	//Using Greedy Algorithm:
+	public String justify1(String words[], int width) {
+		StringBuilder result = new StringBuilder();
+
+		int i = 0, j = 0, n = words.length;
+		while (i < n) {
+			int len = words[i].length();
+			result.append(words[i]);
+			j = i + 1;
+			while (j < n && len + words[j].length() + (j - i - 1) < width) {
+				result.append(" ").append(words[j]);
+				len += words[j].length();
+				j++;
+			}
+			if (j != n) result.append(" ");
+			result.append("\n");
+			i = j;
+		}
+
+		return result.toString();
+	}
+
+	public String justify2(String words[], int width) {
+		int cost[][] = new int[words.length][words.length];
+
+		//next 2 for loop is used to calculate cost of putting words from i to j in one line. If words don't fit in one line then we put
+		//Integer.MAX_VALUE there.
+		for (int i = 0; i < words.length; i++) {
+			cost[i][i] = width - words[i].length();
+			for (int j = i + 1; j < words.length; j++) {
+				cost[i][j] = cost[i][j - 1] - words[j].length() - 1;
+			}
+		}
+
+		for (int i = 0; i < words.length; i++) {
+			for (int j = i; j < words.length; j++) {
+				cost[i][j] = cost[i][j] < 0 ? Integer.MAX_VALUE : (int) Math.pow(cost[i][j], 2);
+			}
+		}
+
+		//minCost from i to len is found by trying j between i to len and checking which one has min value
+		int minCost[] = new int[words.length];
+		int result[] = new int[words.length];
+		for (int i = words.length - 1; i >= 0; i--) {
+			minCost[i] = cost[i][words.length - 1];
+			result[i] = words.length;
+			for (int j = words.length - 1; j > i; j--) {
+				if (cost[i][j - 1] == Integer.MAX_VALUE) continue;
+
+				if (minCost[i] > minCost[j] + cost[i][j - 1]) {
+					minCost[i] = minCost[j] + cost[i][j - 1];
+					result[i] = j;
+				}
+			}
+		}
+		System.out.println("Minimum cost is " + minCost[0]);
+		return getResult(words, result);
+	}
+
+	private String getResult(String[] words, int[] result) {
+		int i = 0;
+		int j;
+		//finally put all words with new line added in string buffer and print it.
+		StringBuilder builder = new StringBuilder();
+		do {
+			j = result[i];
+			for (int k = i; k < j; k++) {
+				builder.append(words[k] + " ");
+			}
+			builder.append("\n");
+			i = j;
+		} while (j < words.length);
+		return builder.toString();
 	}
 
 	public int[][] updateMatrix(int[][] matrix) {

@@ -43,8 +43,7 @@ public class StackProblems {
 			} else if (ch == ')') {
 				/*5. Closed Parentheses: 
 				 *   i.If the scanned character is an ‘)’, pop and output from the stack until an ‘(‘ is encountered.*/
-				while (!stack.isEmpty() && stack.peek() != '(')
-					result.append(stack.pop());
+				while (!stack.isEmpty() && stack.peek() != '(') result.append(stack.pop());
 				// ii.Pop the closed parentheses
 				if (!stack.isEmpty() && stack.peek() == '(') {
 					stack.pop();
@@ -64,8 +63,7 @@ public class StackProblems {
 			}
 		}
 
-		while (!stack.isEmpty())
-			result.append(stack.pop());
+		while (!stack.isEmpty()) result.append(stack.pop());
 
 		System.out.println("infixToPostfix: " + result);
 		return result.toString();
@@ -78,10 +76,8 @@ public class StackProblems {
 		builder1.reverse();
 		// System.out.println("before change:" + builder1);
 		for (int i = 0; i < builder1.length(); i++) {
-			if (builder1.charAt(i) == '(')
-				builder1.setCharAt(i, ')');
-			else if (builder1.charAt(i) == ')')
-				builder1.setCharAt(i, '(');
+			if (builder1.charAt(i) == '(') builder1.setCharAt(i, ')');
+			else if (builder1.charAt(i) == ')') builder1.setCharAt(i, '(');
 		}
 		System.out.println("After change:" + builder1);
 		// System.out.println("Infix-Prefix uses Infix-Postfix algorithm.....");
@@ -162,8 +158,7 @@ public class StackProblems {
 		for (int i = 0; i < s.length(); i++) {
 			if (Character.isDigit(s.charAt(i))) {
 				int start = i;
-				while (Character.isDigit(s.charAt(i + 1)))
-					i++;
+				while (Character.isDigit(s.charAt(i + 1))) i++;
 				countStack.push(Integer.parseInt(s.substring(start, i + 1)));
 			} else if (s.charAt(i) == '[') {
 				valStack.push(result);
@@ -171,8 +166,7 @@ public class StackProblems {
 			} else if (s.charAt(i) == ']') {
 				StringBuilder sb = new StringBuilder(valStack.pop());
 				int repeatTimes = countStack.pop();
-				while (repeatTimes-- > 0)
-					sb.append(result);
+				while (repeatTimes-- > 0) sb.append(result);
 				result = sb.toString();
 			} else {
 				result += s.charAt(i);
@@ -198,8 +192,7 @@ public class StackProblems {
 			int currLength = stack[level] + str.length() - level + 1;
 			stack[level + 1] = currLength;
 			// check if it is file and currLength-1 for removing slash
-			if (str.contains("."))
-				maxLength = Math.max(maxLength, currLength - 1);
+			if (str.contains(".")) maxLength = Math.max(maxLength, currLength - 1);
 		}
 
 		return maxLength;
@@ -213,71 +206,14 @@ public class StackProblems {
 
 		for (String s : input.split("\n")) {
 			int lev = s.lastIndexOf("\t") + 1; // number of "\t"
-			while (lev + 1 < stack.size())
-				stack.pop(); // find parent
+			while (lev + 1 < stack.size()) stack.pop(); // find parent
 			int len = stack.peek() + s.length() - lev + 1; // remove "/t", add"/"
 			stack.push(len);
 			// check if it is file
-			if (s.contains("."))
-				maxLen = Math.max(maxLen, len - 1);
+			if (s.contains(".")) maxLen = Math.max(maxLen, len - 1);
 		}
 
 		return maxLen;
-	}
-
-	//	Remove Duplicate Letters - Stack/Hashing
-	/*
-	 * Given a string which contains only lowercase letters, remove duplicate letters so that every letter appear once and 
-	 * only once. You must make sure your result is the smallest in lexicographical order among all possible results.
-	 * Example 1: Input: "bcabc", Output: "abc";
-	 * Example 2: Input: "cbacdcbc", Output: "acdb";
-	 */
-	// Using Hashing, Time Complexity: O(n)
-	public String removeDuplicateLetters1(String s) {
-		int[] hash = new int[26];
-		for (int i = 0; i < s.length(); i++)
-			hash[s.charAt(i) - 'a']++;
-		HashSet<Character> visited = new HashSet<>();
-		StringBuilder result = new StringBuilder();
-		for (int i = 0; i < s.length(); i++) {
-			char ch = s.charAt(i);
-			hash[ch - 'a']--;
-			if (visited.contains(ch))
-				continue;
-			while (result.length() > 0 && ch < result.charAt(result.length() - 1)
-					&& hash[result.charAt(result.length() - 1) - 'a'] > 0) {
-				visited.remove(result.charAt(result.length() - 1));
-				result.deleteCharAt(result.length() - 1);
-			}
-			result.append(ch);
-			visited.add(ch);
-		}
-		return result.toString();
-	}
-
-	// Using Stack, Time Complexity: O(n)
-	public String removeDuplicateLetters(String s) {
-		int[] hash = new int[26];
-		for (int i = 0; i < s.length(); i++)
-			hash[s.charAt(i) - 'a']++;
-		boolean[] visited = new boolean[26];
-		Stack<Character> stack = new Stack<>();
-		for (int i = 0; i < s.length(); i++) {
-			char ch = s.charAt(i);
-			hash[ch - 'a']--;
-			if (visited[ch - 'a'])
-				continue;
-			while (!stack.isEmpty() && ch < stack.peek() && hash[stack.peek() - 'a'] > 0) {
-				visited[stack.peek() - 'a'] = false;
-				stack.pop();
-			}
-			stack.push(ch);
-			visited[ch - 'a'] = true;
-		}
-		StringBuilder result = new StringBuilder();
-		for (char ch : stack)
-			result.append(ch);
-		return result.toString();
 	}
 
 	/********************** Type2: Monotonic Stack Problems *******************/
@@ -298,8 +234,7 @@ public class StackProblems {
 	//Sum of Subarray Minimums
 	//Approach1: Bruteforce Approach
 	public int sumSubarrayMins1(int[] A) {
-		if (A.length == 0)
-			return 0;
+		if (A.length == 0) return 0;
 		int M = 1000000007;
 		int sum = 0, n = A.length, min = 0;
 		for (int i = 0; i < n; i++) {
@@ -323,8 +258,7 @@ public class StackProblems {
 		    (curr-r) -> No of subarrays in right side
 	*/
 	public int sumSubarrayMins(int[] A) {
-		if (A.length == 0)
-			return 0;
+		if (A.length == 0) return 0;
 
 		int M = 1000000007;
 		int sum = 0, n = A.length, l = 0, curr = 0;
@@ -372,8 +306,7 @@ public class StackProblems {
 		for (int i = 1; i < prices.length; i++) {
 
 			/*Pop elements from stack while stack is not empty and top of stack is smaller than price[i]*/
-			while (!stack.isEmpty() && prices[stack.peek()] < prices[i])
-				stack.pop();
+			while (!stack.isEmpty() && prices[stack.peek()] < prices[i]) stack.pop();
 
 			/*If stack becomes empty, then price[i] is greater than all elements on left of it, i.e., price[0], price[1],..price[i-1]. 
 			  Else price[i] is greater than elements after top of stack*/
@@ -385,6 +318,91 @@ public class StackProblems {
 		}
 		System.out.println("Prices: " + Arrays.toString(prices));
 		System.out.println("Span: " + Arrays.toString(span));
+	}
+
+	//	Remove Duplicate Letters - Stack/Hashing
+	/*
+	 * Given a string which contains only lowercase letters, remove duplicate letters so that every letter appear once and 
+	 * only once. You must make sure your result is the smallest in lexicographical order among all possible results.
+	 * Example 1: Input: "bcabc", Output: "abc";
+	 * Example 2: Input: "cbacdcbc", Output: "acdb";
+	 */
+	// Using Hashing, Time Complexity: O(n)
+	public String removeDuplicateLetters1(String s) {
+		int[] hash = new int[26];
+		for (int i = 0; i < s.length(); i++)
+			hash[s.charAt(i) - 'a']++;
+		HashSet<Character> visited = new HashSet<>();
+		StringBuilder result = new StringBuilder();
+		for (int i = 0; i < s.length(); i++) {
+			char ch = s.charAt(i);
+			hash[ch - 'a']--;
+			if (visited.contains(ch)) continue;
+			while (result.length() > 0 && ch < result.charAt(result.length() - 1)
+					&& hash[result.charAt(result.length() - 1) - 'a'] > 0) {
+				visited.remove(result.charAt(result.length() - 1));
+				result.deleteCharAt(result.length() - 1);
+			}
+			result.append(ch);
+			visited.add(ch);
+		}
+		return result.toString();
+	}
+
+	// Using Stack, Time Complexity: O(n)
+	public String removeDuplicateLetters(String s) {
+		int[] hash = new int[26];
+		for (int i = 0; i < s.length(); i++)
+			hash[s.charAt(i) - 'a']++;
+		boolean[] visited = new boolean[26];
+		Stack<Character> stack = new Stack<>();
+		for (int i = 0; i < s.length(); i++) {
+			char ch = s.charAt(i);
+			hash[ch - 'a']--;
+			if (visited[ch - 'a']) continue;
+			while (!stack.isEmpty() && ch < stack.peek() && hash[stack.peek() - 'a'] > 0) {
+				visited[stack.peek() - 'a'] = false;
+				stack.pop();
+			}
+			stack.push(ch);
+			visited[ch - 'a'] = true;
+		}
+		StringBuilder result = new StringBuilder();
+		for (char ch : stack)
+			result.append(ch);
+		return result.toString();
+	}
+
+	/* Remove K Digits: 
+	 * Given a non-negative integer num represented as a string, remove k digits from the number so that the 
+	 * new number is the smallest possible. 
+	 * Note: The length of num is less than 10002 and will be >= k. The given num does not contain any leading zero.
+	 * Input: num = "1432219", k = 3; Output: "1219"
+	 * Input: num = "10200", k = 1; Output: "200"
+	 */public String removeKdigits(String num, int k) {
+		Stack<Character> stack = new Stack<>();
+		for (int i = 0; i < num.length(); i++) {
+			while (!stack.isEmpty() && k > 0 && stack.peek() > num.charAt(i)) {
+				stack.pop();
+				k--;
+			}
+			stack.push(num.charAt(i));
+		}
+
+		// For corner cases same number like "44444"
+		while (k > 0) {
+			stack.pop();
+			k--;
+		}
+
+		StringBuilder sb = new StringBuilder();
+		for (char ch : stack)
+			sb.append(ch);
+
+		// Remove leading zeros
+		while (sb.length() > 1 && sb.charAt(0) == '0') sb.deleteCharAt(0);
+
+		return sb.length() == 0 ? "0" : sb.toString();
 	}
 
 	/********************** Type3: Stack design problems *******************/
@@ -417,8 +435,7 @@ public class StackProblems {
 	// Move values from s1 to s2
 	public void shiftStacks() {
 		if (s2.isEmpty()) {
-			while (!s1.isEmpty())
-				s2.push(s1.pop());
+			while (!s1.isEmpty()) s2.push(s1.pop());
 		}
 	}
 
@@ -429,8 +446,7 @@ public class StackProblems {
 
 	public void display(Stack<Integer> stack) {
 		ListIterator<Integer> listIterator = stack.listIterator();
-		while (listIterator.hasNext())
-			System.out.print(listIterator.next() + " ");
+		while (listIterator.hasNext()) System.out.print(listIterator.next() + " ");
 	}
 
 	/***************** Operations on Stack *****************/
@@ -453,8 +469,7 @@ public class StackProblems {
 	 *     OverAll Time Complexity: O(n) 
 	 */
 	private void reverseStackUtil(Stack<Integer> stack) {
-		if (stack.isEmpty())
-			return;
+		if (stack.isEmpty()) return;
 		int element = stack.pop();
 		// Recursive call to make empty stack
 		reverseStackUtil(stack);
@@ -484,8 +499,7 @@ public class StackProblems {
 	}
 
 	private void sort(Stack<Integer> stack) {
-		if (stack.isEmpty())
-			return;
+		if (stack.isEmpty()) return;
 		int element = stack.pop();
 		// Recursive call to remove all the element from the stack
 		sort(stack);
@@ -522,8 +536,7 @@ public class StackProblems {
 		}
 
 		// Copy the elements back to original stack
-		while (!tempStack.isEmpty())
-			stack.push(tempStack.pop());
+		while (!tempStack.isEmpty()) stack.push(tempStack.pop());
 
 		System.out.println("\nAfter Sort:");
 		stack.stream().forEach(k -> System.out.print(k + " "));
@@ -581,34 +594,24 @@ public class StackProblems {
 				int count = map.get(val);
 				// Update the countMap
 				if (countMap.get(count) != null) {
-					if (countMap.get(count).size() == 1)
-						countMap.remove(count);
-					else
-						countMap.get(count).remove((Integer) val);
+					if (countMap.get(count).size() == 1) countMap.remove(count);
+					else countMap.get(count).remove((Integer) val);
 				}
 				// Add the value
-				if (!countMap.containsKey(count))
-					countMap.put(count, new ArrayList<>());
+				if (!countMap.containsKey(count)) countMap.put(count, new ArrayList<>());
 				countMap.get(count).add(val);
 			} else if (opt == 2) {
-				if (!map.containsKey(val))
-					continue;
+				if (!map.containsKey(val)) continue;
 				int count = map.get(val);
 				// Update the map
-				if (map.get(val) == 1)
-					map.remove(val);
-				else
-					map.put(val, map.get(val) - 1);
+				if (map.get(val) == 1) map.remove(val);
+				else map.put(val, map.get(val) - 1);
 				// Update the countMap
-				if (countMap.get(count).size() == 1)
-					countMap.remove(count);
-				else
-					countMap.get(count).remove((Integer) val);
+				if (countMap.get(count).size() == 1) countMap.remove(count);
+				else countMap.get(count).remove((Integer) val);
 			} else {
-				if (countMap.containsKey(val))
-					result.add(1);
-				else
-					result.add(0);
+				if (countMap.containsKey(val)) result.add(1);
+				else result.add(0);
 			}
 		}
 		return result;

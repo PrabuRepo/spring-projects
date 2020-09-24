@@ -19,9 +19,7 @@ public class HashingProblems {
 
 	private static final int EXTENDED_ASCII_CHAR_SIZE = 256;
 
-	/*************************************
-	 * Type1: Hashing(Array/Set/Map) Problems
-	 ************************/
+	/************************* Type1: Hashing(Array/Set/Map) Problems ************************/
 	/* Unique Word Abbreviation
 	 * An abbreviation of a word follows the form <first letter><number><last letter>. Below are some examples of word
 	 * abbreviations:Assume you have a dictionary and given a word, find whether its abbreviation is unique in the dictionary. A word's abbreviation is unique if no other word from the dictionary has the same abbreviation.
@@ -364,13 +362,10 @@ public class HashingProblems {
 	public int longestSubstringAtleastKRepeatingChar(String s, int k) {
 		char[] str = s.toCharArray();
 		int[] counts = new int[26];
-		int h, i, j, idx, max = 0, unique, noLessThanK;
+		int h, idx, max = 0;
 		for (h = 1; h <= 26; h++) {
 			Arrays.fill(counts, 0);
-			i = 0;
-			j = 0;
-			unique = 0;
-			noLessThanK = 0;
+			int i = 0, j = 0, unique = 0, noLessThanK = 0;
 			while (j < str.length) {
 				if (unique <= h) {
 					idx = str[j] - 'a';

@@ -70,8 +70,9 @@ public class Recursion {
 		math.factorial(n);
 	}
 
-	public void sqrt(int a, int b) {
-		math.gcd1(a, b);
+	//TODO: Revisit this; Its not a recursive solution 
+	public void sqrt(int n) {
+		math.sqrt3(n);
 	}
 
 	// single recursion: tail recursive type
