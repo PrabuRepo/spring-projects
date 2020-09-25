@@ -1,4 +1,4 @@
-package com.basic.datastructures.operations;
+package com.basic.datastructures.adv.operations;
 
 public interface DisjointSetOperations {
 

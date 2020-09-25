@@ -1,6 +1,6 @@
-package com.basic.datastructures.operations;
+package com.basic.algorithms.operations;
 
-public interface Searching {
+public interface SearchOperations {
 
 	public int linearSearch(int[] a, int x);
 

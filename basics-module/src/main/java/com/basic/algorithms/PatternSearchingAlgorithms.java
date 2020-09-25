@@ -1,8 +1,8 @@
 package com.basic.algorithms;
 
-import com.basic.datastructures.operations.PatternSearching;
+import com.basic.algorithms.operations.PatternSearchOperations;
 
-public class PatternSearchingAlgorithms implements PatternSearching {
+public class PatternSearchingAlgorithms implements PatternSearchOperations {
 
 	// Naive Pattern Searching; Time complexity:O(mn) = Exactly O(m(n-m))
 	@Override

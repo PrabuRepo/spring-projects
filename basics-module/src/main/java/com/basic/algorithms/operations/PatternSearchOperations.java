@@ -1,6 +1,6 @@
-package com.basic.datastructures.operations;
+package com.basic.algorithms.operations;
 
-public interface PatternSearching {
+public interface PatternSearchOperations {
 
 	// Naive Pattern Searching; Time complexity:O(mn) = Exactly O(m(n-m))
 	public void naivePatternSearching(String str, String pattern);

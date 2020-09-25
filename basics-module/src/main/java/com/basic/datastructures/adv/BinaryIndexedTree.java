@@ -2,7 +2,7 @@ package com.basic.datastructures.adv;
 
 import java.util.Arrays;
 
-import com.basic.datastructures.operations.BITOperations;
+import com.basic.datastructures.adv.operations.BITOperations;
 
 /*
  * Implement fenwick or binary indexed tree:

@@ -1,8 +1,8 @@
 package com.basic.algorithms;
 
-import com.basic.datastructures.operations.Searching;
+import com.basic.algorithms.operations.SearchOperations;
 
-public class SearchingAlgorithms implements Searching {
+public class SearchingAlgorithms implements SearchOperations {
 
 	// Time complexity: O(n)
 	@Override

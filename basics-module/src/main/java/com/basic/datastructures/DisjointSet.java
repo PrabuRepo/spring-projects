@@ -3,7 +3,7 @@ package com.basic.datastructures;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.basic.datastructures.operations.DisjointSetOperations;
+import com.basic.datastructures.adv.operations.DisjointSetOperations;
 
 /*
  *  Disjoint-set data structure (also called a union–find data structure or merge–find set) is a data structure that tracks a set of

@@ -6,11 +6,11 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Scanner;
 
-import com.basic.datastructures.operations.Sorting;
+import com.basic.algorithms.operations.SortOperations;
 import com.common.model.ListNode;
 import com.common.utilities.Utils;
 
-public class SortingAlgorithms implements Sorting {
+public class SortingAlgorithms implements SortOperations {
 
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);

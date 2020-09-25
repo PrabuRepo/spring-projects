@@ -3,7 +3,7 @@ package com.basic.datastructures.adv;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.basic.datastructures.operations.TrieOperations;
+import com.basic.datastructures.adv.operations.TrieOperations;
 import com.common.model.TrieNode;
 
 /*

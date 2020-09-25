@@ -1,8 +1,8 @@
-package com.basic.datastructures.operations;
+package com.basic.algorithms.operations;
 
 import com.common.model.ListNode;
 
-public interface Sorting {
+public interface SortOperations {
 	public void bubbleSort(int[] a);
 
 	public void bubbleSortRecursive(int[] a);
