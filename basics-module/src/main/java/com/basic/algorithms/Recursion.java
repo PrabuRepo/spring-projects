@@ -18,12 +18,16 @@ import com.common.utilities.Utils;
  *   
  * Types:
  *  1.Linear Recursion: A linear recursive function is a function that only makes a single call to itself each time the function runs
+ *  	i. Head Recursion:
+ *  	ii.Tail Recursion:
  *  2.Tail Recursion: Tail recursion is a form of linear recursion. In tail recursion, the recursive call is the last thing the function
  *  does. Often, the value of the recursive call is returned. As such, tail recursive functions can often be easily implemented in an 
  *  iterative manner; by taking out the recursive call and replacing it with a loop, the same effect can generally be achieved. In fact, 
  *  a good compiler can recognize tail recursion and convert it to iteration in order to optimize the performance of the code.
  *  3.Binary Recursion: Some recursive functions don't just have one call to themself, they have two (or more). Functions with two recursive
  *    calls are referred to as binary recursive functions.
+ *    	1.Linear Tree Recursion
+ *    	2.Exponential Tree Recursion
  *  4.Exponential Recursion: An exponential recursive function is one that, if you were to draw out a representation of all the function calls,
  *    would have an exponential number of calls in relation to the size of the data set (exponential meaning if there were n elements, there
  *    would be O(an) function calls where a is a positive number).
@@ -70,9 +74,9 @@ public class Recursion {
 		math.factorial(n);
 	}
 
-	//TODO: Revisit this; Its not a recursive solution 
-	public void sqrt(int n) {
-		math.sqrt3(n);
+	//Compute the square root of a number using Newton's method (assume EPSILON to be a very small number close to 0):
+	public double sqrt(double x, double a) {
+		return math.mySqrt4(x, a);
 	}
 
 	// single recursion: tail recursive type

@@ -405,22 +405,6 @@ public class BTPatterns {
 		return head;
 	}
 
-	//TODO: Convert a given Binary Tree to Doubly Linked List(using Level order Traversal) -> It's totally wrong
-	public void convertBinaryTreeToDLL3(TreeNode root) {
-		if (root == null) return;
-		Queue<TreeNode> queue = new LinkedList<>();
-		TreeNode curr, prev = null;
-		queue.add(root);
-		while (!queue.isEmpty()) {
-			curr = queue.poll();
-			if (curr.left != null) queue.add(curr.left);
-			if (curr.right != null) queue.add(curr.right);
-			curr.left = prev;
-			curr.right = queue.peek();
-			prev = curr;
-		}
-	}
-
 	/************************* 7.BT Traversal Modification Probs, Misc Probs **************************/
 	//Connect Nodes at Same Level/Populating Next Right Pointers in Each Node I, II
 	// Approach1: Using extended level order traversal - Level order traversal with null markers;

@@ -29,9 +29,6 @@ public class CyclicSortPatterns {
 		System.out.println("\nDuplicate Numbers: ");
 		ob.findDuplicates4(arr).stream().forEach(k -> System.out.print(k + " "));
 		System.out.println("\nDup Number: " + ob.findDuplicate61(new int[] { 1, 4, 4, 3, 2 }));
-		int[] result = ob.findCorruptPair(new int[] { 1, 4, 4, 3, 2 });
-		System.out.println("\nCorrupt Pair: " + Arrays.toString(result));
-
 	}
 
 	// 1.Cyclic Sort:
@@ -297,32 +294,4 @@ public class CyclicSortPatterns {
 
 		return n + 1;
 	}
-
-	//TODO: Move below code to consolidate modules 
-
-	// 6.Find the Corrupt Pair
-	/*
-	 * Given an array containing n+1 numbers taken from the range 1 to n. One of the numbers got duplicated which also resulted in one number going
-	 * missing. Find these numbers.
-	 * Approach1: Cyclic Sort:
-	 * Approach2: Marker Approach
-	 */
-	public int[] findCorruptPair(int[] nums) {
-		// rearrange the array using cyclic sort.
-		int i = 0, n = nums.length;
-		while (i < n) {
-			int val = nums[i] - 1;
-			if (nums[val] != nums[i]) Utils.swap(nums, val, i);
-			else i++;
-		}
-
-		for (i = 0; i < nums.length; i++)
-			if (nums[i] != i + 1) return new int[] { nums[i], i + 1 };
-
-		return new int[] { 0, 0 };
-	}
-
-	// 8.Find the First K Missing Positive Numbers (hard)
-
-	// 9.Insert into a Cyclic Sorted List - Additional Prob - Check this
 }

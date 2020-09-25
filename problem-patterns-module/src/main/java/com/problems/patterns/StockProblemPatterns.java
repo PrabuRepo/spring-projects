@@ -11,7 +11,7 @@ import java.util.Arrays;
  *  min: Minimum BuyingPrice
  *  diff: Maximum Profit = (Sell Price - Buy Price)
  */
-public class StockProblemPattern {
+public class StockProblemPatterns {
 	/*
 	 * Buy and Sell Stock Problems:
 	 * Ref: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/discuss/108870/Most-consistent-ways-of-dealing-with-the-series-of-stock-problems

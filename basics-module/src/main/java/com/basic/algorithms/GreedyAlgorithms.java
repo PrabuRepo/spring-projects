@@ -26,8 +26,7 @@ public class GreedyAlgorithms {
 	 *  Time Complexity: O(nlogn)
 	 */
 	public int maxActivities(int[] start, int[] end) {
-		if (start.length == 0 || end.length == 0)
-			return 0;
+		if (start.length == 0 || end.length == 0) return 0;
 		int n = start.length;
 
 		// Construct Interval Object;

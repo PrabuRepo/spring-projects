@@ -11,15 +11,7 @@ import java.util.Stack;
 import com.common.model.ListNode;
 
 public class MathProblems {
-	/*
-	 * Why Modulo 10^9+7 (1000000007)?
-	 * ===============================
-	 * 1.It should just be large enough to fit in an largest integer data type i.e it makes sure that there is no over flow
-	 *   in result.
-	 * 2.It should be a prime number because if we take mod of a number by Prime the result is generally spaced i.e. the 
-	 *   results are very different results in comparison to mod the number by non-prime, that is why primes are generally
-	 *   used for mod.
-	 */
+
 	/********************** Type1: Number Types ****************************/
 
 	/*
@@ -53,8 +45,7 @@ public class MathProblems {
 			} else if (val % 10 != 9 && val + 1 <= n) {
 				val++;
 			} else {
-				while ((val / 10) % 10 == 9)
-					val /= 10;
+				while ((val / 10) % 10 == 9) val /= 10;
 				val = val / 10 + 1;
 			}
 		}
@@ -77,8 +68,7 @@ public class MathProblems {
 	12 + 02 + 02 = 1
 	 */
 	public boolean isHappy(int n) {
-		if (n == 0)
-			return false;
+		if (n == 0) return false;
 
 		int slow = n, fast = n;
 		do {
@@ -112,14 +102,10 @@ public class MathProblems {
 	 */
 	public boolean isUgly(int num) {
 		while (num > 1) {
-			if (num % 2 == 0)
-				num /= 2;
-			else if (num % 3 == 0)
-				num /= 3;
-			else if (num % 5 == 0)
-				num /= 5;
-			else
-				break;
+			if (num % 2 == 0) num /= 2;
+			else if (num % 3 == 0) num /= 3;
+			else if (num % 5 == 0) num /= 5;
+			else break;
 		}
 		return num == 1 ? true : false;
 	}
@@ -130,15 +116,13 @@ public class MathProblems {
 	 */
 	public boolean isStrobogrammatic(String num) {
 		if (num.length() == 1) {
-			if (num == "0" || num == "1" || num == "8")
-				return true;
+			if (num == "0" || num == "1" || num == "8") return true;
 			return false;
 		}
 
 		int l = 0, h = num.length() - 1;
 		while (l <= h) {
-			if (!isValid(num.charAt(l), num.charAt(h)))
-				return false;
+			if (!isValid(num.charAt(l), num.charAt(h))) return false;
 			l++;
 			h--;
 		}
@@ -182,8 +166,7 @@ public class MathProblems {
 	public int rotatedDigits1(int N) {
 		int count = 0;
 		for (int i = 1; i <= N; i++)
-			if (isValid(i))
-				count++;
+			if (isValid(i)) count++;
 
 		return count;
 	}
@@ -192,10 +175,8 @@ public class MathProblems {
 		boolean valid = false;
 		while (num > 0) {
 			int mod = num % 10;
-			if (mod == 2 || mod == 5 || mod == 6 || mod == 9)
-				valid = true;
-			else if (mod == 3 || mod == 4 || mod == 7)
-				return false;
+			if (mod == 2 || mod == 5 || mod == 6 || mod == 9) valid = true;
+			else if (mod == 3 || mod == 4 || mod == 7) return false;
 			num /= 10;
 		}
 
@@ -247,8 +228,7 @@ public class MathProblems {
 	public List<List<Integer>> generate(int numRows) {
 		List<List<Integer>> result = new ArrayList<>();
 		List<Integer> list = new ArrayList<>();
-		if (numRows == 0)
-			return result;
+		if (numRows == 0) return result;
 
 		list.add(1);
 		result.add(list);
@@ -310,18 +290,15 @@ public class MathProblems {
 
 	// Approach3: Using Iterative; Time Complexity:O(logn)
 	public boolean isPowerOfTwo3(int n) {
-		if (n <= 0)
-			return false;
-		while (n % 2 == 0)
-			n /= 2;
+		if (n <= 0) return false;
+		while (n % 2 == 0) n /= 2;
 
 		return n == 1;
 	}
 
 	// Approach4:
 	public boolean isPowerOfTwo(int n) {
-		if (n == 0)
-			return false;
+		if (n == 0) return false;
 
 		int logValue = (int) Math.round(Math.log(n) / Math.log(2));
 		System.out.println("Log Value: " + logValue);
@@ -331,17 +308,14 @@ public class MathProblems {
 	// Power of Three
 	// Approach1: Using Iteration; Time Complexity:O(log3n); log base 3
 	public boolean isPowerOfThree1(int n) {
-		if (n <= 0)
-			return false;
-		while (n % 3 == 0)
-			n /= 3;
+		if (n <= 0) return false;
+		while (n % 3 == 0) n /= 3;
 		return n == 1;
 	}
 
 	// Approach2: Using lograthmic Math logic
 	public boolean isPowerOfThree(int n) {
-		if (n <= 0)
-			return false;
+		if (n <= 0) return false;
 
 		int logValue = (int) Math.round(Math.log(n) / Math.log(3));
 		return (n == Math.pow(3, logValue));
@@ -356,17 +330,14 @@ public class MathProblems {
 	// Power of Four
 	// Approach1: Using Iteration; Time Complexity:O(log4n); log base 4
 	public boolean isPowerOfFour1(int n) {
-		if (n <= 0)
-			return false;
-		while (n % 4 == 0)
-			n /= 4;
+		if (n <= 0) return false;
+		while (n % 4 == 0) n /= 4;
 		return n == 1;
 	}
 
 	// Approach2: Using lograthmic Math logic
 	public boolean isPowerOfFour(int n) {
-		if (n <= 0)
-			return false;
+		if (n <= 0) return false;
 
 		int logValue = (int) Math.round(Math.log(n) / Math.log(4));
 		return (n == Math.pow(4, logValue));
@@ -395,8 +366,7 @@ public class MathProblems {
 			double p = Math.pow(x, y);
 
 			while (p <= n && p > 0) {
-				if (p == n)
-					return true;
+				if (p == n) return true;
 				y++;
 				p = Math.pow(x, y);
 			}
@@ -409,8 +379,7 @@ public class MathProblems {
 		for (int x = 2; x <= (int) Math.sqrt(n); x++) {
 			float f = (float) Math.log(n) / (float) Math.log(x);
 
-			if ((f - (int) f) == 0.0)
-				return true;
+			if ((f - (int) f) == 0.0) return true;
 		}
 		return false;
 	}
@@ -446,8 +415,7 @@ public class MathProblems {
 			"Eighty", "Ninety" };
 
 	public String numberToWords(int num) {
-		if (num == 0)
-			return "Zero";
+		if (num == 0) return "Zero";
 		return helper(num);
 	}
 
@@ -459,20 +427,13 @@ public class MathProblems {
 		final int TEN = 10;
 
 		String result;
-		if (num < TEN)
-			result = lessThan10[num];
-		else if (num < 20)
-			result = lessThan20[num - 10];
-		else if (num < HUNDRED)
-			result = lessThan100[num / TEN] + " " + helper(num % TEN);
-		else if (num < THOUSAND)
-			result = helper(num / HUNDRED) + " Hundred " + helper(num % HUNDRED);
-		else if (num < MILLION)
-			result = helper(num / THOUSAND) + " Thousand " + helper(num % THOUSAND);
-		else if (num < BILLION)
-			result = helper(num / MILLION) + " Million " + helper(num % MILLION);
-		else
-			result = helper(num / BILLION) + " Billion " + helper(num % BILLION);
+		if (num < TEN) result = lessThan10[num];
+		else if (num < 20) result = lessThan20[num - 10];
+		else if (num < HUNDRED) result = lessThan100[num / TEN] + " " + helper(num % TEN);
+		else if (num < THOUSAND) result = helper(num / HUNDRED) + " Hundred " + helper(num % HUNDRED);
+		else if (num < MILLION) result = helper(num / THOUSAND) + " Thousand " + helper(num % THOUSAND);
+		else if (num < BILLION) result = helper(num / MILLION) + " Million " + helper(num % MILLION);
+		else result = helper(num / BILLION) + " Billion " + helper(num % BILLION);
 
 		return result.trim();
 	}
@@ -491,8 +452,7 @@ public class MathProblems {
 	M             1000
 	 */
 	public int romanToInt(String s) {
-		if (s == null || s == "")
-			return 0;
+		if (s == null || s == "") return 0;
 
 		int next = 0, curr = 0, result = 0;
 		for (int i = s.length() - 1; i >= 0; i--) {
@@ -508,20 +468,13 @@ public class MathProblems {
 	}
 
 	private int getIntvalue(char r) {
-		if (r == 'I')
-			return 1;
-		if (r == 'V')
-			return 5;
-		if (r == 'X')
-			return 10;
-		if (r == 'L')
-			return 50;
-		if (r == 'C')
-			return 100;
-		if (r == 'D')
-			return 500;
-		if (r == 'M')
-			return 1000;
+		if (r == 'I') return 1;
+		if (r == 'V') return 5;
+		if (r == 'X') return 10;
+		if (r == 'L') return 50;
+		if (r == 'C') return 100;
+		if (r == 'D') return 500;
+		if (r == 'M') return 1000;
 		return -1;
 	}
 
@@ -538,8 +491,7 @@ public class MathProblems {
 				num -= values[i];
 				sb.append(strs[i]);
 			}
-			if (num < 1)
-				break;
+			if (num < 1) break;
 		}
 		return sb.toString();
 	}
@@ -649,12 +601,9 @@ public class MathProblems {
 
 	// Add Two Numbers I- Linked List
 	public ListNode addTwoNumbers(ListNode list1, ListNode list2) {
-		if (list1 == null && list2 == null)
-			return null;
-		if (list1 == null)
-			return list2;
-		if (list2 == null)
-			return list1;
+		if (list1 == null && list2 == null) return null;
+		if (list1 == null) return list2;
+		if (list2 == null) return list1;
 
 		ListNode result = new ListNode(0);
 		ListNode current = result;
@@ -667,10 +616,8 @@ public class MathProblems {
 			sum %= 10;
 			current.next = new ListNode(sum);
 
-			if (list1 != null)
-				list1 = list1.next;
-			if (list2 != null)
-				list2 = list2.next;
+			if (list1 != null) list1 = list1.next;
+			if (list2 != null) list2 = list2.next;
 
 			current = current.next;
 		}
@@ -687,8 +634,7 @@ public class MathProblems {
 	 */
 	// Using Stack
 	public ListNode addTwoNumbers1(ListNode l1, ListNode l2) {
-		if (l1 == null && l2 == null)
-			return null;
+		if (l1 == null && l2 == null) return null;
 
 		Stack<Integer> s1 = new Stack<>();
 		Stack<Integer> s2 = new Stack<>();
@@ -720,8 +666,7 @@ public class MathProblems {
 	// Using Tail recursion:
 	// Using Recursive function
 	public ListNode addTwoNumbers2(ListNode l1, ListNode l2) {
-		if (l1 == null && l2 == null)
-			return null;
+		if (l1 == null && l2 == null) return null;
 
 		int len1 = length(l1);
 		int len2 = length(l2);
@@ -739,8 +684,7 @@ public class MathProblems {
 	}
 
 	public ListNode helper(ListNode l1, ListNode l2, int offset) {
-		if (l1 == null)
-			return null;
+		if (l1 == null) return null;
 
 		ListNode prev = (offset == 0) ? new ListNode(l1.data + l2.data) : new ListNode(l1.data);
 		ListNode curr = (offset == 0) ? helper(l1.next, l2.next, 0) : helper(l1.next, l2, offset - 1);
@@ -783,8 +727,7 @@ public class MathProblems {
 
 	// Recursive approach
 	public static int sum2(int a, int b) {
-		if (b == 0)
-			return a;
+		if (b == 0) return a;
 		int sum = a ^ b;
 		int carry = a & b;
 		return sum2(sum, carry << 1);
@@ -808,8 +751,7 @@ public class MathProblems {
 	}
 
 	public static int sub2(int a, int b) {
-		if (b == 0)
-			return a;
+		if (b == 0) return a;
 		int diff = a ^ b;
 		int borrow = (~a) & b;
 		return sub2(diff, borrow << 1);
@@ -861,8 +803,7 @@ public class MathProblems {
 	}
 
 	public ListNode reverse(ListNode head) {
-		if (head == null || head.next == null)
-			return head;
+		if (head == null || head.next == null) return head;
 
 		ListNode p1 = head;
 		ListNode p2 = p1.next;
@@ -879,8 +820,7 @@ public class MathProblems {
 	}
 
 	public ListNode plusOne2(ListNode head) {
-		if (head == null)
-			return null;
+		if (head == null) return null;
 
 		int carry = plusOneUtil(head);
 
@@ -894,8 +834,7 @@ public class MathProblems {
 	}
 
 	public int plusOneUtil(ListNode node) {
-		if (node == null)
-			return 1;
+		if (node == null) return 1;
 		int carry = plusOneUtil(node.next);
 		int sum = node.data + carry;
 		node.data = sum % 10;
@@ -920,8 +859,7 @@ public class MathProblems {
 
 		StringBuilder sb = new StringBuilder();
 		for (int val : values)
-			if (!(sb.length() == 0 && val == 0))
-				sb.append(val);
+			if (!(sb.length() == 0 && val == 0)) sb.append(val);
 
 		return sb.length() == 0 ? "0" : sb.toString();
 	}
@@ -961,8 +899,7 @@ public class MathProblems {
 		boolean negSign = (dividend < 0 ^ divisor < 0) ? true : false;
 
 		// handle special cases
-		if (divisor == 0 || (dividend == Integer.MIN_VALUE && divisor == -1))
-			return Integer.MAX_VALUE;
+		if (divisor == 0 || (dividend == Integer.MIN_VALUE && divisor == -1)) return Integer.MAX_VALUE;
 
 		// get positive & long values
 		long lDividend = Math.abs((long) dividend);
@@ -995,15 +932,12 @@ public class MathProblems {
 	*/
 	public String fractionToDecimal(int numerator, int denominator) {
 		// validation
-		if (numerator == 0)
-			return "0";
-		if (denominator == 0)
-			return "NaN";
+		if (numerator == 0) return "0";
+		if (denominator == 0) return "NaN";
 
 		StringBuilder sb = new StringBuilder();
 		// Find the sign
-		if (numerator < 0 ^ denominator < 0)
-			sb.append("-");
+		if (numerator < 0 ^ denominator < 0) sb.append("-");
 
 		// convert int to long
 		long num = numerator, den = denominator;
@@ -1018,8 +952,7 @@ public class MathProblems {
 		long rem = (num % den) * 10;
 
 		// If rem is zero, return the result
-		if (rem == 0)
-			return sb.toString();
+		if (rem == 0) return sb.toString();
 
 		// Find the fractional part
 		HashMap<Long, Integer> map = new HashMap<>();
@@ -1060,12 +993,9 @@ public class MathProblems {
 
 	// addDigits1 & addDigits are same
 	public int addDigits2(int num) {
-		if (num == 0)
-			return 0;
-		else if (num % 9 == 0)
-			return 9;
-		else
-			return num % 9;
+		if (num == 0) return 0;
+		else if (num % 9 == 0) return 9;
+		else return num % 9;
 	}
 
 	// Below Solutions are loop/recursion:
@@ -1083,8 +1013,7 @@ public class MathProblems {
 	}
 
 	public int addDigits4(int num) {
-		if (num < 9)
-			return num;
+		if (num < 9) return num;
 		int add = 0;
 		while (num > 0) {
 			add += num % 10;
@@ -1103,8 +1032,7 @@ public class MathProblems {
 	         excluding 11,22,33,44,55,66,77,88,99
 	 */
 	public int countNumbersWithUniqueDigits1(int n) {
-		if (n == 0)
-			return 1;
+		if (n == 0) return 1;
 		int res = 10;
 		int uniqueDigits = 9;
 		int availableNumber = 9;
@@ -1121,10 +1049,8 @@ public class MathProblems {
 		dp[0] = 1;
 		int uniqueDigits = 9, sum = 1;
 		for (int i = 1; i <= n && uniqueDigits > 0; i++) {
-			if (i == 1)
-				dp[i] = dp[i - 1] * 9;
-			else
-				dp[i] = dp[i - 1] * uniqueDigits--;
+			if (i == 1) dp[i] = dp[i - 1] * 9;
+			else dp[i] = dp[i - 1] * uniqueDigits--;
 			sum += dp[i];
 		}
 		return sum;
@@ -1172,12 +1098,9 @@ public class MathProblems {
 	 */
 	// Choose Factor: 3; Time Complexity: O(n)
 	public int integerBreak1(int n) {
-		if (n < 2)
-			return 0;
-		if (n == 2)
-			return 1;
-		if (n == 3)
-			return 2;
+		if (n < 2) return 0;
+		if (n == 2) return 1;
+		if (n == 3) return 2;
 
 		int product = 1;
 		while (n > 4) {
@@ -1190,16 +1113,11 @@ public class MathProblems {
 
 	// Time Complexity: O(logn)
 	public int integerBreak(int n) {
-		if (n == 2)
-			return 1;
-		else if (n == 3)
-			return 2;
-		else if (n % 3 == 0)
-			return (int) Math.pow(3, n / 3);
-		else if (n % 3 == 1)
-			return 2 * 2 * (int) Math.pow(3, (n - 4) / 3);
-		else
-			return 2 * (int) Math.pow(3, n / 3);
+		if (n == 2) return 1;
+		else if (n == 3) return 2;
+		else if (n % 3 == 0) return (int) Math.pow(3, n / 3);
+		else if (n % 3 == 1) return 2 * 2 * (int) Math.pow(3, (n - 4) / 3);
+		else return 2 * (int) Math.pow(3, n / 3);
 	}
 
 	/*
@@ -1230,8 +1148,7 @@ public class MathProblems {
 	 */
 	//Time: O(n^2)
 	public int maxPoints(int[][] points) {
-		if (points.length == 0)
-			return 0;
+		if (points.length == 0) return 0;
 		Map<String, Integer> map = new HashMap<>();
 		int n = points.length, result = 0;
 
@@ -1271,8 +1188,7 @@ public class MathProblems {
 	}
 
 	private int gcd(int a, int b) {
-		if (b == 0)
-			return a;
+		if (b == 0) return a;
 		return gcd(b, a % b);
 	}
 	/********* clean up below ****/

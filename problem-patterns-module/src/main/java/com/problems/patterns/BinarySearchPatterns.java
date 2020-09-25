@@ -28,7 +28,6 @@ public class BinarySearchPatterns {
 
 	public int searchInsert2(int[] a, int target) {
 		int l = 0, h = a.length, m = 0;
-
 		while (l < h) {
 			m = l + (h - l) / 2;
 			if (a[m] < target) {
@@ -40,11 +39,7 @@ public class BinarySearchPatterns {
 		return l;
 	}
 
-	/*
-	 * Search for a Range or 
-	 * Find First and Last Position of Element in Sorted Array 
-	 * or Total Occurrences Of K In A Sorted Array
-	 */
+	// Search for a Range/Find First and Last Position of Element in Sorted Array/Total Occurrences Of K In A Sorted Array
 	// Approach1:
 	public int[] searchRange1(int[] nums, int target) {
 		int left = findIndex(nums, target, true);
@@ -259,128 +254,6 @@ public class BinarySearchPatterns {
 			else return m;
 		}
 		return 0;
-	}
-
-}
-
-class BinarySearch2 {
-	/*
-	 * Search for a Range or 
-	 * Find First and Last Position of Element in Sorted Array 
-	 * or Total Occurrences Of K In A Sorted Array
-	 */
-	// Approach1:
-	public int[] searchRange1(int[] nums, int target) {
-		int[] range = { -1, -1 };
-
-		int leftIndex = binarySearch1(nums, target, 0, nums.length - 1, true);
-
-		if (leftIndex == -1) return range;
-
-		int rightIndex = binarySearch1(nums, target, leftIndex, nums.length - 1, false);
-		range[0] = leftIndex;
-		range[1] = rightIndex;
-
-		return range;
-	}
-
-	// Binary Search to find the extreme left & right based on the flag
-	public int binarySearch1(int[] nums, int x, int l, int h, boolean leftFlag) {
-		int m = 0;
-		while (l <= h) {
-			m = l + (h - l) / 2;
-			if (nums[m] == x) { // Modification
-				if (leftFlag && m > 0 && nums[m - 1] == x) {
-					h = m - 1;
-				} else if (!leftFlag && m < nums.length - 1 && nums[m + 1] == x) {
-					l = m + 1;
-				} else {
-					return m;
-				}
-			} else if (x < nums[m]) {
-				h = m - 1;
-			} else {
-				l = m + 1;
-			}
-		}
-		return -1;
-	}
-
-	// Approach2:
-	/* Why does this trick work? When we use mid = (i+j)/2, the mid is rounded to the lowest integer. In other words, 
-	 * mid is always biased towards the left. This means we could have i == mid when j - i == mid, but we NEVER have 
-	 * j == mid. So in order to keep the search range moving, you must make sure the new i is set to something different 
-	 * than mid, otherwise we are at the risk that i gets stuck. But for the new j, it is okay if we set it to mid, since 
-	 * it was not equal to mid anyways. Our two rules in search of the left boundary happen to satisfy these requirements, 
-	 * so it works perfectly in that situation. Similarly, when we search for the right boundary, we must make sure i won't
-	 * get stuck when we set the new i to i = mid. The easiest way to achieve this is by making mid biased to the right, 
-	 * i.e. mid = (i+j)/2+1.
-	 */
-	public int[] searchRange2(int[] nums, int target) {
-		int[] range = { -1, -1 };
-		if (nums.length == 0) return range;
-		int l = 0, h = nums.length - 1, m = 0;
-		// Search Left:
-		while (l < h) {
-			m = l + (h - l) / 2;
-			if (target > nums[m]) l = m + 1;
-			else h = m;
-		}
-
-		if (nums[l] != target) return range;
-
-		range[0] = l; // or h
-
-		// Search Right:And retains the left index
-		h = nums.length - 1;
-		while (l < h) {
-			// Modification: Make mid biased to the right
-			m = l + (h - l) / 2 + 1;
-			if (target < nums[m]) h = m - 1;
-			else l = m;
-		}
-
-		range[1] = l; // or h
-
-		return range;
-	}
-
-	public int[] searchRange21(int[] nums, int target) {
-		int[] range = { -1, -1 };
-
-		int leftIndex = binarySearch1(nums, target, 0, nums.length - 1, true);
-
-		if (leftIndex == -1) return range;
-
-		int rightIndex = binarySearch1(nums, target, leftIndex, nums.length - 1, false);
-		range[0] = leftIndex;
-		range[1] = rightIndex;
-
-		return range;
-	}
-
-	// Approach4:
-	public int[] searchRange4(int[] A, int target) {
-		int start = firstGreaterEqual(A, target);
-
-		if (start == A.length || A[start] != target) return new int[] { -1, -1 };
-
-		// Modification Here: Check target+1
-		return new int[] { start, firstGreaterEqual(A, target + 1) - 1 };
-	}
-
-	private int firstGreaterEqual(int[] A, int target) {
-		int low = 0, high = A.length;
-		while (low < high) {
-			int mid = low + ((high - low) >> 1);
-			// low <= mid < high
-			if (A[mid] < target) {
-				low = mid + 1;
-			} else {
-				high = mid;
-			}
-		}
-		return low;
 	}
 
 }

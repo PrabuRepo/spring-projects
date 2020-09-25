@@ -19,18 +19,15 @@ public class SortingAlgorithms {
 	public void merge(int[] nums1, int m, int[] nums2, int n) {
 		int i = m - 1, j = n - 1, index = nums1.length - 1;
 
-		while (i >= 0 && j >= 0)
-			nums1[index--] = (nums1[i] > nums2[j]) ? nums1[i--] : nums2[j--];
+		while (i >= 0 && j >= 0) nums1[index--] = (nums1[i] > nums2[j]) ? nums1[i--] : nums2[j--];
 
-		while (j >= 0)
-			nums1[index--] = nums2[j--];
+		while (j >= 0) nums1[index--] = nums2[j--];
 
 		// System.out.println("Result: " + Arrays.toString(nums1));
 	}
 
 	public void merge2(int[] nums1, int m, int[] nums2, int n) {
-		if (nums1.length == 0 || nums2.length == 0)
-			return;
+		if (nums1.length == 0 || nums2.length == 0) return;
 		int size = nums1.length - 1, i1 = m - 1, i2 = n - 1;
 		// Merge from max value or last index
 		while (size >= 0 && i1 >= 0 && i2 >= 0) {
@@ -41,8 +38,7 @@ public class SortingAlgorithms {
 			}
 		}
 
-		while (i2 >= 0)
-			nums1[size--] = nums2[i2--];
+		while (i2 >= 0) nums1[size--] = nums2[i2--];
 
 		// System.out.println(Arrays.toString(nums1));
 	}
@@ -55,8 +51,7 @@ public class SortingAlgorithms {
 	//Time:  O(nklogn), Space:O(n); where n is length of array and k is average length of String;
 	//Then compare 2 strings will take O(k).
 	public String largestNumber(int[] nums) {
-		if (nums.length == 0)
-			return "0";
+		if (nums.length == 0) return "0";
 
 		String[] arr = new String[nums.length];
 		for (int i = 0; i < nums.length; i++)
@@ -65,8 +60,7 @@ public class SortingAlgorithms {
 		Arrays.sort(arr, (a, b) -> (b + a).compareTo(a + b));
 
 		//After sorting if first value is zero, then all elements will be zero.
-		if (arr[0].charAt(0) == '0')
-			return "0";
+		if (arr[0].charAt(0) == '0') return "0";
 
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < arr.length; i++)
@@ -88,14 +82,11 @@ public class SortingAlgorithms {
 			count[a[i]]++;
 
 		int index = 0;
-		while (count[0]-- > 0)
-			a[index++] = 0;
+		while (count[0]-- > 0) a[index++] = 0;
 
-		while (count[1]-- > 0)
-			a[index++] = 1;
+		while (count[1]-- > 0) a[index++] = 1;
 
-		while (count[2]-- > 0)
-			a[index++] = 2;
+		while (count[2]-- > 0) a[index++] = 2;
 
 		return a;
 	}
@@ -200,8 +191,7 @@ public class SortingAlgorithms {
 		for (int i = 1; i < n; i++) {
 			key = arr[i];
 			// if current element is positive do nothing
-			if (key > 0)
-				continue;
+			if (key > 0) continue;
 
 			/* if current element is negative, shift positive elements of arr[0..i-1], to one position to their right */
 			j = i - 1;
@@ -219,8 +209,7 @@ public class SortingAlgorithms {
 	}
 
 	public void divideGroups(int[] arr, int low, int high) {
-		if (low >= high)
-			return;
+		if (low >= high) return;
 		int mid = (low + high) / 2;
 		divideGroups(arr, low, mid);
 		divideGroups(arr, mid + 1, high);
@@ -234,10 +223,8 @@ public class SortingAlgorithms {
 	public void mergeGroup(int[] arr, int low, int mid, int high) {
 		int l = low;
 		int r = mid + 1;
-		while (l <= mid && arr[l] <= 0)
-			l++;
-		while (r <= high && arr[r] <= 0)
-			r++;
+		while (l <= mid && arr[l] <= 0) l++;
+		while (r <= high && arr[r] <= 0) r++;
 
 		reverse(arr, l, mid);
 		reverse(arr, mid + 1, r - 1);
@@ -309,10 +296,8 @@ public class SortingAlgorithms {
 					rightrotate(arr, n, outofplace, index);
 
 					// the new out-of-place entry is now 2 steps ahead
-					if (index - outofplace > 2)
-						outofplace = outofplace + 2;
-					else
-						outofplace = -1;
+					if (index - outofplace > 2) outofplace = outofplace + 2;
+					else outofplace = -1;
 				}
 			}
 
@@ -344,8 +329,7 @@ public class SortingAlgorithms {
 		}
 
 		// If the total element in array is odd then print the last middle element.
-		if (n % 2 != 0)
-			System.out.print(arr[i]);
+		if (n % 2 != 0) System.out.print(arr[i]);
 	}
 
 	// Relative Sorting - Sorting based on another array
@@ -353,7 +337,31 @@ public class SortingAlgorithms {
 	/****************** Type3: Min no of swap required to sort array ***********************/
 
 	/********************************* Type4: Cyclic Sort/Marker Alg ************************/
+	// 6.Find the Corrupt Pair
+	/*
+	 * Given an array containing n+1 numbers taken from the range 1 to n. One of the numbers got duplicated which also resulted in one number going
+	 * missing. Find these numbers.
+	 * Approach1: Cyclic Sort:
+	 * Approach2: Marker Approach
+	 */
+	public int[] findCorruptPair(int[] nums) {
+		// rearrange the array using cyclic sort.
+		int i = 0, n = nums.length;
+		while (i < n) {
+			int val = nums[i] - 1;
+			if (nums[val] != nums[i]) Utils.swap(nums, val, i);
+			else i++;
+		}
 
+		for (i = 0; i < nums.length; i++)
+			if (nums[i] != i + 1) return new int[] { nums[i], i + 1 };
+
+		return new int[] { 0, 0 };
+	}
+
+	// 8.Find the First K Missing Positive Numbers (hard)
+
+	// 9.Insert into a Cyclic Sorted List - Additional Prob - Check this
 	/********************* Type1: Interval Patterns - Selection Problems **************************/
 	/*
 	 * Max length chain/Maximum Length of Pair Chain: 
@@ -368,8 +376,7 @@ public class SortingAlgorithms {
 				i = j;
 				j++;
 			} else {
-				if (pairs[i][1] > pairs[j][1])
-					i = j;
+				if (pairs[i][1] > pairs[j][1]) i = j;
 				j++;
 			}
 		}
@@ -399,23 +406,20 @@ public class SortingAlgorithms {
 		Collections.sort(list);*/
 		int i = 0;
 		for (i = 0; i < list.size(); i++) {
-			if (val == list.get(i))
-				return;
+			if (val == list.get(i)) return;
 			if (val < list.get(i)) {
 				list.add(i, val);
 				break;
 			}
 		}
-		if (list.isEmpty() || list.size() == i)
-			list.add(val);
+		if (list.isEmpty() || list.size() == i) list.add(val);
 	}
 
 	public List<Interval> getIntervals1() {
 		List<Interval> intervals = new ArrayList<>();
 		for (int i = 0; i < list.size(); i++) {
 			int s = i;
-			while (i < list.size() - 1 && (list.get(i) + 1 == list.get(i + 1) || list.get(i) == list.get(i + 1)))
-				i++;
+			while (i < list.size() - 1 && (list.get(i) + 1 == list.get(i + 1) || list.get(i) == list.get(i + 1))) i++;
 
 			intervals.add(new Interval(list.get(s), list.get(i)));
 		}
@@ -423,8 +427,7 @@ public class SortingAlgorithms {
 	}
 
 	public void addNum2(int val) {
-		if (tree.containsKey(val))
-			return;
+		if (tree.containsKey(val)) return;
 		Integer l = tree.lowerKey(val);
 		Integer h = tree.higherKey(val);
 		if (l != null && h != null && tree.get(l).end + 1 == val && h == val + 1) {
@@ -457,19 +460,15 @@ public class SortingAlgorithms {
 
 		for (int i = 0; i < a.length; i++) {
 			p = a[i];
-			if (i > 0 && a[i - 1] == a[i])
-				continue;
+			if (i > 0 && a[i - 1] == a[i]) continue;
 			for (int j = 0; j < b.length; j++) {
 				q = b[j];
-				if (p > q || (j > 0 && b[j - 1] == b[j]))
-					continue;
+				if (p > q || (j > 0 && b[j - 1] == b[j])) continue;
 				for (int k = 0; k < c.length; k++) {
 					r = c[k];
-					if (k > 0 && a[k - 1] == a[k])
-						continue;
+					if (k > 0 && a[k - 1] == a[k]) continue;
 
-					if (q >= r)
-						count++;
+					if (q >= r) count++;
 				}
 			}
 		}
@@ -486,17 +485,14 @@ public class SortingAlgorithms {
 		long pCount = 0, rCount = 0, total = 0;
 		for (int q = 0; q < b.length; q++) {
 			while (p < a.length && a[p] <= b[q]) {
-				if (p == 0 || a[p - 1] != a[p])
-					pCount++;
+				if (p == 0 || a[p - 1] != a[p]) pCount++;
 				p++;
 			}
 			while (r < c.length && c[r] <= b[q]) {
-				if (r == 0 || c[r - 1] != c[r])
-					rCount++;
+				if (r == 0 || c[r - 1] != c[r]) rCount++;
 				r++;
 			}
-			if (q == 0 || b[q - 1] != b[q])
-				total += pCount * rCount;
+			if (q == 0 || b[q - 1] != b[q]) total += pCount * rCount;
 		}
 
 		return total;

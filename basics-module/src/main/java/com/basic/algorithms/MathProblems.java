@@ -100,7 +100,7 @@ public class MathProblems {
 	}
 
 	// Modification of Binary Search
-	public int mySqrt(int n) {
+	public int mySqrt2(int n) {
 		if (n == 0 || n == 1) return n;
 
 		int low = 1, high = n / 2, div = 0, mid;
@@ -115,7 +115,7 @@ public class MathProblems {
 		return low - 1;
 	}
 
-	public int sqrt3(int A) {
+	public int mySqrt3(int A) {
 		if (A <= 1) return A;
 
 		int l = 2, h = A / 2, m = 0, resut = 1;
@@ -135,6 +135,16 @@ public class MathProblems {
 		return resut;
 	}
 
+	private double EPSILON = 0;
+
+	//Sqrt calculation using recursion:
+	//Compute the square root of a number using Newton's method (assume EPSILON to be a very small number close to 0):
+	public double mySqrt4(double x, double a) {
+		double difference = a * x - x;
+		if (difference < 0.0) difference = -difference;
+		if (difference < EPSILON) return (a);
+		else return (mySqrt4(x, (a + x / a) / 2.0));
+	}
 	/*
 	 * Greatest Common Divisor (GCD): (Greatest Common Divisor or Greatest common Factor or Highest Common Factor(GCD or GCF or HCF))
 	 * The GCD of two or more numbers is the largest positive number that divides all the numbers that are considered. For
@@ -322,5 +332,19 @@ public class MathProblems {
 
 	private boolean isIntOverFlow(int num, int nextVal, int expected) {
 		return (num > Integer.MAX_VALUE / 10 || (num == Integer.MAX_VALUE / 10 && nextVal > expected));
+	}
+
+	/*
+	 * Why Modulo 10^9+7 (1000000007)?
+	 * ===============================
+	 * 1.It should just be large enough to fit in an largest integer data type i.e it makes sure that there is no over flow
+	 *   in result.
+	 * 2.It should be a prime number because if we take mod of a number by Prime the result is generally spaced i.e. the 
+	 *   results are very different results in comparison to mod the number by non-prime, that is why primes are generally
+	 *   used for mod.
+	 */
+	//TODO: Write various samples to understand the this
+	public void testLargeInteger() {
+
 	}
 }

@@ -1,6 +1,6 @@
 package com.problems.patterns;
 
-public class PrefixSumPattern {
+public class PrefixSumPatterns {
 
 	/*
 	 * Prefix Sum Array: Given an array arr[] of size n, its prefix sum array is

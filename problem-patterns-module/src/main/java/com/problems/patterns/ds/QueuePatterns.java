@@ -77,10 +77,6 @@ public class QueuePatterns {
 		}
 	}
 
-	//LRU Cache
-
-	//LFU Cache 
-
 	/********************* Type1: Monotonic Queue Problems ****************/
 	/*
 	 * Monotonic Queue: A monotonic Queue is a data structure the elements from the front to the end is strictly either increasing or decreasing.
