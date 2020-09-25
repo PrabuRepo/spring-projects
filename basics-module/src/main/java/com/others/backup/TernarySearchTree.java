@@ -1,6 +1,6 @@
-package backup;
+package com.others.backup;
 
-public class SkipList {
+public class TernarySearchTree {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

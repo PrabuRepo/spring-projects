@@ -936,6 +936,182 @@ public class DynamicProgramming {
 		return builder.toString();
 	}
 
+	/* Largest Divisible Subset: 
+	 * Given a set of distinct positive integers, find the largest subset such that every pair (Si, Sj) of elements in
+	 * this subset satisfies: Si % Sj = 0 or Sj % Si = 0. If there are multiple solutions, return any subset is fine.
+	 * Example 1: nums: [1,2,3] Result: [1,2] (of course, [1,3] will also be ok)
+	 * Example 2: nums: [1,2,4,8] Result: [1,2,4,8]
+	 */
+	// Approach: DP Bottom Approach; Similar to LIS
+	public List<Integer> largestDivisibleSubset(int[] nums) {
+		List<Integer> result = new ArrayList<>();
+		if (nums == null || nums.length == 0) return result;
+
+		int n = nums.length, max = 0, maxIndex = -1;
+		int[] count = new int[n];
+		int[] prevPath = new int[n];
+		// Sort the arrau
+		Arrays.sort(nums);
+
+		for (int i = 0; i < n; i++) {
+			count[i] = 1;
+			prevPath[i] = -1;
+			for (int j = i - 1; j >= 0; j--) {
+				if (nums[i] % nums[j] == 0 && count[i] <= count[j]) {
+					count[i] = count[j] + 1;
+					prevPath[i] = j;
+				}
+			}
+			// Find the max count
+			if (count[i] > max) {
+				max = count[i];
+				maxIndex = i;
+			}
+		}
+
+		while (maxIndex != -1) {
+			result.add(nums[maxIndex]);
+			maxIndex = prevPath[maxIndex];
+		}
+
+		return result;
+	}
+
+	/*Android unlock patterns: 
+	 * 	Given an Android 3x3 key lock screen and two integers m and n, where 1 <= m <= n <= 9, count the total number of unlock patterns
+	 *  of the Android lock screen, which consist of minimum of m keys and maximum n keys.
+	 *  Rules for a valid pattern:
+	 */
+
+	// cur: the current position
+	// remain: the steps remaining
+	int DFS(boolean vis[], int[][] skip, int cur, int remain) {
+		if (remain < 0) return 0;
+		if (remain == 0) return 1;
+		vis[cur] = true;
+		int rst = 0;
+		for (int i = 1; i <= 9; ++i) {
+			// If vis[i] is not visited and (two numbers are adjacent or skip number is already visited)
+			if (!vis[i] && (skip[cur][i] == 0 || (vis[skip[cur][i]]))) {
+				rst += DFS(vis, skip, i, remain - 1);
+			}
+		}
+		vis[cur] = false;
+		return rst;
+	}
+
+	public int numberOfPatterns(int m, int n) {
+		// Skip array represents number to skip between two pairs
+		int[][] skip = new int[10][10];
+		skip[1][3] = skip[3][1] = 2;
+		skip[1][7] = skip[7][1] = 4;
+		skip[3][9] = skip[9][3] = 6;
+		skip[7][9] = skip[9][7] = 8;
+		skip[1][9] = skip[9][1] = skip[2][8] = skip[8][2] = skip[3][7] = skip[7][3] = skip[4][6] = skip[6][4] = 5;
+		boolean vis[] = new boolean[10];
+		int rst = 0;
+		// DFS search each length from m to n
+		for (int i = m; i <= n; ++i) {
+			rst += DFS(vis, skip, 1, i - 1) * 4; // 1, 3, 7, 9 are symmetric
+			rst += DFS(vis, skip, 2, i - 1) * 4; // 2, 4, 6, 8 are symmetric
+			rst += DFS(vis, skip, 5, i - 1); // 5
+		}
+		return rst;
+	}
+
+	/* Encode String with Shortest Length: Given a non-empty string, encode the string such that its encoded length is the shortest.
+	 * The encoding rule is: k[encoded_string], where the encoded_string inside the square brackets is being repeated exactly k times.
+	 * Input: "aaaaaaaaaa"; Output: "10[a]"
+	 * Input: "aabcaabcd"; Output: "2[aabc]d"
+	 * Input: "abbbabbbcabbbabbbc"
+	 * Output: "2[2[abbb]c]"
+	 */
+
+	public String encode(String s) {
+		String[][] dp = new String[s.length()][s.length()];
+		for (int l = 0; l < s.length(); l++) {
+			for (int i = 0; i < s.length() - l; i++) {
+				int j = i + l;
+				String substr = s.substring(i, j + 1);
+				if (l < 4) dp[i][j] = substr;
+				else {
+					dp[i][j] = substr;
+					for (int k = i; k < j; k++) {
+						if ((dp[i][k] + dp[k + 1][j]).length() < dp[i][j].length()) dp[i][j] = dp[i][k] + dp[k + 1][j];
+					}
+					for (int k = 0; k < l; k++) {
+						String repeatStr = substr.substring(0, k + 1);
+						if (repeatStr != null && substr.length() % repeatStr.length() == 0
+								&& substr.replaceAll(repeatStr, "").length() == 0) {
+							String ss = substr.length() / repeatStr.length() + "[" + dp[i][i + k] + "]";
+							if (ss.length() < dp[i][j].length()) {
+								dp[i][j] = ss;
+							}
+						}
+					}
+				}
+			}
+		}
+		return dp[0][s.length() - 1];
+	}
+
+	public String encode2(String s) {
+		if (s == null || s.length() <= 4) return s;
+
+		int len = s.length();
+
+		String[][] dp = new String[len][len];
+
+		// iterate all the length, stay on the disgnose of the dp matrix
+		for (int l = 0; l < len; l++) {
+			for (int i = 0; i < len - l; i++) {
+				int j = i + l;
+				String substr = s.substring(i, j + 1);
+				dp[i][j] = substr;
+				if (l < 4) continue;
+
+				for (int k = i; k < j; k++) {
+					if (dp[i][k].length() + dp[k + 1][j].length() < dp[i][j].length()) {
+						dp[i][j] = dp[i][k] + dp[k + 1][j];
+					}
+				}
+
+				String pattern = kmp(substr);
+				if (pattern.length() == substr.length()) continue; // no repeat pattern found
+				String patternEncode = substr.length() / pattern.length() + "[" + dp[i][i + pattern.length() - 1] + "]";
+				if (patternEncode.length() < dp[i][j].length()) {
+					dp[i][j] = patternEncode;
+				}
+			}
+		}
+
+		return dp[0][len - 1];
+	}
+
+	private String kmp(String s) {
+		int len = s.length();
+		int[] LPS = new int[len];
+
+		int i = 1, j = 0;
+		LPS[0] = 0;
+		while (i < len) {
+			if (s.charAt(i) == s.charAt(j)) {
+				LPS[i++] = ++j;
+			} else if (j == 0) {
+				LPS[i++] = 0;
+			} else {
+				j = LPS[j - 1];
+			}
+		}
+
+		int patternLen = len - LPS[len - 1];
+		if (patternLen != len && len % patternLen == 0) {
+			return s.substring(0, patternLen);
+		} else {
+			return s;
+		}
+	}
+
 	/***************************** Methods for reusage *******************/
 	// Time: O(n*sum); Space: O(sum)
 	public boolean isSubsetSum32(int[] arr, int sum) {

@@ -17,10 +17,10 @@ Applications of bit operations:
    of serial interface.
 */
 
-public class BitAlgorithmsBasic {
+public class BitAlgorithms {
 
 	public static void main(String[] args) {
-		BitAlgorithmsBasic ob = new BitAlgorithmsBasic();
+		BitAlgorithms ob = new BitAlgorithms();
 
 		ob.testBasicIdeas();
 

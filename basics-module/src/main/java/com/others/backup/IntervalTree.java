@@ -1,4 +1,4 @@
-package backup;
+package com.others.backup;
 
 public class IntervalTree {
 
