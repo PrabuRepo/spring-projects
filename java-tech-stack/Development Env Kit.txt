@@ -1,0 +1,30 @@
+Java Environment Kit:
+	- Installation: 
+		Java(JDK/JRE/Open JDK), Maven, Git
+	- IDE:
+		Eclipse, Spring Suite, RAD
+	- Database: 
+		SQL DB Server: MySql, Microsoft SQL server, DB2, Oracle
+		SQL DB Client: MySql WorkBench, Squirrel Client 
+	- Web Server/App Server:
+		Server: Tomcat, WebSphere, Weblogic, Jboss
+		Client: PuTTY, WinScp	
+	- Queue:
+		Queue Server/Manager: IBM MQ, Rabbit MQ, Apache Active MQ, Apache Kafka 
+		Queue Client: Websphere MQ Manager 
+	- Repository:
+		git: git installation
+		git client: bash, SourceTree
+		Server: bitbucket, github
+	- Other Utilities:
+		Beyond Compare 
+		Decompiler: jd-gui 
+		Service Testing: SOAP UI, Postman Client 
+		KeyStore Explorer	
+		WinMerge
+		NotePad++
+		7-Zip
+	- Applications/Solutions:
+		Jenkins
+		Apache Archiva, JFrog Artifactory 
+		SonarQube 
