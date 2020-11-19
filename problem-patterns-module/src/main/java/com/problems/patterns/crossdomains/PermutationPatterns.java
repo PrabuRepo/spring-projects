@@ -40,7 +40,13 @@ public class PermutationPatterns {
 	 * all of the permutations in order, we get the following sequence for n = 3: "123" "132" "213" "231" "312" "321"
 	 * Given n and k, return the kth permutation sequence. 
 	 * Example 1: Input: n = 3, k = 3; Output: "213";
-	 * Time Complexity: O(n)
+	 */
+
+	/* Time Complexity: O(n^2); 
+	 * Because list remove operation takes O(n), so 2nd for loop in this method takes O(n^2).
+	 * But still we can consider this solution as linear time, because input n range from 1 to n, so list remove operation
+	 * will be constant time.
+	 * 
 	 * Ref: https://leetcode.com/problems/permutation-sequence/discuss/22507/%22Explain-like-I'm-five%22-Java-Solution-in-O(n)
 	 */
 	public String getPermutation(int n, int k) {
@@ -58,16 +64,15 @@ public class PermutationPatterns {
 
 		k--; //decrease k by 1
 		StringBuilder sb = new StringBuilder();
-		for (int i = 1; i <= n; i++) {
-			int index = k / fact[n - i];
+		for (int i = n - 1; i >= 0; i--) {
+			int index = k / fact[i];
 			sb.append(nums.get(index));
 			nums.remove(index);
-			k %= fact[n - i]; //or k -= (index * fact[n-i]);
+			k %= fact[i]; //or k -= (index * fact[i]);
 		}
 
 		return sb.toString();
 	}
-
 	/*Next Permutation
 	 * Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
 	 * If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).
@@ -78,28 +83,31 @@ public class PermutationPatterns {
 	 * 1,1,5 -> 1,5,1
 	 */
 
+	/*
+	* Reference: Next lexicographical permutation algorithm
+	* https://www.nayuki.io/page/next-lexicographical-permutation-algorithm
+	*/
 	//Time: O(n), Space: O(1)
 	public void nextPermutation(int[] nums) {
 		if (nums.length <= 1) return;
 
 		int i = nums.length - 1;
-		//1.Find first increasing seq from the right
-		while (i > 0) {
-			if (nums[i - 1] < nums[i]) break;
-			i--;
-		}
+		//1.Find longest non-increasing suffix
+		while (i > 0 && nums[i - 1] >= nums[i]) i--;
 
 		if (i > 0) {
-			//2.Find first max value which is greater than (i-1)th index value from the last index.
-			int maxIndex = nums.length - 1;
-			while (maxIndex >= i) {
-				if (nums[maxIndex] > nums[i - 1]) break;
-				maxIndex--;
-			}
-			swap(nums, i - 1, maxIndex);
+			int j = nums.length - 1;
+			//2.Identify thr pivot; Let array[i - 1] be the pivot
+			int pivot = nums[i - 1];
+
+			//3.Find rightmost element that exceeds the pivot
+			while (j >= i && nums[j] <= pivot) j--;
+
+			//4. Swap the pivot(i-1) with j
+			swap(nums, i - 1, j);
 		}
 
-		//3.Reverse the values from index i to n-1;
+		//5. Reverse the suffix
 		reverse(nums, i, nums.length - 1);
 	}
 

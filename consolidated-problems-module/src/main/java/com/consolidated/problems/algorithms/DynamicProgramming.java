@@ -581,12 +581,13 @@ public class DynamicProgramming {
 	 */
 	// Approach1: Recursion
 	// Approach2: Using DP-Top Down Approach
+
 	// Approach3: Using DP-Bottom Up Approach- Time: O(mn), Space: O(mn)
 	public boolean wildCardMatch3(String s, String p) {
 		int m = s.length(), n = p.length();
 		boolean[][] dp = new boolean[m + 1][n + 1];
 		dp[0][0] = true;
-		for (int j = 2; j <= n; j++)
+		for (int j = 1; j <= n; j++)
 			if (p.charAt(j - 1) == '*') dp[0][j] = dp[0][j - 1];
 		for (int i = 1; i <= m; i++) {
 			for (int j = 1; j <= n; j++) {
@@ -604,7 +605,7 @@ public class DynamicProgramming {
 		return dp[m][n];
 	}
 
-	// Approach4: Linear Time Solution
+	// Approach4: Greedy Algorithm - Time:O(m), Space: O(1)
 	public int isMatch(final String s, final String p) {
 		int m = s.length(), n = p.length();
 		int i = 0, j = 0, star = -1, mark = 0;

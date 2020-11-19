@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 import com.common.model.Cell;
 import com.common.model.ListNode;
 import com.common.model.TreeNode;
-import com.problems.patterns.crossdomains.KthElementPattern;
+import com.problems.patterns.crossdomains.KthElementPatterns;
 
 public class HeapPatterns {
 
@@ -205,7 +205,7 @@ public class HeapPatterns {
 		return diff;
 	}
 
-	private KthElementPattern kthElementPattern;
+	private KthElementPatterns kthElementPattern;
 
 	public void kthSmallestInMatrix(int[][] matrix, int k) {
 		kthElementPattern.kthSmallestInMatrix1(matrix, k);

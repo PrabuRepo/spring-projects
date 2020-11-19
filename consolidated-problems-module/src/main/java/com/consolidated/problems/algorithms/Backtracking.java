@@ -366,6 +366,7 @@ public class Backtracking {
 							if (Integer.parseInt(c) > 255 || (c.charAt(0) == '0' && c.length() > 1)) continue;
 							String d = s.substring(i + j + k, i + j + k + l);
 							if (Integer.parseInt(d) > 255 || (d.charAt(0) == '0' && d.length() > 1)) continue;
+
 							res.add(a + "." + b + "." + c + "." + d);
 						}
 		return res;
@@ -373,20 +374,26 @@ public class Backtracking {
 
 	// Approach2: Recursive Method; DFS Search
 	public List<String> restoreIpAddresses2(String s) {
-		List<String> solutions = new ArrayList<String>();
-		restoreIp(s, solutions, 0, "", 0);
-		solutions.stream().forEach(k -> System.out.print(k + ", "));
-		return solutions;
+		List<String> result = new ArrayList<>();
+		if (s == null || s.length() == 0) return result;
+
+		dfs(s, "", 0, 0, result);
+		result.stream().forEach(k -> System.out.print(k + ", "));
+		return result;
 	}
 
-	private void restoreIp(String ip, List<String> solutions, int idx, String restored, int digits) {
-		if (digits == 4 && idx == ip.length()) solutions.add(restored);
-		if (digits == 4) return;
+	private void dfs(String s, String ip, int idx, int parts, List<String> result) {
+		if (parts == 4 && idx == s.length()) result.add(ip);
+		if (parts == 4 || idx == s.length()) return;
+
 		for (int i = 1; i <= 3; i++) {
-			if (idx + i > ip.length()) break;
-			String s = ip.substring(idx, idx + i);
-			if ((s.startsWith("0") && s.length() > 1) || (i == 3 && Integer.parseInt(s) > 255)) continue;
-			restoreIp(ip, solutions, idx + i, restored + s + (digits == 3 ? "" : "."), digits + 1);
+			if (idx + i > s.length()) break;
+
+			String sub = s.substring(idx, idx + i);
+			if (Integer.parseInt(sub) > 255 || (sub.charAt(0) == '0' && sub.length() > 1)) continue;
+
+			String concat = ip + sub + (parts == 3 ? "" : ".");
+			dfs(s, concat, idx + i, parts + 1, result);
 		}
 	}
 

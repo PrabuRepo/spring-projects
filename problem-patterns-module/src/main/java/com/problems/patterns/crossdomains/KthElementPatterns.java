@@ -11,7 +11,7 @@ import com.common.model.TreeNode;
 import com.common.utilities.Utils;
 
 /*Kth element Pattern - Heap/BS/QuickSelect*/
-public class KthElementPattern {
+public class KthElementPatterns {
 	//	Kth Smallest Element in a Sorted Matrix
 	//	Kth Smallest Number in Multiplication Table
 	//	Kth Smallest Number in M Sorted Lists
