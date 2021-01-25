@@ -26,13 +26,13 @@ public class Utils {
 	public static int max(int[] arr) {
 		int max = arr[0];
 		for (int i = 1; i < arr.length; i++)
-			if (max < arr[i])
-				max = arr[i];
+			if (max < arr[i]) max = arr[i];
 		return max;
 	}
 
 	// Swap the (int)elements in index i & j
 	public static void swap(int[] a, int i, int j) {
+		if (i == j) return;
 		int temp = a[i];
 		a[i] = a[j];
 		a[j] = temp;
@@ -81,10 +81,8 @@ public class Utils {
 		int n = poly.length;
 		for (int i = 0; i < n; i++) {
 			System.out.print(poly[i]);
-			if (i != 0)
-				System.out.print("x^" + i);
-			if (i != n - 1)
-				System.out.print(" + ");
+			if (i != 0) System.out.print("x^" + i);
+			if (i != n - 1) System.out.print(" + ");
 		}
 	}
 
@@ -119,8 +117,7 @@ public class Utils {
 
 	// Find the gcd of given two numbers
 	public static int gcd(int a, int b) {
-		if (b == 0)
-			return a;
+		if (b == 0) return a;
 		return gcd(b, a % b);
 	}
 
@@ -142,22 +139,19 @@ public class Utils {
 
 	// Reverse the array of integers
 	public static void reverse(int[] nums, int start, int end) {
-		while (start < end)
-			swap(nums, start++, end--);
+		while (start < end) swap(nums, start++, end--);
 	}
 
 	// Reverse the String
 	public static String reverse(String str, int start, int end) {
 		char[] arr = str.toCharArray();
-		while (start < end)
-			swap(arr, start++, end--);
+		while (start < end) swap(arr, start++, end--);
 		return new String(arr);
 	}
 
 	// Find the log base 2 value of given value
 	public static int log2(int n) {
-		if (n <= 0)
-			throw new IllegalArgumentException();
+		if (n <= 0) throw new IllegalArgumentException();
 		return 31 - Integer.numberOfLeadingZeros(n);
 	}
 
@@ -165,7 +159,8 @@ public class Utils {
 		String str = "JEDINY /LUK�S";
 		for (int i = 0; i < str.length(); i++) {
 			char ch = str.charAt(i);
-			System.out.println(ch + ": " + (int) ch + " -> " + Charset.forName("ISO_8859_1").newEncoder().canEncode(ch));
+			System.out
+					.println(ch + ": " + (int) ch + " -> " + Charset.forName("ISO_8859_1").newEncoder().canEncode(ch));
 		}
 	}
 

@@ -3,9 +3,11 @@ package com.basic.datastructures;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.basic.datastructures.adv.operations.DJOperations;
 import com.basic.datastructures.adv.operations.DisjointSetOperations;
 
 /*
+ * 	Disjoint-Set/Union-Find is a datastructure that keeps track of elements which are split into one or more disjointsets.
  *  Disjoint-set data structure (also called a union–find data structure or merge–find set) is a data structure that tracks a set of
  *  elements partitioned into a number of disjoint (non-overlapping) subsets. It provides near-constant-time operations to add new sets,
  *  to merge existing sets, and to determine whether elements are in the same set
@@ -16,6 +18,15 @@ import com.basic.datastructures.adv.operations.DisjointSetOperations;
  *  3. Path Compression (Modifications to find()) : It speeds up the data structure by compressing the height of the trees. It can be 
  *     achieved by inserting a small caching mechanism into the Find operation. 
  *     
+ *  Time Complexity:
+ *  	Construction - O(n)
+ *  	Union - alpha(n)
+ *  	Find - alpha(n)
+ *  	Get component - alpha(n)
+ *  	Check if connected - alpha(n)
+ *  	
+ *  alpha(n) - Amortized constant time
+ *     
  * Applications: 
  *   - Disjoint-set data structures model the partitioning of a set, for example to keep track of the connected components of an undirected graph.
  *   - This model can then be used to determine whether two vertices belong to the same component, or whether adding an edge between them would result in a cycle. 
@@ -24,7 +35,7 @@ import com.basic.datastructures.adv.operations.DisjointSetOperations;
  *   
  *   This class has Disjoint Set implementation using Array & Map
  */
-public class DisjointSet implements DisjointSetOperations {
+public class DisjointSet implements DJOperations {
 
 	public int[] parent;
 
@@ -33,10 +44,6 @@ public class DisjointSet implements DisjointSetOperations {
 	}
 
 	@Override
-	public void createNode(int node) {
-		// TODO Auto-generated method stub
-	}
-
 	public boolean union(int set1, int set2) {
 		int root1 = find(set1);
 		int root2 = find(set2);
@@ -47,6 +54,7 @@ public class DisjointSet implements DisjointSetOperations {
 		return true; // Means already pointed to same parent, no need to combine or union the sets
 	}
 
+	@Override
 	public int find(int i) {
 		while (parent[i] != i) {
 			parent[i] = parent[parent[i]]; // Path Compression
@@ -55,36 +63,60 @@ public class DisjointSet implements DisjointSetOperations {
 		return i;
 	}
 
-	public int find1(int node) {
+	@Override
+	public int find2(int node) {
 		if (parent[node] == node) return node;
 
-		parent[node] = find1(parent[node]);
+		parent[node] = find2(parent[node]);
 		return parent[node];
 	}
 
-	@Override
-	public int findParentRecursive(int node) {
-		// TODO Auto-generated method stub
-		return 0;
+}
+
+class DisjointSet2 implements DJOperations {
+
+	public Map<Integer, Integer> root;
+
+	public DisjointSet2() {
+	}
+
+	public void initialize(int[] arr) {
+		root = new HashMap<>();
+		for (int val : arr) {
+			root.put(val, val);
+		}
 	}
 
 	@Override
-	public int findParentIterative(int node) {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean union(int set1, int set2) {
+		int root1 = find(set1);
+		int root2 = find(set2);
+		if (root1 != root2) { // If it doesn't have same parent
+			root.put(root2, root1);
+			return false;
+		}
+		return true; // Means already pointed to same parent, no need to combine or union the sets
 	}
 
 	@Override
-	public boolean unionByRank(int n1, int n2) {
-		// TODO Auto-generated method stub
-		return false;
+	public int find(int node) {
+		while (root.get(node) != node) {
+			int parentNode = root.get(node);
+			root.put(node, root.get(parentNode)); //Path Compression
+
+			node = root.get(node);
+		}
+		return node;
 	}
 
 	@Override
-	public boolean unionBySize(int n1, int n2) {
-		// TODO Auto-generated method stub
-		return false;
+	public int find2(int node) {
+		if (root.get(node) == node) return node;
+
+		root.put(node, find2(root.get(node))); //Path Compression
+		return root.get(node);
 	}
+
 }
 
 class DisjointSetUsingArray implements DisjointSetOperations {
@@ -105,9 +137,10 @@ class DisjointSetUsingArray implements DisjointSetOperations {
 
 	@Override
 	public void createNode(int node) {
-		disJointSets[node] = new SetNode();
-		disJointSets[node].rank = 0;
-		disJointSets[node].parent = node;
+		SetNode newNode = new SetNode();
+		newNode.rank = 0;
+		newNode.parent = node;
+		disJointSets[node] = newNode;
 	}
 
 	@Override
@@ -207,17 +240,11 @@ class DisjointSetUsingMap implements DisjointSetOperations {
 		map.put(val, node);
 	}
 
-	/*public SetNode findSet(SetNode node) {
-		SetNode parent = node.parent;
-		// Here find the parent recursively & compress the path(Point all the sub node to parent)
-		if (node != parent) // Path compression technique: To reduce the height of the tree/path.(Rank == height)
-			node.parent = findSet(node.parent);
-		return node.parent;
-	}*/
+	@Override
+	public boolean union(int n1, int n2) {
 
-	/*	public int findSet(int data) {
-			return findSet(map.get(data)).val;
-		}*/
+		return false;
+	}
 
 	@Override
 	public boolean unionByRank(int n1, int n2) {
@@ -287,9 +314,4 @@ class DisjointSetUsingMap implements DisjointSetOperations {
 
 	}
 
-	@Override
-	public boolean union(int n1, int n2) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

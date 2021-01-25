@@ -102,17 +102,14 @@ public class BitAlgorithms {
 		System.out.println("Byte MIN: -128: " + Integer.toBinaryString(-128)); // 1000 0000
 		System.out.println("Short MAX: +32767: " + Integer.toBinaryString(32767)); // 0111 1111 1111 1111
 		System.out.println("Short MIN: -32768: " + Integer.toBinaryString(-32768)); // 1000 0000 0000 0000
-		System.out.println("Integer MAX: +2147483647: " + Integer.toBinaryString(2147483647)); // 0111 1111 1111 1111
-		// 1111 1111 1111 1111
-		System.out.println("Integer MIN: -2147483648: " + Integer.toBinaryString(-2147483648)); // 1000 0000 0000 0000
-		// 0000 0000 0000 0000
+		// 0111 1111 1111 1111 1111 1111 1111 1111
+		System.out.println("Integer MAX: +2147483647: " + Integer.toBinaryString(2147483647));
+		// 1000 0000 0000 0000 0000 0000 0000 0000
+		System.out.println("Integer MIN: -2147483648: " + Integer.toBinaryString(-2147483648));
 		// The number 0xAAAAAAAA is a 32 bit number with all even bits set as 1 and all odd bits as 0.
-		System.out.println("All Odd set bits: " + Integer.toBinaryString(0xAAAAAAAA));
+		System.out.println("All Even set bits: " + Integer.toBinaryString(0xAAAAAAAA));
 		// The number 0x55555555 is a 32 bit number with all odd bits set as 1 and all even bits as 0.
-		System.out.println("All Even set bits: " + Integer.toBinaryString(0x55555555));
-		// To make all 1 bits; Eg: To get 1111; n=4; > 10000 -1
-		int n = 4;
-		System.out.println("To make n '1' bits: " + Integer.toBinaryString((1 << n) - 1));
+		System.out.println("All Odd set bits: " + Integer.toBinaryString(0x55555555));
 	}
 
 	public void bitwiseOperator(int a, int b) {
@@ -174,14 +171,18 @@ public class BitAlgorithms {
 		System.out.println("Left Rotations:" + leftRotation(128, 3));
 		System.out.println("Right Rotations:" + rightRotation(128, 3));
 		System.out.println("2^n(2 power n) Value:" + twoPowerOfN(5));
+		System.out.println("To make n '1' bits: " + getNSetBits(4));
 		System.out.println("Check the Power of 2:" + checkPowerOfTwo(64));
 		System.out.println("Given numbers are equal? " + checkEquality(24, 24));
 		System.out.println("Is even number? " + isEven(7));
 		System.out.println("Is Odd number? " + isOdd1(21));
 		System.out.println("Is Odd number? " + isOdd2(21));
 		System.out.println("Off the right most bit: " + offRightMost(14));
-		System.out.println("Rightmost 1 in binary representation: " + rightMostSetBit1(8));
-		System.out.println("Find first set bit: " + findFirstSetBit(8));
+		System.out.println("Least Signigicant bit: " + leastSignficantBit1(12));
+		System.out.println("Least Signigicant bit: " + leastSignficantBit2(14));
+		System.out.println("Bit operations helpful to build Fenwick Tree: ");
+		fenwickTreeFoundation();
+		System.out.println("Find first set bit: " + findFirstSetBit(16));
 		System.out.println("Number of ones(Hamming Weight):" + hammingWeight1(424732));
 		System.out.println("Number of ones(Hamming Weight): " + hammingWeight2(424732));
 		System.out.println("Number of ones(Hamming Weight): " + hammingWeight3(424732));
@@ -338,6 +339,11 @@ public class BitAlgorithms {
 		return (1 << n);
 	}
 
+	//Eg: 2^3-1 = 7 => 111 (3 set bits)
+	public int getNSetBits(int n) {
+		return (1 << n) - 1;
+	}
+
 	public boolean checkPowerOfTwo(int x) {
 		return (x & (x - 1)) == 0;
 	}
@@ -362,13 +368,21 @@ public class BitAlgorithms {
 		return n & (n - 1);
 	}
 
+	//Least Significant Bit: This will find value from right most set bit to end of bit. Eg: 1100->100; 1001->1; 1110-> 10
 	// Approach 1 & 2 are exactly same; Because -n and complement of (n-1) are same; or -n => 2's complement of n
-	public int rightMostSetBit1(int n) {
+	public int leastSignficantBit1(int n) {
 		return n & -n;
 	}
 
-	public int rightMostSetBit2(int n) {
+	public int leastSignficantBit2(int n) {
 		return n & ~(n - 1);
+	}
+
+	public void fenwickTreeFoundation() {
+		for (int i = 1; i <= 16; i++) {
+			System.out.println(i + "-" + leastSignficantBit1(i));
+			System.out.println(Integer.toBinaryString(i) + "-" + Integer.toBinaryString(leastSignficantBit1(i)));
+		}
 	}
 
 	// Returns the rightmost 1 in binary representation of x;

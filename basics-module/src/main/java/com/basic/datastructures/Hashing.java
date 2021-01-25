@@ -29,7 +29,7 @@ import com.basic.datastructures.operations.HashingOperations;
  * value. The situation where a newly inserted key maps to an already occupied slot in hash table is called collision and must be
  * handled using some collision handling technique. Following are the ways to handle collisions:
  * 
- * Separate Chaining:The idea is to make each cell of hash table point to a linked list of records that have same hash function value. Chaining 
+ * Separate Chaining: The idea is to make each cell of hash table point to a linked list of records that have same hash function value. Chaining 
  * is simple, but requires additional memory outside the table. 
  * 
  * Open Addressing: In open addressing, all elements are stored in the hash table itself. Each table entry contains either a record or NIL. 
@@ -45,7 +45,7 @@ public class Hashing {
  * Open Addressing: Like separate chaining, open addressing is a method for handling collisions. In Open Addressing, all elements are 
  * stored in the hash table itself. So at any point, size of the table must be greater than or equal to the total number of keys.
  * 
- * Open Addressing is done following ways: - 
+ * Open Addressing is done in the following ways: - 
  *    1. Linear Probing  - 
  *    		Linear probing is when the interval between successive probes is fixed (usually to 1). Let’s assume that the hashed index for
  *       a particular entry is index. The probing sequence for linear probing will be:
@@ -148,7 +148,7 @@ class HashOpenAddressing implements HashingOperations {
 
 	// Get the empty index/key to insert the data using Linear Probing
 	public int findKey1(int data) {
-		int index = data % maxSize;
+		int index = hash1(data);
 		int i = 1, hashValue = index;
 		while (array[index] != null) {
 			// 1.Linear Probing: If slot hash(x) % S is full, then we try (hash(x) + i) % S; where i=1,2,3...
@@ -165,7 +165,7 @@ class HashOpenAddressing implements HashingOperations {
 	 */
 	// Get the empty index/key to insert the data using Quadratic Probing
 	public int findKey2(int data) {
-		int index = data % maxSize;
+		int index = hash1(data);
 		int i = 0, hashValue = index;
 		while (array[index] != null) {
 			// 2.Quadratic Probing: If slot hash(x) % S is full, then we try (hash(x) + 1*1) %S; where i=1,2,3..
@@ -194,7 +194,7 @@ class HashOpenAddressing implements HashingOperations {
 	// Find the data in the array (use Linear Probing)
 	public int findValue1(int element) {
 		int index = -1;
-		index = element % maxSize; // Find the hashing value
+		index = hash1(element); // Find the hashing value
 		int hashValue = index;
 		for (int i = 1; i < maxSize; i++) {
 			if (array[index] != null && array[index] == element) {
@@ -209,7 +209,7 @@ class HashOpenAddressing implements HashingOperations {
 	// Find the data in the array (use Linear Probing)
 	public int findValue2(int element) {
 		int index = -1;
-		index = element % maxSize; // Find the hashing value
+		index = hash1(element); // Find the hashing value
 		int hashValue = index;
 		for (int i = 1; i < maxSize; i++) {
 			if (array[index] != null && array[index] == element) {
@@ -240,13 +240,13 @@ class HashOpenAddressing implements HashingOperations {
 		return (currSize == maxSize);
 	}
 
-	private int hash1(int n) {
-		return n % maxSize;
+	private int hash1(int key) {
+		return key % maxSize;
 	}
 
-	private int hash2(int n) {
+	private int hash2(int val) {
 		int PRIME_NO = 7; // hash2(key) = PRIME – (key % PRIME) where PRIME is a prime smaller than the TABLE_SIZE.
-		return (PRIME_NO - n % PRIME_NO);
+		return (PRIME_NO - val % PRIME_NO);
 	}
 
 	/************ Util Methods ******************/
@@ -325,7 +325,7 @@ class HashOpenAddressing implements HashingOperations {
  */
 class HashSeperateChaining implements HashingOperations {
 
-	java.util.LinkedList[] table;
+	java.util.LinkedList<Integer>[] table;
 	int hashSize;
 	int capacity;
 
@@ -337,21 +337,23 @@ class HashSeperateChaining implements HashingOperations {
 	@Override
 	public void add(int data) {
 		int pos = hash(data);
-		if (table[pos] == null)
-			table[pos] = new java.util.LinkedList();
+		if (table[pos] == null) table[pos] = new java.util.LinkedList();
 		hashSize++;
 		table[pos].add(data);
 	}
 
 	@Override
-	public boolean contains(int data) {
+	public int get(int data) {
 		int pos = hash(data);
-		boolean flag = false;
-		if (table[pos] != null) {
-			if (table[pos].contains(data))
-				flag = true;
+		if (table[pos] != null && table[pos].contains(data)) {
+			return data;
 		}
-		return flag;
+		return -1;
+	}
+
+	@Override
+	public boolean contains(int data) {
+		return get(data) != -1 ? true : false;
 	}
 
 	@Override
@@ -379,12 +381,6 @@ class HashSeperateChaining implements HashingOperations {
 	}
 
 	@Override
-	public int get(int data) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public void set(int index, int data) {
 		// TODO Auto-generated method stub
 
@@ -400,8 +396,8 @@ class HashSeperateChaining implements HashingOperations {
 		}
 	}
 
-	private int hash(int n) {
-		return (Integer) n % capacity;
+	private int hash(int key) {
+		return (Integer) key % capacity;
 	}
 
 	public static void main(String[] args) {
@@ -474,13 +470,11 @@ class MyHashSet {
 	}
 
 	public void add(int key) {
-		if (!contains(key))
-			map[key % size] = key;
+		if (!contains(key)) map[key % size] = key;
 	}
 
 	public void remove(int key) {
-		if (!contains(key))
-			map[key % size] = -1;
+		if (!contains(key)) map[key % size] = -1;
 	}
 
 	/** Returns true if this set contains the specified element */

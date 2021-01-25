@@ -27,7 +27,7 @@ public class Backtracking {
 	public List<List<Integer>> subsets1(int[] nums) {
 		List<List<Integer>> res = new ArrayList<>();
 		backtrack1(res, new ArrayList<>(), nums, 0);
-		res.stream().forEach(k -> System.out.print(k + ", "));
+		res.forEach(k -> System.out.print(k + ", "));
 		return res;
 	}
 
@@ -62,13 +62,14 @@ public class Backtracking {
 		List<List<Integer>> res = new ArrayList<>();
 		Arrays.sort(nums);
 		backtrack2(res, new ArrayList<>(), nums, 0);
-		res.stream().forEach(k -> System.out.print(k + ", "));
+		res.forEach(k -> System.out.print(k + ", "));
 		return res;
 	}
 
 	private void backtrack2(List<List<Integer>> res, List<Integer> buffer, int[] nums, int startIndex) {
 		res.add(new ArrayList<>(buffer));
 		for (int i = startIndex; i < nums.length; i++) {
+			//condition to avoid the duplicate
 			if (i > startIndex && nums[i] == nums[i - 1]) continue;
 			buffer.add(nums[i]);
 			backtrack2(res, buffer, nums, i + 1);
@@ -80,7 +81,7 @@ public class Backtracking {
 	public List<List<Character>> subSequence(String str) {
 		List<List<Character>> res = new ArrayList<>();
 		subSeq(res, new ArrayList<>(), str, 0);
-		res.stream().forEach(k -> System.out.print(k + ", "));
+		res.forEach(k -> System.out.print(k + ", "));
 		return res;
 	}
 
@@ -99,7 +100,7 @@ public class Backtracking {
 	public List<List<Integer>> combine(int n, int k) {
 		List<List<Integer>> res = new ArrayList<>();
 		backtrack3(n, k, 1, new ArrayList<>(), res);
-		res.stream().forEach(val -> System.out.print(val + ", "));
+		res.forEach(val -> System.out.print(val + ", "));
 		return res;
 	}
 
@@ -120,7 +121,7 @@ public class Backtracking {
 		List<List<Integer>> res = new ArrayList<>();
 		Arrays.sort(nums);
 		backtrack4(res, new ArrayList<>(), nums, target, 0);
-		res.stream().forEach(val -> System.out.print(val + ", "));
+		res.forEach(val -> System.out.print(val + ", "));
 		return res;
 	}
 
@@ -141,7 +142,7 @@ public class Backtracking {
 	public List<List<Integer>> permute1(int[] nums) {
 		List<List<Integer>> res = new ArrayList<>();
 		backtrack8(res, new ArrayList<>(), nums);
-		res.stream().forEach(k -> System.out.print(k + ", "));
+		res.forEach(k -> System.out.print(k + ", "));
 		return res;
 	}
 
@@ -162,7 +163,7 @@ public class Backtracking {
 	public List<List<Integer>> permute2(int[] nums) {
 		List<List<Integer>> res = new ArrayList<>();
 		backtrack9(nums, 0, res);
-		res.stream().forEach(k -> System.out.print(k + ", "));
+		res.forEach(k -> System.out.print(k + ", "));
 		return res;
 	}
 
@@ -185,7 +186,7 @@ public class Backtracking {
 		List<List<Integer>> list = new ArrayList<>();
 		Arrays.sort(nums);
 		backtrack10(list, new ArrayList<>(), nums, new boolean[nums.length]);
-		list.stream().forEach(val -> System.out.print(val + ", "));
+		list.forEach(val -> System.out.print(val + ", "));
 		return list;
 	}
 
@@ -208,7 +209,7 @@ public class Backtracking {
 	public List<List<Integer>> permuteUnique2(int[] nums) {
 		List<List<Integer>> res = new ArrayList<>();
 		backtrack11(nums, 0, res);
-		res.stream().forEach(k -> System.out.print(k + ", "));
+		res.forEach(k -> System.out.print(k + ", "));
 		return res;
 	}
 
@@ -226,6 +227,13 @@ public class Backtracking {
 				}
 			}
 		}
+	}
+
+	public static void main(String[] args) {
+		Backtracking ob = new Backtracking();
+		int[] nums = { 1, 1, 3 };
+		ob.permute2(nums);
+		ob.permuteUnique2(nums);
 	}
 
 }

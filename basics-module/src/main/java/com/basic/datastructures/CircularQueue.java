@@ -72,8 +72,7 @@ class CircularQueueArrayImpl implements QueueOperations {
 
 	@Override
 	public int poll() {
-		if (isEmpty())
-			return -1;
+		if (isEmpty()) return -1;
 
 		int element = queue[front];
 		queue[front] = -1;
@@ -91,17 +90,16 @@ class CircularQueueArrayImpl implements QueueOperations {
 
 	@Override
 	public int peek() {
-		return front == -1 ? -1 : queue[front];
+		return isEmpty() ? -1 : queue[front];
 	}
 
-	//TODO: Implement this
 	public int getRear() {
-		return -1;
+		return isEmpty() ? -1 : queue[rear];
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return front == -1;
+		return front == -1 && rear == -1;
 	}
 
 	public boolean isFull() {
@@ -110,7 +108,7 @@ class CircularQueueArrayImpl implements QueueOperations {
 
 	@Override
 	public void print() {
-		if (front == -1) {
+		if (isEmpty()) {
 			System.out.println("Queue is empty!");
 		} else if (front <= rear) { // Normal Case: Print from front to rear
 			for (int i = front; i <= rear; i++)
@@ -168,17 +166,13 @@ class CircularQueueArrayImpl implements QueueOperations {
 				break;
 			case 2:
 				int data = queue.poll();
-				if (data != -1)
-					System.out.println("Dequeued element is: " + data);
-				else
-					System.out.println("Queue is empty");
+				if (data != -1) System.out.println("Dequeued element is: " + data);
+				else System.out.println("Queue is empty");
 				break;
 			case 3:
 				data = queue.peek();
-				if (data != -1)
-					System.out.println("Front element is: " + data);
-				else
-					System.out.println("Queue is empty");
+				if (data != -1) System.out.println("Front element is: " + data);
+				else System.out.println("Queue is empty");
 				break;
 			default:
 				System.out.println("Please enter the valid option!!!");
@@ -202,6 +196,7 @@ class CircularQueueArrayImpl2 implements QueueOperations {
 
 	public CircularQueueArrayImpl2(int k) {
 		rear = -1;
+		front = 0;
 		currSize = 0;
 		queue = new int[k];
 		Arrays.fill(queue, -1);
@@ -209,8 +204,7 @@ class CircularQueueArrayImpl2 implements QueueOperations {
 
 	@Override
 	public void add(int data) {
-		if (isFull())
-			return;
+		if (isFull()) return;
 
 		rear = (rear + 1) % queue.length;
 		queue[rear] = data;
@@ -219,8 +213,7 @@ class CircularQueueArrayImpl2 implements QueueOperations {
 
 	@Override
 	public int poll() {
-		if (isEmpty())
-			return -1;
+		if (isEmpty()) return -1;
 
 		int element = queue[front];
 		front = (front + 1) % queue.length;
@@ -272,8 +265,17 @@ class CircularQueueArrayImpl2 implements QueueOperations {
 
 	@Override
 	public void print() {
-		// TODO Auto-generated method stub
-
+		if (isEmpty()) {
+			System.out.println("Queue is empty!");
+		} else if (front <= rear) { // Normal Case: Print from front to rear
+			for (int i = front; i <= rear; i++)
+				System.out.print(queue[i] + " ");
+		} else { // Rear moved to place front side and front is placed in rear side
+			for (int i = front; i < queue.length; i++)
+				System.out.print(queue[i] + " ");
+			for (int i = 0; i <= rear; i++)
+				System.out.print(queue[i] + " ");
+		}
 	}
 }
 
@@ -287,7 +289,7 @@ class CircularQueueSLLImpl implements QueueOperations {
 			front = rear = node;
 			rear.next = front;
 		} else {
-			node.next = rear.next;
+			node.next = rear.next; //or node.next = front;
 			rear.next = node;
 			rear = node;
 		}
@@ -295,8 +297,7 @@ class CircularQueueSLLImpl implements QueueOperations {
 
 	@Override
 	public int poll() {
-		if (!isEmpty())
-			return -1;
+		if (!isEmpty()) return -1;
 		int element = front.data;
 		if (front == rear) {
 			front = rear = null;
@@ -319,8 +320,7 @@ class CircularQueueSLLImpl implements QueueOperations {
 
 	@Override
 	public void print() {
-		if (isEmpty())
-			return;
+		if (isEmpty()) return;
 		ListNode temp = front;
 		do {
 			System.out.print(temp.data + " ");
@@ -373,17 +373,13 @@ class CircularQueueSLLImpl implements QueueOperations {
 				break;
 			case 2:
 				int data = queue.poll();
-				if (data != -1)
-					System.out.println("Dequeued element is: " + data);
-				else
-					System.out.println("Queue is empty");
+				if (data != -1) System.out.println("Dequeued element is: " + data);
+				else System.out.println("Queue is empty");
 				break;
 			case 3:
 				data = queue.peek();
-				if (data != -1)
-					System.out.println("Front element is: " + data);
-				else
-					System.out.println("Queue is empty");
+				if (data != -1) System.out.println("Front element is: " + data);
+				else System.out.println("Queue is empty");
 				break;
 			default:
 				System.out.println("Please enter the valid option!!!");

@@ -40,13 +40,14 @@ import java.util.Arrays;
  *    1.Recursion -  Time: exponential time O(2^n), space complexity is O(n) which is used to store the recursion stack.
  *    2.DP: Top Down Approach or Memoization - Time and space complexity is same as memoization array size.
  *    3.DP: Bottom Up Approach or Tabulation - Time & space complexity is O(n^2) or O(n)
- *    4.Memory Optimization - This will be same time as Bottom up approach, but space efficient. Eg: Two variable approach
+ *    4.Memory Optimization - This will be same time as "Bottom up" approach, but space efficient. Eg: Two variable approach
  *    
  * Imp Note: All the recursion problems needs below two points
  * 		1. Base case -> Its common for Recursion solution, memoization and bottom up approach
- * 		2. Recursive function(Sub problems solution)
+ * 		2. Recursive function(Sub problems + Relationship between sub problems)
  */
 public class DynamicProgramming {
+
 	// Fibonacci Number calculation:
 	// 1.using recursive function
 	public int fibonacci1(int n) {
@@ -81,10 +82,11 @@ public class DynamicProgramming {
 		return fib[n];
 	}
 
-	// 4.Two variable approach:
+	// 4.DP-Bottom Up: Two variable approach:
+	// Fibonacci series: 0,1,1,2,3,5,8,13,21,34...
 	public int fibonacci4(int n) {
 		if (n == 0) return 0;
-		int prev = 1, curr = 1;
+		int prev = 0, curr = 1;
 		for (int i = 2; i < n; i++) {
 			int tmp = curr;
 			curr += prev;
@@ -95,6 +97,7 @@ public class DynamicProgramming {
 
 	// Staircase/Climbing Stairs/Triple Step/ Davis' Staircase/Count number of ways to cover a distance
 	// 1.Recursive Solution
+
 	public int tripleSteps1(int n) {
 		if (n < 0) return 0;
 		else if (n == 0) return 1;
@@ -117,7 +120,7 @@ public class DynamicProgramming {
 		return dp[n];
 	}
 
-	// 3. DP- Bottom up: Tabulation
+	// 3. DP- Bottom up: Tabulation;
 	public int tripleSteps3(int n) {
 		if (n <= 0) return 0;
 		else if (n == 1) return 1;
@@ -127,12 +130,37 @@ public class DynamicProgramming {
 		dp[0] = 1;
 		dp[1] = 1;
 		dp[2] = 2;
-		for (int i = 3; i <= n; i++)
+		for (int i = 1; i <= n; i++) {
 			dp[i] = dp[i - 1] + dp[i - 2] + dp[i - 3];
+		}
+
+		//or this alternative Approach:
+		dp[0] = 1;
+		for (int i = 1; i <= n; i++) {
+			if (i - 1 >= 0) dp[i] += dp[i - 1];
+			if (i - 2 >= 0) dp[i] += dp[i - 2];
+			if (i - 3 >= 0) dp[i] += dp[i - 3];
+			//dp[i] = dp[i - 1] + dp[i - 2] + dp[i - 3];
+		}
 		return dp[n];
 	}
 
-	// 4. DP- Bottom up: Tabulation
+	//This is similar to above approach
+	public int tripleSteps32(int n) {
+		if (n <= 0) return 0;
+
+		int[] dp = new int[n + 1];
+		dp[0] = 1;
+
+		for (int i = 0; i < n; i++) {
+			if (i + 1 <= n) dp[i + 1] += dp[i];
+			if (i + 2 <= n) dp[i + 2] += dp[i];
+			if (i + 3 <= n) dp[i + 3] += dp[i];
+		}
+		return dp[n];
+	}
+
+	// 4. DP- Bottom up: Two variable approach
 	public int tripleSteps4(int n) {
 		if (n <= 0) return 0;
 		else if (n == 1) return 1;
@@ -146,5 +174,13 @@ public class DynamicProgramming {
 			curr = sum;
 		}
 		return curr;
+	}
+
+	public static void main(String[] args) {
+		DynamicProgramming ob = new DynamicProgramming();
+		int n = 34;
+		System.out.println("Triple Steps: " + ob.tripleSteps3(n));
+		System.out.println("Triple Steps: " + ob.tripleSteps32(n));
+		System.out.println("Triple Steps: " + ob.tripleSteps4(n));
 	}
 }

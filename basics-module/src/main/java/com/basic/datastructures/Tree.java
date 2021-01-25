@@ -94,9 +94,9 @@ class BinarySearchTree implements TreeOperations {
 	@Override
 	public void addIterative(int data) {
 		TreeNode newNode = new TreeNode(data);
-		if (root == null) root = newNode;
-
-		else {
+		if (root == null) {
+			root = newNode;
+		} else {
 			TreeNode curr = root;
 			while (curr != null) {
 				if (data <= curr.val) {
@@ -124,21 +124,21 @@ class BinarySearchTree implements TreeOperations {
 		return true;
 	}
 
-	private TreeNode deleteNode(TreeNode root, int n) {
-		if (root == null) {
+	private TreeNode deleteNode(TreeNode curr, int n) {
+		if (curr == null) {
 			System.out.println("Data not found");
-		} else if (n < root.val) {
-			root.left = deleteNode(root.left, n);
-		} else if (n > root.val) {
-			root.right = deleteNode(root.right, n);
-		} else if (root.left != null & root.right != null) {
-			int minElement = findMin(root.right);
-			root.val = minElement;
-			root.right = deleteNode(root.right, minElement);
+		} else if (n < curr.val) {
+			curr.left = deleteNode(curr.left, n);
+		} else if (n > curr.val) {
+			curr.right = deleteNode(curr.right, n);
+		} else if (curr.left != null & curr.right != null) {
+			int minElement = findMin(curr.right);
+			curr.val = minElement;
+			curr.right = deleteNode(curr.right, minElement);
 		} else {
-			root = root.left != null ? root.left : root.right;
+			curr = curr.left != null ? curr.left : curr.right;
 		}
-		return root;
+		return curr;
 	}
 
 	@Override
@@ -287,10 +287,29 @@ class BinarySearchTree implements TreeOperations {
 
 	@Override
 	public void postorderIterative(TreeNode root) {
-		postorderTraversal(root);
+		postorderTraversal2(root);
 	}
 
-	public List<Integer> postorderTraversal(TreeNode root) {
+	public List<Integer> postorderTraversal1(TreeNode root) {
+		java.util.LinkedList<Integer> result = new java.util.LinkedList<>();
+		//List<Integer> result = new ArrayList<>();
+		if (root == null) return result;
+
+		java.util.Stack<TreeNode> stack = new java.util.Stack<>();
+		stack.push(root);
+
+		while (!stack.isEmpty()) {
+			TreeNode curr = stack.pop();
+			result.addFirst(curr.val);
+
+			if (curr.left != null) stack.push(curr.left);
+			if (curr.right != null) stack.push(curr.right);
+		}
+
+		return result;
+	}
+
+	public List<Integer> postorderTraversal2(TreeNode root) {
 		java.util.LinkedList<Integer> result = new java.util.LinkedList<>();
 		//List<Integer> result = new ArrayList<>();
 		if (root == null) return result;
@@ -301,7 +320,7 @@ class BinarySearchTree implements TreeOperations {
 		while (!stack.isEmpty() || curr != null) {
 			if (curr != null) {
 				result.addFirst(curr.val); // Reverse the process of preorder
-				// result.add(0, curr.val); //for ArrayList
+				// result.add(0, curr.val); //for ArrayList - Time: O(n)
 				stack.push(curr);
 				curr = curr.right; // Reverse the process of preorder
 			} else {
@@ -313,7 +332,35 @@ class BinarySearchTree implements TreeOperations {
 		return result;
 	}
 
-	//Recursive
+	public List<Integer> postorderTraversal3(TreeNode root) {
+		List<Integer> result = new ArrayList<>();
+		if (root == null) return result;
+		TreeNode current = root, rightNode, topNode;
+		java.util.Stack<TreeNode> stack = new java.util.Stack<>();
+
+		while (current != null || !stack.isEmpty()) {
+			if (current != null) {
+				stack.push(current);
+				current = current.left;
+			} else {
+				rightNode = stack.peek().right;
+				if (rightNode != null) {
+					current = rightNode;
+				} else {
+					topNode = stack.pop();
+					result.add(topNode.val);
+					//To handle continuous right subtree
+					while (!stack.isEmpty() && topNode == stack.peek().right) {
+						topNode = stack.pop();
+						result.add(topNode.val);
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	//TODO: Change recursive solution. Because it looks like level by level logic Recursive
 	@Override
 	public void levelorder(TreeNode root) {
 		List<List<Integer>> result = new java.util.LinkedList<>();

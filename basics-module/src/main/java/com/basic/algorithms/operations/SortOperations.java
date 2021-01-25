@@ -27,8 +27,7 @@ public interface SortOperations {
 
 	public void countingSort(int[] a, int capacity);
 
-	public void radixSort(int[] a);
-
 	public void bucketSort(float[] a);
 
+	public void radixSort(int[] a);
 }

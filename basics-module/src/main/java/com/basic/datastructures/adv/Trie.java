@@ -2,11 +2,15 @@ package com.basic.datastructures.adv;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.basic.datastructures.adv.operations.TrieOperations;
 import com.common.model.TrieNode;
 
 /*
+ * A trie is a tree-like data structure whose nodes store the letters of an alphabet. By structuring the nodes in a 
+ * particular way, words and strings can be retrieved from the structure by traversing down a branch path of the tree.
+ * 
  * Trie or Retrieval or prefix tree is a tree data structure, which is used for retrieval of a key in a dataset
  * of strings. There are various applications of this very efficient data structure such as :
  *    - Auto Complete
@@ -27,8 +31,8 @@ import com.common.model.TrieNode;
 public class Trie {
 	public static void main(String[] args) {
 		Trie ob = new Trie();
-		ob.testTrieNodeUsingArray();
-		// ob.testTrieNodeUsingMap();
+		//ob.testTrieNodeUsingArray();
+		ob.testTrieNodeUsingMap();
 	}
 
 	public void testTrieNodeUsingArray() {
@@ -63,9 +67,12 @@ public class Trie {
 		trie.typeAheadSearch("a");
 
 		System.out.println("Delete the string: ");
-		trie.remove("mhe");
+		trie.remove("the");
+		trie.remove("the");
 		System.out.println("after deletion..");
-		System.out.println("an --- " + trie.search("mhe"));
+		System.out.println("the --- " + trie.search("the"));
+		System.out.println("their --- " + trie.search("their"));
+		System.out.println("these --- " + trie.search("these"));
 
 	}
 
@@ -90,6 +97,11 @@ public class Trie {
 		if (trie.search("thaw") == true) System.out.println("thaw --- " + "Present in trie");
 		else System.out.println("thaw --- " + "Not present in trie");
 
+		System.out.println("Wildcard Match: Search with special chars: ");
+		System.out.println(".he --- " + trie.wildcardMatch(".he"));
+		System.out.println("t.e --- " + trie.wildcardMatch("t.e"));
+		System.out.println("answ.t --- " + trie.wildcardMatch("answ.t"));
+
 		// Delete Operation
 		System.out.println("After delete operation");
 		trie.remove("the");
@@ -97,10 +109,13 @@ public class Trie {
 		if (trie.search("the") == true) System.out.println("the --- " + "Present in trie");
 		else System.out.println("the --- " + "Not present in trie");
 
-		trie.remove("these");
-
-		if (trie.search("these") == true) System.out.println("these --- " + "Present in trie");
-		else System.out.println("these --- " + "Not present in trie");
+		System.out.println("Delete the string: ");
+		trie.remove("the");
+		trie.remove("the");
+		System.out.println("after deletion..");
+		System.out.println("the --- " + trie.search("the"));
+		System.out.println("their --- " + trie.search("their"));
+		System.out.println("these --- " + trie.search("these"));
 	}
 }
 
@@ -134,26 +149,23 @@ class Trie1 implements TrieOperations {
 	@Override
 	public boolean search(String word) {
 		TrieNode result = wordSearch(word);
-		return result == null ? false : (result != null && result.isEndOfWord);
+		return result != null ? result.isEndOfWord : false;
 	}
 
 	@Override
 	public boolean prefixSearch(String prefix) {
 		TrieNode result = wordSearch(prefix);
-		return result == null ? false : true;
+		return result != null ? true : false;
 	}
 
 	private TrieNode wordSearch(String word) {
-		int index;
-		TrieNode current = root;
-
+		TrieNode curr = root;
 		for (int i = 0; i < word.length(); i++) {
-			index = word.charAt(i) - 'a';
-			if (current.children[index] == null) return null;
-
-			current = current.children[index];
+			int index = word.charAt(i) - 'a';
+			curr = curr.children[index];
+			if (curr == null) return null;
 		}
-		return current;
+		return curr;
 	}
 
 	@Override
@@ -213,18 +225,21 @@ class Trie1 implements TrieOperations {
 		delete(root, word, 0);
 	}
 
-	public TrieNode delete(TrieNode node, String str, int index) {
+	private TrieNode delete(TrieNode node, String str, int index) {
 		if (node == null) return null;
 
 		if (index == str.length()) {
 			node.isEndOfWord = false;
-			if (!node.isEndOfWord && isEmpty(node)) node = null;
+			//This check is to delete the last node, if there is no child node
+			if (isEmpty(node)) node = null;
 			return node;
 		}
 
+		if (index >= str.length()) return node;
+
 		int chIndex = str.charAt(index) - 'a';
 		node.children[chIndex] = delete(node.children[chIndex], str, index + 1);
-
+		//This check is to delete the remaining nodes which doesn't have any child nodes.
 		if (!node.isEndOfWord && isEmpty(node)) node = null;
 
 		return node;
@@ -253,8 +268,10 @@ class Trie2 implements TrieOperations {
 		TrieNode curr = root;
 		for (int i = 0; i < word.length(); i++) {
 			char ch = word.charAt(i);
-			curr = curr.childNodes.computeIfAbsent(ch, c -> new TrieNode());
-			/* TrieNode childNode = curr.childNodes.get(ch);
+			curr = curr.childNodes.computeIfAbsent(ch, node -> new TrieNode());
+			// or
+			/*
+			TrieNode childNode = curr.childNodes.get(ch);
 			if (childNode == null) {
 				childNode = new TrieNode();
 				curr.childNodes.put(ch, childNode);
@@ -266,24 +283,43 @@ class Trie2 implements TrieOperations {
 
 	@Override
 	public boolean search(String word) {
-		TrieNode current = root;
-		for (int i = 0; i < word.length(); i++) {
-			TrieNode childNode = current.childNodes.get(word.charAt(i));
-			if (childNode == null) return false;
-			current = childNode;
-		}
-		return current.isEndOfWord;
+		TrieNode result = wordSearch(word);
+		return result != null ? result.isEndOfWord : false;
 	}
 
 	@Override
 	public boolean prefixSearch(String prefix) {
-		// TODO Auto-generated method stub
-		return false;
+		TrieNode result = wordSearch(prefix);
+		return result != null ? true : false;
+	}
+
+	private TrieNode wordSearch(String word) {
+		TrieNode curr = root;
+		for (int i = 0; i < word.length(); i++) {
+			curr = curr.childNodes.get(word.charAt(i));
+			if (curr == null) return null;
+		}
+		return curr;
 	}
 
 	@Override
 	public boolean wildcardMatch(String word) {
-		// TODO Auto-generated method stub
+		return dfs(root, word, 0);
+	}
+
+	private boolean dfs(TrieNode curr, String word, int index) {
+		if (index == word.length() && curr.isEndOfWord) return true;
+		if (index >= word.length()) return false;
+
+		char ch = word.charAt(index);
+		if (ch == '.') {
+			for (Map.Entry<Character, TrieNode> entry : curr.childNodes.entrySet()) {
+				if (dfs(entry.getValue(), word, index + 1)) return true;
+			}
+		} else {
+			TrieNode next = curr.childNodes.get(ch);
+			if (next != null) return dfs(next, word, index + 1);
+		}
 		return false;
 	}
 
@@ -293,16 +329,15 @@ class Trie2 implements TrieOperations {
 	}
 
 	public boolean delete(TrieNode current, String word, int index) {
-		if (word.length() == index) {
-			// If EOW is false, then word is not present in the Trie DS
-			/*if (!current.isEndOfWord)
-				return false;*/
+		if (word.length() == index && current.isEndOfWord) {
 			// Reset EOW to false
 			current.isEndOfWord = false;
 			/*If last node of the word has childNodes, then simple reset the EOW.
 			  If last node doesn't have childNodes, then below cond satisfies and keep deleting the node below*/
 			return current.childNodes.size() == 0;
 		}
+
+		if (index >= word.length()) return false;
 
 		char ch = word.charAt(index);
 		TrieNode next = current.childNodes.get(ch);

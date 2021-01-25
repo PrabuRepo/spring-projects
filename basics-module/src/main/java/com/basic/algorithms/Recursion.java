@@ -3,8 +3,6 @@ package com.basic.algorithms;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.common.utilities.Utils;
-
 /* 
  * Recursion:
  *   Recursion is an algorithmic technique where a function, in order to accomplish a task, calls itself with some part of the task.
@@ -18,19 +16,21 @@ import com.common.utilities.Utils;
  *   
  * Types:
  *  1.Linear Recursion: A linear recursive function is a function that only makes a single call to itself each time the function runs
- *  	i. Head Recursion:
- *  	ii.Tail Recursion:
- *  2.Tail Recursion: Tail recursion is a form of linear recursion. In tail recursion, the recursive call is the last thing the function
- *  does. Often, the value of the recursive call is returned. As such, tail recursive functions can often be easily implemented in an 
- *  iterative manner; by taking out the recursive call and replacing it with a loop, the same effect can generally be achieved. In fact, 
- *  a good compiler can recognize tail recursion and convert it to iteration in order to optimize the performance of the code.
- *  3.Binary Recursion: Some recursive functions don't just have one call to themself, they have two (or more). Functions with two recursive
+ *  	i. Head Recursion: First make a recursive call, then do the logic(any logic like add, div, sub, mul, print etc)
+ *  	ii.Tail Recursion: First do a logic, then make recursive call.
+ * 	 i.Head Recursion: If a recursive function calling itself and that recursive call is the first statement in the function then it’s known as 
+ * 	 Head Recursion.There’s no statement, no operation before the call. The function doesn’t have to process or perform any operation at the 
+ *   time of calling and all operations are done at returning time.
+ *   ii.Tail Recursion: If a recursive function calling itself and that recursive call is the last statement in the function then it’s known as 
+ *   Tail Recursion.After that call the recursive function performs nothing. The function has to process or perform any operation at the time 
+ *   of calling and it does nothing at returning time.
+ *  2.Binary Recursion: Some recursive functions don't just have one call to themself, they have two (or more). Functions with two recursive
  *    calls are referred to as binary recursive functions.
  *    	1.Linear Tree Recursion
  *    	2.Exponential Tree Recursion
- *  4.Exponential Recursion: An exponential recursive function is one that, if you were to draw out a representation of all the function calls,
+ *  3.Exponential Recursion: An exponential recursive function is one that, if you were to draw out a representation of all the function calls,
  *    would have an exponential number of calls in relation to the size of the data set (exponential meaning if there were n elements, there
- *    would be O(an) function calls where a is a positive number).
+ *    would be O(a^n) function calls where a is a positive number).
  * 
  *   
  * When you hear a problem beginning with the following statements, it's often (though not always) a good candidate for recursion:
@@ -39,12 +39,18 @@ import com.common.utilities.Utils;
  *  - "Implement a method to compute all..:; and so on.
  *  
  * Recursive Problems Categorized by "ByteByBye" website:
- *  - Iteration - Iterate over a variety of data structures using recursion, both in one and multiple dimensions; Eg: Insert Element at the Bottom of a Stack, Generating All Substrings of a String, Flattening a 2D Array, and more
- *  - SubProblems - Most fundamental pattern in all of recursion: Subproblems; Eg: Stair Stepping, Towers of Hanoi, Is String a Palindrome, and more
- *  - Selection - Pattern related to DP & Combination Problems. Eg: Find All Combinations, 0-1 Knapsack, String Interleaving, and more
- *  - Ordering - Pattern related to permutations & similar problems;  Eg: Find All Permutations, N-digit Numbers, BST Arrays, and more
- *  - Divide & Conquer - solve problems by breaking them into smaller pieces, grouping subpattern of difficult problems; Eg: Binary Search, Unique BSTs, String Compression, Rotated Arrays, and more
- *  - Depth First Search - Mostly applied to Tree, Graph & Matrix; Eg: DFS in Trees and Graphs, Find all Combinations via DFS, and more
+ *  - Iteration - Iterate over a variety of data structures using recursion, both in one and multiple dimensions; 
+ *  	Eg: Insert Element at the Bottom of a Stack, Generating All Substrings of a String, Flattening a 2D Array, and more
+ *  - SubProblems - Most fundamental pattern in all of recursion: Subproblems; 
+ *  	Eg: Stair Stepping, Towers of Hanoi, Is String a Palindrome, and more
+ *  - Selection - Pattern related to DP & Combination Problems. 
+ *  	Eg: Find All Combinations, 0-1 Knapsack, String Interleaving, and more
+ *  - Ordering - Pattern related to permutations & similar problems;  
+ *  	Eg: Find All Permutations, N-digit Numbers, BST Arrays, and more
+ *  - Divide & Conquer - solve problems by breaking them into smaller pieces, grouping subpattern of difficult problems; 
+ *  	Eg: Binary Search, Unique BSTs, String Compression, Rotated Arrays, and more
+ *  - Depth First Search - Mostly applied to Tree, Graph & Matrix; 
+ *  	Eg: DFS in Trees and Graphs, Find all Combinations via DFS, and more
  
  */
 public class Recursion {
@@ -52,6 +58,8 @@ public class Recursion {
 	Backtracking backtracking = new Backtracking();
 
 	MathProblems math = new MathProblems();
+
+	SortingAlgorithms sort = new SortingAlgorithms();
 
 	public static int count = 0;
 
@@ -71,7 +79,7 @@ public class Recursion {
 
 	//Example for linear recursion: Factorial , sqrt
 	public void factorial(int n) {
-		math.factorial(n);
+		math.factorial1(n);
 	}
 
 	//Compute the square root of a number using Newton's method (assume EPSILON to be a very small number close to 0):
@@ -95,36 +103,16 @@ public class Recursion {
 		math.gcd1(a, b);
 	}
 
-	// Example1: Factorial of n
-	public long factRecursive(int n) {
-		if (n == 0 || n == 1) return 1;
-		return n * factRecursive(n - 1);
-	}
-
-	public long factIterative(int n) {
-		int result = 1;
-		if (n > 1) {
-			for (int i = 1; i <= n; i++)
-				result = result * i;
-		}
-		return result;
-	}
-
 	// Example2: Decimal to Binary Conversion
 	public int decimalToBin(int n) {
-		String data = "";
-		if (n == 0 || n == 1) return n;
-
-		data += decimalToBin(n / 2);
-		data += n % 2;
-		return Integer.valueOf(data);
+		return math.decimalToBin2(n);
 	}
 
 	/*************** 2.Multiple recursion & Binary Recursion ********************/
 	/*Binary Recursion: This form of recursion has the potential for calling itself twice instead of once as with before. 
 	 Many operations, such as traversals, on binary trees are naturally binary recursive, like the trees.*/
 
-	// Binary Recursion: Both Head & Tail recursion
+	// Binary Recursion: Both Head & Tail recursion; 
 	public void binaryRecursiveCall(int n) {
 		// No of calls in recursive program: n+1s
 		// System.out.println("No of calls:" + count++);
@@ -141,13 +129,14 @@ public class Recursion {
 		}
 	}
 
-	// Example1: Fibonacci Series
+	// Example1: Fibonacci Series; Time-O(2^n)
 	public long fibRecursive(int n) {
 		if (n <= 1) return n;
 		return fibRecursive(n - 1) + fibRecursive(n - 2);
 	}
 
 	// Fibonacci series: 0,1,1,2,3,5,8,13,21,34...
+	//Time: O(n)
 	public long fibIterative(int n) {
 		if (n <= 1) return n;
 		long f1 = 0, f2 = 1;
@@ -166,25 +155,8 @@ public class Recursion {
 
 	// Example2: Quick Sort
 	// Binary Recursion: Tail recursion type
-	public void quickSort(int[] a, int l, int h) {
-		if (l < h) {
-			int m = partition(a, l, h);
-			quickSort(a, l, m - 1);
-			quickSort(a, m + 1, h);
-		}
-	}
-
-	public static int partition(int[] a, int l, int h) {
-		int j = l, pivot = a[h];
-
-		for (int i = l; i <= h; i++) {
-			if (a[i] < pivot) {
-				Utils.swap(a, i, j);
-				j++;
-			}
-		}
-		Utils.swap(a, j, h);
-		return j;
+	public void quickSort(int[] a) {
+		sort.quickSort(a);
 	}
 
 	/*************** 3.Exponential Recursion ********************/

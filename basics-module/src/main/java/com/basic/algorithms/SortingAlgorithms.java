@@ -3,7 +3,6 @@ package com.basic.algorithms;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.ListIterator;
 import java.util.Scanner;
 
 import com.basic.algorithms.operations.SortOperations;
@@ -63,8 +62,7 @@ public class SortingAlgorithms implements SortOperations {
 				break;
 			case 6:
 				a = sort.insert(in);
-				// sort.quickSort(a);
-				quickSort1(a, 0, a.length - 1);
+				sort.quickSort(a);
 				break;
 			case 7:
 				a = sort.insert(in);
@@ -111,11 +109,11 @@ public class SortingAlgorithms implements SortOperations {
 			count++;
 			for (int j = 0; j < a.length - i; j++) {
 				if (a[j] > a[j + 1]) {
-					a = swap(a, j, j + 1);
+					Utils.swap(a, j, j + 1);
 					swapFlag = true;
 				}
 			}
-			System.out.println("No of iterations:" + count);
+			System.out.println("Iteration Count: " + count);
 			if (!swapFlag) {
 				System.out.println("No swapping, i.e array sorted");
 				break;
@@ -142,7 +140,7 @@ public class SortingAlgorithms implements SortOperations {
 
 	void compare(int[] a, int l, int r) {
 		if (l >= r) return;
-		if (a[l] > a[l + 1]) swap(a, l, l + 1);
+		if (a[l] > a[l + 1]) Utils.swap(a, l, l + 1);
 		compare(a, l + 1, r);
 	}
 	// Bubble sort - end
@@ -155,7 +153,8 @@ public class SortingAlgorithms implements SortOperations {
 			for (int j = i; j < a.length; j++) {
 				if (a[j] < a[minIndex]) minIndex = j;
 			}
-			swap(a, minIndex, i);
+			Utils.swap(a, minIndex, i);
+			Utils.swap(a, minIndex, i);
 		}
 	}
 	// Selection - end
@@ -219,7 +218,6 @@ public class SortingAlgorithms implements SortOperations {
 				a[j] = a[j - 1];
 			}
 			a[j] = lastElement;
-			display(a);
 		}
 	}
 
@@ -290,8 +288,8 @@ public class SortingAlgorithms implements SortOperations {
 			right[i] = a[m + 1 + i];
 		*/
 		//or
-		int[] left = Arrays.copyOfRange(a, l, m + 1);
-		int[] right = Arrays.copyOfRange(a, m + 1, r + 1);
+		int[] left = Arrays.copyOfRange(a, l, m + 1); //Copy index from l to m
+		int[] right = Arrays.copyOfRange(a, m + 1, r + 1); //Copy index from m+1 to r
 
 		int leftIndex = 0, rightIndex = 0, curr = l;
 		// Merge the elements in asc order
@@ -325,16 +323,20 @@ public class SortingAlgorithms implements SortOperations {
 
 	}
 
-	private void merge2(int[] a, int l, int m, int r, int[] helper) {
-		for (int i = l; i <= r; i++)
+	private void merge2(int[] a, int l, int m, int h, int[] helper) {
+		for (int i = l; i <= h; i++)
 			helper[i] = a[i];
 
-		int left = l, right = m + 1, curr = l;
+		//l - left subarray start index, m - left subarray end index
+		//rs - right subarray start index, h - right subarray end index  
+		int curr = l, rs = m + 1;
 
-		while (left <= m && right <= r) a[curr++] = (helper[left] <= helper[right]) ? helper[left++] : helper[right++];
+		while (l <= m && rs <= h) {
+			a[curr++] = (helper[l] <= helper[rs]) ? helper[l++] : helper[rs++];
+		}
 
 		// Copy the remaining left side elements into array
-		while (left <= m) a[curr++] = helper[left++];
+		while (l <= m) a[curr++] = helper[l++];
 
 		// The right half doesn't need to be copied because it's already there.
 		// Copy the remaining right side elements into array
@@ -421,11 +423,11 @@ public class SortingAlgorithms implements SortOperations {
 	}
 
 	private void qSort(int[] a, int left, int right) {
-		if (left < right) {
-			int mid = partition(a, left, right);
-			qSort(a, left, mid - 1);
-			qSort(a, mid + 1, right);
-		}
+		if (left >= right) return;
+
+		int mid = partition(a, left, right);
+		qSort(a, left, mid - 1);
+		qSort(a, mid + 1, right);
 	}
 
 	private int partition(int[] a, int left, int right) {
@@ -433,12 +435,12 @@ public class SortingAlgorithms implements SortOperations {
 		int i = left, j = left;
 		while (j < right) {
 			if (a[j] < pivot) {
-				swap(a, i, j);
+				Utils.swap(a, i, j);
 				i++;
 			}
 			j++;
 		}
-		swap(a, i, right); // swap pivot element at the end
+		Utils.swap(a, i, right); // swap pivot element at the end
 		return i;
 	}
 	// Quick sort - end
@@ -454,11 +456,12 @@ public class SortingAlgorithms implements SortOperations {
 
 		// One by one extract an element from heap
 		for (int i = size - 1; i >= 0; i--) { // Time complexity: maxheapify for n times, its o(nlog(n))
-			a = swap(a, 0, i); // Move max element (current root) to end
+			Utils.swap(a, 0, i); // Move max element (current root) to end
 			maxHeapify(a, 0, i); // call max heapify on the reduced heap
 		}
 	}
 
+	// Heapify/Shift Down:
 	// Time complexity for maxheapify is o(log(n))
 	private void maxHeapify(int[] a, int startIndex, int size) {
 		int left = 2 * startIndex + 1; // left child
@@ -472,16 +475,9 @@ public class SortingAlgorithms implements SortOperations {
 			largest = right;
 
 		if (largest != startIndex) { // Swap if largest element index changes
-			a = swap(a, largest, startIndex);
+			Utils.swap(a, largest, startIndex);
 			maxHeapify(a, largest, size);
 		}
-	}
-
-	private int[] swap(int[] a, int i, int j) {
-		int temp = a[i];
-		a[i] = a[j];
-		a[j] = temp;
-		return a;
 	}
 
 	// Heap sort - end
@@ -513,11 +509,12 @@ public class SortingAlgorithms implements SortOperations {
 	 *  increment the counter at that index. At the end, run through your counting array, printing the value of each non-zero valued index
 	 *  that number of times.
 	 *  
+	 *  Counting sort is a linear time sorting algorithm that sort in O(n+k) time when elements are in range from 1 to k.
 	 *  The array arr[] is traversed in n time and the resulting sorted array is also computed in O(n) time.  count array is traversed 
 	 *  in O(k) time. Therefore, the overall time complexity of counting sort algorithm is O(n+k).	
 	 */
-	public void countingSort(int[] arr, int capacity) {
-		int[] countArray = new int[capacity]; // Here you can find the max vaue initialize the array using that value
+	public void countingSort(int[] arr, int k) {
+		int[] countArray = new int[k]; // Here you can find the max vaue initialize the array using that value
 		int count;
 		// Count the elements int the array and set into new array; O(n) time
 		for (int i = 0; i < arr.length; i++)
@@ -525,7 +522,7 @@ public class SortingAlgorithms implements SortOperations {
 
 		// Arrange elements based on count array; O(k) time
 		int index = 0;
-		for (int i = 0; i < countArray.length; i++) {
+		for (int i = 0; i < k; i++) {
 			count = countArray[i];
 			while (count-- > 0) arr[index++] = countArray[i];
 		}
@@ -631,50 +628,16 @@ public class SortingAlgorithms implements SortOperations {
 		// Set all the elements back into the arr
 		int curr = 0;
 		for (int i = 0; i < n; i++) {
-			if (buckets[i] != null) {
-				ListIterator<Float> iter = buckets[i].listIterator();
-				while (iter.hasNext()) arr[curr++] = iter.next();
+			if (buckets[i] == null) continue;
+
+			for (Float val : buckets[i]) {
+				arr[curr++] = val;
 			}
 		}
 
 		System.out.println("After Sorting: ");
 		for (int i = 0; i < n; i++)
 			System.out.print(arr[i] + " ");
-	}
-
-	static void quickSort1(int[] a, int left, int right) {
-		if (left < right) {
-			int mid = partition1(a, left, right);
-			quickSort1(a, left, mid - 1);
-			quickSort1(a, mid + 1, right);
-		}
-	}
-
-	static int partition1(int[] a, int left, int right) {
-		int j = left, pivot = a[right];
-		for (int i = left; i < right; i++) {
-			if (a[i] < pivot) {
-				swap1(a, i, j);
-				j++;
-			}
-		}
-		swap1(a, right, j);
-		return j;
-	}
-
-	private static int[] swap1(int[] a, int i, int j) {
-		int temp = a[i];
-		a[i] = a[j];
-		a[j] = temp;
-		return a;
-	}
-
-	static int findMedian(int[] arr) {
-		int n = arr.length - 1;
-		quickSort1(arr, 0, n);
-		for (int i = 0; i <= n; i++)
-			System.out.print(arr[i] + " ");
-		return arr[n / 2];
 	}
 
 }

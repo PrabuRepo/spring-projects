@@ -20,7 +20,8 @@ public class SearchingAlgorithms implements SearchOperations {
 	public int binarySearch1(int[] a, int x) {
 		int mid, l = 0, h = a.length - 1;
 		while (l <= h) {
-			mid = (l + h) / 2;
+			//l + (h-l)/2: It is used to prevent (l + h) overflow
+			mid = (l + h) / 2; //or l + (h-l)/2;
 			if (x == a[mid]) {
 				return mid;
 			} else if (x < a[mid]) {
@@ -35,23 +36,16 @@ public class SearchingAlgorithms implements SearchOperations {
 	// Recursive Approach: Time complexity: O(logn)
 	@Override
 	public int binarySearch2(int[] a, int x) {
-		return binarySearch(a, 0, a.length - 1, 610);
+		return binarySearch(a, 0, a.length - 1, x);
 	}
 
 	private int binarySearch(int[] a, int l, int h, int x) {
-		int index = -1;
-		if (l > h)
-			return index;
+		if (l > h) return -1;
 
-		int m = (l + h) / 2;
-		if (a[m] == x)
-			index = m;
-		else if (x < a[m])
-			index = binarySearch(a, l, m - 1, x);
-		else
-			index = binarySearch(a, m + 1, h, x);
-
-		return index;
+		int m = (l + h) / 2; //or l + (h-l)/2;
+		if (a[m] == x) return m;
+		else if (x < a[m]) return binarySearch(a, l, m - 1, x);
+		else return binarySearch(a, m + 1, h, x);
 	}
 
 	/* Binary Search Template I:
@@ -63,8 +57,7 @@ public class SearchingAlgorithms implements SearchOperations {
 	 * Searching Right: left = mid+1
 	 */
 	public int binarySearchTemplate1(int[] nums, int target) {
-		if (nums == null || nums.length == 0)
-			return -1;
+		if (nums == null || nums.length == 0) return -1;
 
 		int left = 0, right = nums.length - 1;
 		while (left <= right) {
@@ -92,8 +85,7 @@ public class SearchingAlgorithms implements SearchOperations {
 	 * Searching Right: left = mid+1
 	 */
 	public int binarySearchTemplate2(int[] nums, int target) {
-		if (nums == null || nums.length == 0)
-			return -1;
+		if (nums == null || nums.length == 0) return -1;
 
 		int left = 0, right = nums.length;
 		while (left < right) {
@@ -110,9 +102,7 @@ public class SearchingAlgorithms implements SearchOperations {
 
 		// Post-processing:
 		// End Condition: left == right
-		if (left != nums.length && nums[left] == target)
-			return left;
-		return -1;
+		return (left != nums.length && nums[left] == target) ? left : -1;
 	}
 
 	/* Binary Search Template III:
@@ -124,8 +114,7 @@ public class SearchingAlgorithms implements SearchOperations {
 	 * Searching Right: left = mid+1
 	 */
 	public int binarySearchTemplate3(int[] nums, int target) {
-		if (nums == null || nums.length == 0)
-			return -1;
+		if (nums == null || nums.length == 0) return -1;
 
 		int left = 0, right = nums.length - 1;
 		while (left + 1 < right) {
@@ -142,10 +131,8 @@ public class SearchingAlgorithms implements SearchOperations {
 
 		// Post-processing:
 		// End Condition: left + 1 == right
-		if (nums[left] == target)
-			return left;
-		if (nums[right] == target)
-			return right;
+		if (nums[left] == target) return left;
+		if (nums[right] == target) return right;
 		return -1;
 	}
 
@@ -159,11 +146,9 @@ public class SearchingAlgorithms implements SearchOperations {
 			mid1 = left + ((right - left) / 3);
 			mid2 = left + (2 * (right - left) / 3); // or mid2 = mid1 + ((right - left) / 3);
 
-			if (a[mid1] == x)
-				return mid1;
+			if (a[mid1] == x) return mid1;
 
-			if (a[mid2] == x)
-				return mid2;
+			if (a[mid2] == x) return mid2;
 
 			if (x < a[mid1]) { // Data present in first quarter
 				right = mid1 - 1;
@@ -183,21 +168,15 @@ public class SearchingAlgorithms implements SearchOperations {
 	}
 
 	public int ternarySearch(int[] a, int l, int h, int x) {
-		if (l > h)
-			return -1;
+		if (l > h) return -1;
 
 		int mid1 = l + (h - l) / 3;
 		int mid2 = l + (2 * (h - l)) / 3;
-		if (a[mid1] == x)
-			return mid1;
-		else if (a[mid2] == x)
-			return mid2;
-		else if (x < a[mid1])
-			return ternarySearch(a, l, mid1 - 1, x);
-		else if (x > a[mid2])
-			return ternarySearch(a, mid2 + 1, h, x);
-		else
-			return ternarySearch(a, mid1 + 1, mid2 - 1, x);
+		if (a[mid1] == x) return mid1;
+		else if (a[mid2] == x) return mid2;
+		else if (x < a[mid1]) return ternarySearch(a, l, mid1 - 1, x);
+		else if (x > a[mid2]) return ternarySearch(a, mid2 + 1, h, x);
+		else return ternarySearch(a, mid1 + 1, mid2 - 1, x);
 	}
 
 	// Time complexity: O(sqrt(n))
@@ -212,15 +191,14 @@ public class SearchingAlgorithms implements SearchOperations {
 		int prev = 0;
 
 		// (n/m) jumps, where m is block
-		while (a[step - 1] < x) {
-			prev = step;
+		while (a[step] < x) {
+			prev = step + 1;
 			step += block;
 		}
 
 		// Linear Search (m-1) comparisons
 		while (a[prev] <= x) {
-			if (a[prev] == x)
-				return prev;
+			if (a[prev] == x) return prev;
 			prev++;
 		}
 
@@ -260,10 +238,8 @@ public class SearchingAlgorithms implements SearchOperations {
 				break;
 			}
 
-			if (x < a[pos])
-				h = pos - 1;
-			else
-				l = pos + 1;
+			if (x < a[pos]) h = pos - 1;
+			else l = pos + 1;
 		}
 		return index;
 	}
@@ -326,13 +302,11 @@ public class SearchingAlgorithms implements SearchOperations {
 			}
 
 			/* element found. return index */
-			else
-				return i;
+			else return i;
 		}
 
 		/* comparing the last element with x */
-		if (fibMMm1 == 1 && arr[offset + 1] == x)
-			return offset + 1;
+		if (fibMMm1 == 1 && arr[offset + 1] == x) return offset + 1;
 
 		/*element not found. return -1 */
 		return -1;

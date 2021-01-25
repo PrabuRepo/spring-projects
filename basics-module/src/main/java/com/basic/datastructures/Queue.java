@@ -66,8 +66,7 @@ class QueueArrayImpl implements QueueOperations {
 	//Add the element in the rear end
 	@Override
 	public void add(int data) {
-		if (isFull())
-			return;
+		if (isFull()) return;
 		if (isEmpty()) // When Queue is empty; both front & rear will be increased zero.
 			front++;
 		queue[++rear] = data; // Normal case: Simply insert the data in the rear end
@@ -75,13 +74,10 @@ class QueueArrayImpl implements QueueOperations {
 
 	@Override
 	public int poll() {
-		if (isEmpty())
-			return -1;
+		if (isEmpty()) return -1;
 		int element = queue[front];
-		if (front == rear)
-			front = rear = -1;
-		else
-			front++;
+		if (front == rear) front = rear = -1;
+		else front++;
 		return element;
 	}
 
@@ -105,8 +101,7 @@ class QueueArrayImpl implements QueueOperations {
 
 	@Override
 	public void print() {
-		if (isEmpty())
-			return;
+		if (isEmpty()) return;
 
 		for (int i = front; i <= rear; i++)
 			System.out.print(queue[i] + " ");
@@ -147,14 +142,13 @@ class QueueSLinkedListImpl implements QueueOperations {
 			front = rear = newNode;
 		} else {
 			rear.next = newNode;
-			rear = rear.next;
+			rear = rear.next; //or rear = newNode
 		}
 	}
 
 	@Override
 	public int poll() {
-		if (isEmpty())
-			return -1;
+		if (isEmpty()) return -1;
 		int data = front.data;
 		if (front == rear) {
 			front = rear = null;
@@ -166,11 +160,11 @@ class QueueSLinkedListImpl implements QueueOperations {
 
 	@Override
 	public int peek() {
-		return !isEmpty() ? front.data : null;
+		return !isEmpty() ? front.data : -1;
 	}
 
 	public int getRear() {
-		return !isEmpty() ? rear.data : null;
+		return !isEmpty() ? rear.data : -1;
 	}
 
 	@Override
@@ -203,8 +197,7 @@ class QueueSLinkedListImpl implements QueueOperations {
 
 	@Override
 	public void print() {
-		if (isEmpty())
-			return;
+		if (isEmpty()) return;
 		ListNode curr = front;
 		while (curr != null) {
 			System.out.print(curr.data + " ");

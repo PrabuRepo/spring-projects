@@ -63,10 +63,20 @@ public class MathProblems {
 		return true;
 	}
 
-	public int factorial(int n) {
-		if (n == 1) return 1;
+	// Recursive Approach:
+	public long factorial1(int n) {
+		if (n == 0 || n == 1) return 1;
+		return n * factorial1(n - 1);
+	}
 
-		return factorial(n - 1) * n;
+	//Iterative Approach:
+	public long factorial2(int n) {
+		int result = 1;
+		if (n > 1) {
+			for (int i = 1; i <= n; i++)
+				result = result * i;
+		}
+		return result;
 	}
 
 	// Pow(x, n)
@@ -197,8 +207,7 @@ public class MathProblems {
 		if (a == b) return a;
 
 		// a is greater
-		if (a > b) return gcd3(a - b, b);
-		return gcd3(a, b - a);
+		return (a > b) ? gcd3(a - b, b) : gcd3(a, b - a);
 	}
 
 	// Calculated using the formula -> [a*b = gcd(a,b) * lcm(a,b)]
@@ -224,6 +233,36 @@ public class MathProblems {
 			result = gcd1(result, a[i]);
 		}
 		return result;
+	}
+
+	/*
+	 * Simple Decimal to Binary string:
+	 */
+	//Linear or Head Recursion
+	public String decimalToBin1(int n) {
+		if (n <= 0) return "";
+
+		return decimalToBin1(n >> 1) + (n % 2);
+	}
+
+	//Tail Recursion:
+	public int decimalToBin2(int n) {
+		String data = "";
+		if (n == 0 || n == 1) return n;
+
+		data += decimalToBin2(n / 2);
+		data += n % 2;
+		return Integer.valueOf(data);
+	}
+
+	//Iterative:
+	public String decimalToBin3(int n) {
+		StringBuilder sb = new StringBuilder();
+		while (n > 1) {
+			sb.append(n % 2);
+			n = n / 2;
+		}
+		return sb.reverse().toString();
 	}
 
 	/*

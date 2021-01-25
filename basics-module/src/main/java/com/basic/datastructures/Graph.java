@@ -114,7 +114,7 @@ public class Graph {
 			if (adjMatrix.length == 0 || adjMatrix[0].length == 0) return null;
 			boolean[] visited = new boolean[N];
 			List<Integer> result = new ArrayList<>();
-			dfsUtil(adjMatrix, visited, N, result);
+			dfsUtil(adjMatrix, visited, source, result);
 			return result;
 		}
 
@@ -138,7 +138,7 @@ public class Graph {
 		public int dfsDisconnectedGraph() {
 			if (adjMatrix.length == 0) return 0;
 			List<Integer> result = new ArrayList<>();
-			int groups = 0;
+			int groups = 0; //No of disconnected graphs
 			boolean[] visited = new boolean[N];
 			for (int i = 0; i < N; i++) {
 				if (!visited[i]) {
@@ -168,7 +168,7 @@ public class Graph {
 				visited[top] = true;
 				result.add(top);
 				for (int j = 0; j < n; j++) {
-					if (!visited[j] && j != s && adjMatrix[top][j] == 1) queue.add(j);
+					if (!visited[j] && j != top && adjMatrix[top][j] == 1) queue.add(j);
 				}
 			}
 		}
@@ -217,9 +217,7 @@ public class Graph {
 			boolean[] visited = new boolean[N];
 
 			// Set max values in edgeWeight array
-			for (int i = 0; i < N; i++)
-				edgeWeight[i] = Integer.MAX_VALUE;
-
+			Arrays.fill(edgeWeight, Integer.MAX_VALUE);
 			edgeWeight[0] = 0;
 			parent[0] = -1;
 
@@ -400,8 +398,10 @@ public class Graph {
 		public void printGraph() {
 			for (int i = 0; i < N; i++) {
 				System.out.println("\nEdges from Vertex: " + i + "->");
-				ListIterator<Integer> iterator = adjList[i].listIterator();
-				while (iterator.hasNext()) System.out.print(iterator.next() + ", ");
+				adjList[i].forEach(v -> System.out.print(v + ", "));
+				//or
+				//ListIterator<Integer> iterator = adjList[i].listIterator();
+				//while (iterator.hasNext()) System.out.print(iterator.next() + ", ");
 			}
 		}
 
@@ -517,7 +517,6 @@ public class Graph {
 			visited[v] = true;
 			recursionStack[v] = true;
 
-			visited[v] = true;
 			ListIterator<Integer> listIterator = adjList[v].listIterator();
 			while (listIterator.hasNext()) {
 				int next = listIterator.next();
@@ -551,13 +550,20 @@ public class Graph {
 				// 1.Increment count of visited nodes by 1.
 				count++;
 
+				if (adjList[vertex] == null || adjList[vertex].isEmpty()) continue;
+
 				// 2.Decrease in-degree by 1 for all its neighboring nodes
+				for (int adjNode : adjList[vertex]) {
+					// 3.If in-degree of a neighboring nodes is reduced to zero, then add it to the queue.
+					if (--indegree[adjNode] == 0) queue.add(adjNode);
+				}
+				/*
 				ListIterator<Integer> iter = adjList[vertex].listIterator();
 				while (iter.hasNext()) {
 					int data = iter.next();
 					if (--indegree[data] == 0) queue.add(data); // 3.If in-degree of a neighboring nodes is reduced to zero,
 																// then add it to the queue.
-				}
+				}*/
 			}
 			// Step-4:If count of visited nodes is equal to the number of nodes in the graph then print the topological sort
 			if (count == N) {
@@ -584,7 +590,7 @@ public class Graph {
 			// If this condition satisfies, then graph contains cycle
 			if (recursionStack[vertex]) return true;
 
-			if (visited[vertex]) return false;
+			//if (visited[vertex]) return false;
 
 			// Mark vertex as visited and set recursion stack
 			visited[vertex] = true;
@@ -594,7 +600,7 @@ public class Graph {
 				ListIterator<Integer> iter = adjList[vertex].listIterator();
 				while (iter.hasNext()) {
 					int adjVertex = iter.next();
-					if (hasCycle(adjVertex, visited, recursionStack)) return true;
+					if (!visited[adjVertex] && hasCycle(adjVertex, visited, recursionStack)) return true;
 				}
 			}
 			// Reset the recursion stack array
@@ -608,7 +614,7 @@ public class Graph {
 			for (int i = 0; i < n; i++)
 				ds.parent[i] = i;
 			for (int i = 0; i < e; i++) {
-				if (ds.union(edges[i].src, edges[i].src)) return true;
+				if (ds.union(edges[i].src, edges[i].dest)) return true;
 			}
 			return false;
 		}
@@ -818,19 +824,19 @@ public class Graph {
 
 		@Override
 		public List<Integer> dfsRecursive(int source) {
-			boolean[] visited = new boolean[N];
+			Set<Integer> visited = new HashSet<>();
 			List<Integer> result = new ArrayList<>();
 			dfs1(source, visited, result);
 			return result;
 		}
 
 		// Recursive Approach
-		private void dfs1(int v, boolean[] visited, List<Integer> result) {
-			visited[v] = true;
+		private void dfs1(int v, Set<Integer> visited, List<Integer> result) {
+			visited.add(v);
 			result.add(v);
 			if (adjMap.get(v) == null) return;
 			for (int adjNode : adjMap.get(v)) {
-				if (!visited[adjNode]) dfs1(adjNode, visited, result);
+				if (!visited.contains(adjNode)) dfs1(adjNode, visited, result);
 			}
 		}
 
@@ -908,15 +914,13 @@ public class Graph {
 			// If this condition satisfies, then adjMap contains cycle
 			if (recStack.contains(v)) return true;
 
-			if (visited.contains(v)) return false;
-
 			// Mark vertex as visited and set recursion stack
 			visited.add(v);
 			recStack.add(v);
 
 			if (adjMap.get(v) != null) {
 				for (int adjVertex : adjMap.get(v)) {
-					if (topoSortUtil(adjVertex, visited, recStack, result)) return true;
+					if (!visited.contains(adjVertex) && topoSortUtil(adjVertex, visited, recStack, result)) return true;
 				}
 			}
 			result.addFirst(v);

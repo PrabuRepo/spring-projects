@@ -62,8 +62,7 @@ class StackArrayImpl implements StackOperations {
 
 	@Override
 	public void push(int data) {
-		if (isFull())
-			return;
+		if (isFull()) return;
 		stack[++top] = data;
 	}
 
@@ -117,8 +116,7 @@ class StackArrayImpl implements StackOperations {
 
 	@Override
 	public void print() {
-		if (isEmpty())
-			return;
+		if (isEmpty()) return;
 
 		for (int i = 0; i <= top; i++)
 			System.out.print(stack[i] + " ");
@@ -141,8 +139,7 @@ class StackSLinkedListImpl implements StackOperations {
 
 	@Override
 	public int pop() {
-		if (!isEmpty())
-			return -1;
+		if (isEmpty()) return -1;
 
 		int data = stack.data;
 		stack = stack.next;
@@ -151,7 +148,7 @@ class StackSLinkedListImpl implements StackOperations {
 
 	@Override
 	public int peek() {
-		return stack != null ? stack.data : null;
+		return isEmpty() ? -1 : stack.data;
 	}
 
 	@Override
@@ -161,8 +158,7 @@ class StackSLinkedListImpl implements StackOperations {
 
 	@Override
 	public void print() {
-		if (isEmpty())
-			return;
+		if (isEmpty()) return;
 
 		ListNode curr = stack;
 		while (curr != null) {

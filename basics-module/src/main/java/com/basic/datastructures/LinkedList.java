@@ -27,7 +27,8 @@ import com.common.model.ListNode;
  *   2. Doubly Linked List
  *   3. Circular Singly Linked List
  *   
- *  Note: Consider below for all the LL operations:  1.Front End; 2.Tail End; 3.Middle
+ *  Note: Consider below three positions for all the LL operations: 
+ *  	     1.First; 2.Last 3.Middle(Anywhere between first & last);
  */
 public class LinkedList {
 	public static void main(String[] args) {
@@ -35,10 +36,10 @@ public class LinkedList {
 		LinkedList ob = new LinkedList();
 
 		System.out.println("1. Singly Linked List");
-		//ob.testSinglyLinkedList();
+		ob.testSinglyLinkedList();
 
 		System.out.println("\n2. Doubly Linked List");
-		ob.testDoublyLinkedList();
+		//ob.testDoublyLinkedList();
 
 		System.out.println("\n3. Circular Singly Linked List");
 		//ob.testCircularSLinkedList();
@@ -46,7 +47,7 @@ public class LinkedList {
 
 	public void testSinglyLinkedList() {
 		SinglyLinkedList list = new SinglyLinkedList();
-		System.out.println("Insert:");
+		System.out.println("Add:");
 		list.add(1);
 		list.add(2);
 		list.add(3);
@@ -54,8 +55,9 @@ public class LinkedList {
 		list.add(7);
 		System.out.println("\nDisplay:");
 		list.print();
-		list.insert(4, 4);
-		list.insert(7, 8);
+		System.out.println("\nInsert:");
+		list.insert(1, 4);
+		list.insert(2, 8);
 		System.out.println("\nDisplay:");
 		list.print();
 		System.out.println("\nDelete: " + list.remove(1));
@@ -117,15 +119,15 @@ class SinglyLinkedList implements SLLOperations {
 			head = newNode;
 		} else {
 			ListNode curr = head;
-			while (curr.next != null)
-				curr = curr.next;
+			while (curr.next != null) curr = curr.next;
 			curr.next = newNode;
 		}
 	}
 
 	@Override
 	public void set(int index, int data) {
-		// TODO Auto-generated method stub
+		// Note: Index based operation is not supported by LL. So here consider index as position which starts from 1.
+		//TODO: Write the logic to update the element in the given position.
 	}
 
 	@Override
@@ -135,8 +137,7 @@ class SinglyLinkedList implements SLLOperations {
 
 	@Override
 	public boolean remove(int data) {
-		if (isEmpty())
-			return false;
+		if (isEmpty()) return false;
 
 		if (head.data == data) {
 			head = head.next;
@@ -157,8 +158,7 @@ class SinglyLinkedList implements SLLOperations {
 
 	@Override
 	public int size() {
-		if (isEmpty())
-			return 0;
+		if (isEmpty()) return 0;
 		int count = 0;
 		ListNode curr = head;
 		while (curr != null) {
@@ -175,11 +175,17 @@ class SinglyLinkedList implements SLLOperations {
 
 	@Override
 	public void insert(int index, int data) {
+		ListNode newNode = new ListNode(data);
+		if (index == 1) {
+			newNode.next = head;
+			head = newNode;
+			return;
+		}
+
 		ListNode curr = head;
 		while (--index > 1)// Move to prev node
 			curr = curr.next;
 
-		ListNode newNode = new ListNode(data);
 		if (curr != null) {
 			newNode.next = curr.next;
 			curr.next = newNode;
@@ -188,13 +194,11 @@ class SinglyLinkedList implements SLLOperations {
 
 	@Override
 	public ListNode get(int data) {
-		if (isEmpty())
-			return null;
+		if (isEmpty()) return null;
 
 		ListNode curr = head;
 		while (curr != null) {
-			if (curr.data == data)
-				return curr;
+			if (curr.data == data) return curr;
 			curr = curr.next;
 		}
 		return null;
@@ -234,8 +238,7 @@ class DoublyLinkedList implements DLLOperations {
 			head = newNode;
 		} else {
 			ListNode curr = head;
-			while (curr.next != null)
-				curr = curr.next;
+			while (curr.next != null) curr = curr.next;
 			curr.next = newNode;
 			newNode.prev = curr;
 		}
@@ -255,25 +258,19 @@ class DoublyLinkedList implements DLLOperations {
 	public boolean remove(int data) {
 		ListNode delNode = get(data);
 
-		if (delNode == null)
-			return false;
+		if (delNode == null) return false;
 
-		if (head == delNode)
-			head = head.next;
+		if (delNode.prev != null) delNode.prev.next = delNode.next;
+		else head = head.next;
 
-		if (delNode.prev != null)
-			delNode.prev.next = delNode.next;
-
-		if (delNode.next != null)
-			delNode.next.prev = delNode.prev;
+		if (delNode.next != null) delNode.next.prev = delNode.prev;
 
 		return true;
 	}
 
 	@Override
 	public int size() {
-		if (isEmpty())
-			return 0;
+		if (isEmpty()) return 0;
 		int count = 0;
 		ListNode curr = head;
 		while (curr != null) {
@@ -301,15 +298,12 @@ class DoublyLinkedList implements DLLOperations {
 		//Get the node based on the index
 		ListNode curr = get2(index);
 
-		if (curr == null)
-			return;
+		if (curr == null) return;
 
 		//Handle newNode's prev pointer & related links
 		newNode.prev = curr.prev;
-		if (curr.prev != null)
-			curr.prev.next = newNode;
-		else
-			head = newNode;
+		if (curr.prev != null) curr.prev.next = newNode;
+		else head = newNode;
 
 		//Handle newNode's next pointer & related links
 		newNode.next = curr;
@@ -321,17 +315,14 @@ class DoublyLinkedList implements DLLOperations {
 		//Get the node based on the data
 		ListNode curr = get(data);
 
-		if (curr == null)
-			return;
+		if (curr == null) return;
 
 		ListNode newNode = new ListNode(newData);
 
 		//Handle newNode's prev pointer & related links
 		newNode.prev = curr.prev;
-		if (curr.prev != null)
-			curr.prev.next = newNode;
-		else
-			head = newNode;
+		if (curr.prev != null) curr.prev.next = newNode;
+		else head = newNode;
 
 		//Handle newNode's next pointer & related links
 		newNode.next = curr;
@@ -343,15 +334,13 @@ class DoublyLinkedList implements DLLOperations {
 		//Get the node based on the data
 		ListNode curr = get(data);
 
-		if (curr == null)
-			return;
+		if (curr == null) return;
 
 		ListNode newNode = new ListNode(newData);
 
 		//Handle newNode's next pointer & related links
 		newNode.next = curr.next;
-		if (curr.next != null)
-			curr.next.prev = newNode;
+		if (curr.next != null) curr.next.prev = newNode;
 
 		//Handle newNode's prev pointer & related links
 		newNode.prev = curr;
@@ -360,13 +349,11 @@ class DoublyLinkedList implements DLLOperations {
 
 	@Override
 	public ListNode get(int data) {
-		if (isEmpty())
-			return null;
+		if (isEmpty()) return null;
 
 		ListNode curr = head;
 		while (curr != null) {
-			if (curr.data == data)
-				return curr;
+			if (curr.data == data) return curr;
 			curr = curr.next;
 		}
 		return null;
@@ -374,8 +361,7 @@ class DoublyLinkedList implements DLLOperations {
 
 	@Override
 	public ListNode get2(int index) {
-		if (isEmpty())
-			return null;
+		if (isEmpty()) return null;
 
 		ListNode curr = head;
 		while (--index >= 1 && curr != null) {
@@ -397,8 +383,7 @@ class DoublyLinkedList implements DLLOperations {
 	public void printReverse() {
 		ListNode curr = head;
 		//Move to last node
-		while (curr.next != null)
-			curr = curr.next;
+		while (curr.next != null) curr = curr.next;
 
 		while (curr != null) {
 			System.out.print(curr.data + " ");
@@ -449,13 +434,12 @@ class CircularSLinkedList implements SLLOperations {
 
 	@Override
 	public boolean remove(int data) {
-		if (isEmpty())
-			return false;
+		if (isEmpty()) return false;
 
 		ListNode curr = head;
-		if (curr.data == data && curr.next == head) {
+		if (head.data == data && curr.next == head) {
 			head = null;
-		} else if (curr.data == data) {
+		} else if (head.data == data) {
 			curr.data = curr.next.data;
 			curr.next = curr.next.next;
 		} else {
@@ -473,17 +457,15 @@ class CircularSLinkedList implements SLLOperations {
 
 	@Override
 	public int size() {
-		if (isEmpty())
-			return 0;
+		if (isEmpty()) return 0;
 
 		ListNode curr = head;
 		int count = 0;
-		if (curr != null) {
-			do {
-				count++;
-				curr = curr.next;
-			} while (curr != head);
-		}
+		do {
+			count++;
+			curr = curr.next;
+		} while (curr != head);
+
 		return count;
 	}
 
@@ -495,26 +477,24 @@ class CircularSLinkedList implements SLLOperations {
 	@Override
 	public void insert(int index, int data) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public ListNode get(int data) {
+		if (isEmpty()) return null;
+
 		ListNode curr = head;
-		if (curr != null) {
-			do {
-				if (curr.data == data)
-					return curr;
-				curr = curr.next;
-			} while (curr != head);
-		}
+		do {
+			if (curr.data == data) return curr;
+			curr = curr.next;
+		} while (curr != head);
+
 		return null;
 	}
 
 	@Override
 	public void print() {
-		if (isEmpty())
-			return;
+		if (isEmpty()) return;
 
 		ListNode curr = head;
 		do {

@@ -8,11 +8,12 @@ import com.common.model.ListNode;
 
 /*  
  * Deque(Double Ended Queue):
- * 	Deque can act as both stack(push/pop) & queue(enqueue/deque)
+ * 	Deque can act as both stack(push/pop) & queue(enqueue/dequeue)
  * 	A linear collection that supports element insertion and removal at both ends. The name deque is short for "double ended queue" 
  * 	and is usually pronounced "deck". Most Deque implementations place no fixed limits on the number of elements they may contain, 
  * 	but this interface supports capacity-restricted deques as well as those with no fixed size limit.
- * 
+ * 	Stack: use addFirst(push), removeFirst(pop) operation
+ *  Queue: use addLast(enqueue), removeFirst(dequeue) operation
  * Deque Impl using Circular Array & Doubly Linked List
  */
 public class Deque {
@@ -36,8 +37,7 @@ class DequeArrayImpl implements DequeOperations {
 
 	@Override
 	public void addFirst(int data) {
-		if (isFull2())
-			return;
+		if (isFull2()) return;
 		if (isEmpty()) { // When queue is empty
 			front++;
 			rear++;
@@ -52,8 +52,7 @@ class DequeArrayImpl implements DequeOperations {
 
 	@Override
 	public void addLast(int data) {
-		if (isFull2())
-			return;
+		if (isFull2()) return;
 		if (isEmpty()) {// When queue is empty
 			front++;
 			rear++;
@@ -68,8 +67,7 @@ class DequeArrayImpl implements DequeOperations {
 
 	@Override
 	public int removeFirst() {
-		if (isEmpty())
-			return -1;
+		if (isEmpty()) return -1;
 		int element = queue[front];
 		queue[front] = -1;
 		if (front == rear) { // If both are same, only one data present in the queue
@@ -87,8 +85,7 @@ class DequeArrayImpl implements DequeOperations {
 
 	@Override
 	public int removeLast() {
-		if (isEmpty())
-			return -1;
+		if (isEmpty()) return -1;
 		int element = queue[rear];
 		queue[rear] = -1;
 		if (front == rear) {// If both are same, only one data present in the queue
@@ -115,15 +112,14 @@ class DequeArrayImpl implements DequeOperations {
 
 	@Override
 	public void print() {
-		if (isEmpty())
-			return;
+		if (isEmpty()) return;
 		for (int i = 0; i < maxSize; i++)
 			System.out.print(queue[i] + " ");
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return front == -1 ? true : false;
+		return front == -1 && rear == -1 ? true : false;
 	}
 
 	public boolean isFull1() {
@@ -198,31 +194,23 @@ class DequeArrayImpl implements DequeOperations {
 				break;
 			case 3:
 				int data = queue.removeFirst();
-				if (data != -1)
-					System.out.println("Dequeued front element is: " + data);
-				else
-					System.out.println("Queue is empty");
+				if (data != -1) System.out.println("Dequeued front element is: " + data);
+				else System.out.println("Queue is empty");
 				break;
 			case 4:
 				data = queue.removeLast();
-				if (data != -1)
-					System.out.println("Dequeued rear element is: " + data);
-				else
-					System.out.println("Queue is empty");
+				if (data != -1) System.out.println("Dequeued rear element is: " + data);
+				else System.out.println("Queue is empty");
 				break;
 			case 5:
 				data = queue.getFirst();
-				if (data != -1)
-					System.out.println("Front element is: " + data);
-				else
-					System.out.println("Queue is empty");
+				if (data != -1) System.out.println("Front element is: " + data);
+				else System.out.println("Queue is empty");
 				break;
 			case 6:
 				data = queue.getLast();
-				if (data != -1)
-					System.out.println("Rear element is: " + data);
-				else
-					System.out.println("Queue is empty");
+				if (data != -1) System.out.println("Rear element is: " + data);
+				else System.out.println("Queue is empty");
 				break;
 			default:
 				System.out.println("Please enter the valid option!!!");
@@ -255,7 +243,7 @@ class DequeDLLImpl implements DequeOperations {
 	@Override
 	public void addFirst(int data) {
 		ListNode newNode = new ListNode(data);
-		if (front == null) {
+		if (isEmpty()) {
 			front = rear = newNode;
 		} else {
 			newNode.next = front;
@@ -267,7 +255,7 @@ class DequeDLLImpl implements DequeOperations {
 	@Override
 	public void addLast(int data) {
 		ListNode newNode = new ListNode(data);
-		if (rear == null) {
+		if (isEmpty()) {
 			front = rear = newNode;
 		} else {
 			rear.next = newNode;
@@ -278,30 +266,28 @@ class DequeDLLImpl implements DequeOperations {
 
 	@Override
 	public int removeFirst() {
+		if (isEmpty()) return -1;
 		int element = -1;
-		if (front != null && rear != null) {
-			element = front.data;
-			if (front == rear) {
-				front = rear = null;
-			} else {
-				front = front.next;
-				front.prev = null;
-			}
+		element = front.data;
+		if (front == rear) {
+			front = rear = null;
+		} else {
+			front = front.next;
+			front.prev = null;
 		}
 		return element;
 	}
 
 	@Override
 	public int removeLast() {
+		if (isEmpty()) return -1;
 		int element = -1;
-		if (front != null && rear != null) {
-			element = rear.data;
-			if (front == rear) {
-				front = rear = null;
-			} else {
-				rear = rear.prev;
-				rear.next = null;
-			}
+		element = rear.data;
+		if (front == rear) {
+			front = rear = null;
+		} else {
+			rear = rear.prev;
+			rear.next = null;
 		}
 		return element;
 	}
@@ -318,8 +304,7 @@ class DequeDLLImpl implements DequeOperations {
 
 	@Override
 	public void print() {
-		if (isEmpty())
-			return;
+		if (isEmpty()) return;
 		ListNode temp = front;
 		while (temp != null) {
 			System.out.print(temp.data + " ");
@@ -394,31 +379,23 @@ class DequeDLLImpl implements DequeOperations {
 				break;
 			case 3:
 				int data = queue.removeFirst();
-				if (data != -1)
-					System.out.println("Dequeued front element is: " + data);
-				else
-					System.out.println("Queue is empty");
+				if (data != -1) System.out.println("Dequeued front element is: " + data);
+				else System.out.println("Queue is empty");
 				break;
 			case 4:
 				data = queue.removeLast();
-				if (data != -1)
-					System.out.println("Dequeued rear element is: " + data);
-				else
-					System.out.println("Queue is empty");
+				if (data != -1) System.out.println("Dequeued rear element is: " + data);
+				else System.out.println("Queue is empty");
 				break;
 			case 5:
 				data = queue.getFirst();
-				if (data != -1)
-					System.out.println("Front element is: " + data);
-				else
-					System.out.println("Queue is empty");
+				if (data != -1) System.out.println("Front element is: " + data);
+				else System.out.println("Queue is empty");
 				break;
 			case 6:
 				data = queue.getLast();
-				if (data != -1)
-					System.out.println("Rear element is: " + data);
-				else
-					System.out.println("Queue is empty");
+				if (data != -1) System.out.println("Rear element is: " + data);
+				else System.out.println("Queue is empty");
 				break;
 			default:
 				System.out.println("Please enter the valid option!!!");

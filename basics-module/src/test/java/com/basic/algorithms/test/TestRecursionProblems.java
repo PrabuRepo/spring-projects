@@ -4,8 +4,7 @@ import java.util.Arrays;
 
 import com.basic.algorithms.Recursion;
 
-public class TestRecursionProblems
-		extends Recursion {
+public class TestRecursionProblems extends Recursion {
 	public static void main(String[] args) {
 		TestRecursionProblems ob = new TestRecursionProblems();
 
@@ -25,42 +24,30 @@ public class TestRecursionProblems
 	}
 
 	public void testSingleRecursion() {
-		System.out.println(
-				"Factorial of a given number:"
-						+ factRecursive(5));
 
-		System.out.println("\nDecimal to Bin:"
-				+ decimalToBin(5));
+		System.out.println("\nDecimal to Bin:" + decimalToBin(5));
 
-		System.out.println(
-				"\nHead Recursive call:");
+		System.out.println("\nHead Recursive call:");
 		headRecursiveCall(5);
 		// System.out.println("Total no of calls in headRecursiveCall: " + count);
 
-		System.out.println(
-				"\nTail Recursive call:");
+		System.out.println("\nTail Recursive call:");
 		tailRecursiveCall(5);
 		// System.out.println("\nTotal no of calls in tailRecursiveCall: " + count);
 	}
 
 	public void testMultipleRecursion() {
-		System.out.println("\nFib of value n:"
-				+ fibRecursive(6));
+		System.out.println("\nFib of value n:" + fibRecursive(6));
 		// System.out.println("\nFib of value n:" + fibIterative(6));
 
-		System.out.println(
-				"\nBinary Recursive Call:");
+		System.out.println("\nBinary Recursive Call:");
 		binaryRecursiveCall(3);
 
-		int[] arr = { 0, 1, 89, 144, 2, 233, 5, 8,
-				377, 3, 1, 13, 21, 34, 55, 610 };
+		int[] arr = { 0, 1, 89, 144, 2, 233, 5, 8, 377, 3, 1, 13, 21, 34, 55, 610 };
 		System.out.println("Before sorting:");
-		Arrays.stream(arr).forEach(
-				a -> System.out.print(a + " "));
-		quickSort(arr, 0, arr.length - 1);
+		Arrays.stream(arr).forEach(a -> System.out.print(a + " "));
 		System.out.println("\nAfter sorting:");
-		Arrays.stream(arr).forEach(
-				a -> System.out.print(a + " "));
+		Arrays.stream(arr).forEach(a -> System.out.print(a + " "));
 	}
 
 	public void testIterativeVsRecursive() {
@@ -73,30 +60,23 @@ public class TestRecursionProblems
 		System.out.println("\nDouble Iteration:");
 		doubleIteration(5);
 
-		System.out
-				.println("\nDouble Recursion: ");
+		System.out.println("\nDouble Recursion: ");
 		doubleRecursion(4);
-		System.out.println("No of method calls: "
-				+ dualRecursionCount);
+		System.out.println("No of method calls: " + dualRecursionCount);
 
-		System.out.println(
-				"\nOne Iteration & Recursion:");
+		System.out.println("\nOne Iteration & Recursion:");
 		oneIterAndRecursion(4);
-		System.out.println("No of method calls: "
-				+ oneIterAndRecurCount);
+		System.out.println("No of method calls: " + oneIterAndRecurCount);
 
-		System.out.println(
-				"\nSum of all the double recursion combination: ");
+		System.out.println("\nSum of all the double recursion combination: ");
 		doubleRecursionWithSum(4);
 
 		System.out.println("\nTriple Iteration:");
 		tripleIteration(4);
 
-		System.out
-				.println("\nTriple Recursion: ");
+		System.out.println("\nTriple Recursion: ");
 		tripleRecursion(1, 4);
-		System.out.println("\nNo of executions: "
-				+ tripleRecursionCount);
+		System.out.println("\nNo of executions: " + tripleRecursionCount);
 	}
 
 	public void testSimpleProblems() {

@@ -6,6 +6,22 @@ import java.util.Scanner;
 import com.basic.datastructures.operations.HeapOperations;
 
 /*
+ * A Heap is a special Tree-based data structure in which the tree is a complete binary tree. A Binary Heap is a Binary Tree with following properties.
+ *   1) It’s a complete tree (All levels are completely filled except possibly the last level and the last level has all keys as left as possible). 
+ *      This property of Binary Heap makes them suitable to be stored in an array.
+ *   2) A Binary Heap is either Min Heap or Max Heap. In a Min Binary Heap, the key at root must be minimum among all keys present in Binary Heap. 
+ *      The same property must be recursively true for all nodes in Binary Tree. Max Binary Heap is similar to MinHeap.
+ * 
+ * Applications of Heaps:
+ *   1) Heap Sort: Heap Sort uses Binary Heap to sort an array in O(nLogn) time.
+ *   2) Priority Queue: Priority queues can be efficiently implemented using Binary Heap because it supports insert(), delete() and extractmax(), decreaseKey() 
+ *      operations in O(logn) time. Binomoial Heap and Fibonacci Heap are variations of Binary Heap. These variations perform union also efficiently.
+ *   3) Graph Algorithms: The priority queues are especially used in Graph Algorithms like Dijkstra’s Shortest Path and Prim’s Minimum Spanning Tree.
+ *   4) Many problems can be efficiently solved using Heaps. See following for example.
+ *   		a) K’th Largest Element in an array.
+ *   		b) Sort an almost sorted array/
+ *   		c) Merge K Sorted Arrays.
+ * 
  * Priority Queue Impl using Heap:
  * - Max Binary Heap
  * - Min Binary Heap 
@@ -35,15 +51,60 @@ class MaxBinaryHeap implements HeapOperations {
 			elements[heapSize++] = data;
 		} else {
 			elements[heapSize] = data;
-			for (int i = heapSize; i > 0; i = parent(i)) {
-				if (elements[parent(i)] != null && elements[parent(i)] < data) {
-					swap(i, parent(i));
+			//Shift up logic:
+			shiftUp(heapSize);
+			heapSize++;
+
+			/*for (int i = heapSize; i > 0; i = parent(i)) {
+				int parentIndex = parent(i);
+				if (elements[parentIndex] != null && elements[parentIndex] < data) {
+					swap(i, parentIndex);
 				} else {
 					break;
 				}
-			}
-			heapSize++;
+			}*/
 		}
+	}
+
+	//Update the value: Time Complexity: O(logn)
+	@Override
+	public void set(int index, int newValue) {
+		if (index >= heapSize || index < 0) {
+			System.out.println("Index is not a valid!");
+			return;
+		}
+
+		if (newValue > elements[index]) {
+			elements[index] = newValue;
+			shiftUp(index);
+		} else {
+			elements[index] = newValue;
+			shiftDown(index);
+		}
+	}
+
+	//Get the max value
+	// Time Complexity: O(logn)
+	@Override
+	public int poll() {
+		Integer value = null;
+		if (!isHeapEmpty()) {
+			value = elements[0];
+			if (heapSize == 1) {
+				heapSize--;
+			} else {
+				elements[0] = elements[heapSize - 1]; // Last element assigned to root
+				elements[heapSize--] = null; // Last element set it as null & reduce the heap size
+				shiftDown(0);
+			}
+		}
+		return value;
+	}
+
+	// Time Complexity:O(1)
+	@Override
+	public int peek() {
+		return isHeapEmpty() ? null : elements[0];
 	}
 
 	// Search/Access element: Time Complexity: O(n)
@@ -59,43 +120,6 @@ class MaxBinaryHeap implements HeapOperations {
 		return flag;
 	}
 
-	// Time Complexity: O(logn)
-	@Override
-	public int poll() {
-		Integer value = null;
-		if (!isHeapEmpty()) {
-			value = elements[0];
-			if (heapSize == 1) {
-				heapSize--;
-			} else {
-				elements[0] = elements[heapSize - 1]; // Last element assigned to root
-				elements[heapSize--] = null; // Last element set it as null & reduce the heap size
-				maxHeapify(0);
-			}
-		}
-		return value;
-	}
-
-	// Time Complexity:O(1)
-	@Override
-	public int peek() {
-		return isHeapEmpty() ? null : elements[0];
-	}
-
-	//Update the value: Time Complexity: O(logn)
-	@Override
-	public void set(int index, int increasedValue) {
-		if (index < heapSize) {
-			elements[index] = increasedValue;
-			while (index > 0 && elements[parent(index)] < elements[index]) {
-				swap(index, parent(index));
-				index = parent(index);
-			}
-		} else {
-			System.out.println("Not a valid position");
-		}
-	}
-
 	@Override
 	public void print() {
 		for (int i = 0; i < heapSize; i++)
@@ -104,8 +128,25 @@ class MaxBinaryHeap implements HeapOperations {
 
 	@Override
 	public boolean remove(int data) {
-		// TODO Auto-generated method stub
-		return false;
+		/*Steps: 
+			1. Find the index of the data.
+			2. Set max value in index and set() method, that will move the record to top.
+			3. Invoke poll() method, that will delete the root value and rearrange the data.*/
+
+		int index = findIndex(data);
+		if (index != -1) {
+			set(index, Integer.MAX_VALUE);
+			poll();
+		}
+
+		return true;
+	}
+
+	private int findIndex(int data) {
+		for (int i = 0; i < heapSize; i++) {
+			if (elements[i] == data) return i;
+		}
+		return -1;
 	}
 
 	@Override
@@ -118,6 +159,29 @@ class MaxBinaryHeap implements HeapOperations {
 	public boolean isEmpty() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public int parent(int i) {
+		return (i - 1) / 2;
+	}
+
+	@Override
+	public int left(int i) {
+		return 2 * i + 1;
+	}
+
+	@Override
+	public int right(int i) {
+		return 2 * i + 2;
+	}
+
+	//Shift Down Logic:
+	@Override
+	public void heapify(int i) {
+		maxHeapify(i);
+
+		maxHeapify2(i);
 	}
 
 	// Time Complexity: O(logn)
@@ -155,16 +219,17 @@ class MaxBinaryHeap implements HeapOperations {
 		}
 	}
 
-	private int parent(int i) {
-		return (i - 1) / 2;
+	@Override
+	public void shiftDown(int i) {
+		maxHeapify(i);
 	}
 
-	private int left(int i) {
-		return 2 * i + 1;
-	}
-
-	private int right(int i) {
-		return 2 * i + 2;
+	@Override
+	public void shiftUp(int i) {
+		while (i > 0 && elements[parent(i)] < elements[i]) {
+			swap(i, parent(i));
+			i = parent(i);
+		}
 	}
 
 	private boolean isHeapFull() {
@@ -249,12 +314,30 @@ class MinBinaryHeap implements HeapOperations {
 	public void add(int data) {
 		if (!isFull()) {
 			elements[currSize] = data;
-			for (int i = currSize; (i > 0 && elements[parent(i)] > elements[i]); i = parent(i))
-				swap(parent(i), i);
-
+			//Shift up logic:
+			shiftUp(currSize);
 			currSize++;
+			/*for (int i = currSize; (i > 0 && elements[parent(i)] > elements[i]); i = parent(i))
+				swap(parent(i), i);*/
+
 		} else {
 			System.out.println("Overflow: heap full!");
+		}
+	}
+
+	// Time Complexity: O(logn)
+	@Override
+	public void set(int index, int newVal) {
+		if (index < 0 || index >= currSize) {
+			System.out.println("Index is invalid!");
+		}
+
+		if (newVal < elements[index]) {
+			elements[index] = newVal;
+			shiftUp(index);
+		} else {
+			elements[index] = newVal;
+			shiftDown(index);
 		}
 	}
 
@@ -285,8 +368,7 @@ class MinBinaryHeap implements HeapOperations {
 			elements[0] = elements[currSize - 1]; // assign last element in the heap
 			elements[currSize - 1] = null;
 			currSize--;
-			// minHeapify(0);
-			minHeapifyIterative(0);
+			shiftDown(0);
 		}
 		return element;
 	}
@@ -295,16 +377,6 @@ class MinBinaryHeap implements HeapOperations {
 	@Override
 	public int peek() {
 		return currSize > 0 ? elements[0] : null;
-	}
-
-	// Time Complexity: O(logn)
-	@Override
-	public void set(int index, int decreasedValue) {
-		if (index < currSize) {
-			elements[index] = decreasedValue;
-			for (int i = index; (i > 0 && elements[parent(i)] > elements[i]); i = parent(i))
-				swap(parent(i), i);
-		}
 	}
 
 	@Override
@@ -319,8 +391,17 @@ class MinBinaryHeap implements HeapOperations {
 
 	@Override
 	public boolean remove(int data) {
-		// TODO Auto-generated method stub
-		return false;
+		/*Steps: 
+		1. Find the index of the data.
+		2. Set max value in index and set() method, that will move the record to top.
+		3. Invoke poll() method, that will delete the root value and rearrange the data.*/
+
+		int index = findIndex(data);
+		if (index != -1) {
+			set(index, Integer.MIN_VALUE);
+			poll();
+		}
+		return true;
 	}
 
 	@Override
@@ -329,11 +410,33 @@ class MinBinaryHeap implements HeapOperations {
 		return 0;
 	}
 
+	@Override
+	public int parent(int i) {
+		return (i - 1) / 2;
+	}
+
+	@Override
+	public int left(int i) {
+		return (2 * i) + 1;
+	}
+
+	@Override
+	public int right(int i) {
+		return (2 * i) + 2;
+	}
+
+	@Override
+	public void heapify(int i) {
+		minHeapify(i);
+
+		minHeapifyIterative(i);
+	}
+
 	private void minHeapifyIterative(int i) {
 		int left, right, minIndex;
 		while (i < currSize) {
-			left = leftChild(i);
-			right = rightChild(i);
+			left = left(i);
+			right = right(i);
 			minIndex = i;
 
 			if (left < currSize && elements[left] < elements[minIndex]) {
@@ -353,8 +456,8 @@ class MinBinaryHeap implements HeapOperations {
 
 	// Time Complexity: O(logn)
 	private void minHeapify(int index) {
-		int left = leftChild(index);
-		int right = rightChild(index);
+		int left = left(index);
+		int right = right(index);
 		int smallest = index;
 
 		if (left < currSize && elements[left] < elements[smallest]) smallest = left;
@@ -367,20 +470,21 @@ class MinBinaryHeap implements HeapOperations {
 		}
 	}
 
+	@Override
+	public void shiftUp(int i) {
+		while (i > 0 && elements[parent(i)] > elements[i]) {
+			swap(i, parent(i));
+			i = parent(i);
+		}
+	}
+
+	@Override
+	public void shiftDown(int i) {
+		minHeapify(i);
+	}
+
 	private boolean isFull() {
 		return (currSize == capacity) ? true : false;
-	}
-
-	private int parent(int i) {
-		return (i - 1) / 2;
-	}
-
-	private int leftChild(int i) {
-		return (2 * i) + 1;
-	}
-
-	private int rightChild(int i) {
-		return (2 * i) + 2;
 	}
 
 	private void swap(int pos1, int pos2) {
@@ -398,6 +502,13 @@ class MinBinaryHeap implements HeapOperations {
 			currSize--;
 			minHeapify(index);
 		}
+	}
+
+	private int findIndex(int data) {
+		for (int i = 0; i < currSize; i++) {
+			if (elements[i] == data) return i;
+		}
+		return -1;
 	}
 
 	public static void main(String[] args) {
@@ -451,6 +562,7 @@ class MinBinaryHeap implements HeapOperations {
 		System.out.println("****Thank You******");
 		in.close();
 	}
+
 }
 
 class PriorityQueue {
