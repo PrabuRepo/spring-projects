@@ -3,6 +3,7 @@ package com.basic.algorithms;
 public class MathProblems {
 	// Reverse Integer
 	public int reverse1(int n) {
+		if (n >= Integer.MAX_VALUE || n <= Integer.MIN_VALUE) return 0;
 		int rev = 0, curr = Math.abs(n);
 		boolean flag = n < 0 ? true : false;
 		int MAX = Integer.MAX_VALUE / 10;
@@ -17,36 +18,38 @@ public class MathProblems {
 		return flag == false ? rev : -rev;
 	}
 
-	public int reverse2(int x) {
-		int result = 0, rem = Math.abs(x);
-		while (rem != 0) {
-			int tail = rem % 10;
-			int rev = (result * 10) + tail;
-			if ((rev - tail) / 10 != result) return 0; // If rev overflows, this condition success and returns 0;
-			result = rev;
-			rem /= 10;
+	public int reverse2(int n) {
+		if (n >= Integer.MAX_VALUE || n <= Integer.MIN_VALUE) return 0;
+		int prev = 0, val = Math.abs(n);
+		while (val != 0) {
+			int rem = val % 10;
+			int rev = (val * 10) + rem;
+			if ((rev - rem) / 10 != prev) return 0; // If rev overflows, this condition success and returns 0;
+			prev = rev;
+			val /= 10;
 		}
 
-		return x < 0 ? -result : result;
+		return n < 0 ? -prev : prev;
 	}
 
 	// Palindrome Number
 	public boolean isPalindrome(int x) {
 		if (x < 0) return false;
 
-		int rem = x, result = 0;
-		while (rem >= 10) {
-			result *= 10;
-			result += rem % 10;
-			rem /= 10;
+		int val = x, rev = 0;
+		//Checks till 10, to avoid the overflow
+		while (val >= 10) {
+			rev *= 10;
+			rev += val % 10;
+			val /= 10;
 		}
 
-		return result == x / 10 && rem == x % 10;
+		return rev == x / 10 && val == x % 10;
 	}
 
 	// Count Primes
 	public int countPrimes(int n) {
-		if (n <= 2) return 0;
+		if (n <= 1) return 0;
 		int count = 1;
 		for (int i = 3; i < n; i++) {
 			if (isPrime(i)) count++;
@@ -54,8 +57,12 @@ public class MathProblems {
 		return count;
 	}
 
+	/* A prime number (or a prime) is a natural number that has exactly two distinct natural number divisors: 1 and itself.
+	 * For example, there are 25 prime numbers from 1 to 100: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53,
+	 * 59, 61, 67, 71, 73, 79, 83, 89, 97.*/
 	private boolean isPrime(int n) {
-		if (n == 2 || n == 3) return true;
+		if (n <= 1) return false;
+		if (n <= 3) return true;
 		int sqrt = (int) Math.sqrt(n);
 		for (int i = 2; i <= sqrt; i++) {
 			if (n % i == 0) return false;
@@ -65,44 +72,72 @@ public class MathProblems {
 
 	// Recursive Approach:
 	public long factorial1(int n) {
-		if (n == 0 || n == 1) return 1;
+		if (n <= 1) return 1;
 		return n * factorial1(n - 1);
 	}
 
 	//Iterative Approach:
 	public long factorial2(int n) {
+		if (n <= 1) return 1;
 		int result = 1;
-		if (n > 1) {
-			for (int i = 1; i <= n; i++)
-				result = result * i;
-		}
+		for (int i = 1; i <= n; i++)
+			result = result * i;
 		return result;
 	}
 
 	// Pow(x, n)
-	public double myPow(double x, int n) {
-		return (n < 0) ? 1 / pow(x, -n) : pow(x, n);
+	//Time Complexity: O(n)
+	public double pow1(double x, int n) {
+		//if n is negative find 1/x^n; here -n used below for changing -n to +n; 
+		return (n < 0) ? (1 / findPow1(x, -n)) : findPow1(x, n);
 	}
 
-	public double pow(double x, int n) {
+	private double findPow1(double x, int n) {
+		if (n == 0) return 1;
+		if (n == 1) return x;
+
+		return x * findPow1(x, n - 1);
+	}
+
+	//Better Approach: Time Complexity: O(n); Assume n%2 always odd
+	public double pow2(double x, int n) {
+		return (n < 0) ? (1 / findPow2(x, -n)) : findPow2(x, n);
+	}
+
+	private double findPow2(double x, int n) {
 		if (n == 0) return 1.0;
 		if (n == 1) return x;
 
 		if (n % 2 == 0) {
-			double val = pow(x, n / 2);
+			double val = findPow2(x, n / 2);
 			return val * val;
 		}
 
-		return x * myPow(x, n - 1);
+		return x * findPow2(x, n - 1);
+	}
+
+	//Time Complexity: O(logn)
+	public double pow3(double x, int n) {
+		return (n < 0) ? (1 / findPow3(x, -n)) : findPow3(x, n);
+	}
+
+	private double findPow3(double x, int n) {
+		if (n == 0) return 1.0;
+		if (n == 1) return x;
+
+		double val = findPow3(x, n / 2);
+
+		return n % 2 == 0 ? val * val : x * val * val;
 	}
 
 	// Sqrt(x):
 	// Simple Approach: It doesnt work for high values
-	/*The squareroot of a (non-negative) number N always lies between 0 and N/2. The straightforward way to solve this problem would be to check every number k between 0 and N/2, until the square of k becomes greater than or rqual to N.  */
+	/*The squareroot of a (non-negative) number N always lies between 0 and N/2. The straightforward way to solve this problem would be
+	 * to check every number i between 0 and N/2, until the square of i becomes greater than or equal to N.  */
 	public int mySqrt1(int n) {
 		if (n == 0 || n == 1) return n;
 		int i = 1, multiply = 1;
-		while (multiply <= n / 2) {
+		while (multiply <= n) {
 			i++;
 			multiply = i * i;
 		}
@@ -111,14 +146,14 @@ public class MathProblems {
 
 	// Modification of Binary Search
 	public int mySqrt2(int n) {
-		if (n == 0 || n == 1) return n;
+		if (n <= 1) return n;
 
 		int low = 1, high = n / 2, div = 0, mid;
 		while (low <= high) {
 			mid = low + (high - low) / 2;
 			div = n / mid;
 			if (mid == div) return mid;
-			else if (mid > div) high = mid - 1;
+			else if (div < mid) high = mid - 1;
 			else low = mid + 1;
 
 		}
@@ -128,7 +163,7 @@ public class MathProblems {
 	public int mySqrt3(int A) {
 		if (A <= 1) return A;
 
-		int l = 2, h = A / 2, m = 0, resut = 1;
+		int l = 1, h = A / 2, m = 0, resut = 1;
 		while (l <= h) {
 			m = l + (h - l) / 2;
 
@@ -181,19 +216,16 @@ public class MathProblems {
 	 */
 	public int gcd1(int a, int b) {
 		if (b == 0) return a;
-		int rem = a % b;
-		return gcd1(b, rem);
+		return gcd1(b, a % b);
 	}
 
 	// GCD is calculated using Euclid's algorithm(Iterative)
 	public int gcd2(int a, int b) {
-		if (b != 0) {
-			int temp;
-			while (b > 0) {
-				temp = a % b;
-				a = b;
-				b = temp;
-			}
+		int temp;
+		while (b > 0) {
+			temp = a % b;
+			a = b;
+			b = temp;
 		}
 		return a;
 	}
@@ -322,14 +354,19 @@ public class MathProblems {
 		if (str.isEmpty()) return 0;
 		int sign = 1, base = 0, i = 0, n = str.length();
 		while (i < n && str.charAt(i) == ' ') i++;
+
 		if (i == n) return 0;
-		if (str.charAt(i) == '-' || str.charAt(i) == '+') sign = str.charAt(i++) == '-' ? -1 : 1;
+		if (str.charAt(i) == '-' || str.charAt(i) == '+') {
+			sign = str.charAt(i++) == '-' ? -1 : 1;
+		}
+
 		while (i < str.length() && str.charAt(i) >= '0' && str.charAt(i) <= '9') {
 			if (base > Integer.MAX_VALUE / 10 || (base == Integer.MAX_VALUE / 10 && str.charAt(i) - '0' > 7)) {
 				return (sign == 1) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
 			}
 			base = 10 * base + (str.charAt(i++) - '0');
 		}
+
 		return base * sign;
 	}
 
@@ -385,5 +422,13 @@ public class MathProblems {
 	//TODO: Write various samples to understand the this
 	public void testLargeInteger() {
 
+	}
+
+	public static void main(String[] args) {
+		MathProblems ob = new MathProblems();
+		int n = 43253;
+		System.out.println("Sqrt: " + ob.mySqrt1(n));
+		System.out.println("Sqrt: " + ob.mySqrt2(n));
+		System.out.println("Sqrt: " + ob.mySqrt3(n));
 	}
 }

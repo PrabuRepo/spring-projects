@@ -4,8 +4,11 @@ import java.util.Arrays;
 
 /*
  * Binary Search Patterns:
- *  
+ * 
  * Note: 
+ *  If target presents left side(t<a[m]), h = m-1
+ *  If target presents right side(a[m]<t), l = m+1
+ * 
  * 	Mostly l=m+1, h=m -> This condition allows to move the index
  *  But l=m, h=m-1 -> This condition doesnt move and loop runs without exit. 
  *  
@@ -109,6 +112,7 @@ public class BinarySearchPatterns {
 		while (l < h) {
 			m = l + (h - l) / 2;
 
+			//Assign l=m+1, only when mid element is greater than left or right. Eg: a[m] > a[h] or a[m] > a[l]
 			if (nums[m] > nums[h]) l = m + 1;
 			else h = m;
 		}
@@ -136,6 +140,7 @@ public class BinarySearchPatterns {
 			m = l + (h - l) / 2;
 			if (nums[m] == target) return m;
 
+			//Here choose the sorted part and search the element.
 			if (nums[m] < nums[h]) { // right part is sorted
 				if (target > nums[m] && target <= nums[h]) { // Check target between m to h, if so l = m+1
 					l = m + 1;
@@ -218,7 +223,7 @@ public class BinarySearchPatterns {
 	// Note: If data is already sorted, binary search will be efficient approach
 	public int missingNumber(int[] nums) {
 		Arrays.sort(nums);
-		int l = 0, h = nums.length, m = (l + h) / 2;
+		int l = 0, h = nums.length, m = 0;
 		while (l < h) {
 			m = (l + h) / 2;
 			// Modification: Compare mth index with m element.

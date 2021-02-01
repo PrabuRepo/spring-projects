@@ -97,13 +97,14 @@ public class StringProblems {
 	 * whether you can make it a palindrome.
 	 */
 	public boolean validPalindrome2(String s) {
+		if (s == null || s.length() == 0) return false;
 		int l = 0, r = s.length() - 1;
 		while (l < r && s.charAt(l) == s.charAt(r)) {
 			l++;
 			r--;
 		}
 
-		if (l >= r) return true;
+		if (l == r) return true;
 
 		if (isPalindrome(s, l + 1, r) || isPalindrome(s, l, r - 1)) return true;
 
@@ -129,13 +130,15 @@ public class StringProblems {
 	public String convert1(String s, int numRows) {
 		if (numRows <= 1) return s;
 
-		String[] arr = new String[numRows];
-		Arrays.fill(arr, "");
+		String[] strArr = new String[numRows];
+		Arrays.fill(strArr, "");
 		int n = s.length(), row = 0;
 		boolean down = false;
 
 		for (int i = 0; i < n; i++) {
-			arr[row] += s.charAt(i);
+			//Concatenate each char:
+			strArr[row] += s.charAt(i);
+
 			if (row == 0) down = true;
 			if (row == numRows - 1) down = false;
 
@@ -144,7 +147,7 @@ public class StringProblems {
 		}
 
 		StringBuilder sb = new StringBuilder();
-		for (String str : arr)
+		for (String str : strArr)
 			sb.append(str);
 		return sb.toString();
 	}
@@ -219,11 +222,11 @@ public class StringProblems {
 		int i = 0;
 		while (i < s.length()) {
 			// Get length
-			int strIdx = s.indexOf('#', i); // Find the '#' index from 'i'
-			int len = Integer.parseInt(s.substring(i, strIdx));
+			int symbolIdx = s.indexOf('#', i); // Find the '#' index from 'i'
+			int len = Integer.parseInt(s.substring(i, symbolIdx));
 			// Get string
-			res.add(s.substring(strIdx + 1, strIdx + len + 1));
-			i = strIdx + len + 1;
+			res.add(s.substring(symbolIdx + 1, symbolIdx + len + 1));
+			i = symbolIdx + len + 1;
 		}
 		return res;
 	}
@@ -277,6 +280,12 @@ public class StringProblems {
 			if (arr1[i] != arr2[i]) return false;
 
 		return true;
+	}
+
+	public static void main(String[] args) {
+		StringProblems ob = new StringProblems();
+		// System.out.println(ob.compareVersion("7.5.3.4", "7.5.3"));
+
 	}
 
 }

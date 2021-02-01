@@ -155,6 +155,11 @@ public class Utils {
 		return 31 - Integer.numberOfLeadingZeros(n);
 	}
 
+	//TODO: Compare log2 and logBase2 logic
+	public static int logBase2(int n) {
+		return (int) (Math.log(n) / Math.log(2));
+	}
+
 	public static void checkISOChars() {
 		String str = "JEDINY /LUK�S";
 		for (int i = 0; i < str.length(); i++) {

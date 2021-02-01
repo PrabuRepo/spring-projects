@@ -467,14 +467,100 @@ public class ArrayProblems {
 	 * e will exist till end if it is a majority element.
 	*/
 	public int majorityElement3(int[] nums) {
+		if (nums == null || nums.length == 0) return -1;
 		int count = 0, element = 0;
 		for (int num : nums) {
 			if (count == 0) element = num;
 
-			if (num == element) count++;
-			else count--;
+			count = (num == element) ? count + 1 : count - 1;
 		}
-		return element;
+
+		// check array, verify element is majority
+		count = 0;
+		for (int num : nums) {
+			if (num == element) count++;
+		}
+
+		return count > nums.length / 2 ? element : -1;
+	}
+
+	public int majorityElement4(int[] nums) {
+		if (nums == null || nums.length == 0) return -1;
+
+		int element = nums[0], count = 1, n = nums.length;
+		for (int i = 1; i < n; i++) {
+			if (nums[i] == element) {
+				count++;
+			} else if (count > 0) {
+				count--;
+			} else {
+				element = nums[i];
+				count = 1;
+			}
+		}
+
+		// check array, verify element is majority
+		count = 0;
+		for (int num : nums) {
+			if (num == element) count++;
+		}
+
+		return count > n / 2 ? element : -1;
+	}
+
+	/* Majority of 1/K element:
+	 * You are given an array of numbers. Find a number that occurs more than 1/K of the time.
+	 * For example:
+	 * 	A = [2,4,5,2,4,2,2,1,5] and K = 3, Result = 2, which occurs more than Length/3 times.
+	 * 	B = [2,4,5,2,4,2,6,1,5] and K = 3, No result as there is no number occurring > Length/3 times.
+	 * 
+	 * Time: O(n), Space: O(k)
+	 */
+	public int majorityKElement(int[] nums, int k) {
+		Map<Integer, Integer> map = new HashMap<>();
+		for (int num : nums) {
+			//Update count of each num
+			map.put(num, map.getOrDefault(num, 0) + 1);
+
+			//Reduce the count for all the element, if k unique element exist
+			if (map.size() == k) {
+				for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+					if (entry.getValue() == 1) {
+						map.remove(entry.getKey());
+					} else {
+						map.put(entry.getKey(), map.get(entry.getKey()) - 1);
+					}
+				}
+			}
+		}
+
+		//Below are verification process:
+		//1.Clear the count in Map
+		for (int key : map.keySet()) {
+			map.put(key, 0);
+		}
+
+		//2.Calculate the count of each key in the map
+		for (int num : nums) {
+			if (map.containsKey(num)) {
+				map.put(num, map.get(num) + 1);
+			}
+		}
+
+		//3.Check if any of them have majority
+		for (int key : map.keySet()) {
+			if (map.get(key) > nums.length / k) return key;
+		}
+
+		return -1;
+	}
+
+	/*
+	 * Majority Element II:
+	 */
+	//TODO:
+	public List<Integer> majorityElementII(int[] arr) {
+		return null;
 	}
 
 	/* Third Maximum Number

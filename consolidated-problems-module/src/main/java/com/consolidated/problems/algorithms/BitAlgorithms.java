@@ -46,50 +46,12 @@ public class BitAlgorithms {
 		return findFirstSetBit(xorValue);
 	}
 
-	/* Number of 1 Bits/Hamming Weight:
-	 * Write a function that takes an unsigned integer and return the number of '1' bits it has (also known as 
-	 * the Hamming weight).
+	/* Hamming Distance/Conversion/Bit Difference
+	 * The Hamming distance between two integers is the number of positions at which the corresponding bits are different.
+	 * Given two integers x and y, calculate the Hamming distance.
 	 */
-	public int hammingWeight(int n) {
-		int count = 0;
-		while (n != 0) {
-			n = n & (n - 1);
-			count++;
-		}
-		return count;
-	}
-
-	public int hammingWeight2(int n) {
-		int ones = 0;
-		while (n != 0) {
-			ones = ones + (n & 1);
-			n = n >>> 1;
-		}
-		return ones;
-	}
-
-	// Count total set bits
-	public int countAllSetBits(int n) {
-		int count = 0;
-		if (n > 0) {
-			for (int i = 1; i <= n; i++) {
-				count += countSetBits1(i);
-			}
-		}
-		return count;
-	}
-
-	public int countSetBits1(int n) {
-		int count = 0;
-		if (n > 0) {
-			while (n > 0) {
-				/*count += n&1;
-				n = n >> 1;*/
-				n = n & (n - 1);
-				count++;
-			}
-		}
-		return count;
+	public int hammingDistance(int x, int y) {
+		return countSetBits2(x ^ y);
 	}
 
 	public int countSetBits2(int n) {
@@ -99,14 +61,6 @@ public class BitAlgorithms {
 			count++;
 		}
 		return count;
-	}
-
-	/* Hamming Distance/Conversion/Bit Difference
-	 * The Hamming distance between two integers is the number of positions at which the corresponding bits are different.
-	 * Given two integers x and y, calculate the Hamming distance.
-	 */
-	public int hammingDistance(int x, int y) {
-		return countSetBits2(x ^ y);
 	}
 
 	/* Total Hamming Distance:
@@ -375,21 +329,6 @@ public class BitAlgorithms {
 		return data;
 	}
 
-	// Swap all odd and even bits/Pairwise Swap
-	// Simple Approach
-	public int swapBits1(int n) {
-		int evenBits = n & 0xAAAAAAAA;
-		int oddBits = n & 0x55555555;
-		evenBits >>>= 1;
-		oddBits <<= 1;
-		return (oddBits | evenBits);
-	}
-
-	// One line code of previous one
-	public int swapBits2(int n) {
-		return ((n & 0xAAAAAAAA) >>> 1 | (n & 0x55555555) << 1);
-	}
-
 	// Insertion
 	/*
 	 * 1.Insertion: You are given two 32-bit numbers, N and M, and two bit positions, i and j. Write a method to insert M into N 
@@ -415,72 +354,6 @@ public class BitAlgorithms {
 		N = N & mask;
 		N = N | M;
 		System.out.println("Result: " + Integer.toBinaryString(N));
-	}
-
-	// Rotate Bits
-	static int BITS = 16;
-	static int CLEAR_BITS = (-1 >>> BITS);
-
-	public static int rotateLeft(int n, int d) {
-		if (d > 16) d = d % BITS;
-
-		return ((n << d) | (n >> BITS - d)) & 0xFFFF;
-	}
-
-	public static int rotateRight(int n, int d) {
-		if (d > 16) d = d % BITS;
-		return ((n >> d) | (n << BITS - d)) & CLEAR_BITS;
-	}
-
-	/* Reverse Bits/Reverse all bits
-	 * Reverse bits of a given 32 bits unsigned integer.
-	 */
-	// you need treat n as an unsigned value
-	public int reverseBits(int n) {
-		int count = 31, result = 0;
-		while (count >= 0) {
-			int bit = n & 1;
-			bit <<= count;
-			if (bit != 0) result |= bit;
-			n >>>= 1;
-			count--;
-		}
-		return result;
-	}
-
-	// you need treat n as an unsigned value
-	public int reverseBits2(int n) {
-		// System.out.println("Input: " + Integer.toBinaryString(n));
-		int count = 31;
-		int rev = 0;
-		while (n > 0) {
-			rev <<= 1;
-			rev |= n & 1;
-			n >>= 1;
-			count--;
-		}
-		rev <<= count;
-		// System.out.println("Ouput: " + Integer.toBinaryString(rev));
-		return rev;
-	}
-
-	//TODO: Reverse the bits till last set bit. Eg: 1011 -> 1101; Here should consider only 4 bits
-	//Approach using reverse cache 
-	public int reverseBits() {
-		return 0;
-	}
-
-	//Compliment of given input only till last set bit.
-	public int compliment(int n) {
-		//Find the last set bit; Eg: 1001 => 9; log2(9) => 3; So last set bit is 3rd position
-		int lastSetBit = (int) (Math.log(n) / Math.log(2));
-
-		//Add '1' is to move one additional left shift 
-		//Subract '1' is to get all set bit from the last set bit
-		int val = (1 << lastSetBit + 1) - 1;
-
-		//Perform xor b/w n and val to get the compliment 
-		return n ^ val;
 	}
 
 	/*************************** Type3: Apply the Bit Magic to Problems *******************/

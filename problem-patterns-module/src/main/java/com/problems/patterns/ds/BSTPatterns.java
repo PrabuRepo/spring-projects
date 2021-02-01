@@ -147,15 +147,8 @@ public class BSTPatterns {
 		if (root == null) return -1;
 
 		if (key == root.val) {
-			TreeNode leftSubTree = root.left;
-			if (leftSubTree != null) {
-				// Find the next node in the left subtree(Pred should be present in the left sub tree)
-				while (leftSubTree.right != null)// Keep moving to right side, to find the prev(successor) node in BST
-					leftSubTree = leftSubTree.right;
-				return leftSubTree.val;
-			} else {
-				return -1;
-			}
+			//Find the max element in the left subtree 
+			return findMax(root.left);
 		} else if (key < root.val) {
 			return inOrderPredecessor(root.left, key);
 		} else {
@@ -165,18 +158,20 @@ public class BSTPatterns {
 		}
 	}
 
+	private int findMax(TreeNode curr) {
+		if (curr == null) return -1;
+		while (curr.right != null) {
+			curr = curr.right;
+		}
+		return curr.val;
+	}
+
 	public int inOrderSuccessor(TreeNode root, int key) {
 		if (root == null) return -1;
 
 		if (key == root.val) {
-			// Find the next node in the right subtree
-			TreeNode rightSubTree = root.right;
-			if (rightSubTree != null) {
-				while (rightSubTree.left != null)// Keep moving to left side, to find the next(successor) node in BST
-					rightSubTree = rightSubTree.left;
-				return rightSubTree.val;
-			}
-			return -1;
+			// Find the min element in the right subtree
+			return findMin(root.right);
 		} else if (key < root.val) {
 			int successor = inOrderSuccessor(root.left, key);
 			// If there is no element in rightSubtree, then root element should be next element
@@ -184,6 +179,14 @@ public class BSTPatterns {
 		} else {
 			return inOrderSuccessor(root.right, key);
 		}
+	}
+
+	private int findMin(TreeNode curr) {
+		if (curr == null) return -1;
+		while (curr.left != null) {
+			curr = curr.left;
+		}
+		return curr.val;
 	}
 
 	/**************************** Type2: Traversal Modification **************************/

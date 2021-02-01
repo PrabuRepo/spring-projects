@@ -49,15 +49,15 @@ public class QuickSelectPatterns {
 
 	/* K’th Smallest Element in Unsorted Array: 
 	 * Using Quick sort Partitioning or Quick Select: Expect Linear Time complexity: O(n) 
-	 *   Partition or Quick Select: The partition subroutine of quicksort can also be used to solve this problem. 
-	 *  In partition, we divide the array into elements>=pivot pivot elements<=pivot. Then, according to the index of pivot,
-	 *  we will know whther the kth largest element is to the left or right of pivot or just itself. In average, this
-	 *  algorithm reduces the size of the problem by approximately one half after each partition, giving the 
-	 *  recurrence T(n) = T(n/2) + O(n) with O(n) being the time for partition. The solution is T(n) = O(n), which means 
-	 *  we have found an average linear-time solution. However, in the worst case, the recurrence will become 
-	 *  T(n) = T(n - 1) + O(n) and T(n) = O(n^2).
+	 *  
+	 * Partition or Quick Select: The partition subroutine of quicksort can also be used to solve this problem. 
+	 * In partition, we divide the array into elements<=pivot, pivot, and elements>=pivot. Then, according to the index of pivot,
+	 * we will know whether the kth smallest element is to the left or right of pivot or just itself. 
+	 * In average, this algorithm reduces the size of the problem by approximately one half after each partition, giving the 
+	 * recurrence T(n) = T(n/2) + O(n) with O(n) being the time for partition. The solution is T(n) = O(n), which means 
+	 * we have found an average linear-time solution. However, in the worst case, the recurrence will become 
+	 * T(n) = T(n - 1) + O(n) and T(n) = O(n^2).
 	 */
-	// This is simpler than kthSmallestElementInArray32
 	public int kthSmallestElementInArray31(int[] nums, int k) {
 		if (nums.length == 0 || k == 0) return 0;
 		int l = 0, r = nums.length - 1;
@@ -70,8 +70,13 @@ public class QuickSelectPatterns {
 		return -1;
 	}
 
-	// K largest elements in the array:
-	// Quick sort Partitioning: Worst Case Time: O(n)
+	/* K largest elements in the array:
+	 * Partition or Quick Select: The partition subroutine of quicksort can also be used to solve this problem. 
+	 * In partition, we divide the array into elements>=pivot, pivot, and elements<=pivot. Then, according to the index of pivot,
+	 * we will know whther the kth largest element is to the left or right of pivot or just itself. 
+	 * 
+	 * Quick sort Partitioning: Avg Time: O(n); Worst case: O(n^2)
+	 */
 	public int kthLargestElementsInArray31(int[] nums, int k) {
 		if (nums.length == 0 || k == 0) return 0;
 		int l = 0, r = nums.length - 1;

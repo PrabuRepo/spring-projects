@@ -4,6 +4,10 @@ import com.basic.algorithms.operations.PatternSearchOperations;
 
 public class PatternSearchingAlgorithms implements PatternSearchOperations {
 
+	/*
+	 * The Naive String Matching algorithm slides the pattern one by one. After each slide, it one by one checks characters at the current
+	 * shift and if all characters match then prints the match. 
+	 */
 	// Naive Pattern Searching; Time complexity:O(mn) = Exactly O(m(n-m))
 	@Override
 	public void naivePatternSearching(String str, String pattern) {
@@ -11,18 +15,15 @@ public class PatternSearchingAlgorithms implements PatternSearchOperations {
 		int n = str.length(); // String Length
 		int m = pattern.length(); // Pattern Length
 		for (int i = 0; i <= (n - m); i++) {
-			if (str.charAt(i) == pattern.charAt(0)) {
-				for (j = 0; j < m; j++) {
-					if (str.charAt(i + j) != pattern.charAt(j))
-						break;
-				}
-				if (j == m)
-					System.out.println("Pattern found at: " + i);
+			if (str.charAt(i) != pattern.charAt(0)) continue;
+			for (j = 0; j < m; j++) {
+				if (str.charAt(i + j) != pattern.charAt(j)) break;
 			}
+			if (j == m) System.out.println("Pattern found at: " + i);
 		}
 	}
 
-	// KMP(Knuth Morris Pratt) Algorithm
+	// KMP(Knuth Morris Pratt) Algorithm; Time=O(n+m); Space: O(n)
 	@Override
 	public void KMPAlgorithm(String text, String pattern) {
 		int m = pattern.length(), n = text.length();
@@ -39,10 +40,8 @@ public class PatternSearchingAlgorithms implements PatternSearchOperations {
 					j = lps[j - 1];
 				}
 			} else {
-				if (j != 0)
-					j = lps[j - 1];
-				else
-					i++;
+				if (j != 0) j = lps[j - 1];
+				else i++;
 			}
 		}
 	}
@@ -68,17 +67,27 @@ public class PatternSearchingAlgorithms implements PatternSearchOperations {
 		return lps;
 	}
 
-	// Rabin-Karp Algorithm
+	/* Rabin-Karp Algorithm: (Rolling Hash Technique)
+	 * The Naive String Matching algorithm slides the pattern one by one. After each slide, it one by one checks characters at the current
+	 * shift and if all characters match then prints the match. 
+	 * Like the Naive Algorithm, Rabin-Karp algorithm also slides the pattern one by one. But unlike the Naive algorithm, Rabin Karp algorithm
+	 * matches the hash value of the pattern with the hash value of current substring of text, and if the hash values match then only it starts
+	 * matching individual characters. So Rabin Karp algorithm needs to calculate hash values for following strings.
+	 * 	1) Pattern itself. 
+	 * 	2) All the substrings of the text of length m. 
+	 * 
+	 * The average and best-case running time of the Rabin-Karp algorithm is O(n+m), but its worst-case time is O(nm).
+	 */
 	@Override
 	public void rabinKarpAlgorithm(String text, String pattern) {
 		int prime = 101;
 		long textHash = 0, patternHash = 0;
 		int n = text.length(), m = pattern.length();
-		// Calculate hash value
+		// Calculate hash value of pattern and text:
 		for (int i = 0; i < m; i++) {
 			// Pattern Hash Value
 			patternHash += pattern.charAt(i) * Math.pow(prime, i);
-			// Text Hash Value
+			// Hash Value of first m character in Text
 			textHash += text.charAt(i) * Math.pow(prime, i);
 		}
 		int j;
@@ -86,11 +95,9 @@ public class PatternSearchingAlgorithms implements PatternSearchOperations {
 			if (textHash == patternHash) {
 				// Check for characters one by one
 				for (j = 0; j < m; j++) {
-					if (text.charAt(i + j) != pattern.charAt(j))
-						break;
+					if (text.charAt(i + j) != pattern.charAt(j)) break;
 				}
-				if (j == m)
-					System.out.println("Pattern found at index:" + i);
+				if (j == m) System.out.println("Pattern found at index:" + i);
 			}
 
 			// Recalculate the test hash value
@@ -131,8 +138,7 @@ public class PatternSearchingAlgorithms implements PatternSearchOperations {
 		for (int i = 1; i < n; i++) {
 			if (i > right) {
 				left = right = i;
-				while (right < n && str.charAt(right - left) == str.charAt(right))
-					right++;
+				while (right < n && str.charAt(right - left) == str.charAt(right)) right++;
 
 				zArray[i] = right - left;
 				right--;
@@ -146,8 +152,7 @@ public class PatternSearchingAlgorithms implements PatternSearchOperations {
 				} else {
 					// else start from R and check manually
 					left = i;
-					while (right < n && str.charAt(i) == str.charAt(right - left))
-						right++;
+					while (right < n && str.charAt(i) == str.charAt(right - left)) right++;
 
 					zArray[i] = right - left;
 					right--;

@@ -227,6 +227,22 @@ class BinarySearchTree implements TreeOperations {
 		List<Integer> result = new ArrayList<>();
 		if (root == null) return result;
 
+		java.util.Stack<TreeNode> stack = new java.util.Stack<>();
+		stack.push(root);
+		while (!stack.isEmpty()) {
+			root = stack.pop();
+			result.add(root.val);
+			if (root.right != null) stack.push(root.right);
+			if (root.left != null) stack.push(root.left);
+		}
+
+		return result;
+	}
+
+	public List<Integer> preorderTraversal2(TreeNode root) {
+		List<Integer> result = new ArrayList<>();
+		if (root == null) return result;
+
 		TreeNode curr = root;
 		java.util.Deque<TreeNode> stack = new ArrayDeque<>();
 
@@ -240,22 +256,6 @@ class BinarySearchTree implements TreeOperations {
 				curr = curr.right;
 			}
 		}
-		return result;
-	}
-
-	public List<Integer> preorderTraversal2(TreeNode root) {
-		List<Integer> result = new ArrayList<>();
-		if (root == null) return result;
-
-		java.util.Stack<TreeNode> stack = new java.util.Stack<>();
-		stack.push(root);
-		while (!stack.isEmpty()) {
-			root = stack.pop();
-			result.add(root.val);
-			if (root.right != null) stack.push(root.right);
-			if (root.left != null) stack.push(root.left);
-		}
-
 		return result;
 	}
 

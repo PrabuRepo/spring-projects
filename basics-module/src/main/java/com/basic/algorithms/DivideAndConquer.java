@@ -11,7 +11,9 @@ Divide and Conquer algorithm solves a problem using following three steps:
  */
 public class DivideAndConquer {
 
-	private SortingAlgorithms ob;
+	private SortingAlgorithms sort = new SortingAlgorithms();
+
+	private MathProblems math = new MathProblems();
 
 	public static int binarySearch(int[] a, int x) {
 		return binarySearch(a, 0, a.length - 1, 610);
@@ -32,38 +34,24 @@ public class DivideAndConquer {
 	public void mergeSort() {
 		// MergeSort for array
 		int[] arr = { 3, 7, 4, 8, 2, 1 };
-		ob.mergeSort(arr);
+		sort.mergeSort(arr);
 
 		// MergeSort for linked list
 		ListNode head = new ListNode(10);
-		ob.mergeSort(head);
+		sort.mergeSort(head);
 	}
 
 	public void quickSort() {
 		// QuickSort for array
 		int[] arr = { 3, 7, 4, 8, 2, 1 };
-		ob.quickSort(arr);
+		sort.quickSort(arr);
 	}
 
 	// Calculate pow(x, n)
-	public int pow(int m, int n) {
-		if (n == 0) return 1;
-		return m * pow(m, n - 1);
+	public void pow(double x, int n) {
+		math.pow1(x, n);
+		math.pow2(x, n);
+		math.pow3(x, n);
 	}
 
-	// Better Approach: Time Complexity: o(n)
-	public int pow2(int m, int n) {
-		if (n == 0) return 1;
-		else if (n % 2 == 0) return pow2(m, n / 2) * pow2(m, n / 2);
-		else return m * pow2(m, n / 2) * pow2(m, n / 2);
-	}
-
-	// Time Complexity of optimized solution: O(logn)
-	static int pow3(int m, int n) {
-		int temp;
-		if (n == 0) return 1;
-		temp = pow3(m, n / 2);
-		if (n % 2 == 0) return temp * temp;
-		else return m * temp * temp;
-	}
 }

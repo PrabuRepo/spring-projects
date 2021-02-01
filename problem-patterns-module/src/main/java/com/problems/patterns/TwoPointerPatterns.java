@@ -10,12 +10,11 @@ import com.problems.patterns.ds.StackPatterns;
 public class TwoPointerPatterns {
 
 	/********************* Sorted: 2 ptr *******************/
-	// Two Sum: Given an array of integers, return indices of the two numbers such that they add up to a specific
-	// target.
+	// Two Sum: Given an array of integers, return indices of the two numbers such that they add up to a specific target.
 	// 1. Brute force approach: Time Complexity:(n^2)
 	public int[] twoSum1(int[] nums, int target) {
 		int[] result = new int[2];
-		for (int i = 0; i < nums.length; i++) {
+		for (int i = 0; i < nums.length - 1; i++) {
 			result[0] = i;
 			for (int j = i + 1; j < nums.length; j++) {
 				if (nums[i] + nums[j] == target) {
@@ -49,17 +48,16 @@ public class TwoPointerPatterns {
 
 	// 3.Two Ptr Approach: Time Complexity: O(nlogn) for both sorted and unsorted array;
 	public int[] twoSum3(int[] arr, int k) {
-		Arrays.sort(arr);
+		int n = arr.length;
 		int[] result = new int[2];
-		for (int i = 0; i < arr.length; i++) {
-			int index = Arrays.binarySearch(arr, k - arr[i]);
+
+		Arrays.sort(arr);
+		for (int i = 0; i < n - 1; i++) {
+			int index = Arrays.binarySearch(arr, i + 1, n, k - arr[i]);
 			if (index >= 0) {
-				/* If this points at us, then the pair exists only if there is another copy of the element. Look ahead of us and behind us. */
-				if (index != i || (i > 0 && arr[i - 1] == arr[i]) || (i < arr.length - 1 && arr[i + 1] == arr[i])) {
-					result[0] = i;
-					result[1] = index;
-					return result;
-				}
+				result[0] = i;
+				result[1] = index;
+				break;
 			}
 		}
 		return result;
@@ -71,7 +69,7 @@ public class TwoPointerPatterns {
 		int[] result = new int[2];
 		Arrays.fill(result, -1);
 		Map<Integer, Integer> map = new HashMap<>(); // Value, Index
-		for (int i = 0; i < nums.length; i++) {
+		for (int i = 0; i < nums.length - 1; i++) {
 			if (map.get(nums[i]) != null) {
 				result[0] = map.get(nums[i]);
 				result[1] = i;
@@ -131,8 +129,6 @@ public class TwoPointerPatterns {
 
 	// Using 2 ptr approach
 	public boolean sumPresent1(int[] nums, int l, int h, int firstValue, int target) {
-		// target -= firstValue; // Remove first value from the target, two find the remaining two values
-
 		while (l < h) {
 			if (nums[l] + nums[h] == target) {
 				System.out.println("The Triplet is: " + firstValue + ", " + nums[l] + ", " + nums[h]);
@@ -148,7 +144,6 @@ public class TwoPointerPatterns {
 	}
 
 	public boolean sumPresent2(int[] nums, int l, int h, int firstValue, int target) {
-		// target -= firstValue; // Remove first value from the target, two find the remaining two values
 		HashSet<Integer> set = new HashSet<>();
 
 		for (int i = l; i <= h; i++) {
@@ -167,10 +162,9 @@ public class TwoPointerPatterns {
 	 * to target. Return the sum of the three integers. You may assume that each input would have exactly one 
 	 */
 	public int threeSumClosest(int[] nums, int target) {
-		int minDiff = Integer.MAX_VALUE;
-		int result = 0;
+		int minDiff = Integer.MAX_VALUE, result = 0;
 		Arrays.sort(nums);
-		for (int i = 0; i < nums.length; i++) {
+		for (int i = 0; i < nums.length - 2; i++) {
 			int l = i + 1;
 			int h = nums.length - 1;
 			while (l < h) {
@@ -183,7 +177,7 @@ public class TwoPointerPatterns {
 					minDiff = diff;
 					result = sum;
 				}
-				if (sum <= target) {
+				if (sum < target) {
 					l++;
 				} else {
 					h--;
@@ -259,6 +253,11 @@ public class TwoPointerPatterns {
 	 * Given n non-negative integers a1, a2, ..., an , where each represents a point at coordinate (i, ai). n vertical
 	 * lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together
 	 * with x-axis forms a container, such that the container contains the most water.
+	 * 
+	 * Solution:
+	 * 	Area = height * width;
+	 * 	height = Min(height[l], height[h]);
+	 * 	width = difference b/w l and h. (h-l);
 	 */
 	public int maxArea(int[] height) {
 		if (height.length <= 1) return 0;
@@ -273,4 +272,11 @@ public class TwoPointerPatterns {
 		return max;
 	}
 
+	public static void main(String[] args) {
+		TwoPointerPatterns ob = new TwoPointerPatterns();
+		int[] nums = { 1, 3, 5, 7, 8, 12, 15, 19 };
+		System.out.println(Arrays.toString(ob.twoSum2(nums, 31)));
+		System.out.println(Arrays.toString(ob.twoSum3(nums, 31)));
+
+	}
 }

@@ -10,9 +10,11 @@ public class DataTypes {
 
 		characterAPI();
 
-		integerAPI();
+		printChars();
 
 		charConversions();
+
+		integerAPI();
 	}
 
 	public void dataTypesInfo() {
@@ -53,11 +55,31 @@ public class DataTypes {
 
 	/* Note: character accepts 0 to 65535(16 bit: 2^16-1)
 	 *       128 ASCII chars, 256 Extended Ascii chars
+	 *  This method is used to understand the possible chars supported by Java.
 	 */
+	public static void printChars() {
+		System.out.println("\nASCII: 0 to 128 chars: ");
+		for (int i = 0; i < 128; i++) {
+			System.out.print((char) i + " ");
+		}
+
+		System.out.println("\nASCII: 128 to 256 chars: ");
+		for (int i = 128; i < 256; i++) {
+			char ch = (char) i;
+			System.out.print((char) i + " ");
+		}
+
+		System.out.println("\nAfter 256 chars: ");
+		for (int i = 256; i < 300; i++) {
+			char ch = (char) i;
+			System.out.print((char) i + " ");
+		}
+	}
+
 	public static void charConversions() {
 		char ch = ' ';
 
-		System.out.println("To find starting number of alphabet: ");
+		System.out.println("\nTo find starting number of alphabet: ");
 		ch = 'a';
 		System.out.println((int) ch);
 

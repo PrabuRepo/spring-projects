@@ -1,6 +1,7 @@
 package com.problems.patterns;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -95,6 +96,7 @@ public class BitwiseXorPatterns {
 
 		// 2.Find the Right Most Set Bit
 		int rightMostSetXor = xor & -xor; // xor & ~(xor - 1);
+		System.out.println(Integer.toBinaryString(rightMostSetXor));
 
 		/*3. Now if we XOR all the elements of arr[] and (1 to n) that have rightmost bit set(rightMostSetXor & elem > 0) 
 		 * we will get one of the missing numbers, say result[0].
@@ -210,6 +212,11 @@ public class BitwiseXorPatterns {
 		}
 
 		result.stream().forEach(k -> System.out.print(k + " "));
+	}
+
+	public static void main(String[] args) {
+		int[] arr = { 1, 2, 4, 6, 7 };
+		System.out.println(Arrays.toString(findTwoMissingNumbers3(arr)));
 	}
 
 }

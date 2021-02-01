@@ -29,6 +29,7 @@ public class FastAndSlowPtrPatterns {
 
 	/* Start of LinkedList Cycle/Linked List Cycle II: Linked List Cycle II: Given a linked list, return the node
 	 *  where the cycle begins. If there is no cycle, return null. */
+	//Why this is logic is working? refer the document here \1.Coding Interview\1.DS & Algorithms\Algorithms Proof
 	public ListNode detectCycle(ListNode head) {
 		if (head == null || head.next == null) return null;
 		ListNode slow = head, fast = head, start = head;
@@ -54,6 +55,7 @@ public class FastAndSlowPtrPatterns {
 	 */
 	/* Solution: Using floyd'd algorithm, we can find whether square number equals 1 (where it will stay), or it loops
 	 * endlessly in a cycle which does not include 1.
+	 * This solution helps to skip the logic(square sum), if there is any cycle.
 	 */
 	public boolean isHappy1(int n) {
 		if (n == 0) return false;
@@ -78,7 +80,7 @@ public class FastAndSlowPtrPatterns {
 	}
 
 	/* Using HashSet: The idea is to use one hash set to record sum of every digit square of every number occurred.
-	 * Once the current sum cannot be added to set, return false; once the current sum equals 1, return true;
+	 * Once the current sum is already available(duplicate) in set, return false; once the current sum equals 1, return true;
 	 */
 	public boolean isHappy2(int n) {
 		Set<Integer> set = new HashSet<Integer>();
@@ -164,7 +166,9 @@ public class FastAndSlowPtrPatterns {
 		prevNode.next = null;
 		ListNode secondHalf = slowPtr;
 		secondHalf = reversalLLPatterns.reverseList1(secondHalf);
-		boolean flag = compare(head, secondHalf);
+		boolean isPalindrome = compare(head, secondHalf);
+
+		//Rearrange the List
 		secondHalf = reversalLLPatterns.reverseList1(secondHalf);
 		if (midNode != null) {
 			prevNode.next = midNode;
@@ -172,7 +176,7 @@ public class FastAndSlowPtrPatterns {
 		} else {
 			prevNode.next = slowPtr;
 		}
-		return flag;
+		return isPalindrome;
 	}
 
 	public boolean compare(ListNode node1, ListNode node2) {

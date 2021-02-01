@@ -1,4 +1,7 @@
 package com.basic.algorithms;
+
+import com.common.utilities.Utils;
+
 /*Practice tricks in below links:
  ********************************
     https://github.com/keon/awesome-bits
@@ -164,14 +167,14 @@ public class BitAlgorithms {
 		System.out.println("Integer.MIN_VALUE: " + intMinValue());
 		System.out.println("Long.MAX_VALUE: " + longMaxValue());
 		System.out.println("Long.MIN_VALUE: " + longMinValue());
+		System.out.println("Mask N Bits: " + Integer.toBinaryString(maskNBits(4)));
 		System.out.println("Set nth bit:" + setNthBit(3, 2));
 		System.out.println("Check whether nth bit is set or not? " + isSetBit(16, 5));
 		System.out.println("UnSet nth bit:" + unSetNthBit(15, 3));
 		System.out.println("Toggle Nth bit:" + toggleNthBit(10, 3));
-		System.out.println("Left Rotations:" + leftRotation(128, 3));
-		System.out.println("Right Rotations:" + rightRotation(128, 3));
+		System.out.println("Multiply By 2:" + multiplyBy2(128, 3));
+		System.out.println("Divide By 2:" + divideBy2(128, 3));
 		System.out.println("2^n(2 power n) Value:" + twoPowerOfN(5));
-		System.out.println("To make n '1' bits: " + getNSetBits(4));
 		System.out.println("Check the Power of 2:" + checkPowerOfTwo(64));
 		System.out.println("Given numbers are equal? " + checkEquality(24, 24));
 		System.out.println("Is even number? " + isEven(7));
@@ -182,7 +185,8 @@ public class BitAlgorithms {
 		System.out.println("Least Signigicant bit: " + leastSignficantBit2(14));
 		System.out.println("Bit operations helpful to build Fenwick Tree: ");
 		fenwickTreeFoundation();
-		System.out.println("Find first set bit: " + findFirstSetBit(16));
+		System.out.println("Find left most set bit for " + Integer.toBinaryString(9) + ": " + findLeftMostSetBit(9));
+		System.out.println("Find right most set bit for " + Integer.toBinaryString(9) + ": " + findRightMostSetBit(9));
 		System.out.println("Number of ones(Hamming Weight):" + hammingWeight1(424732));
 		System.out.println("Number of ones(Hamming Weight): " + hammingWeight2(424732));
 		System.out.println("Number of ones(Hamming Weight): " + hammingWeight3(424732));
@@ -193,6 +197,8 @@ public class BitAlgorithms {
 		swap1(2905, 6079);
 		System.out.println("Swap without using temp variable2:");
 		swap2(2905, 6079);
+		System.out.println("Compliment of all bits: " + Integer.toBinaryString(compliment1(9)));
+		System.out.println("Compliment of only till left most set bit: " + Integer.toBinaryString(compliment2(9)));
 	}
 
 	public int intMaxValue() {
@@ -223,6 +229,11 @@ public class BitAlgorithms {
 		max = max >>> 1;
 		long min = ~max;
 		return min;
+	}
+
+	//Mask N Bits: Eg: n=3, 2^3-1 = 7 => 111 (3 set bits)
+	public int maskNBits(int n) {
+		return (1 << n) - 1;
 	}
 
 	// Test nth bit is set:
@@ -266,82 +277,43 @@ public class BitAlgorithms {
 		return data;
 	}
 
-	/* Find the last set bit;
-	 * 	Eg: 1001 => 9; log2(9) => 3; So last set bit is in 3rd position
-	 *  Eg: 10111 => 18; log2(23) => 4; So last set bit is in 4th position 
+	/* Find the left most set bit;
+	 * 	Eg: 1001 => 9; 1+log2(9) => 4; So left most set bit is in 4th position
+	 *  Eg: 10111 => 18; 1+log2(23) => 5; So left most set bit is in 5th position 
 	 */
-	public int findLastSetBit(int n) {
-		return (int) (Math.log(n) / Math.log(2));
+	public int findLeftMostSetBit(int n) {
+		return n > 1 ? 1 + Utils.logBase2(n) : 0;
 	}
 
-	public int swapBits(int data, int i, int j) {
-		//If two bits not equal, swap the bits
-		if (getNthBit(data, i) != getNthBit(data, j)) {
-			return (data ^ (1 << i | 1 << j));
+	/* Find the right most set bit;
+	 * 	Eg: 1001 - Ans: 1
+	 *  Eg: 10110 - Ans: 2 
+	 */
+	public int findRightMostSetBit(int n) {
+		if (n == 0) return 0;
+
+		int bit = 1;
+		int count = 1;
+		while ((n & bit) == 0) {
+			bit <<= 1;
+			count++;
 		}
-		return data;
+
+		return count;
 	}
 
-	// Each Left Rotation will be multiplied by 2
-	public int leftRotation(int data, int noOfRotations) {
-		return data << noOfRotations;
+	// Each Left shift will be multiplied by 2
+	public int multiplyBy2(int data, int n) {
+		return data << n;
 	}
 
-	// Each Right Rotation will be divided by 2
-	public int rightRotation(int data, int noOfRotations) {
-		return data >> noOfRotations;
-	}
-
-	/*
-	 * Rotate bits of a number Bit Rotation: A rotation (or circular shift) is an operation similar to shift except that
-	 * the bits that fall off at one end are put back to the other end. 
-	 *    In left rotation, the bits that fall off at left end are put back at right end. 
-	 *    In right rotation, the bits that fall off at right end are put back at left end.
-	 * 
-	 * Problem: Given an integer N and an integer D, you are required to write a program to rotate the binary representation
-	 * of the integer N by D digits to the left as well as right and print the results in decimal values after each of the rotation.
-	 * Note: Integer N is stored using 16 bits. i.e. 12 will be stored as 0000.....001100.
-	 */
-
-	static int BITS_16 = 16;
-	static int BITS_32 = 32;
-
-	// For 32 bits
-	public static int rotateLeft1(int n, int d) {
-		/* In n<<d, last d bits are 0. To put first 3 bits of n at last, do bitwise or of n<<d with n >>(INT_BITS - d) */
-		return ((n << d) | (n >> BITS_32 - d));
-	}
-
-	// For 16 Bits
-	public static int rotateLeft2(int n, int d) {
-		if (d > 16) // To handle d is more than 16
-			d = d % BITS_16;
-		/* In n<<d, last d bits are 0. To put first 3 bits of n at last, do bitwise or of n<<d with n >>(INT_BITS - d) */
-		// & 0xFFFF -> To clear elements more than 16 bits
-		return ((n << d) | (n >> BITS_16 - d)) & 0xFFFF;
-	}
-
-	// For 32 bits
-	public static int rotateRight1(int n, int d) {
-		/* In n>>d, first d bits are 0. To put last 3 bits of at first, do bitwise or of n>>d with n <<(INT_BITS - d) */
-		return ((n >> d) | (n << BITS_32 - d));
-	}
-
-	// For 16 bits
-	public static int rotateRight2(int n, int d) {
-		if (d > 16) // To handle d is more than 16
-			d = d % BITS_16;
-		/* In n>>d, first d bits are 0. To put last 3 bits of at first, do bitwise or of n>>d with n <<(INT_BITS - d) */
-		return ((n >> d) | (n << BITS_16 - d)) & 0xFFFF;
+	// Each Right shift will be divided by 2
+	public int divideBy2(int data, int n) {
+		return data >> n;
 	}
 
 	public int twoPowerOfN(int n) {
 		return (1 << n);
-	}
-
-	//Eg: 2^3-1 = 7 => 111 (3 set bits)
-	public int getNSetBits(int n) {
-		return (1 << n) - 1;
 	}
 
 	public boolean checkPowerOfTwo(int x) {
@@ -364,6 +336,7 @@ public class BitAlgorithms {
 		return ((n - 1) & 1) == 0;
 	}
 
+	//Dropping least significant bit
 	public int offRightMost(int n) {
 		return n & (n - 1);
 	}
@@ -385,21 +358,10 @@ public class BitAlgorithms {
 		}
 	}
 
-	// Returns the rightmost 1 in binary representation of x;
-	public int findFirstSetBit(int data) {
-		if (data == 0) return 0;
-
-		int bit = 1;
-		int count = 1;
-		while ((data & bit) == 0) {
-			bit <<= 1;
-			count++;
-		}
-
-		return count;
-	}
-
-	// Number of 1 Bits or Hamming Weight This method counts no of ones in the given number
+	/* Number of 1 Bits/Hamming Weight:
+	 * Write a function that takes an unsigned integer and return the number of '1' bits it has (also known as 
+	 * the Hamming weight).
+	 */
 	// Approach1:
 	public int hammingWeight1(int n) {
 		int count = 0;
@@ -410,7 +372,8 @@ public class BitAlgorithms {
 		return count;
 	}
 
-	// Approach2:
+	// Approach2: Dropping Least Significant Bit every time. Better than prev approach
+	//Here no of iterations =  no of set(1) bits
 	public int hammingWeight2(int n) {
 		int count = 0;
 		while (n > 0) {
@@ -482,6 +445,49 @@ public class BitAlgorithms {
 		 (be aware that it is not actually faster than the general extra variable swap, as it can’t achieve instruction parallelism.)*/
 	}
 
+	/*
+	 * Rotate bits of a number Bit Rotation: A rotation (or circular shift) is an operation similar to shift except that
+	 * the bits that fall off at one end are put back to the other end. 
+	 *    In left rotation, the bits that fall off at left end are put back at right end. 
+	 *    In right rotation, the bits that fall off at right end are put back at left end.
+	 * 
+	 * Problem: Given an integer N and an integer D, you are required to write a program to rotate the binary representation
+	 * of the integer N by D digits to the left as well as right and print the results in decimal values after each of the rotation.
+	 * Note: Integer N is stored using 16 bits. i.e. 12 will be stored as 0000.....001100.
+	 */
+
+	static int BITS_16 = 16;
+	static int BITS_32 = 32;
+
+	// For 32 bits
+	public static int rotateLeft1(int n, int d) {
+		/* In n<<d, last d bits are 0. To put first 3 bits of n at last, do bitwise or of n<<d with n >>(INT_BITS - d) */
+		return ((n << d) | (n >> BITS_32 - d));
+	}
+
+	// For 16 Bits
+	public static int rotateLeft2(int n, int d) {
+		if (d > 16) // To handle d is more than 16
+			d = d % BITS_16;
+		/* In n<<d, last d bits are 0. To put first 3 bits of n at last, do bitwise or of n<<d with n >>(INT_BITS - d) */
+		// & 0xFFFF -> To clear elements more than 16 bits
+		return ((n << d) | (n >> BITS_16 - d)) & 0xFFFF;
+	}
+
+	// For 32 bits
+	public static int rotateRight1(int n, int d) {
+		/* In n>>d, first d bits are 0. To put last 3 bits of at first, do bitwise or of n>>d with n <<(INT_BITS - d) */
+		return ((n >> d) | (n << BITS_32 - d));
+	}
+
+	// For 16 bits
+	public static int rotateRight2(int n, int d) {
+		if (d > 16) // To handle d is more than 16
+			d = d % BITS_16;
+		/* In n>>d, first d bits are 0. To put last 3 bits of at first, do bitwise or of n>>d with n <<(INT_BITS - d) */
+		return ((n >> d) | (n << BITS_16 - d)) & 0xFFFF;
+	}
+
 	// Simple Approach
 	public int swapOddEvenBits1(int n) {
 		int evenBits = n & 0xAAAAAAAA;
@@ -494,6 +500,79 @@ public class BitAlgorithms {
 	// One line code of previous one
 	public int swapOddEvenBits2(int n) {
 		return ((n & 0xAAAAAAAA) >>> 1 | (n & 0x55555555) << 1);
+	}
+
+	public int swapBits(int data, int i, int j) {
+		//If two bits not equal, swap the bits
+		if (getNthBit(data, i) != getNthBit(data, j)) {
+			return (data ^ (1 << i | 1 << j));
+		}
+		return data;
+	}
+
+	/* Reverse Bits/Reverse all bits
+	 * Reverse bits of a given 32 bits unsigned integer.
+	 */
+	// you need treat n as an unsigned value. It reverse all bits, Eg: 111 -> 111000...0
+	public int reverseBits(int n) {
+		int bitCount = 31, result = 0;
+		while (bitCount >= 0) {
+			int bit = n & 1;
+			if (bit != 0) {
+				bit <<= bitCount;
+				result |= bit;
+			}
+			n >>>= 1;
+			bitCount--;
+		}
+		return result;
+	}
+
+	// Its better than previous approach
+	public int reverseBits2(int n) {
+		int bitCount = 31;
+		int rev = 0;
+		//Reverse bits only till n reaches zero
+		while (n > 0) {
+			rev <<= 1;
+			rev |= n & 1;
+			n >>= 1;
+			bitCount--;
+		}
+		//Remaining bits will be reversed here
+		rev <<= bitCount;
+		return rev;
+	}
+
+	//Reverse Bits using Swap
+	public int reverseBits3(int num) {
+		int i = 0, j = 31;
+		while (i < j) {
+			num = swapBits(num, i++, j--);
+		}
+		return num;
+	}
+
+	//TODO: Reverse the bits till last set bit. Eg: 1011 -> 1101; Here should consider only 4 bits
+	//Approach using reverse cache 
+	public int reverseBits4() {
+		return 0;
+	}
+
+	//Compliment of all bits
+	public int compliment1(int n) {
+		return ~n;
+	}
+
+	//Compliment of given input only till last set bit.
+	public int compliment2(int n) {
+		//Find the left most set bit; Eg: 1001 => 9; log2(9) => 3; So last set bit is 3rd position
+		int lastSetBit = findLeftMostSetBit(n);
+
+		int val = maskNBits(lastSetBit);
+
+		//Perform xor b/w n and val to get the compliment 
+		return n ^ val;
 	}
 
 }
