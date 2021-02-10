@@ -3,7 +3,9 @@ package com.problems.patterns.ds;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 
 public class QueuePatterns {
@@ -17,14 +19,18 @@ public class QueuePatterns {
 	 * Return the starting gas station's index if you can travel around the circuit once in the clockwise direction, otherwise return -1.
 	 * 
 	 * Note: gas[i] -> Amount of gas in the gas station;
-	 *       cost[i] -> Amount of gas required to travel from ith station to i+1th station
+	 *       cost[i] -> Cost of gas required to travel from ith station to i+1th station
 	 */
 	public int canCompleteCircuit1(int[] gas, int[] cost) {
 		int n = gas.length, tank = 0;
+		//1.Find the sum of differences b/w gas and cost_required.
 		for (int i = 0; i < n; i++)
 			tank += gas[i] - cost[i];
+
+		//2.If difference is less than zero, you cant travel around the circuit.
 		if (tank < 0) return -1;
 
+		//3.Find the gas station's starting index
 		int rem = 0, start = 0;
 		for (int i = 0; i < n; i++) {
 			rem += gas[i] - cost[i];
@@ -54,52 +60,116 @@ public class QueuePatterns {
 		return front;
 	}
 
-	//First non-repeating character in a stream
-	public void firstNonRepeatingChar(char[] ch) {
-		if (ch.length == 0) return;
-		Queue<Character> queue = new LinkedList<>();
-		int[] count = new int[26];
-		for (int i = 0; i < ch.length; i++) {
-			// Add first non repeating char in queue
-			queue.add(ch[i]);
-			// Increase the count array corresponding to the char
-			count[ch[i] - 'a']++;
+	//First Unique Character in a String
+	/*
+	1.Using count array
+	2.Using hash map
+	*/
+	public int firstUniqChar1(String s) {
+		if (s == null) return -1;
+		int n = s.length();
+		int[] countArray = new int[26];
 
-			while (!queue.isEmpty()) {
-				if (count[queue.peek() - 'a'] > 1) {
-					queue.poll();
-				} else {
-					System.out.print(queue.peek() + " ");
-					break;
-				}
-			}
-			if (queue.isEmpty()) System.out.print("-1" + " ");
-		}
+		for (int i = 0; i < n; i++)
+			countArray[s.charAt(i) - 'a']++;
+
+		for (int i = 0; i < n; i++)
+			if (countArray[s.charAt(i) - 'a'] == 1) return i;
+
+		return -1;
 	}
 
-	/********************* Type1: Monotonic Queue Problems ****************/
+	public int firstUniqChar2(String s) {
+		if (s == null) return -1;
+		int n = s.length();
+		char ch;
+		HashMap<Character, Integer> map = new HashMap<>();
+		for (int i = 0; i < n; i++) {
+			ch = s.charAt(i);
+			map.put(ch, map.getOrDefault(ch, 0) + 1);
+		}
+
+		for (int i = 0; i < n; i++) {
+			if (map.get(s.charAt(i)) == 1) return i;
+		}
+
+		return -1;
+	}
+
+	/* First non-repeating(unique) character in a stream:
+	 * Given a string A denoting a stream of lowercase alphabets. You have to make new string B. B is formed such that we have to find first
+	 * non-repeating character each time a character is inserted to the stream and append it at the end to B. If no non-repeating character 
+	 * is found then append '#' at the end of B.
+	 * Eg: A = "abadbc"; output:  "aabbdd"
+	 *     A = "abcabc"; output: "aaabc#"
+	 */
+	public String firstNonRepeatingChar1(String A) {
+		if (A == null || A.length() == 0) return "";
+
+		StringBuilder result = new StringBuilder();
+		Queue<Character> queue = new LinkedList<>();
+		Map<Character, Integer> map = new HashMap<>();
+		//or int[] charCounts = new int[26];
+		for (int i = 0; i < A.length(); i++) {
+			char ch = A.charAt(i);
+			map.put(ch, map.getOrDefault(ch, 0) + 1);
+			if (map.get(ch) == 1) queue.add(ch);
+
+			while (!queue.isEmpty()) {
+				char top = queue.peek();
+				if (map.get(top) == 1) {
+					result.append(top);
+					break;
+				} else {
+					queue.poll();
+				}
+			}
+			if (queue.isEmpty()) result.append('#');
+		}
+
+		return result.toString();
+	}
+
+	//using Sliding Window - Two Pointer 
+	public String firstNonRepeatingChar2(String s) {
+		int[] charCounts = new int[26];
+		int l = 0, r = 0;
+		StringBuilder sb = new StringBuilder();
+		while (r < s.length()) {
+			charCounts[s.charAt(r) - 'a']++;
+
+			// move the start pointer ahead either till the current index or until we see another non-repeating character
+			while (l < r && charCounts[s.charAt(l) - 'a'] > 1) l++;
+
+			if (charCounts[s.charAt(l) - 'a'] == 1) sb.append(s.charAt(l));
+			else sb.append('#');
+			r++;
+		}
+		return sb.toString();
+	}
+
+	/********************* Type2: Monotonic Queue Problems ****************/
 	/*
 	 * Monotonic Queue: A monotonic Queue is a data structure the elements from the front to the end is strictly either increasing or decreasing.
-	 * Monotonic increasing queue: to push an element e, starts from the rear element, we pop out element s>=e(violation).
-	 * Monotonic decreasing queue: we pop out element s<=e (violation).
+	 * Monotonic increasing queue: add an element e in queue and pop out the element; s.peek()>=e (violation).
+	 * Monotonic decreasing queue: add an element e in queue and pop out the element; s.peek()<=e (violation).
+	 * Note: Monotonic Increasing/Decreasing Queue performs exactly same thing. So we can simply use monotonic stack, because its comparatively simple.
 	 */
 
-	//monotonous increasing stack: elements in the monotonous increase queue keeps an increasing order.
 	public void monotonicIncreasingQueue(int[] arr) {
 		Deque<Integer> queue = new ArrayDeque<>(); //or new LinkedList<>();
 		for (int i = 0; i < arr.length; i++) {
-			while (!queue.isEmpty() && queue.getLast() > arr[i]) {
+			while (!queue.isEmpty() && queue.getLast() >= arr[i]) {
 				queue.removeLast();
 			}
 			queue.add(arr[i]);
 		}
 	}
 
-	//monotonous decreasing stack: elements in the monotonous decrease queue keeps an decreasing order.
 	public void monotonicDecreasingQueue(int[] arr) {
 		Deque<Integer> queue = new LinkedList<>();
 		for (int i = 0; i < arr.length; i++) {
-			while (!queue.isEmpty() && queue.getLast() < arr[i]) {
+			while (!queue.isEmpty() && queue.getLast() <= arr[i]) {
 				queue.removeLast();
 			}
 			queue.add(arr[i]);
@@ -122,8 +192,9 @@ public class QueuePatterns {
 
 		int n = nums.length;
 		int[] result = new int[n - k + 1];
-		//Queue to store the index of the elements; Max element index should be retained in the deque front.
+		//Deque to store the index of the elements; If we store the element, we can't find the elements position and window size has size K. 
 		Deque<Integer> deque = new LinkedList<>();
+		int index = 0;
 
 		for (int i = 0; i < n; i++) {
 			//If 'i' reaches the size k, then Remove the top element 
@@ -134,7 +205,11 @@ public class QueuePatterns {
 
 			deque.addLast(i);
 
-			if (i + 1 >= k) result[i - k + 1] = nums[deque.peek()];
+			if (i >= k - 1) {
+				result[index++] = nums[deque.peekFirst()];
+				//or
+				//result[i - k + 1] = nums[deque.peek()];
+			}
 		}
 
 		return result;
@@ -170,7 +245,9 @@ public class QueuePatterns {
 			minDeque.addLast(i);
 			maxDeque.addLast(i);
 
-			if (i + 1 >= k) maxDiff = Math.min(maxDiff, nums[maxDeque.peek()] - nums[minDeque.peek()]);
+			if (i >= k - 1) {
+				maxDiff = Math.min(maxDiff, nums[maxDeque.peek()] - nums[minDeque.peek()]);
+			}
 		}
 		return maxDiff;
 	}
@@ -182,7 +259,7 @@ public class QueuePatterns {
 		for (int i = 0; i < N; i++)
 			B[i + 1] = B[i] + A[i];
 		Deque<Integer> d = new ArrayDeque<>();
-		for (int i = 0; i < N + 1; i++) {
+		for (int i = 0; i <= N; i++) {
 			while (d.size() > 0 && B[i] - B[d.getFirst()] >= K) {
 				res = Math.min(res, i - d.pollFirst());
 			}

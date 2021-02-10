@@ -210,8 +210,9 @@ public class StackPatterns {
 	 * "2*(5+5*2)/3+(6/2+8)" = 21
 	 */
 	public int calculator31(String s) {
-		Stack<Character> operStack = new Stack<>();
-		Stack<Long> valStack = new Stack<>();
+		Stack<Character> operStack = new Stack<>(); //Operator Stack
+		Stack<Integer> valStack = new Stack<>(); //Operand Stack
+
 		// s = s.trim().replaceAll("[ ]+", ""); //Check this RegEx
 		int n = s.length();
 		for (int i = 0; i < n; i++) {
@@ -219,19 +220,30 @@ public class StackPatterns {
 			if (ch == ' ') {
 				continue;
 			} else if (Character.isDigit(ch)) {
+				int num = (int) ch - '0'; //or Character.getNumericValue(s.charAt(i)); 
+
+				while (i + 1 < s.length() && Character.isDigit(s.charAt(i + 1))) {
+					num = num * 10 + Character.getNumericValue(s.charAt(i + 1));
+					i++;
+				}
+				valStack.push(num);
+
+				/* This calculation throws exception for the inputs 10-2147483648, 0-2147483648
 				int start = i;
 				while (i + 1 < n && Character.isDigit(s.charAt(i + 1))) i++;
-				valStack.push(Long.valueOf(s.substring(start, i + 1)));
+				valStack.push(Integer.valueOf(s.substring(start, i + 1)));*/
 			} else {
 				if (operStack.isEmpty() || ch == '(') {
 					operStack.push(ch);
 				} else if (ch == ')') {
-					while (operStack.peek() != '(')
+					while (operStack.peek() != '(') {
+						// Get the values from operStack & valStack, perform arithmetic operation and store the result back in valStack
 						valStack.push(arithmeticOperation(operStack.pop(), valStack.pop(), valStack.pop()));
+					}
 					operStack.pop();
-				} else {
-					char prevOp = operStack.peek();
-					if (prevOp != '(' && getPrecedence(prevOp) >= getPrecedence(ch)) {
+				} else { //If ch is operator, process it
+					char top = operStack.peek();
+					if (top != '(' && getPrecedence(top) >= getPrecedence(ch)) {
 						valStack.push(arithmeticOperation(operStack.pop(), valStack.pop(), valStack.pop()));
 					}
 					operStack.push(ch);
@@ -239,105 +251,11 @@ public class StackPatterns {
 			}
 		}
 
-		while (!operStack.isEmpty())
+		while (!operStack.isEmpty()) {
 			valStack.push(arithmeticOperation(operStack.pop(), valStack.pop(), valStack.pop()));
-
-		return (int) valStack.pop().longValue();
-	}
-
-	//TODO: Understand how this solution works for Integer.MIN_VALUE. Eg: 10-2147483648, 0-2147483648
-	public int calculator32(String s) {
-		if (s == null || s.length() == 0) return 0;
-
-		// remove leading and trailing spaces and white spaces.
-		s = s.trim().replaceAll("[ ]+", "");
-
-		if (s == null || s.length() == 0) {
-			return 0;
 		}
 
-		Stack<Character> opStack = new Stack<>();
-		Stack<Integer> numStack = new Stack<>();
-		System.out.println("Input: " + s);
-		int i = 0;
-		while (i < s.length()) {
-			if (Character.isDigit(s.charAt(i))) {
-				int num = 0;
-				//TODO: Check these samples here in debug mode  Eg: 10-2147483648, 0-2147483648
-				while (i < s.length() && Character.isDigit(s.charAt(i))) {
-					num = num * 10 + Character.getNumericValue(s.charAt(i));
-					i++;
-				}
-				numStack.push(num);
-				System.out.println(num);
-			} else {
-				char op = s.charAt(i);
-				if (opStack.isEmpty()) {
-					opStack.push(op);
-					i++;
-				} else if (op == '+' || op == '-') {
-					char top = opStack.peek();
-					if (top == '(') {
-						opStack.push(op);
-						i++;
-					} else {
-						calculate(numStack, opStack);
-					}
-				} else if (op == '*' || op == '/') {
-					char top = opStack.peek();
-					if (top == '(') {
-						opStack.push(op);
-						i++;
-					} else if (top == '*' || top == '/') {
-						calculate(numStack, opStack);
-					} else if (top == '+' || top == '-') {
-						opStack.push(op);
-						i++;
-					}
-				} else if (op == '(') {
-					opStack.push(op);
-					i++;
-				} else if (op == ')') {
-					while (opStack.peek() != '(') {
-						calculate(numStack, opStack);
-					}
-					opStack.pop();
-					i++;
-				}
-			}
-		}
-
-		while (!opStack.isEmpty()) {
-			calculate(numStack, opStack);
-		}
-
-		return numStack.peek();
-	}
-
-	private void calculate(Stack<Integer> numStack, Stack<Character> opStack) {
-		int num2 = numStack.pop();
-		int num1 = numStack.pop();
-		//TODO: Check these samples here in debug mode Eg: 10-2147483648, 0-2147483648
-		char op = opStack.pop();
-
-		int ans = 0;
-
-		switch (op) {
-		case '+':
-			ans = num1 + num2;
-			break;
-		case '-':
-			ans = num1 - num2;
-			break;
-		case '*':
-			ans = num1 * num2;
-			break;
-		case '/':
-			ans = num1 / num2;
-			break;
-		}
-
-		numStack.push(ans);
+		return valStack.isEmpty() ? 0 : valStack.pop();
 	}
 
 	//Simplify Path
@@ -367,6 +285,9 @@ public class StackPatterns {
 	 * 		The next element smaller than the current element
 	 * 		The previous element smaller than the current element
 	 * Tips: You can store indexes in the stack, or you can directly store elements
+	 * 
+	 * Monotonic increasing stack: push an element e in stack and pop out the element; s.peek()>=e(violation).
+	 * Monotonic decreasing stack: push an element e in stack and pop out the element; s.peek()<=e (violation).
 	 */
 	//monotonous increasing stack: elements in the monotonous increase stack keeps an increasing order.
 	public void monotonicIncreasingStack(int[] arr) {
@@ -406,8 +327,7 @@ public class StackPatterns {
 		}
 	}
 
-	// Approach2: Using Stack; Time Complexity: O(n), with additional stack space
-	//Loop once, we can get the Next Greater Number of a normal array.
+	// Approach2: Used Monotonic Decreasing Stack; Time: O(n), Space: O(n)
 	public int[] nextGreaterElementI2(int[] nums1, int[] nums2) {
 		if (nums2.length == 0 || nums1.length == 0) return new int[0];
 
@@ -451,16 +371,18 @@ public class StackPatterns {
 		return res;
 	}
 
-	//Using Stack
+	//Using Monotonic Decreasing Stack, but iterate from back
 	public int[] nextGreaterElementsII2(int[] nums) {
 		if (nums.length == 0) return new int[0];
 
 		Stack<Integer> stack = new Stack<>();
 		int n = nums.length;
+		//1.First add the elements in the stack
 		for (int i = n - 1; i >= 0; i--) {
 			stack.push(nums[i]);
 		}
 
+		//Then iterate from backend and find the next greatest element
 		int[] result = new int[n];
 		for (int i = n - 1; i >= 0; i--) {
 			while (!stack.isEmpty() && stack.peek() <= nums[i]) {
@@ -474,6 +396,7 @@ public class StackPatterns {
 	}
 
 	//Online Stock Span
+	//Using Monotonic Decreasing Stack
 	public void stockSpan(int[] prices) {
 		//0-price, 1-consecutive days count
 		Stack<int[]> stack = new Stack<>();
@@ -543,7 +466,7 @@ public class StackPatterns {
 	public int largestRectangleArea3(int[] heights) {
 		if (heights == null || heights.length == 0) return 0;
 
-		Stack<Integer> stack = new Stack<Integer>();
+		Stack<Integer> stack = new Stack<>();
 		int maxArea = 0, n = heights.length;
 		for (int i = 0; i <= n; i++) {
 			while (!stack.isEmpty() && (i == n || heights[stack.peek()] >= heights[i])) {
@@ -595,7 +518,7 @@ public class StackPatterns {
 			result = a / b;
 			break;
 		case '^':
-			result = pow(a, b);
+			result = (int) Math.pow(a, b);
 			break;
 		}
 		return result;
@@ -628,9 +551,9 @@ public class StackPatterns {
 		return -1;
 	}
 
-	private static int pow(int a, int b) {
-		if (b == 1) return a;
-		return a * pow(a, b - 1);
+	public static void main(String[] args) {
+		StackPatterns ob = new StackPatterns();
+		//10-2147483648, 0-2147483648
+		System.out.println("Output: " + ob.calculator31("10-2147483648"));
 	}
-
 }

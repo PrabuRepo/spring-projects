@@ -11,6 +11,7 @@ import com.common.utilities.Utils;
  * factored into the number of cycles where each of them can be rotated 
  * to produce a sorted array. It is theoretically optimal in the sense 
  * that it reduces the number of writes to the original array.
+ * Note: Array elements range from 1 to n or 0 to n-1;
  * 
  * Steps:
  *    if the element is found to be at its correct position, simply leave it as it is.
@@ -21,16 +22,6 @@ import com.common.utilities.Utils;
  */
 public class CyclicSortPatterns {
 
-	public static void main(String[] args) {
-		CyclicSortPatterns ob = new CyclicSortPatterns();
-		int[] arr = { 2, 3, 1, 8, 2, 3, 5, 1 };
-		System.out.println("Missing Numbers: ");
-		ob.missingNumbers2(arr).stream().forEach(k -> System.out.print(k + " "));
-		System.out.println("\nDuplicate Numbers: ");
-		ob.findDuplicates4(arr).stream().forEach(k -> System.out.print(k + " "));
-		System.out.println("\nDup Number: " + ob.findDuplicate61(new int[] { 1, 4, 4, 3, 2 }));
-	}
-
 	// 1.Cyclic Sort:
 	// Array range from 1 to n
 	public void cycleSort1(int[] nums) {
@@ -38,6 +29,10 @@ public class CyclicSortPatterns {
 		int i = 0;
 		while (i < n) {
 			int val = nums[i] - 1;
+			/* Below condition satisfies,
+			 *  1.Indices are same(i==val), then definitely nums[i]==nums[val]
+			 *  2.If indices are different(i!=val), then it should be duplicate(nums[i]==nums[val]).
+			 */
 			if (nums[val] != nums[i]) {
 				// if the current number is not at the correct index, swap it
 				Utils.swap(nums, val, i);
@@ -51,10 +46,10 @@ public class CyclicSortPatterns {
 	public void cycleSort2(int[] nums) {
 		int n = nums.length, val = 0;
 		for (int i = 0; i < n; i++) {
-			val = nums[i];
-			while (val > 0 && val <= n && nums[val - 1] != val) {
-				Utils.swap(nums, val - 1, i);
-				val = nums[i];
+			val = nums[i] - 1;
+			while (val >= 0 && val < n && nums[val] != nums[i]) {
+				Utils.swap(nums, val, i);
+				val = nums[i] - 1;
 			}
 		}
 		System.out.println("Sorted Array: " + Arrays.toString(nums));
@@ -68,7 +63,7 @@ public class CyclicSortPatterns {
 	 *  3.Binary Search -O(nlogn); if it is already sorted-O(logn)
 	 *  4.Using Cyclic Sort
 	 */
-	public int missingNumber4(int[] nums) {
+	public int missingNumber(int[] nums) {
 		int i = 0, n = nums.length;
 		// rearrange the array using cyclic sort.
 		while (i < n) {
@@ -91,9 +86,8 @@ public class CyclicSortPatterns {
 	 */
 
 	// Cyclic Sort Approach
-	public List<Integer> missingNumbers2(int[] arr) {
+	public List<Integer> missingNumbers21(int[] arr) {
 		List<Integer> missed = new ArrayList<>();
-		// rearrange the array using cyclic sort.
 		int i = 0, n = arr.length;
 		while (i < n) {
 			int val = arr[i] - 1;
@@ -112,7 +106,8 @@ public class CyclicSortPatterns {
 	}
 
 	// Marker Approach
-	public void missingNumbers3(int[] arr) {
+	public List<Integer> missingNumbers22(int[] arr) {
+		List<Integer> missed = new ArrayList<>();
 		for (int i = 0; i < arr.length; i++) {
 			int val = Math.abs(arr[i]) - 1;
 			if (arr[val] > 0) {
@@ -121,9 +116,10 @@ public class CyclicSortPatterns {
 		}
 		for (int i = 0; i < arr.length - 1; i++) {
 			if (arr[i] > 0) {
-				System.out.println(i + 1);
+				missed.add(i + 1);
 			}
 		}
+		return missed;
 	}
 
 	// 4.Find the Duplicate Number:
@@ -242,7 +238,7 @@ public class CyclicSortPatterns {
 		while (i < nums.length) {
 			val = nums[i] - 1;
 			if (val >= 0 // Skip negative numbers
-					&& val < n // Critical, so we do not want to go out of bound
+					&& val < n // Skip out of bound
 					&& nums[val] != nums[i]) { // Cyclic Sort criteria
 				Utils.swap(nums, val, i);
 			} else {
@@ -293,5 +289,17 @@ public class CyclicSortPatterns {
 			if (nums[i] >= 0) return i + 1;
 
 		return n + 1;
+	}
+
+	public static void main(String[] args) {
+		CyclicSortPatterns ob = new CyclicSortPatterns();
+		int[] arr = { 4, 3, 2, 7, 8, 2, 3, 1 };
+		int[] arr2 = { 2, 3, 1, 8, 2, 3, 5, 1 };
+		System.out.println("Missing Numbers: ");
+		ob.missingNumbers21(arr).stream().forEach(k -> System.out.print(k + " "));
+		System.out.println("\nDuplicate Numbers: ");
+		ob.findDuplicates4(arr2).stream().forEach(k -> System.out.print(k + " "));
+		System.out.println("\nDup Number: " + ob.findDuplicate61(new int[] { 1, 4, 4, 3, 2 }));
+
 	}
 }

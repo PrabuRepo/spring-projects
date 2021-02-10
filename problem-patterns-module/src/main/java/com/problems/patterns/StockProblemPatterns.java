@@ -71,8 +71,7 @@ public class StockProblemPatterns {
 	 * So iteration goes k times inside prices loop 
 	 */
 	public int maxProfit3(int k, int[] prices) {
-		// or prices.length/2
-		if (k >= prices.length >>> 1) {
+		if (k >= prices.length >>> 1) { // or prices.length/2
 			// Use Multiple Trx solution
 			return maxProfit4(prices);
 		}
@@ -81,7 +80,7 @@ public class StockProblemPatterns {
 		Arrays.fill(min, Integer.MAX_VALUE);
 
 		for (int price : prices) {
-			for (int i = 1; i <= k; i--) {
+			for (int i = 1; i <= k; i++) {
 				min[i] = Math.min(min[i], price - diff[i - 1]);
 				diff[i] = Math.max(diff[i], price - min[i]);
 			}

@@ -88,14 +88,17 @@ public class Utils {
 
 	// Method to print int matrix
 	public static void printMatrix(int[][] data) {
-		int row = data.length;
-		int col = data[0].length;
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < col; j++) {
-				System.out.print(data[i][j] + " ");
-			}
-			System.out.println();
-		}
+		/*	int row = data.length;
+			int col = data[0].length;
+			for (int i = 0; i < row; i++) {
+				for (int j = 0; j < col; j++) {
+					System.out.print(data[i][j] + " ");
+				}
+				System.out.println();
+			}*/
+
+		//or
+		System.out.println(Arrays.deepToString(data));
 	}
 
 	// Method to print char matrix

@@ -29,6 +29,17 @@ import com.common.model.ListNode;
  *   
  *  Note: Consider below three positions for all the LL operations: 
  *  	     1.First; 2.Last 3.Middle(Anywhere between first & last);
+ *  
+ *  Tips for index based traverse from first node to given node(K)
+ *  	Case 1: Move to prev to the Kth node
+ *  			i. Using Incrementer: count = 1; while(++count < K)
+ *  			ii.Using Decrementer: while(--k > 1)
+ *  	Case 2: Move to the Kth node
+ *    			i. Using Incrementer: count = 1; while(count++ < K)
+ *  			ii.Using Decrementer: while(k-- > 1)
+ *  	Case 3: Move to next to the Kth node
+ *	 			i. Using Incrementer: count = 1; while(count++ <= K)
+ *  			ii.Using Decrementer: while(k-- >= 1)
  */
 public class LinkedList {
 	public static void main(String[] args) {
@@ -183,7 +194,8 @@ class SinglyLinkedList implements SLLOperations {
 		}
 
 		ListNode curr = head;
-		while (--index > 1)// Move to prev node
+		// Move to prev node
+		while (--index > 1) //or count =1; (++count < index)
 			curr = curr.next;
 
 		if (curr != null) {

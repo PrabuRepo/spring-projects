@@ -24,6 +24,13 @@ public class GreedyAlgorithms {
 	 *  on a single activity at a time.
 	 *  
 	 *  Time Complexity: O(nlogn)
+	 *  
+	 * The greedy choice is to always pick the next activity whose finish time is least among the remaining activities and the 
+	 * start time is more than or equal to the finish time of previously selected activity. We can sort the activities according
+	 * to their finishing time so that we always consider the next activity as minimum finishing time activity.
+	 * 
+	 * Sort based on start time: To find the overlapping intervals, insert the intervals, merge overlapping intervals
+	 * Sort based on end time: To find the maximum number of non-overlapping intervals. Eg: max activities, no of meeting rooms required,  
 	 */
 	public int maxActivities(int[] start, int[] end) {
 		if (start.length == 0 || end.length == 0) return 0;
@@ -37,13 +44,13 @@ public class GreedyAlgorithms {
 		// Sort based on end time
 		Arrays.sort(intervals, (a, b) -> (a.end - b.end));
 
-		int activityCount = 1, l = 0, r = 1;
-		while (r < n) {
-			if (intervals[l].end <= intervals[r].start) {
+		int activityCount = 1, prev = 0, curr = 1;
+		while (curr < n) {
+			if (intervals[prev].end <= intervals[curr].start) {
 				activityCount++;
-				l = r;
+				prev = curr;
 			}
-			r++;
+			curr++;
 		}
 
 		return activityCount;

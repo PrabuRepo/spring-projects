@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -57,13 +58,13 @@ public class HeapPatterns {
 			if (nodes[i] != null) queue.add(nodes[i]);
 
 		ListNode dummy = new ListNode(0);
-		ListNode temp = dummy;
+		ListNode curr = dummy;
 		while (!queue.isEmpty()) {
-			ListNode curr = queue.poll();
+			ListNode top = queue.poll();
 			// Add next val in the queue
-			if (curr.next != null) queue.add(curr.next);
-			temp.next = curr;
-			temp = temp.next;
+			if (top.next != null) queue.add(top.next);
+			curr.next = top;
+			curr = curr.next;
 		}
 		return dummy.next;
 	}
@@ -107,7 +108,7 @@ public class HeapPatterns {
 		while (!queue.isEmpty()) {
 			Cell curr = queue.poll();
 			result[index++] = curr.data;
-			if (curr.j < arr[curr.i].length - 1) {
+			if (curr.j + 1 < arr[curr.i].length) {
 				queue.add(new Cell(curr.i, curr.j + 1, arr[curr.i][curr.j + 1]));
 			}
 		}
@@ -128,7 +129,7 @@ public class HeapPatterns {
 	 * Explanation: List 1: [4, 10, 15, 24,26], 24 is in range [20,24]. List 2: [0, 9, 12, 20], 20 is in range [20,24]. 
 	 * List 3: [5, 18, 22, 30], 22 is in range [20,24].	 
 	 */
-	// TODO: Modify this to use Container to to hold the indices
+	// TODO: Modify this to use Container to hold the indices
 	// Apply Merge K List Algorithm
 	public int[] smallestRange(List<List<Integer>> nums) {
 		int[] result = new int[2];
@@ -168,8 +169,6 @@ public class HeapPatterns {
 		return result;
 	}
 
-	//TODO: Move to consolidated module
-
 	/*
 	 * Minimize the absolute difference: 
 	 * Given three sorted arrays A, B and Cof not necessarily same sizes.
@@ -180,12 +179,8 @@ public class HeapPatterns {
 	 */
 	public static int minAbsoluteDiff(ArrayList<Integer> A, ArrayList<Integer> B, ArrayList<Integer> C) {
 		int diff = Integer.MAX_VALUE;
-		int i = 0;
-		int j = 0;
-		int k = 0;
-		int p = A.size();
-		int q = B.size();
-		int r = C.size();
+		int i = 0, j = 0, k = 0;
+		int p = A.size(), q = B.size(), r = C.size();
 
 		while (i < p && j < q && k < r) {
 			int maximum = Math.max(A.get(i), Math.max(B.get(j), C.get(k)));
@@ -205,6 +200,7 @@ public class HeapPatterns {
 		return diff;
 	}
 
+	//TODO: Move to consolidated module
 	private KthElementPatterns kthElementPattern;
 
 	public void kthSmallestInMatrix(int[][] matrix, int k) {
@@ -290,35 +286,66 @@ public class HeapPatterns {
 		int n = nums.length;
 		if (n == 0 || k == 0) return null;
 
-		// Count the frequency of elements
+		// 1.Count the frequency of elements
 		Map<Integer, Integer> map = new HashMap<>();
 		for (int i = 0; i < n; i++)
 			map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
 
-		// Create a min Heap based on count(freq of elements)
-		//PriorityQueue<Map.Entry<Integer, Integer>> queue = new PriorityQueue<>((a, b) -> a.getValue() - b.getValue());
+		if (map.size() < k) return null;
+
+		// 2.Create a min Heap based on count(freq of elements)
 		PriorityQueue<Integer> queue = new PriorityQueue<>((a, b) -> map.get(a) - map.get(b));
 
-		// Insert the elements one by one in queue and maintain k elements in PQ
+		// 3.Insert the elements one by one in queue and maintain k elements in PQ; Time-O(nlogk)
 		for (Integer key : map.keySet()) {
 			queue.add(key);
 			if (queue.size() > k) queue.poll();
 		}
 
-		// Insert the queue values in result
+		//4.Arrange Elements in Decreasing order; Because queue(min heap) returns elements in increasing order.
 		List<Integer> result = new ArrayList<>();
 		while (!queue.isEmpty() && result.size() < k) {
-			result.add(0, queue.poll());
+			result.add(queue.poll());
 		}
-
 		Collections.reverse(result);
 
-		// result.stream().forEach(i -> System.out.print(i + " "));
 		return result;
 	}
 
-	// Approach2: Using Hashmap & Heap; Time Complexity: O(nlogk)
-	public int[] topKFrequent12(int[] nums, int k) {
+	// Approach1: Same solution but here priority queue uses Entry map
+	public List<Integer> topKFrequent12(int[] nums, int k) {
+		int n = nums.length;
+
+		if (n == 0 || k == 0) return null;
+
+		// Count the frequency of elements
+		Map<Integer, Integer> map = new HashMap<>(); // Key - Element; Value - Count
+		for (int i = 0; i < n; i++) {
+			map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
+		}
+
+		if (map.size() < k) return null;
+
+		// Create a min Heap based on count(freq of elements)
+		PriorityQueue<Map.Entry<Integer, Integer>> queue = new PriorityQueue<>((a, b) -> a.getValue() - b.getValue());
+
+		// Insert the elements one by one in queue and maintain k elements in PQ
+		for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+			queue.add(entry);
+			if (queue.size() > k) queue.poll();
+		}
+		// Insert the queue values in result
+		List<Integer> result = new ArrayList<>();
+		while (!queue.isEmpty() && result.size() < k) {
+			result.add(queue.poll().getKey());
+		}
+
+		Collections.reverse(result);
+		return result;
+	}
+
+	// Approach1: Same problem but here return type is array:
+	public int[] topKFrequent13(int[] nums, int k) {
 		int n = nums.length;
 
 		// Count the frequency of elements
@@ -330,7 +357,7 @@ public class HeapPatterns {
 
 		if (map.size() < k) return null;
 
-		// Create a max Heap based on count(freq of elements)
+		// Create a min Heap based on count(freq of elements)
 		PriorityQueue<Integer> queue = new PriorityQueue<>((a, b) -> map.get(a) - map.get(b));
 
 		// Insert the elements one by one in queue and maintain k elements in PQ
@@ -339,13 +366,12 @@ public class HeapPatterns {
 			if (queue.size() > k) queue.poll();
 		}
 
-		// Insert the queue values in result
+		// Insert the queue values in result 
 		int[] result = new int[k];
 		for (int i = k - 1; i >= 0; --i) {
 			result[i] = queue.poll();
 		}
 
-		//result.stream().forEach(i -> System.out.print(i + " "));
 		return result;
 	}
 
@@ -385,7 +411,6 @@ public class HeapPatterns {
 			}
 		}
 
-		// result.stream().forEach(i -> System.out.print(i + " "));
 		return result;
 	}
 
@@ -393,10 +418,10 @@ public class HeapPatterns {
 	 * Given a non-empty string str and an integer k, rearrange the string such that the same characters are at least
 	 * distance k from each other. All input strings are given in lowercase letters. If it is not possible to rearrange
 	 * the string, return an empty string "".
-	 * str = "aabbcc", k = 3
-	 * Result: "abcabc"
-	 * The same letters are at least distance 3 from each other.
+	 * Example1: str = "aabbcc", k = 3; Answer: "abcabc"; The same letters are at least distance 3 from each other.
+	 * Example2: str = "aaabc", k = 3 Answer: ""; It is not possible to rearrange the string. -> This is not working, check this
 	 */
+	//Time Complexity: O(nlogn); Here n is String length
 	public String rearrangeString(String str, int k) {
 		if (k == 0) return str;
 
@@ -407,7 +432,7 @@ public class HeapPatterns {
 			map.put(c, map.getOrDefault(c, 0) + 1);
 		}
 
-		// sort the chars by frequency
+		// Max Heap: sort the chars by frequency
 		PriorityQueue<Character> queue = new PriorityQueue<>(
 				(c1, c2) -> map.get(c1) != map.get(c2) ? map.get(c2) - map.get(c1) : c1.compareTo(c2));
 
@@ -419,19 +444,27 @@ public class HeapPatterns {
 		StringBuilder sb = new StringBuilder();
 		int len = str.length();
 		while (!queue.isEmpty()) {
-			List<Character> waitingQueue = new ArrayList<>();
+			//Waiting Queue is used to process the chars in the next iteration, if char count is more one
+			List<Character> waitingQueue = new LinkedList<>();
 			for (int i = 0; i < Math.min(k, len); i++) {
+				//It is not possible to rearrange the string.
 				if (queue.isEmpty()) return "";
 
 				char c = queue.poll();
 				sb.append(String.valueOf(c));
 
 				map.put(c, map.get(c) - 1);
+				//if char count is greater than one, then add into the waiting queue to process in next iteration
 				if (map.get(c) > 0) waitingQueue.add(c);
 
+				/*	if (map.get(c) == 1) {
+						map.remove(c);
+					} else { 
+						map.put(c, map.get(c) - 1);
+						waitingQueue.add(c);
+					}*/
 				len--;
 			}
-
 			queue.addAll(waitingQueue);
 		}
 
@@ -447,7 +480,7 @@ public class HeapPatterns {
 	 * Example: Input: tasks = ["A","A","A","B","B","B"], n = 2 Output: 8 
 	 * Explanation: A -> B -> idle -> A -> B -> idle -> A -> B.
 	 */
-	// Appoach1:
+	// Approach1:
 	public int leastInterval1(char[] tasks, int n) {
 		int[] cnt = new int[26];
 		for (char c : tasks) {
@@ -627,7 +660,6 @@ public class HeapPatterns {
 		return sb.toString();
 	}
 
-	// Using TreeSet(Balanced BST)
 	public String frequencySort(String s) {
 		int n = s.length();
 		if (n <= 1) return s;
@@ -659,9 +691,10 @@ public class HeapPatterns {
 	/********************* 3.Two Heaps *************************/
 
 	/*Find Median from Data Stream:
-	 * Median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value.
+	 * Median is the middle value in an ordered list of elements. If the size of the list is even, there is no middle value.
 	 * So the median is the mean of the two middle value.
-	 * Given that integers are read from a data stream. Find median of elements read so for in efficient way.
+	 * 
+	 * Given that integers are read from a data stream. Find median of elements read so far in efficient way.
 	 * Approaches:
 	 *    1.Simple Sorting: Store the numbers in a resize-able container. Every time you need to output the median, sort the 
 	 *      container and output the median. Time: O(nlogn), Space:O(n)
@@ -714,6 +747,7 @@ public class HeapPatterns {
 				: (double) upper.peek();
 	}
 
+	//Remove from Heap takes O(n) time 
 	public void removeNum(int num) {
 		if (!lower.isEmpty() && num <= lower.peek()) lower.remove(num);
 		else upper.remove(num);
@@ -742,15 +776,15 @@ public class HeapPatterns {
 		lower = new PriorityQueue<>(Collections.reverseOrder());
 		upper = new PriorityQueue<>();
 		double[] result = new double[n - k + 1];
-		int j = 0;
+		int index = 0;
 
-		for (int i = 0; i <= n; i++) {
-			if (i >= k) {
-				result[j++] = findMedian();
-				removeNum(nums[i - k]);
+		for (int i = 0; i < n; i++) {
+			addNum(nums[i]);
+
+			if (i >= k - 1) {
+				result[index++] = findMedian();
+				removeNum(nums[i - k + 1]);
 			}
-
-			if (i < n) addNum(nums[i]);
 		}
 
 		return result;
@@ -758,52 +792,59 @@ public class HeapPatterns {
 
 	/* Approach2: Using Treeset
 	 *  However instead of using two priority queue's we use two Tree Sets as we want O(logk) for remove(element).
-	 * Priority Queue would have been O(k) for remove(element) giving us an overall time complexity of O(nk) instead of
-	 * O(nlogk).
+	 *  Priority Queue would have been O(k) for remove(element) giving us an overall time complexity of O(nk) 
+	 *  instead of O(nlogk).
 	 */
-	// TODO: ITs not working; Change it to index based; Because TreeSet doesnt allow duplicate
-	public double[] medianSlidingWindow2(int[] nums, int k) {
-		TreeSet<Integer> lower = new TreeSet<>(Collections.reverseOrder());
-		TreeSet<Integer> upper = new TreeSet<>();
+	TreeSet<Integer> left = null;
+	TreeSet<Integer> right = null;
+
+	public double[] medianSlidingWindow(int[] nums, int k) {
+		// Should add index in the set to handle duplicate elements
+		Comparator<Integer> comparator = (i, j) -> nums[i] != nums[j] ? Integer.compare(nums[i], nums[j]) : i - j;
+		left = new TreeSet<>(comparator.reversed());
+		right = new TreeSet<>(comparator);
+
 		int n = nums.length, index = 0;
 		double[] result = new double[n - k + 1];
-		for (int i = 0; i <= n; i++) {
-			if (i >= k) {
-				result[index++] = findMedian(lower, upper);
-				removeNum(lower, upper, nums[n - k]);
+
+		for (int i = 0; i < n; i++) {
+			addNum(nums, i);
+
+			if (i >= k - 1) {
+				result[index++] = findMedian(nums);
+				removeNum(nums, i - k + 1);
 			}
 
-			if (i < n) addNum(lower, upper, nums[i]);
 		}
 		return result;
 	}
 
-	public void addNum(TreeSet<Integer> lower, TreeSet<Integer> upper, int num) {
-		if (!lower.isEmpty() && num < lower.first()) lower.add(num);
-		else upper.add(num);
-		balanceTreeSet(lower, upper);
+	public void addNum(int[] nums, int i) {
+		if (!left.isEmpty() && nums[i] < nums[left.first()]) left.add(i);
+		else right.add(i);
+		balanceTreeSet();
 	}
 
-	public void removeNum(TreeSet<Integer> lower, TreeSet<Integer> upper, int num) {
-		if (!lower.isEmpty() && num < lower.first()) lower.remove(num);
-		else upper.remove(num);
-		balanceTreeSet(lower, upper);
+	public void removeNum(int[] nums, int i) {
+		if (!left.isEmpty() && nums[i] <= nums[left.first()]) left.remove(i);
+		else right.remove(i);
+		balanceTreeSet();
 	}
 
-	public void balanceTreeSet(TreeSet<Integer> lower, TreeSet<Integer> upper) {
-		if (lower.size() > upper.size()) upper.add(lower.pollFirst());
-		if (upper.size() - lower.size() > 1) lower.add(upper.pollFirst());
+	public void balanceTreeSet() {
+		if (left.size() > right.size()) right.add(left.pollFirst());
+		if (right.size() - left.size() > 1) left.add(right.pollFirst());
 	}
 
-	public double findMedian(TreeSet<Integer> lower, TreeSet<Integer> upper) {
-		if (lower.size() == upper.size()) return ((double) (lower.first() + upper.first()) * 0.5);
-		return upper.first();
+	public double findMedian(int[] nums) {
+		return left.size() != right.size() ? (double) nums[right.first()]
+				: ((double) nums[left.first()] + (double) nums[right.first()]) * 0.5;
 	}
 
 	// Using Lambda Expression
 	public double[] medianSlidingWindow3(int[] nums, int k) {
 		// Should add index in the set to handle duplicate elements
-		Comparator<Integer> comparator = (a, b) -> nums[a] != nums[b] ? Integer.compare(nums[a], nums[b]) : a - b;
+		Comparator<Integer> comparator = (i, j) -> nums[i] != nums[j] ? Integer.compare(nums[i], nums[j]) : i - j;
 		TreeSet<Integer> left = new TreeSet<>(comparator.reversed());
 		TreeSet<Integer> right = new TreeSet<>(comparator);
 
@@ -1090,4 +1131,8 @@ public class HeapPatterns {
 				&& isMaxBinaryHeap(root.right);
 	}
 
+	public static void main(String[] args) {
+		HeapPatterns ob = new HeapPatterns();
+		System.out.println(ob.rearrangeString("aaabc", 3));
+	}
 }

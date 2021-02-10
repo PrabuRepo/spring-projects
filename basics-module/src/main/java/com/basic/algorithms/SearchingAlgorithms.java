@@ -15,6 +15,11 @@ public class SearchingAlgorithms implements SearchOperations {
 		return -1;
 	}
 
+	/* Binary Search Patterns:
+	 * If target is mid element(t==a[m]) return mid index
+	 * If target presents left side(t<a[m]), h = m-1
+	 * If target presents right side(a[m]<t), l = m+1
+	 */
 	// Iterative Approach: Time complexity: O(logn)
 	@Override
 	public int binarySearch1(int[] a, int x) {
@@ -43,7 +48,7 @@ public class SearchingAlgorithms implements SearchOperations {
 		if (l > h) return -1;
 
 		int m = (l + h) / 2; //or l + (h-l)/2;
-		if (a[m] == x) return m;
+		if (x == a[m]) return m;
 		else if (x < a[m]) return binarySearch(a, l, m - 1, x);
 		else return binarySearch(a, m + 1, h, x);
 	}
@@ -63,12 +68,12 @@ public class SearchingAlgorithms implements SearchOperations {
 		while (left <= right) {
 			// Prevent (left + right) overflow
 			int mid = left + (right - left) / 2;
-			if (nums[mid] == target) {
+			if (target == nums[mid]) {
 				return mid;
-			} else if (nums[mid] < target) {
-				left = mid + 1;
-			} else {
+			} else if (target < nums[mid]) {
 				right = mid - 1;
+			} else {
+				left = mid + 1;
 			}
 		}
 
@@ -91,12 +96,12 @@ public class SearchingAlgorithms implements SearchOperations {
 		while (left < right) {
 			// Prevent (left + right) overflow
 			int mid = left + (right - left) / 2;
-			if (nums[mid] == target) {
+			if (target == nums[mid]) {
 				return mid;
-			} else if (nums[mid] < target) {
-				left = mid + 1;
-			} else {
+			} else if (target < nums[mid]) {
 				right = mid;
+			} else {
+				left = mid + 1;
 			}
 		}
 
@@ -120,12 +125,12 @@ public class SearchingAlgorithms implements SearchOperations {
 		while (left + 1 < right) {
 			// Prevent (left + right) overflow
 			int mid = left + (right - left) / 2;
-			if (nums[mid] == target) {
+			if (target == nums[mid]) {
 				return mid;
-			} else if (nums[mid] < target) {
-				left = mid;
-			} else {
+			} else if (target < nums[mid]) {
 				right = mid;
+			} else {
+				left = mid;
 			}
 		}
 

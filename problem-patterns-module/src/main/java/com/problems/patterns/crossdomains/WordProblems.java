@@ -378,6 +378,8 @@ public class WordProblems {
 		return ans;
 	}
 
+	private static final int[][] DIRS = { { 0, 1 }, { 0, -1 }, { 1, 0 }, { -1, 0 } };
+
 	//Matrix 4 Dir & Trie: Word Boggle or Word Search I, II
 	/* Word Search I - Search one word
 	 * Given a 2D board and a "word", find if the word exists in the grid.The word can be constructed from 
@@ -407,13 +409,19 @@ public class WordProblems {
 		if (i < 0 || i >= row || j < 0 || j >= col || index >= word.length() || word.charAt(index) != board[i][j]
 				|| board[i][j] == '#')
 			return false;
-
 		if (index == word.length() - 1) return true;
+
 		char temp = board[i][j];
 		board[i][j] = '#'; // Avoid to revisit the same value
 
-		boolean flag = dfsSearch(board, word, i - 1, j, index + 1) || dfsSearch(board, word, i + 1, j, index + 1)
+		boolean flag = false;
+		flag = dfsSearch(board, word, i - 1, j, index + 1) || dfsSearch(board, word, i + 1, j, index + 1)
 				|| dfsSearch(board, word, i, j - 1, index + 1) || dfsSearch(board, word, i, j + 1, index + 1);
+
+		//or
+		for (int[] dir : DIRS) {
+			flag = flag || dfsSearch(board, word, i + dir[0], j + dir[1], index + 1);
+		}
 
 		board[i][j] = temp;
 		return flag;

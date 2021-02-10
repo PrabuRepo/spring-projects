@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.TreeMap;
@@ -15,39 +16,13 @@ import com.common.model.Interval;
  * https://www.freecodecamp.org/news/what-is-a-greedy-algorithm/
  * 
  * Sort based on start time:
- * 	- To find the overlapping the intervals, insert the intervals, merge the overlapping intervals
+ * 	- To find the overlapping intervals, insert the intervals, merge overlapping intervals
  * 
  * Sort based on end time:
  * 	- To find the maximum number of non-overlapping intervals. Eg: max activities, no of meeting rooms required,  
  */
 public class IntervalPatterns {
-	/********************* Interval Patterns - Selection Problems **************************/
-	/*
-	 * All the below problems are mostly identifying the overlap in the points.
-	 * Overlapping points = No of meeting rooms required/No of platforms required/No of activites done
-	 */
-	/* Activity Selection Problem:
-	 *  Select the maximum number of activities that can be performed by a single person, assuming that a person can only work
-	 *  on a single activity at a time.
-	 *  
-	 *  Time Complexity: O(nlogn)
-	 */
-	public int maxActivities(int[] start, int[] end) {
-		int n = start.length;
-		Interval[] intervals = new Interval[n];
-		for (int i = 0; i < n; i++)
-			intervals[i] = new Interval(start[i], end[i]);
-		Arrays.sort(intervals, (a, b) -> (a.end - b.end));
-		int activityCount = 1, l = 0, r = 1;
-		while (r < n) {
-			if (intervals[l].end <= intervals[r].start) {
-				activityCount++;
-				l = r;
-			}
-			r++;
-		}
-		return activityCount;
-	}
+	/********************* Interval Patterns - Pattern I **************************/
 
 	/*
 	 * N meetings in one room:
@@ -62,14 +37,14 @@ public class IntervalPatterns {
 		for (int i = 0; i < n; i++)
 			intervals[i] = new Interval(start[i], end[i], i + 1);
 		Arrays.sort(intervals, (a, b) -> (a.end - b.end));
-		int l = 0, r = 1;
-		System.out.print(intervals[l].order + " ");
-		while (r < n) { // Starting Index
-			if (intervals[l].end <= intervals[r].start) {
-				System.out.print(intervals[r].order + " ");
-				l = r;
+		int prev = 0, curr = 1;
+		System.out.print(intervals[prev].order + " ");
+		while (curr < n) { // Starting Index
+			if (intervals[prev].end <= intervals[curr].start) {
+				System.out.print(intervals[curr].order + " ");
+				prev = curr;
 			}
-			r++;
+			curr++;
 		}
 	}
 
@@ -93,9 +68,113 @@ public class IntervalPatterns {
 		return true;
 	}
 
+	/*
+	 * Non-overlapping Intervals
+	 * Given a collection of intervals, find the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
+	 * Input: [ [1,2], [2,3], [3,4], [1,3] ]	Output: 1
+	 * Explanation: [1,3] can be removed and the rest of intervals are non-overlapping.
+	 */
+	//NoteL This solution is opposite of "Activity Selection Problem"
+	public int eraseOverlapIntervals(int[][] intervals) {
+		if (intervals.length <= 1) return 0;
+
+		//0th Index-Starting point, 1st index-Ending point
+		//Sort the input intervals based on ending point 
+		Arrays.sort(intervals, (ob1, ob2) -> ob1[1] - ob2[1]);
+
+		//Count the overlapping intervals
+		int prev = 0, curr = 1, overlapCount = 0;
+
+		while (curr < intervals.length) {
+			if (intervals[prev][1] <= intervals[curr][0]) {
+				prev = curr;
+			} else {
+				overlapCount++;
+			}
+			curr++;
+		}
+
+		return overlapCount;
+	}
+
+	/* Insert Interval:
+	 * Given a set of non-overlapping intervals, insert a new interval into the intervals (merge if necessary). You may
+	 * assume that the intervals were initially sorted according to their start times.
+	 * Example: Input: intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]
+	 *          Output: [[1,2],[3,10],[12,16]] Explanation: Because the new interval [4,8] overlaps with [3,5],[6,7],[8,10].
+	 */
+	//Using List
+	public void insertIntervals1(List<Interval> intervals, Interval newInterval) {
+		insert1(intervals, newInterval);
+		insert2(intervals, newInterval);
+		insert3(intervals, newInterval);
+	}
+
+	//Using 2D Array
+	public void insertIntervals2(int[][] intervals, int[] newInterval) {
+		insert(intervals, newInterval);
+	}
+
+	/*
+	 * Merge Intervals:
+	 * Given a collection of intervals, merge all overlapping intervals.
+	 * Example 1: Input: [[1,3],[2,6],[8,10],[15,18]]; Output: [[1,6],[8,10],[15,18]]
+	 */
+	// intverals list
+	public List<Interval> merge(List<Interval> intervals) {
+		if (intervals.size() <= 1) return intervals;
+		Collections.sort(intervals, Comparator.comparing(i -> i.start));
+		//Collections.sort(intervals, (a, b) -> (a.start - b.start));
+		// Merge the overlapping intervals
+		List<Interval> result = new ArrayList<>();
+		Interval prev = intervals.get(0);
+		for (int i = 1; i < intervals.size(); i++) {
+			Interval curr = intervals.get(i);
+			if (prev.end >= curr.start) {
+				prev.end = Math.max(curr.end, prev.end);
+			} else {
+				result.add(prev);
+				prev = curr;
+			}
+		}
+		result.add(prev);
+		return result;
+	}
+
+	//intervals array
+	public int[][] merge(int[][] intervals) {
+		if (intervals.length <= 1) return intervals;
+
+		Arrays.sort(intervals, (a, b) -> (a[0] - b[0]));
+
+		int[] prev = intervals[0];
+		List<int[]> result = new ArrayList<>();
+		for (int i = 1; i < intervals.length; i++) {
+			if (prev[1] >= intervals[i][0]) {
+				prev[0] = Math.min(prev[0], intervals[i][0]);
+				prev[1] = Math.max(prev[1], intervals[i][1]);
+			} else {
+				result.add(prev);
+				prev = intervals[i];
+			}
+		}
+
+		result.add(prev);
+
+		return result.toArray(new int[result.size()][]);
+		//return convertToArray(result);
+	}
+
+	/******************** Interval Patterns - Pattern II ***********************/
+	/*
+	 * All the below problems are mostly identifying the overlap in the points.
+	 * Overlapping points = No of meeting rooms required/No of platforms required
+	 */
+
 	/* Meeting Rooms II:
 	 * Given an array of meeting time intervals consisting of start and end times [[s1,e1],[s2,e2],...] find the minimum
 	 * number of conference rooms required.
+	 * Time: O(nlogn) for the below solutions 
 	 */
 	// Approach1: Greedy Algorithm:
 	public int minMeetingRooms1(Interval[] intervals) {
@@ -130,7 +209,7 @@ public class IntervalPatterns {
 		PriorityQueue<Integer> queue = new PriorityQueue<>();
 		queue.add(intervals[0].end);
 		int count = 1;
-		for (int i = 1; i < intervals.length - 1; i++) {
+		for (int i = 1; i < intervals.length; i++) {
 			if (queue.peek() > intervals[i].start) {
 				count++;
 			} else {
@@ -200,49 +279,74 @@ public class IntervalPatterns {
 
 	//TODO: Conflict Appointments
 
-	/******************** Interval Patterns - Interval Manipulations ***********************/
+	//======================Util or Common Methods==========================
 
-	/* Insert Interval:
-	 * Given a set of non-overlapping intervals, insert a new interval into the intervals (merge if necessary). You may
-	 * assume that the intervals were initially sorted according to their start times.
-	 * Example: Input: intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]
-	 *          Output: [[1,2],[3,10],[12,16]] Explanation: Because the new interval [4,8] overlaps with [3,5],[6,7],[8,10].
-	 */
-	// Approach1:
+	//Approach1:
 	public List<Interval> insert1(List<Interval> intervals, Interval newInterval) {
+		//Note: Here consider intervals as prev interval and newInterval as curr; 
+		List<Interval> result = new LinkedList<>();
+		int i = 0, n = intervals.size();
+
+		//Sort based on start time, if input is not sorted
+		Collections.sort(intervals, (a, b) -> (a.start - b.start));
+
+		//1.Add all intervals before newInterval start point; prev.end<curr.start
+		while (i < n && intervals.get(i).end < newInterval.start) {
+			result.add(intervals.get(i++));
+		}
+
+		//2.merge overlapping intervals; prev.start<=curr.end
+		while (i < n && intervals.get(i).start <= newInterval.end) {
+			newInterval = new Interval( // we could mutate newInterval here also
+					Math.min(newInterval.start, intervals.get(i).start),
+					Math.max(newInterval.end, intervals.get(i).end));
+			i++;
+		}
+		result.add(newInterval);
+
+		//3.Add remaining intervals, after newInterval;
+		while (i < n) {
+			result.add(intervals.get(i++));
+		}
+		return result;
+	}
+
+	// Approach2:
+	//Here curr Interval is new Interval going add in the list, intervals list act as prev Interval  
+	public List<Interval> insert2(List<Interval> intervals, Interval curr) {
 		List<Interval> result = new ArrayList<>();
 		//Sort based on start time, if input is not sorted
 		Collections.sort(intervals, (a, b) -> (a.start - b.start));
 
-		for (Interval interval : intervals) {
-			if (interval.end < newInterval.start) {
-				result.add(interval);
-			} else if (interval.start > newInterval.end) {
-				result.add(newInterval);
-				newInterval = interval;
-			} else if (interval.start <= newInterval.end || interval.end >= newInterval.start) {
-				newInterval = new Interval(Math.min(interval.start, newInterval.start),
-						Math.max(interval.end, newInterval.end));
+		for (Interval prev : intervals) {
+			if (prev.end < curr.start) {
+				result.add(prev);
+			} else if (prev.start > curr.end) {
+				result.add(curr);
+				curr = prev;
+			} else if (prev.start <= curr.end || prev.end >= curr.start) { //or just else
+				curr = new Interval(Math.min(prev.start, curr.start), Math.max(prev.end, curr.end));
 			}
 		}
-		result.add(newInterval);
+		result.add(curr);
 		return result;
 	}
 
 	// Approach2: Simplified Code:In place solution
-	public List<Interval> insert2(List<Interval> intervals, Interval newInterval) {
+	// Time is O(n^2), if list is ArrayList. Time is O(n), if list is LinkedList  
+	public List<Interval> insert3(List<Interval> intervals, Interval newInterval) {
 		//Sort based on start time, if input is not sorted
 		Collections.sort(intervals, (a, b) -> (a.start - b.start));
 
-		int i = 0;
+		int i = 0, n = intervals.size();
 		// Linear Search to find the starting pos
-		while (i < intervals.size() && intervals.get(i).end < newInterval.start) i++;
+		while (i < n && intervals.get(i).end < newInterval.start) i++;
 		// or
 		// Binary Search is used to find the starting position to insert the interval
-		int startingIndex = binarySearch(intervals, newInterval);
-		i = startingIndex;
+		i = binarySearch(intervals, newInterval);
 
-		while (i < intervals.size() && intervals.get(i).start <= newInterval.end) {
+		//Time is O(n^2), if list is ArrayList. Time is O(n), if list is LinkedList  
+		while (i < n && intervals.get(i).start <= newInterval.end) {
 			newInterval = new Interval(Math.min(intervals.get(i).start, newInterval.start),
 					Math.max(intervals.get(i).end, newInterval.end));
 			intervals.remove(i);
@@ -251,38 +355,52 @@ public class IntervalPatterns {
 		return intervals;
 	}
 
-	// Approach3: Similar to Appraoch1; Binary Search:The best time is O(log(n)) and worst case time is O(n).
-	public List<Interval> insert3(List<Interval> intervals, Interval newInterval) {
-		List<Interval> result = new ArrayList<>();
+	public int[][] insert(int[][] intervals, int[] newInterval) {
+		//Note: Here consider intervals as prev interval and newInterval as curr; 
+		List<int[]> result = new ArrayList<>();
+		int i = 0, n = intervals.length;
+		//Sort based on start time, if input is not sorted
+		Arrays.sort(intervals, (a, b) -> (a[0] - b[0]));
 
-		if (intervals.size() == 0) {
-			result.add(newInterval);
-			return result;
-		}
-		// Binary Search is used to find the starting position to insert the interval
-		int startingIndex = binarySearch(intervals, newInterval);
-		// Add all the intervals before the startinIndex in the result list
-		result.addAll(intervals.subList(0, startingIndex));
-
-		for (int i = startingIndex; i < intervals.size(); i++) {
-			Interval interval = intervals.get(i);
-			if (interval.end < newInterval.start) {
-				result.add(interval);
-			} else if (interval.start > newInterval.end) {
-				result.add(newInterval);
-				newInterval = interval;
-			} else if (interval.end >= newInterval.start || interval.start <= newInterval.end) {
-				newInterval = new Interval(Math.min(interval.start, newInterval.start),
-						Math.max(newInterval.end, interval.end));
-			}
+		//1.Add all intervals before newInterval start point; prev.end<curr.start
+		while (i < n && intervals[i][1] < newInterval[0]) {
+			result.add(intervals[i++]);
 		}
 
+		//2.merge overlapping intervals; prev.start<=curr.end
+		while (i < n && intervals[i][0] <= newInterval[1]) {
+			newInterval[0] = Math.min(newInterval[0], intervals[i][0]);
+			newInterval[1] = Math.max(newInterval[1], intervals[i][1]);
+			i++;
+		}
 		result.add(newInterval);
 
-		return result;
+		//3.Add remaining intervals, after newInterval; 
+		while (i < n) {
+			result.add(intervals[i++]);
+		}
+
+		return result.toArray(new int[result.size()][]);
 	}
 
+	//Applied "Search Insert Position" problem's solution. 
+	// Here target is newInterval's end time and consider start time of intervals as input 
 	public int binarySearch(List<Interval> intervals, Interval newInterval) {
+		int l = 0, h = intervals.size() - 1, m = 0;
+
+		int target = newInterval.end;
+		while (l <= h) {
+			m = l + (h - l) / 2;
+			if (target == intervals.get(m).start) return m;
+			else if (target < intervals.get(m).start) h = m - 1;
+			else l = m + 1;
+		}
+
+		return l;
+	}
+
+	//TODO: Test previous solution and delete this
+	public int binarySearch2(List<Interval> intervals, Interval newInterval) {
 		int low = 0;
 		int high = intervals.size() - 1;
 
@@ -297,56 +415,6 @@ public class IntervalPatterns {
 		}
 
 		return high == 0 ? 0 : high - 1;
-	}
-
-	/*
-	 * Merge Intervals:
-	 * Given a collection of intervals, merge all overlapping intervals.
-	 * Example 1: Input: [[1,3],[2,6],[8,10],[15,18]]; Output: [[1,6],[8,10],[15,18]]
-	 */
-	public List<Interval> merge(List<Interval> intervals) {
-		if (intervals.size() <= 1) return intervals;
-		Collections.sort(intervals, Comparator.comparing(i -> i.start));
-		// Merge the overlapping intervals
-		List<Interval> result = new ArrayList<>();
-		Interval prevInterval = intervals.get(0);
-		for (int i = 1; i < intervals.size(); i++) {
-			Interval currInterval = intervals.get(i);
-			if (prevInterval.end >= currInterval.start) {
-				prevInterval.end = Math.max(currInterval.end, prevInterval.end);
-			} else {
-				result.add(prevInterval);
-				prevInterval = currInterval;
-			}
-		}
-		result.add(prevInterval);
-		return result;
-	}
-
-	/*
-	 * Non-overlapping Intervals
-	 * Given a collection of intervals, find the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
-	 * Input: [ [1,2], [2,3], [3,4], [1,3] ]	Output: 1
-	 * Explanation: [1,3] can be removed and the rest of intervals are non-overlapping.
-	 */
-	public int eraseOverlapIntervals(int[][] intervals) {
-		if (intervals.length <= 1) return 0;
-
-		//Sort the input intervals based on ending point 
-		Arrays.sort(intervals, (ob1, ob2) -> ob1[1] - ob2[1]);
-
-		//Count the overlapping intervals
-		int count = 0, prevIndex = 0;
-		for (int i = 1; i < intervals.length; i++) {
-			if (intervals[i][0] >= intervals[prevIndex][1]) {
-				prevIndex = i;
-			} else {
-				count++;
-			}
-		}
-
-		return count;
-
 	}
 
 }

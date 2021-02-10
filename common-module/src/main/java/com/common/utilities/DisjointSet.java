@@ -1,84 +1,88 @@
 package com.common.utilities;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /*
  * Simple Disjoint set/Union find implementation using array, it will be useful in competitive programming.
  */
-public class DisjointSet {
-	public int[] parent;
+/* DisJointSet using Array Implementation:
+ * 	In array,
+ * 		index denotes node
+ * 		value of index denotes Parent of node
+ * 
+ * Example:
+ * 	Set1 = {1,2,3}; Here 1, 2, 3 are nodes and comes under one set
+ *  Set2 = {4,5,6}; Here 4, 5, 6 are nodes and comes under one set
+ */
+public class DisjointSet implements DisJointOperations {
+	public int[] nodes;
 
-	public DisjointSet(int capacity) {
-		parent = new int[capacity];
+	public DisjointSet(int size) {
+		nodes = new int[size];
 	}
 
-	public boolean union(int set1, int set2) {
-		int root1 = find(set1);
-		int root2 = find(set2);
-		if (root1 != root2) { // If it doesn't have same parent
-			parent[root2] = root1;
-			return false; // Means pointed to same parent or union the two sets
+	@Override
+	public void initialize(int size) {
+		for (int i = 0; i < size; i++) {
+			set(i, i);
 		}
-		return true; // Means already pointed to same parent, no need to combine or union the sets
 	}
 
+	@Override
+	public void set(int node, int parentNode) {
+		nodes[node] = parentNode;
+	}
+
+	@Override
+	public int get(int node) {
+		return nodes[node];
+	}
+
+	@Override
+	public boolean union(int node1, int node2) {
+		int parent1 = find(node1);
+		int parent2 = find(node2);
+		// Means already pointed to same parent, no need to combine or union the nodes
+		if (parent1 == parent2) return true;
+
+		// If it doesn't have same nodes
+		nodes[parent2] = parent1;
+		return false; // Means pointed to same parent or union the two sets
+	}
+
+	@Override
 	public int find(int i) {
-		while (parent[i] != i) {
-			parent[i] = parent[parent[i]]; // Is that mandatory??
-			i = parent[i];
+		while (nodes[i] != i) {
+			nodes[i] = nodes[nodes[i]]; // Path Compression
+			i = nodes[i];
 		}
 
 		return i;
 	}
 
-	public int find1(int node) {
-		if (parent[node] == node) return node;
+	@Override
+	public int find2(int node) {
+		if (nodes[node] == node) return node;
 
-		parent[node] = find1(parent[node]);
-		return parent[node];
+		nodes[node] = find2(nodes[node]);
+		return nodes[node];
 	}
 }
 
-class DisjointSet2 {
+interface DisJointOperations {
+	void initialize(int size);
 
-	public Map<Integer, Integer> root;
+	void set(int node, int parentNode);
 
-	public DisjointSet2() {
-	}
+	//Returns the parent of any given node
+	int get(int node);
 
-	public void initialize(int[] arr) {
-		root = new HashMap<>();
-		for (int val : arr) {
-			root.put(val, val);
-		}
-	}
+	//Find the parent of the node. Search the array/nodes till node and its parent is same.
+	int find(int node);
 
-	public boolean union(int set1, int set2) {
-		int root1 = find(set1);
-		int root2 = find(set2);
-		if (root1 != root2) { // If it doesn't have same parent
-			root.put(root2, root1);
-			return false;
-		}
-		return true; // Means already pointed to same parent, no need to combine or union the sets
-	}
+	//Recursive solution
+	int find2(int node);
 
-	public int find(int node) {
-		while (root.get(node) != node) {
-			int parentNode = root.get(node);
-			root.put(node, root.get(parentNode)); //Path Compression
-
-			node = root.get(node);
-		}
-		return node;
-	}
-
-	public int find2(int node) {
-		if (root.get(node) == node) return node;
-
-		root.put(node, find2(root.get(node))); //Path Compression
-		return root.get(node);
-	}
-
+	/* Combine 2 nodes and make it as set. 
+	 * If both nodes are in same set then return true, otherwise combine those nodes and make it as single set.
+	 */
+	boolean union(int node1, int node2);
 }

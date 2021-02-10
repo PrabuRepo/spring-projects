@@ -6,6 +6,7 @@ import java.util.Arrays;
  * Binary Search Patterns:
  * 
  * Note: 
+ *  If target is mid element(t==a[m]) return mid index
  *  If target presents left side(t<a[m]), h = m-1
  *  If target presents right side(a[m]<t), l = m+1
  * 
@@ -22,18 +23,19 @@ public class BinarySearchPatterns {
 		int l = 0, h = nums.length - 1, m = 0;
 		while (l <= h) {
 			m = l + (h - l) / 2;
-			if (nums[m] == target) return m;
-			else if (nums[m] < target) l = m + 1;
-			else h = m - 1;
+			if (target == nums[m]) return m;
+			else if (target < nums[m]) h = m - 1;
+			else l = m + 1;
 		}
 		return l;
 	}
 
 	public int searchInsert2(int[] a, int target) {
+		//Here h = a.length(size of the array). not a.length-1.
 		int l = 0, h = a.length, m = 0;
 		while (l < h) {
 			m = l + (h - l) / 2;
-			if (a[m] < target) {
+			if (target > a[m]) {
 				l = m + 1;
 			} else {
 				h = m;
@@ -56,7 +58,7 @@ public class BinarySearchPatterns {
 		int l = 0, h = a.length - 1, m = 0, index = -1;
 		while (l <= h) {
 			m = l + (h - l) / 2;
-			if (a[m] == x) {
+			if (x == a[m]) {
 				index = m;
 				if (left) {
 					h = m - 1;
@@ -93,7 +95,7 @@ public class BinarySearchPatterns {
 		while (l < h) {
 			m = l + (h - l) / 2;
 			// Modification
-			if (nums[m] == x) {
+			if (x == nums[m]) {
 				if (left) h = m;
 				else l = m + 1;
 			} else if (x < nums[m]) {
@@ -138,7 +140,7 @@ public class BinarySearchPatterns {
 		int l = 0, h = nums.length - 1, m = 0;
 		while (l <= h) {
 			m = l + (h - l) / 2;
-			if (nums[m] == target) return m;
+			if (target == nums[m]) return m;
 
 			//Here choose the sorted part and search the element.
 			if (nums[m] < nums[h]) { // right part is sorted
@@ -164,7 +166,7 @@ public class BinarySearchPatterns {
 		int l = 0, h = nums.length - 1, m = 0;
 		while (l <= h) {
 			m = l + (h - l) / 2;
-			if (nums[m] == target) return true;
+			if (target == nums[m]) return true;
 
 			if (nums[m] < nums[h]) {
 				if (target > nums[m] && target <= nums[h]) { // Check target between m to h, if so l = m+1
@@ -227,7 +229,7 @@ public class BinarySearchPatterns {
 		while (l < h) {
 			m = (l + h) / 2;
 			// Modification: Compare mth index with m element.
-			if (nums[m] > m) h = m;
+			if (m < nums[m]) h = m;
 			else l = m + 1;
 		}
 		return l;

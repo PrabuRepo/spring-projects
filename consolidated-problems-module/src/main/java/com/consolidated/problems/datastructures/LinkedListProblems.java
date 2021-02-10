@@ -8,6 +8,21 @@ import com.problems.patterns.crossdomains.CloneProblems;
 import com.problems.patterns.ds.FastAndSlowPtrPatterns;
 import com.problems.patterns.ds.InPlaceReversalLLPatterns;
 
+/*
+ *  Note: Consider below three positions for all the LL operations: 
+ *  	     1.First; 2.Last 3.Middle(Anywhere between first & last);
+ *  
+ *  Tips for index based traverse from first node to given node(K)
+ *  	Case 1: Move to prev to the Kth node
+ *  			i. Using Incrementer: count = 1; while(++count < K)
+ *  			ii.Using Decrementer: while(--k > 1)
+ *  	Case 2: Move to the Kth node
+ *    			i. Using Incrementer: count = 1; while(count++ < K)
+ *  			ii.Using Decrementer: while(k-- > 1)
+ *  	Case 3: Move to next to the Kth node
+ *	 			i. Using Incrementer: count = 1; while(count++ <= K)
+ *  			ii.Using Decrementer: while(k-- >= 1)
+ */
 public class LinkedListProblems {
 	FastAndSlowPtrPatterns fastAndSlowPtrPatterns = new FastAndSlowPtrPatterns();
 
@@ -25,14 +40,13 @@ public class LinkedListProblems {
 			head = newLLNode;
 		} else {
 			ListNode temp = head;
-			//TODO: Clean up: Remove count variable and use while(pos-- > 0)
 			int count = 1;
 			if (pos == 1) {
 				newLLNode.next = head;
 				head = newLLNode;
 			} else {
 				while (temp != null) {
-					if (count == pos - 1) {
+					if (count == pos - 1) { //or use while(--pos > 1)
 						newLLNode.next = temp.next;
 						temp.next = newLLNode;
 						break;

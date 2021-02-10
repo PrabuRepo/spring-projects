@@ -37,16 +37,14 @@ public class ConsecutiveSeqPatterns {
 
 	private boolean contains(int[] arr, int num) {
 		for (int i = 0; i < arr.length; i++)
-			if (arr[i] == num)
-				return true;
+			if (arr[i] == num) return true;
 
 		return false;
 	}
 
 	// Approach2:
 	public int longestConsecutive2(int[] nums) {
-		if (nums.length == 0)
-			return 0;
+		if (nums.length == 0) return 0;
 
 		// Sort
 		Arrays.sort(nums);
@@ -77,8 +75,7 @@ public class ConsecutiveSeqPatterns {
 		// Up/Down search
 		int longestSeq = 0, up, down;
 		for (int i = 0; i < nums.length; i++) {
-			if (!set.contains(nums[i]))
-				continue;
+			if (!set.contains(nums[i])) continue;
 
 			set.remove(nums[i]);
 
@@ -108,14 +105,12 @@ public class ConsecutiveSeqPatterns {
 	 * to be from parent to child (cannot be the reverse).
 	 */
 	public int longestConsecutive(TreeNode root) {
-		if (root == null)
-			return 0;
+		if (root == null) return 0;
 		return lcs(root, root.val, 0);
 	}
 
 	private int lcs(TreeNode node, int next, int count) {
-		if (node == null)
-			return count;
+		if (node == null) return count;
 
 		count = (node.val == next) ? count + 1 : 1;
 		return Math.max(count, Math.max(lcs(node.left, node.val + 1, count), lcs(node.right, node.val + 1, count)));
@@ -145,22 +140,17 @@ public class ConsecutiveSeqPatterns {
 	}
 
 	public int[] longestPath(TreeNode root) {
-		if (root == null)
-			return new int[] { 0, 0 };
+		if (root == null) return new int[] { 0, 0 };
 		int inr = 1, dcr = 1;
 		if (root.left != null) {
 			int[] l = longestPath(root.left);
-			if (root.left.val == root.val - 1)
-				dcr = l[1] + 1;
-			else if (root.left.val == root.val + 1)
-				inr = l[0] + 1;
+			if (root.left.val == root.val - 1) dcr = l[1] + 1;
+			else if (root.left.val == root.val + 1) inr = l[0] + 1;
 		}
 		if (root.right != null) {
 			int[] r = longestPath(root.right);
-			if (root.right.val == root.val - 1)
-				dcr = Math.max(dcr, r[1] + 1);
-			else if (root.right.val == root.val + 1)
-				inr = Math.max(inr, r[0] + 1);
+			if (root.right.val == root.val - 1) dcr = Math.max(dcr, r[1] + 1);
+			else if (root.right.val == root.val + 1) inr = Math.max(inr, r[0] + 1);
 		}
 		maxVal = Math.max(maxVal, dcr + inr - 1);
 		return new int[] { inr, dcr };

@@ -491,7 +491,7 @@ public class GraphProblems {
 		int row = adjMatrix.length, col = adjMatrix[0].length;
 		DisjointSet ds = new DisjointSet(row);
 		for (int i = 0; i < row; i++)
-			ds.parent[i] = i;
+			ds.nodes[i] = i;
 		for (int i = 0; i < row; i++)
 			for (int j = 0; j < col; j++)
 				if (adjMatrix[i][j] == 1 && i != j) {
@@ -499,7 +499,7 @@ public class GraphProblems {
 				}
 		int count = 0;
 		for (int i = 0; i < row; i++)
-			if (ds.parent[i] == i) count++;
+			if (ds.nodes[i] == i) count++;
 		return count;
 	}
 

@@ -611,8 +611,7 @@ public class Graph {
 		// Using DisjointSet: Union-Find Algorithm can be used to check whether an undirected graph contains cycle or no
 		public boolean hasCycleInUndirectedGraph(EdgeNode[] edges, int n, int e) {
 			DisjointSet ds = new DisjointSet(n);
-			for (int i = 0; i < n; i++)
-				ds.parent[i] = i;
+			ds.initialize(n);
 			for (int i = 0; i < e; i++) {
 				if (ds.union(edges[i].src, edges[i].dest)) return true;
 			}
@@ -1379,15 +1378,14 @@ public class Graph {
 
 		public void KruskalsMST(EdgeNode[] edges, int n) {
 			ArrayList<EdgeNode> result = new ArrayList<>();
-			DisjointSet set = new DisjointSet(n);
+			DisjointSet ds = new DisjointSet(n);
 
-			for (int i = 0; i < n; i++)
-				set.parent[i] = i;
+			ds.initialize(n);
 
 			Arrays.sort(edges, (u, v) -> u.weight - v.weight);
 
 			for (EdgeNode edge : edges) {
-				if (!set.union(edge.src, edge.dest)) {
+				if (!ds.union(edge.src, edge.dest)) {
 					result.add(edge);
 				}
 			}

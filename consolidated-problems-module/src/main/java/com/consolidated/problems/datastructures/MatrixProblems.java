@@ -12,13 +12,13 @@ import com.common.utilities.DisjointSet;
 
 public class MatrixProblems {
 	// Below set follows the order: {up, down,left, right}
-	private static final int[]		rowSet4		= { -1, 1, 0, 0 };
-	private static final int[]		colSet4		= { 0, 0, -1, 1 };
-	private static final int[][]	directions	= { { 0, 1 }, { 0, -1 }, { 1, 0 }, { -1, 0 } };
+	private static final int[] rowSet4 = { -1, 1, 0, 0 };
+	private static final int[] colSet4 = { 0, 0, -1, 1 };
+	private static final int[][] directions = { { 0, 1 }, { 0, -1 }, { 1, 0 }, { -1, 0 } };
 
 	// Left,Right,Up,Down & diagonal
-	private static final int[]	rowSet8	= { -1, 1, 0, 0, -1, -1, 1, 1 };
-	private static final int[]	colSet8	= { 0, 0, -1, 1, -1, 1, -1, 1 };
+	private static final int[] rowSet8 = { -1, 1, 0, 0, -1, -1, 1, 1 };
+	private static final int[] colSet8 = { 0, 0, -1, 1, -1, 1, -1, 1 };
 
 	/************** Matrix 4/8 directions flow problems (Top/Bottom/Left/Right) ***************/
 	// Matrix 4/8 directions flow problems: These problems can be solved using DFS, BFS, Union Find, Back or simple
@@ -288,7 +288,7 @@ public class MatrixProblems {
 		int arrSize = rowSize * colSize;
 		DisjointSet uf = new DisjointSet(arrSize + 1);
 		for (int i = 0; i <= arrSize; i++)
-			uf.parent[i] = i;
+			uf.nodes[i] = i;
 
 		int dummyNode = arrSize;
 

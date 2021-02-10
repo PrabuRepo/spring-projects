@@ -7,8 +7,8 @@ public class PrefixSumPatterns {
 	 * another array prefixSum[] of same size such that the value of
 	 * prefixSum[i] is arr[0] + arr[1] + arr[2] … arr[i].
 	 */
-
-	public void fillPrefixSum(int arr[], int n, int prefixSum[]) {
+	public void fillPrefixSum(int arr[], int prefixSum[]) {
+		int n = arr.length;
 		prefixSum[0] = arr[0];
 		// Adding present element with previous element 
 		for (int i = 1; i < n; ++i)
@@ -29,6 +29,15 @@ public class PrefixSumPatterns {
 		this.sum = nums;
 	}
 
+	//Time: O(n), Space: O(1)
+	public int sumRange1(int[] nums, int i, int j) {
+		int sum = 0;
+		for (int k = i; k < j; k++)
+			sum += nums[k];
+		return sum;
+	}
+
+	//Time: O(1), Space: O(n)
 	public int sumRange(int i, int j) {
 		if (i == 0) return sum[j];
 
@@ -36,18 +45,35 @@ public class PrefixSumPatterns {
 	}
 
 	/*
-	 * Range Sum Query 2D - Immutable Given a 2D matrix matrix, find the sum of
+	 * Range Sum Query 2D - Immutable Given a 2D matrix, find the sum of
 	 * the elements inside the rectangle defined by its upper left corner (row1,
 	 * col1) and lower right corner (row2, col2).
 	 */
 	private int[][] lookup, matrix;
 
 	public void init3(int[][] matrix) {
-		if (matrix == null || matrix.length == 0) return;
 		populateLookup(matrix);
 	}
 
-	// Approach1: Brute force approach
+	public void populateLookup(int[][] matrix) {
+		if (matrix == null || matrix.length == 0) return;
+		int m = matrix.length, n = matrix[0].length;
+		lookup = new int[m][n];
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
+				if (i == 0 && j == 0) {
+					lookup[i][j] = matrix[i][j];
+				} else if (i == 0 || j == 0) {
+					int val = i == 0 ? lookup[i][j - 1] : lookup[i - 1][j];
+					lookup[i][j] = matrix[i][j] + val;
+				} else {
+					lookup[i][j] = matrix[i][j] + lookup[i - 1][j] + lookup[i][j - 1] - lookup[i - 1][j - 1];
+				}
+			}
+		}
+	}
+
+	// Approach1: Brute force approach: Time: O(m*n), Space: O(1)
 	public int sumRegion1(int row1, int col1, int row2, int col2) {
 		int sum = 0;
 		for (int i = row1; i <= row2; i++) {
@@ -58,17 +84,37 @@ public class PrefixSumPatterns {
 		return sum;
 	}
 
-	public int sumRegion(int row1, int col1, int row2, int col2) {
+	//Approach2: Using Prefix Sum: Time: O(1), Space: O(m*n)
+	public int sumRegion2(int r1, int c1, int r2, int c2) {
+		if (r1 > r2 || c1 > c2) return 0;
 		if (lookup.length == 0) return 0;
-		return lookup[row2 + 1][col2 + 1] - lookup[row2 + 1][col1] - lookup[row1][col2 + 1] + lookup[row1][col1];
+
+		int result = 0;
+		if (r1 == 0 && c1 == 0) {
+			result = lookup[r2][c2];
+		} else if (r1 == 0 || c1 == 0) {
+			int val = r1 == 0 ? lookup[r2][c1 - 1] : lookup[r1 - 1][c2];
+			result = lookup[r2][c2] - val;
+		} else {
+			result = lookup[r2][c2] - lookup[r2][c1 - 1] - lookup[r1 - 1][c2] + lookup[r1 - 1][c1 - 1];
+		}
+
+		return result;
 	}
 
-	public void populateLookup(int[][] matrix) {
-		int rowLen = matrix.length, colLen = matrix[0].length;
-		lookup = new int[rowLen + 1][colLen + 1];
-		for (int i = 1; i <= rowLen; i++)
-			for (int j = 1; j <= colLen; j++)
+	//Below logic has additional one index in rows and cols.
+	public void populateLookup1(int[][] matrix) {
+		if (matrix == null || matrix.length == 0) return;
+		int m = matrix.length, n = matrix[0].length;
+		lookup = new int[m + 1][n + 1];
+		for (int i = 1; i <= m; i++)
+			for (int j = 1; j <= n; j++)
 				lookup[i][j] = lookup[i][j - 1] + lookup[i - 1][j] + matrix[i - 1][j - 1] - lookup[i - 1][j - 1];
+	}
+
+	public int sumRegion3(int row1, int col1, int row2, int col2) {
+		if (lookup.length == 0) return 0;
+		return lookup[row2 + 1][col2 + 1] - lookup[row2 + 1][col1] - lookup[row1][col2 + 1] + lookup[row1][col1];
 	}
 
 	/* Equilibrium point/Find Pivot Index
@@ -143,10 +189,11 @@ public class PrefixSumPatterns {
 
 	// Improved version
 	public int[] productExceptSelf(int[] nums) {
-		int n = nums.length, temp = 1;
+		int n = nums.length;
 		int[] prod = new int[n];
 
 		// Multiply from left side
+		int temp = 1;
 		for (int i = 0; i < n; i++) {
 			prod[i] = temp;
 			temp *= nums[i];

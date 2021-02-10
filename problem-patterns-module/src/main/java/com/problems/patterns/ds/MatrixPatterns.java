@@ -10,9 +10,12 @@ import java.util.Queue;
 import com.common.model.Point;
 import com.common.utilities.DisjointSet;
 import com.common.utilities.Utils;
+import com.problems.patterns.advds.DisjointSetProblems;
 import com.problems.patterns.crossdomains.WordProblems;
 
 public class MatrixPatterns {
+	private DisjointSetProblems disjointSetProblems = new DisjointSetProblems();
+
 	/************** Type1: Basic Matrix Problems ***************/
 	// Anti clock wise direction:
 	// Apprach1: Take transpose, reverse the column & use an additional space
@@ -219,9 +222,9 @@ public class MatrixPatterns {
 			m = (l + h) / 2;
 			i = m / c;
 			j = m % c;
-			if (matrix[i][j] == target) return true;
-			else if (target > matrix[i][j]) l = m + 1;
-			else h = m - 1;
+			if (target == matrix[i][j]) return true;
+			else if (target < matrix[i][j]) h = m - 1;
+			else l = m + 1;
 		}
 		return false;
 	}
@@ -243,17 +246,33 @@ public class MatrixPatterns {
 		return false;
 	}
 
-	/************** Type4: Apply DP in Matrix ***************/
+	/************** Type4: DP in Matrix ***************/
 	// Unique Paths: Recursive Approach
 	public int uniquePaths(int m, int n) {
-		if (m == 1 || n == 1) return 1;
-
+		if (m == 1 && n == 1) return 1;
+		if (m < 0 || n < 0) return 0;
 		return uniquePaths(m - 1, n) + uniquePaths(n - 1, m);
 		// Including diagonal
 		// return uniquePaths(m-1,n)+uniquePaths(n-1,m)+uniquePaths(m-1. n-1);
 	}
 
-	public int uniquePathsDP(int m, int n) {
+	//DP: Top Down or Memoization
+	public int uniquePaths2(int m, int n) {
+		int[][] memo = new int[m][n];
+		return uniquePaths(m - 1, n - 1, memo);
+	}
+
+	private int uniquePaths(int m, int n, int[][] memo) {
+		if (m == 0 && n == 0) return 1;
+		if (m < 0 || n < 0) return 0;
+		if (memo[m][n] > 0) return memo[m][n];
+
+		memo[m][n] = uniquePaths(m - 1, n, memo) + uniquePaths(m, n - 1, memo);
+		return memo[m][n];
+	}
+
+	//DP: Bottom Up 
+	public int uniquePaths3(int m, int n) {
 		if (m == 0 && n == 0) return 0;
 
 		int[][] dp = new int[m][n];
@@ -289,7 +308,28 @@ public class MatrixPatterns {
 		return uniquePathsWithObstacles(a, i - 1, j) + uniquePathsWithObstacles(a, i, j - 1);
 	}
 
-	public int uniquePathsWithObstacles2(int[][] a) {
+	//DP: Top Down or Memoization
+	public int uniquePathsWithObstacles2(int[][] obstacleGrid) {
+		int r = obstacleGrid.length, c = obstacleGrid[0].length;
+		if (r == 0 && c == 0) return 0;
+		int[][] memo = new int[r][c];
+		return uniquePathsWithObstacles(obstacleGrid, r - 1, c - 1, memo);
+	}
+
+	public int uniquePathsWithObstacles(int[][] a, int i, int j, int[][] memo) {
+		// Here 1 means obstacle, 0 means empty path
+		if (i < 0 || j < 0 || a[i][j] == 1) return 0;
+
+		if (i == 0 && j == 0) return 1;
+
+		if (memo[i][j] > 0) return memo[i][j];
+
+		memo[i][j] = uniquePathsWithObstacles(a, i - 1, j, memo) + uniquePathsWithObstacles(a, i, j - 1, memo);
+		return memo[i][j];
+	}
+
+	//DP: Bottom Up 
+	public int uniquePathsWithObstacles3(int[][] a) {
 		if (a.length == 0 && a[0].length == 0) return 0;
 
 		int m = a.length, n = a[0].length;
@@ -331,8 +371,25 @@ public class MatrixPatterns {
 		return grid[i][j] + Math.min(minPathSum(grid, i - 1, j), minPathSum(grid, i, j - 1));
 	}
 
-	// DP approach
-	public int minPathSum(int[][] grid) {
+	//DP - Top down or memoization:
+	public int minPathSum2(int[][] grid) {
+		if (grid.length == 0 && grid[0].length == 0) return 0;
+		int m = grid.length, n = grid[0].length;
+		int[][] memo = new int[m][n];
+		return minPathSum(grid, m - 1, n - 1, memo);
+	}
+
+	public int minPathSum(int[][] grid, int i, int j, int[][] memo) {
+		if (i < 0 || j < 0) return Integer.MAX_VALUE;
+		if (i == 0 && j == 0) return grid[i][j];
+		if (memo[i][j] > 0) return memo[i][j];
+
+		memo[i][j] = grid[i][j] + Math.min(minPathSum(grid, i - 1, j, memo), minPathSum(grid, i, j - 1, memo));
+		return memo[i][j];
+	}
+
+	// DP - Bottom up
+	public int minPathSum3(int[][] grid) {
 		if (grid.length == 0 && grid[0].length == 0) return 0;
 		int r = grid.length, c = grid[0].length;
 		int[][] dp = new int[r][c];
@@ -361,7 +418,8 @@ public class MatrixPatterns {
 	private static final int[] colSet4 = { 0, 0, -1, 1 };
 	private static final int[] rowSet8 = { -1, 1, 0, 0, -1, -1, 1, 1 };
 	private static final int[] colSet8 = { 0, 0, -1, 1, -1, 1, -1, 1 };
-	private static final int[][] directions = { { 0, 1 }, { 0, -1 }, { 1, 0 }, { -1, 0 } };
+	//4 Directions 
+	private static final int[][] DIRS = { { 0, 1 }, { 0, -1 }, { 1, 0 }, { -1, 0 } };
 
 	/************** 5.1.Modify/Change the Region: ***************/
 	/*Flood Fill/Paint Fill Algorithm:
@@ -372,6 +430,7 @@ public class MatrixPatterns {
 	 * Given a 2D screen, location of a pixel in the screen ie(x,y) and a color(K), your task is to replace color of the 
 	 * given pixel and all adjacent(excluding diagonally adjacent) same colored pixels with the given color K.
 	 */
+	//Time Complexity: O(m*n), where m-row size, n-col size
 	public void floodFillAlg(int[][] m, int x, int y, int newColor) {
 		int rSize = m.length, cSize = m[0].length;
 		if (x < 0 || x >= rSize || y < 0 || y >= cSize) return;
@@ -386,13 +445,24 @@ public class MatrixPatterns {
 
 	public void floodFill(int[][] m, int newColor, int oldColor, int i, int j) {
 		int rSize = m.length, cSize = m[0].length;
+		//1.Termination Condition:
 		if (i < 0 || i >= rSize || j < 0 || j >= cSize || m[i][j] != oldColor) return;
 
+		//2.Logic based on problems
 		m[i][j] = newColor; // Apply the new color
+
+		//3.Traverse to all the directions(4 or 8 based on problem)
+		//3.1.Recursion
 		floodFill(m, newColor, oldColor, i + 1, j);
 		floodFill(m, newColor, oldColor, i - 1, j);
 		floodFill(m, newColor, oldColor, i, j + 1);
 		floodFill(m, newColor, oldColor, i, j - 1);
+
+		//or 
+		//3.2.Iteration + Recursion
+		for (int[] dir : DIRS) {
+			floodFill(m, newColor, oldColor, i + dir[0], j + dir[1]);
+		}
 	}
 
 	/* Surrounded Regions: Given a 2D board containing 'X' and 'O' (the letter O), capture all regions surrounded by 'X'. A region 
@@ -403,31 +473,34 @@ public class MatrixPatterns {
 	public void surroundedRegions(char[][] matrix) {
 		if (matrix.length == 0 || matrix[0].length == 0) return;
 
-		int row = matrix.length, col = matrix[0].length;
-		for (int i = 0; i < row; i++) {
+		int m = matrix.length, n = matrix[0].length;
+		//Traverse the border(Row:0 to m) and change 'O' to '#'
+		for (int i = 0; i < m; i++) {
 			if (matrix[i][0] == 'O') {
 				// surroundedRegionsDFS(matrix, i, 0);
 				surroundedRegionsBFS(matrix, i, 0);
 			}
-			if (matrix[i][col - 1] == 'O') {
-				// surroundedRegionsDFS(matrix, i, col - 1);
-				surroundedRegionsBFS(matrix, i, col - 1);
+			if (matrix[i][n - 1] == 'O') {
+				// surroundedRegionsDFS(matrix, i, n - 1);
+				surroundedRegionsBFS(matrix, i, n - 1);
 			}
 		}
 
-		for (int j = 0; j < col; j++) {
+		//Traverse the border(Col:0 to n) and change 'O' to '#'
+		for (int j = 0; j < n; j++) {
 			if (matrix[0][j] == 'O') {
 				// surroundedRegionsDFS(matrix, 0, j);
 				surroundedRegionsBFS(matrix, 0, j);
 			}
-			if (matrix[row - 1][j] == 'O') {
-				// surroundedRegionsDFS(matrix, row - 1, j);
-				surroundedRegionsBFS(matrix, row - 1, j);
+			if (matrix[m - 1][j] == 'O') {
+				// surroundedRegionsDFS(matrix, m - 1, j);
+				surroundedRegionsBFS(matrix, m - 1, j);
 			}
 		}
 
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < col; j++) {
+		//Finally change all unmodified 'O' to 'X' and '#' to 'O'
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
 				if (matrix[i][j] == 'O') matrix[i][j] = 'X';
 				else if (matrix[i][j] == '#') matrix[i][j] = 'O';
 			}
@@ -439,8 +512,7 @@ public class MatrixPatterns {
 
 	public void surroundedRegionsDFS(char[][] matrix, int i, int j) {
 		int row = matrix.length, col = matrix[0].length;
-		if (i < 0 || i >= row || j < 0 || j >= col || matrix[i][j] != 'O') // or matrix[i][j] == 'X'
-			return;
+		if (i < 0 || i >= row || j < 0 || j >= col || matrix[i][j] != 'O') return;
 
 		matrix[i][j] = '#';
 
@@ -448,39 +520,31 @@ public class MatrixPatterns {
 		surroundedRegionsDFS(matrix, i + 1, j);// down
 		surroundedRegionsDFS(matrix, i, j - 1);// left
 		surroundedRegionsDFS(matrix, i, j + 1);// right
+
+		//or
+		for (int[] dir : DIRS)
+			surroundedRegionsDFS(matrix, i + dir[0], j + dir[1]);
 	}
 
-	public void surroundedRegionsBFS(char[][] matrix, int i, int j) {
+	public void surroundedRegionsBFS(char[][] matrix, int r, int c) {
 		Queue<Integer> queue = new LinkedList<>();
 
-		int row = matrix.length, col = matrix[0].length;
-		queue.add(i * col + j); // Other approach is create class with row and column, add that value in queue
-		matrix[i][j] = '#';
+		int m = matrix.length, n = matrix[0].length;
+		queue.add(r * n + c); // Other approach is create class with m and column, add that value in queue
+		matrix[r][c] = '#';
 
 		while (!queue.isEmpty()) {
 			int top = queue.poll();
-			int r = top / col;
-			int c = top % col;
+			int i = top / n;
+			int j = top % n;
 
-			//TODO: Add single for loop to below logic
-			if (r - 1 >= 0 && matrix[r - 1][c] == 'O') {
-				matrix[r - 1][c] = '#';
-				queue.add((r - 1) * col + c);
-			}
+			for (int[] dir : DIRS) {
+				int mi = i + dir[0]; //modified i & j
+				int mj = j + dir[1];
+				if (mi < 0 || mi >= m || mj < 0 || mj >= n || matrix[mi][mj] != 'O') continue;
 
-			if (r + 1 < row && matrix[r + 1][c] == 'O') {
-				matrix[r + 1][c] = '#';
-				queue.add((r + 1) * col + c);
-			}
-
-			if (c - 1 >= 0 && matrix[r][c - 1] == 'O') {
-				matrix[r][c - 1] = '#';
-				queue.add(r * col + (c - 1));
-			}
-
-			if (c + 1 < col && matrix[r][c + 1] == 'O') {
-				matrix[r][c + 1] = '#';
-				queue.add(r * col + (c + 1));
+				queue.add(mi * n + mj);
+				matrix[mi][mj] = '#';
 			}
 		}
 	}
@@ -493,9 +557,8 @@ public class MatrixPatterns {
 
 		// last one is dummy, all outer O are connected to this dummy
 		int arrSize = rows * cols;
-		DisjointSet uf = new DisjointSet(arrSize + 1);
-		for (int i = 0; i <= arrSize; i++)
-			uf.parent[i] = i;
+		DisjointSet ds = new DisjointSet(arrSize + 1);
+		ds.initialize(arrSize + 1);
 
 		int dummyNode = arrSize;
 
@@ -503,19 +566,19 @@ public class MatrixPatterns {
 			for (int j = 0; j < cols; j++) {
 				if (matrix[i][j] == 'O') {
 					if (i == 0 || i == rows - 1 || j == 0 || j == cols - 1) {
-						uf.union(node(i, j, cols), dummyNode);
+						ds.union(node(i, j, cols), dummyNode);
 					} else {
 						if (i > 0 && matrix[i - 1][j] == 'O') {
-							uf.union(node(i, j, cols), node(i - 1, j, cols));
+							ds.union(node(i, j, cols), node(i - 1, j, cols));
 						}
 						if (i < rows - 1 && matrix[i + 1][j] == 'O') {
-							uf.union(node(i, j, cols), node(i + 1, j, cols));
+							ds.union(node(i, j, cols), node(i + 1, j, cols));
 						}
 						if (j > 0 && matrix[i][j - 1] == 'O') {
-							uf.union(node(i, j, cols), node(i, j - 1, cols));
+							ds.union(node(i, j, cols), node(i, j - 1, cols));
 						}
 						if (j < cols - 1 && matrix[i][j + 1] == 'O') {
-							uf.union(node(i, j, cols), node(i, j + 1, cols));
+							ds.union(node(i, j, cols), node(i, j + 1, cols));
 						}
 					}
 				}
@@ -524,7 +587,7 @@ public class MatrixPatterns {
 
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-				if (!(uf.find(node(i, j, cols)) == uf.find(dummyNode)) && matrix[i][j] == 'O') matrix[i][j] = 'X';
+				if (!(ds.find(node(i, j, cols)) == ds.find(dummyNode)) && matrix[i][j] == 'O') matrix[i][j] = 'X';
 			}
 		}
 
@@ -562,88 +625,36 @@ public class MatrixPatterns {
 
 		matrix[i][j] = '0';
 
-		for (int dir = 0; dir < 4; dir++)
-			numIslandsDFS(matrix, i + rowSet4[dir], j + colSet4[dir]);
+		for (int[] dir : DIRS)
+			numIslandsDFS(matrix, i + dir[0], j + dir[1]);
 	}
 
 	// Using BFS
-	public void numIslandsBFS(char[][] grid, int i, int j) {
+	public void numIslandsBFS(char[][] grid, int r, int c) {
 		Queue<Integer> queue = new LinkedList<>();
 
 		int rowSize = grid.length, colSize = grid[0].length;
-		int index = i * colSize + j;
-		queue.add(index); // Other approach is create class with row and column, add that value in queue
-		grid[i][j] = '0';
+		queue.add(r * colSize + c); // Other approach is create class with row and column, add that value in queue
+		grid[r][c] = '0';
 
 		while (!queue.isEmpty()) {
 			int top = queue.poll();
-			int r = top / colSize;
-			int c = top % colSize;
-			// Check 4 directions of r & c
-			for (int dir = 0; dir < 4; dir++) {
-				i = r + rowSet4[dir];
-				j = c + colSet4[dir];
-				if (i < 0 || i >= rowSize || j < 0 || j >= colSize || grid[i][j] == '0') continue;
+			int i = top / colSize;
+			int j = top % colSize;
+			for (int[] dir : DIRS) {
+				int mi = i + dir[0]; //Modified i & j
+				int mj = j + dir[1];
+				if (mi < 0 || mi >= rowSize || mj < 0 || mj >= colSize || grid[mi][mj] == '0') continue;
 
-				grid[i][j] = '0';
-				queue.add((i) * colSize + j);
+				queue.add(mi * colSize + mj);
+				grid[mi][mj] = '0';
 			}
 		}
 	}
 
 	// Using DisJoint Set/Union-Find DS
 	public int numIslands(char[][] grid) {
-		if (grid == null || grid.length == 0 || grid[0].length == 0) return 0;
-
-		int m = grid.length;
-		int n = grid[0].length;
-		int count = 0;
-
-		// Create Parent array to build the disjoint set
-		int[] parent = new int[m * n];
-		// Count all the land or 1 in the array
-		for (int i = 0; i < m; i++)
-			for (int j = 0; j < n; j++)
-				if (grid[i][j] == '1') {
-					parent[i * n + j] = i * n + j; // rowIndex * colSize + colIndex
-					count++;
-				}
-
-		// Group the connected components(meaning 1's in the 4 directions)
-		for (int i = 0; i < m; i++) {
-			for (int j = 0; j < n; j++) {
-				if (grid[i][j] == '1') {
-					// Check in four directions
-					for (int dir = 0; dir < 4; dir++) {
-						int x = i + rowSet4[dir];
-						int y = j + colSet4[dir];
-						if (x < 0 || x >= m || y < 0 || y >= n || grid[x][y] == '0') continue;
-
-						if (!union(parent, i * n + j, x * n + y)) count--;
-					}
-				}
-			}
-		}
-
-		return count;
-	}
-
-	public boolean union(int[] parent, int i1, int i2) {
-		int root1 = find(parent, i1);
-		int root2 = find(parent, i2);
-		if (root1 != root2) { // If it doesn't have same parent
-			parent[root2] = root1;
-			return false; // Means point to same parent or union the two sets
-		}
-		return true; // Means already pointed to same parent, no need to combine or union the sets
-	}
-
-	public int find(int[] parent, int i) {
-		while (parent[i] != i) {
-			parent[i] = parent[parent[i]];
-			i = parent[i];
-		}
-		return i;
+		return disjointSetProblems.numIslands(grid);
 	}
 
 	/*
@@ -659,33 +670,15 @@ public class MatrixPatterns {
 	 * If there is no balancing, the worse case could be O(N^2).
 	 */
 	public List<Integer> numIslands2(int m, int n, int[][] positions) {
-		ArrayList<Integer> result = new ArrayList<Integer>();
-		int count = 0;
-
-		// Create the disjoint set
-		DisjointSet ds = new DisjointSet(m * n);
-		Arrays.fill(ds.parent, -1);// Initially set -1s in all the set
-
-		// Traverse edges one by one
-		for (int k = 0; k < positions.length; k++) {
-			count++;
-			int[] p = positions[k];
-			int set1 = p[0] * n + p[1]; // i * rowSize + j
-			ds.parent[set1] = set1;// set root to be itself for each node
-
-			for (int dir = 0; dir < 4; dir++) {
-				int i = p[0] + rowSet4[dir];
-				int j = p[1] + colSet4[dir];
-				int set2 = i * n + j;
-				if (i >= 0 && j >= 0 && i < m && j < n && ds.parent[set2] != -1) {
-					if (!ds.union(set1, set2)) count--;
-				}
-			}
-			result.add(count);
-		}
-		return result;
+		return disjointSetProblems.numIslands2(m, n, positions);
 	}
 
+	/*
+	 * Given an m x n integers matrix, return the length of the longest increasing path in matrix.
+	 * Input: matrix = [[9,9,4],[6,6,8],[2,1,1]]
+	 * Output: 4
+	 * Explanation: The longest increasing path is [1, 2, 6, 9].
+	 */
 	public int longestIncreasingPath1(int[][] matrix) {
 		if (matrix.length == 0 || matrix[0].length == 0) return 0;
 		int max = 0, r = matrix.length, c = matrix[0].length;
@@ -702,11 +695,15 @@ public class MatrixPatterns {
 		if (i < 0 || i >= r || j < 0 || j >= c) return 0;
 		if (prev >= matrix[i][j]) return 0;
 
-		int curr = matrix[i][j];
-		int result = 1 + Utils.max(longestIncreasingPath1(matrix, i + 1, j, curr),
-				longestIncreasingPath1(matrix, i, j + 1, curr), longestIncreasingPath1(matrix, i - 1, j, curr),
-				longestIncreasingPath1(matrix, i, j - 1, curr));
-		// System.out.println("Result: " + result);
+		/*int result = 1 + Utils.max(longestIncreasingPath1(matrix, i + 1, j, matrix[i][j]),
+				longestIncreasingPath1(matrix, i, j + 1, matrix[i][j]),
+				longestIncreasingPath1(matrix, i - 1, j, matrix[i][j]),
+				longestIncreasingPath1(matrix, i, j - 1, matrix[i][j]));*/
+		//or
+		int result = 0;
+		for (int[] dir : DIRS) {
+			result = Math.max(result, 1 + longestIncreasingPath1(matrix, i + dir[0], j + dir[1], matrix[i][j]));
+		}
 		return result;
 	}
 
@@ -714,44 +711,46 @@ public class MatrixPatterns {
 	public int longestIncreasingPath2(int[][] matrix) {
 		if (matrix.length == 0 || matrix[0].length == 0) return 0;
 		int max = 0, r = matrix.length, c = matrix[0].length;
-		int[][] lookup = new int[r][c];
+		int[][] memo = new int[r][c];
 
 		for (int i = 0; i < r; i++) {
 			for (int j = 0; j < c; j++) {
-				max = Math.max(max, longestIncreasingPath2(matrix, i, j, Integer.MIN_VALUE, lookup));
+				max = Math.max(max, longestIncreasingPath2(matrix, i, j, Integer.MIN_VALUE, memo));
 			}
 		}
 		return max;
 	}
 
-	public int longestIncreasingPath2(int[][] matrix, int i, int j, int prev, int[][] lookup) {
+	public int longestIncreasingPath2(int[][] matrix, int i, int j, int prev, int[][] memo) {
 		int r = matrix.length, c = matrix[0].length;
-		if (i < 0 || i >= r || j < 0 || j >= c) return 0;
+		if (i < 0 || i >= r || j < 0 || j >= c || prev >= matrix[i][j]) return 0;
 
-		if (prev >= matrix[i][j]) return 0;
 		// Lookup from the table
-		if (lookup[i][j] != 0) return lookup[i][j];
+		if (memo[i][j] != 0) return memo[i][j];
 
-		int curr = matrix[i][j];
-		// Store the result in lookup table
-		lookup[i][j] = 1 + Utils.max(longestIncreasingPath2(matrix, i + 1, j, curr, lookup),
-				longestIncreasingPath2(matrix, i, j + 1, curr, lookup),
-				longestIncreasingPath2(matrix, i - 1, j, curr, lookup),
-				longestIncreasingPath2(matrix, i, j - 1, curr, lookup));
-		// System.out.println("Result: " + result);
-		return lookup[i][j];
+		memo[i][j] = 1 + Utils.max(longestIncreasingPath2(matrix, i + 1, j, matrix[i][j], memo),
+				longestIncreasingPath2(matrix, i, j + 1, matrix[i][j], memo),
+				longestIncreasingPath2(matrix, i - 1, j, matrix[i][j], memo),
+				longestIncreasingPath2(matrix, i, j - 1, matrix[i][j], memo));
+		//or 
+
+		for (int[] dir : DIRS) {
+			memo[i][j] = Math.max(memo[i][j],
+					1 + longestIncreasingPath2(matrix, i + dir[0], j + dir[1], matrix[i][j], memo));
+		}
+		return memo[i][j];
 	}
 
 	// Word Boggle/Word Search I:
-	public void wordSearchI() {
-		WordProblems.wordSearchI(null, null);
+	public void wordSearchI(char[][] board, String str) {
+		WordProblems.wordSearchI(board, str);
 	}
 
 	// Word Search II:
-	public void wordSearchII() {
-		WordProblems.wordSearchII1(null, null);
-		WordProblems.wordSearchII2(null, null);
-		WordProblems.wordSearchII3(null, null);
+	public void wordSearchII(char[][] board, String[] words) {
+		WordProblems.wordSearchII1(board, words);
+		WordProblems.wordSearchII2(board, words);
+		WordProblems.wordSearchII3(board, words);
 	}
 
 	/************** 5.3.Find one path from src to dest: ***************/
@@ -801,23 +800,23 @@ public class MatrixPatterns {
 
 	private boolean hasPath1(int[][] maze, boolean[][] visited, int si, int sj, int di, int dj) {
 		int rSize = maze.length, cSize = maze[0].length;
-		if (visited[si][sj]) return false;
 		if (si == di && sj == dj) return true;
-
 		visited[si][sj] = true;
-		for (int[] d : directions) {
-			int row = si, col = sj;
+
+		for (int[] d : DIRS) {
+			int i = si, j = sj;
 			// This looping to identify the end. "it won't stop rolling until hitting a wall"
-			while (row >= 0 && row < rSize && col >= 0 && col < cSize && maze[row][col] == 0) {
-				row += d[0];
-				col += d[1];
+			while (i >= 0 && i < rSize && j >= 0 && j < cSize && maze[i][j] == 0) {
+				i += d[0];
+				j += d[1];
 			}
 
-			// New Start: row-d[0], col-d[1]; It has reduced to adjust the increased val in while loop
-			row -= d[0];
-			col -= d[1];
+			// New Start: i-d[0], j-d[1]; It has reduced to adjust the increased val in while loop
+			i -= d[0];
+			j -= d[1];
 
-			if (hasPath1(maze, visited, row, col, di, dj)) return true;
+			if (visited[i][j]) continue;
+			if (hasPath1(maze, visited, i, j, di, dj)) return true;
 		}
 
 		return false;
@@ -835,22 +834,22 @@ public class MatrixPatterns {
 		while (!queue.isEmpty()) {
 			Point curr = queue.poll();
 
-			for (int[] d : directions) {
-				int row = curr.x, col = curr.y;
+			for (int[] d : DIRS) {
+				int i = curr.x, j = curr.y;
 				// This looping to identify the end. "it won't stop rolling until hitting a wall"
-				while (row >= 0 && row < rSize && col >= 0 && col < cSize && maze[row][col] == 0) {
-					row += d[0];
-					col += d[1];
+				while (i >= 0 && i < rSize && j >= 0 && j < cSize && maze[i][j] == 0) {
+					i += d[0];
+					j += d[1];
 				}
-				// New Start: row-d[0], col-d[1]; It has reduced to adjust the increased val in while loop
-				row -= d[0];
-				col -= d[1];
+				// New Start: i-d[0], j-d[1]; It has reduced to adjust the increased val in while loop
+				i -= d[0];
+				j -= d[1];
 
-				if (row == destination[0] && col == destination[1]) return true;
-				if (visited[row][col]) continue;
+				if (i == destination[0] && j == destination[1]) return true;
+				if (visited[i][j]) continue;
 
-				visited[row][col] = true;
-				queue.add(new Point(row, col));
+				visited[i][j] = true;
+				queue.add(new Point(i, j));
 			}
 		}
 
@@ -884,7 +883,7 @@ public class MatrixPatterns {
 	private void shortestDistance1(int[][] maze, int[][] distance, int si, int sj, int di, int dj) {
 		if (si == di && sj == dj) return;
 		int rSize = maze.length, cSize = maze[0].length;
-		for (int[] d : directions) {
+		for (int[] d : DIRS) {
 			int row = si, col = sj;
 			// This looping to identify the end. "it won't stop rolling until hitting a wall"
 			while (row >= 0 && row < rSize && col >= 0 && col < cSize && maze[row][col] == 0) {
@@ -919,7 +918,7 @@ public class MatrixPatterns {
 				continue;
 
 			distance[curr.x][curr.y] = curr.dist;
-			for (int[] d : directions) {
+			for (int[] d : DIRS) {
 				int row = curr.x, col = curr.y, dist = curr.dist;
 				// This looping to identify the end. "it won't stop rolling until hitting a wall"
 				while (row >= 0 && row < rSize && col >= 0 && col < cSize && maze[row][col] == 0) {
@@ -950,17 +949,18 @@ public class MatrixPatterns {
 	 *  ‘W’ represents walls 
 	 *  in a Bank. Replace all of the O’s in the matrix with their shortest distance from a guard, without being able to
 	 *  go through any walls. Also, replace the guards with 0 and walls with -1 in output matrix.
+	 *  
+	 *  BFS is better than DFS for this problem
 	 */
 
-	public void shortestDistFromGuard(char[][] matrix) {
-		int r = matrix.length, c = matrix[0].length;
-		Queue<Point> queue = new LinkedList<>();
-		int[][] result = new int[r][c];
+	public int[][] shortestDistFromGuard(char[][] matrix) {
+		int m = matrix.length, n = matrix[0].length;
+		int[][] result = new int[m][n];
 
-		for (int i = 0; i < r; i++) {
-			for (int j = 0; j < c; j++) {
+		//Convert input char matrix to int matrix
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
 				if (matrix[i][j] == 'G') {
-					queue.add(new Point(i, j, 0));
 					result[i][j] = 0;
 				} else if (matrix[i][j] == 'W') {
 					result[i][j] = -1;
@@ -970,25 +970,11 @@ public class MatrixPatterns {
 			}
 		}
 
-		bfsSearch(queue, result);
+		bfsSearch(result);
+		//or
+		dfsSearch(result);
 
-		Utils.printMatrix(result);
-	}
-
-	public void bfsSearch(Queue<Point> queue, int[][] result) {
-		int r = result.length, c = result[0].length;
-		// BFS Search
-		while (!queue.isEmpty()) {
-			Point curr = queue.poll();
-			for (int dir = 0; dir < rowSet4.length; dir++) {
-				int i = curr.x + rowSet4[dir];
-				int j = curr.y + colSet4[dir];
-				if (i >= 0 && i < r && j >= 0 && j < c && result[i][j] == Integer.MAX_VALUE) {
-					result[i][j] = curr.dist + 1;
-					queue.add(new Point(i, j, curr.dist + 1));
-				}
-			}
-		}
+		return result;
 	}
 
 	/*
@@ -1000,55 +986,81 @@ public class MatrixPatterns {
 	 * We use the value 2^31 - 1 = 2147483647 to represent INF as you may assume that the distance to a gate is less than 2147483647.
 	 * Fill each empty room with the distance to its nearest gate. If it is impossible to reach a gate, it should be filled with INF.
 	 * 
-	 * Solution: Exactly same as previous one
-	 * 
 	 * BFS is better than DFS for this problem
 	 */
-	public void wallsAndGatesBFS(int[][] rooms) {
+	public void wallsAndGates(int[][] rooms) {
 		if (rooms == null || rooms.length == 0) return;
 
-		int r = rooms.length, c = rooms[0].length;
-		Queue<Point> queue = new LinkedList<>();
-
-		for (int i = 0; i < r; i++)
-			for (int j = 0; j < c; j++)
-				if (rooms[i][j] == 0) queue.add(new Point(i, j, 0));
-		/*for (int i = 0; i < r; i++)
-			for (int j = 0; j < c; j++)
-				if (rooms[i][j] == 0)
-					queue.add(i * c + j);*/
-
-		bfsSearch(queue, rooms);
+		bfsSearch(rooms);
+		//or
+		dfsSearch(rooms);
 
 		Utils.printMatrix(rooms);
+	}
+
+	public int[][] bfsSearch(int[][] matrix) {
+		int m = matrix.length, n = matrix[0].length;
+		Queue<Point> queue = new LinkedList<>();
+
+		for (int i = 0; i < m; i++)
+			for (int j = 0; j < n; j++)
+				if (matrix[i][j] == 0) queue.add(new Point(i, j, 0));
+
+		bfs(queue, matrix);
+		return matrix;
+	}
+
+	public void bfs(Queue<Point> queue, int[][] result) {
+		int m = result.length, n = result[0].length;
+		while (!queue.isEmpty()) {
+			Point curr = queue.poll();
+			for (int[] dir : DIRS) {
+				int i = curr.x + dir[0];
+				int j = curr.y + dir[1];
+				if (i >= 0 && i < m && j >= 0 && j < n && result[i][j] == Integer.MAX_VALUE) {
+					result[i][j] = curr.dist + 1;
+					queue.add(new Point(i, j, curr.dist + 1));
+				}
+			}
+		}
 	}
 
 	// Solution using DFS algorithm
-	public void wallsAndGatesDFS(int[][] rooms) {
+	public void dfsSearch(int[][] rooms) {
 		int r = rooms.length, c = rooms[0].length;
 
 		for (int i = 0; i < r; i++)
 			for (int j = 0; j < c; j++)
-				if (rooms[i][j] == 0) {
-					dfsSearch(rooms, i, j, 0);
-					Utils.printMatrix(rooms);
-					System.out.println();
-				}
+				if (rooms[i][j] == 0) dfs(rooms, i, j, 0);
 
 		Utils.printMatrix(rooms);
 	}
 
-	public void dfsSearch(int[][] rooms, int i, int j, int dist) {
+	public void dfs(int[][] rooms, int i, int j, int dist) {
 		int rSize = rooms.length, cSize = rooms[0].length;
 
 		if (i < 0 || i >= rSize || j < 0 || j >= cSize || rooms[i][j] < dist) return;
 
 		rooms[i][j] = dist;
 
-		dfsSearch(rooms, i - 1, j, dist + 1);
+		for (int[] dir : DIRS) {
+			dfs(rooms, i + dir[0], j + dir[1], dist + 1);
+		}
+
+		//or
+		/*dfsSearch(rooms, i - 1, j, dist + 1);
 		dfsSearch(rooms, i + 1, j, dist + 1);
 		dfsSearch(rooms, i, j - 1, dist + 1);
-		dfsSearch(rooms, i, j + 1, dist + 1);
+		dfsSearch(rooms, i, j + 1, dist + 1);*/
+	}
+
+	public static void main(String[] args) {
+		MatrixPatterns ob = new MatrixPatterns();
+		char matrix[][] = { { 'O', 'O', 'O', 'O', 'G' }, { 'O', 'W', 'W', 'O', 'O' }, { 'O', 'O', 'O', 'W', 'O' },
+				{ 'G', 'W', 'W', 'W', 'O' }, { 'O', 'O', 'O', 'O', 'G' } };
+
+		System.out.println(Arrays.deepToString(ob.shortestDistFromGuard(matrix)));
+
 	}
 
 }
