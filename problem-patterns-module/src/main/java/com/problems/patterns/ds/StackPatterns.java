@@ -286,8 +286,12 @@ public class StackPatterns {
 	 * 		The previous element smaller than the current element
 	 * Tips: You can store indexes in the stack, or you can directly store elements
 	 * 
-	 * Monotonic increasing stack: push an element e in stack and pop out the element; s.peek()>=e(violation).
-	 * Monotonic decreasing stack: push an element e in stack and pop out the element; s.peek()<=e (violation).
+	 * Monotonic increasing stack:
+	 * 		monotonous increase stack keeps elements in an increasing order. 
+	 * 		push an element e in stack and pop out the element; s.peek()>=e(violation).
+	 * Monotonic decreasing stack: 
+	 * 		monotonous increase stack keeps elements in an decreasing order. 
+	 * 		push an element e in stack and pop out the element; s.peek()<=e (violation).
 	 */
 	//monotonous increasing stack: elements in the monotonous increase stack keeps an increasing order.
 	public void monotonicIncreasingStack(int[] arr) {

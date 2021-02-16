@@ -6,8 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.basic.algorithms.Backtracking;
-import com.problems.patterns.recursion.BacktrackingPatterns;
-import com.problems.patterns.recursion.DynamicProgrammingPatterns;
+import com.problems.patterns.BacktrackingPatterns;
+import com.problems.patterns.dp.DPKnapsackPatterns;
 
 public class PermutationPatterns {
 
@@ -15,7 +15,7 @@ public class PermutationPatterns {
 
 	BacktrackingPatterns backtrackingPatterns = new BacktrackingPatterns();
 
-	DynamicProgrammingPatterns dpPatterns = new DynamicProgrammingPatterns();
+	DPKnapsackPatterns dpKnapsackPatterns = new DPKnapsackPatterns();
 
 	//Permutations
 	public void permutaions(int[] nums) {
@@ -287,9 +287,9 @@ public class PermutationPatterns {
 
 	// Combination Sum IV  - Permutation Problem
 	public void combinationSumIV(int[] nums, int target) {
-		dpPatterns.combinationSum41(nums, target);
-		dpPatterns.combinationSum42(nums, target);
-		dpPatterns.combinationSum43(nums, target);
+		dpKnapsackPatterns.combinationSum41(nums, target);
+		dpKnapsackPatterns.combinationSum42(nums, target);
+		dpKnapsackPatterns.combinationSum43(nums, target);
 	}
 
 }

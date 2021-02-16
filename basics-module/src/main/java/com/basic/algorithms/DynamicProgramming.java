@@ -36,11 +36,11 @@ import java.util.Arrays;
  *   In other words, in memoization, we do it top-down in the sense that we solve the top problem first (which typically recurses down to 
  *   solve the sub-problems).    
  *
- * All the below problems are solved in 4 approaches such as,
+ * All the DP problems are solved in following 3 approaches such as,
  *    1.Recursion -  Time: exponential time O(2^n), space complexity is O(n) which is used to store the recursion stack.
- *    2.DP: Top Down Approach or Memoization - Time and space complexity is same as memoization array size.
+ *    2.DP: Top Down Approach or Memoization - Time and space complexity is equal to memoization array size. Mostly this approach takes 
+ *    										   same Time & Space complexity as Bottom up approach. 
  *    3.DP: Bottom Up Approach or Tabulation - Time & space complexity is O(n^2) or O(n)
- *    4.Memory Optimization - This will be same time as "Bottom up" approach, but space efficient. Eg: Two variable approach
  *    
  * Imp Note: All the recursion problems needs below two points
  * 		1. Base case -> Its common for Recursion solution, memoization and bottom up approach

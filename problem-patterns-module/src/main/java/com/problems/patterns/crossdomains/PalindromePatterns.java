@@ -2,10 +2,10 @@ package com.problems.patterns.crossdomains;
 
 import com.basic.algorithms.MathProblems;
 import com.common.model.ListNode;
+import com.problems.patterns.BacktrackingPatterns;
 import com.problems.patterns.StringProblems;
+import com.problems.patterns.dp.DPStringPatterns;
 import com.problems.patterns.ds.FastAndSlowPtrPatterns;
-import com.problems.patterns.recursion.BacktrackingPatterns;
-import com.problems.patterns.recursion.DynamicProgrammingPatterns;
 
 public class PalindromePatterns {
 
@@ -15,7 +15,7 @@ public class PalindromePatterns {
 
 	FastAndSlowPtrPatterns fastAndSlowPtrPatterns = new FastAndSlowPtrPatterns();
 
-	DynamicProgrammingPatterns dpPatterns = new DynamicProgrammingPatterns();
+	DPStringPatterns dpStringPatterns = new DPStringPatterns();
 
 	BacktrackingPatterns backtrackingPatterns = new BacktrackingPatterns();
 
@@ -76,14 +76,14 @@ public class PalindromePatterns {
 
 	//Longest Palindromic Subsequence   
 	public void palindromicSubsequence(String str) {
-		dpPatterns.lps1(str);
-		dpPatterns.lps3(str);
+		dpStringPatterns.lps1(str);
+		dpStringPatterns.lps3(str);
 	}
 
 	//Longest Palindromic Substring   
 	public void palindromicSubstring(String str) {
-		dpPatterns.lpSubstr1(str);
-		dpPatterns.lpSubstr3(str);
+		dpStringPatterns.lpSubstr1(str);
+		dpStringPatterns.lpSubstr3(str);
 	}
 
 	//Palindrome Partitioning
@@ -94,8 +94,8 @@ public class PalindromePatterns {
 
 	//Palindrome Partitioning II
 	public void palindromePartitioningII(String str) {
-		dpPatterns.minCut1(str);
-		dpPatterns.minCut2(str);
+		dpStringPatterns.minCut1(str);
+		dpStringPatterns.minCut2(str);
 	}
 
 	//TODO: Solve below problems

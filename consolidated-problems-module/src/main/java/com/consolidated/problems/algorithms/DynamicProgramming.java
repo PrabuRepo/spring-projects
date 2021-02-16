@@ -188,36 +188,6 @@ public class DynamicProgramming {
 	}
 
 	/*
-	 * Count of Subset Sum/Perfect Sum Problem:
-	 * 
-	 */
-	// Approach1: Using Recursive Function; Time Complexity: O(2^n)
-	public int countSubsetSum1(int arr[], int sum) {
-		return countSubsetSum1(arr, arr.length - 1, sum);
-	}
-
-	private int countSubsetSum1(int arr[], int i, int sum) {
-		if (sum == 0) return 1;
-		if (i < 0) return 0;
-		if (arr[i] > sum) return countSubsetSum1(arr, i - 1, sum);
-		return countSubsetSum1(arr, i - 1, sum) + countSubsetSum1(arr, i - 1, sum - arr[i]);
-	}
-
-	// Approach3: Bottom Up DP - Time: O(n*sum); Space: O(n*sum)
-	public int countSubsetSum3(int[] nums, int sum) {
-		int n = nums.length, count = 0;
-		boolean[] dp = new boolean[sum + 1];
-		dp[0] = true;
-		for (int i = 0; i < n; i++)
-			for (int j = sum; j >= nums[i]; j--) {
-				if (j == sum && dp[j - nums[i]]) count++;
-				else dp[j] = dp[j] || dp[j - nums[i]];
-			}
-
-		return count;
-	}
-
-	/*
 	 * Given n items with size Ai, an integer m denotes the size of a backpack. How full you can fill this backpack?
 	 * Example 1: Input:  [3,4,8,5], backpack size=10; Output:  9
 	 * Example 2: Input:  [2,3,5,7], backpack size=12; Output:  12
@@ -437,6 +407,32 @@ public class DynamicProgramming {
 			}
 		}
 		return dp[0][n - 1];
+	}
+
+	/*
+	 * Matrix Chain Multiplication:
+	 * Input: p[] = {40, 20, 30, 10, 30}; Output: 26000; 
+	 * There are 4 matrices of dimensions 40x20, 20x30, 30x10 and 10x30. Let the input 4 matrices be A, B, C and D.  The minimum number of
+	 * multiplications are obtained by putting parenthesis in following way 
+	 * (A(BC))D --> 20*30*10 + 40*20*10 + 40*10*30
+	 */
+	// Time Complexity: O(n3 ); Auxiliary Space: O(n2)
+	public int findCost(int arr[]) {
+		int dp[][] = new int[arr.length][arr.length];
+		int q = 0;
+		for (int l = 2; l < arr.length; l++) {
+			for (int i = 0; i < arr.length - l; i++) {
+				int j = i + l;
+				dp[i][j] = 1000000;
+				for (int k = i + 1; k < j; k++) {
+					q = dp[i][k] + dp[k][j] + arr[i] * arr[k] * arr[j];
+					if (q < dp[i][j]) {
+						dp[i][j] = q;
+					}
+				}
+			}
+		}
+		return dp[0][arr.length - 1];
 	}
 
 	/* Sherlock and Anagrams:

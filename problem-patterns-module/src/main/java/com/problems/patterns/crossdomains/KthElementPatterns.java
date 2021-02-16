@@ -9,20 +9,22 @@ import java.util.Stack;
 import com.common.model.Cell;
 import com.common.model.TreeNode;
 import com.common.utilities.Utils;
+import com.problems.patterns.ds.MatrixPatterns;
 
 /*Kth element Pattern - Heap/BS/QuickSelect*/
 public class KthElementPatterns {
+	MatrixPatterns matrixPatterns = new MatrixPatterns();
 	//	Kth Smallest Element in a Sorted Matrix
 	//	Kth Smallest Number in Multiplication Table
 	//	Kth Smallest Number in M Sorted Lists
 
 	/********************* Search Kth element *************************/
-	//	Kth Smallest/Largest Element in an Array
 	// K’th Smallest Element in Unsorted Array
 	/* Find the kth Smallest element in an unsorted array. Note that it is the kth largest element in the sorted order,
 	 * not the kth distinct element.
 	 * Example 1: Input: [3,2,1,5,6,4] and k = 2; Output: 2
 	 */
+
 	// Approach1:Sort the given array using a sorting algorithm and return the element at index k-1 in the sorted array.
 	// Time Complexity: O(nLogn)
 	public int kthSmallestElementInArray1(int[] a, int k) {
@@ -30,30 +32,33 @@ public class KthElementPatterns {
 		return a[k - 1];
 	}
 
-	// Approach2: Using Max Binary Heap: Time Complexity-O(nlogk)
-	// Same solution used in the Kth Largest Element in the Stream
+	// Approach21: Using Min Binary Heap: Time Complexity-O(nlogn)
 	public int kthSmallestElementInArray21(int[] arr, int k) {
+		PriorityQueue<Integer> queue = new PriorityQueue<>();
+		for (int i = 0; i < arr.length; i++) // O(nlogn)
+			queue.add(arr[i]);
+
+		for (int i = 0; i < k - 1; i++) // O(klogn) time
+			queue.remove();
+
+		return queue.peek();
+	}
+
+	// Approach22: Using Max Binary Heap: Time Complexity-O(nlogk)
+	public int kthSmallestElementInArray22(int[] arr, int k) {
 		PriorityQueue<Integer> queue = new PriorityQueue<>(Collections.reverseOrder());
 		for (int i = 0; i < arr.length; i++) {// O(nlogk) times
-			if (queue.isEmpty() || queue.size() < k) {
+			queue.add(arr[i]);
+			if (queue.size() > k) queue.poll();
+
+			//or below logic saves few add/remove operations, but both with O(nlogk) time
+			/*if (queue.isEmpty() || queue.size() < k) {
 				queue.add(arr[i]);
 			} else if (arr[i] < queue.peek()) {
 				queue.remove();
 				queue.add(arr[i]);
-			}
+			}*/
 		}
-		return queue.peek();
-	}
-
-	// Approach3: Using Min Binary Heap: Time Complexity-O(n+klogn)
-	public int kthSmallestElementInArray22(int[] arr, int k) {
-		PriorityQueue<Integer> queue = new PriorityQueue<>();
-		for (int i = 0; i < arr.length; i++) // O(n) Time to build the heap
-			queue.add(arr[i]);
-
-		for (int i = 0; i < k - 1; i++) // O(k.logn) time
-			queue.remove();
-
 		return queue.peek();
 	}
 
@@ -75,11 +80,12 @@ public class KthElementPatterns {
 		int l = 0, r = nums.length - 1;
 
 		while (l <= r) {
-			int index = partition(nums, l, r); // Here partition being invoked all the condition
+			// Here 'm' is the partition index to split the array into two parts
+			int m = partition(nums, l, r);
 
-			if (index == k - 1) return nums[index];
-			else if (index < k - 1) l = index + 1;
-			else r = index - 1;
+			if (k - 1 == m) return nums[m];
+			else if (k - 1 < m) r = m - 1;
+			else l = m + 1;
 		}
 
 		return -1;
@@ -129,184 +135,6 @@ public class KthElementPatterns {
 		if (queue.size() > k) queue.poll();
 
 		return queue.size() < k ? -1 : queue.peek();
-	}
-
-	/* Kth Smallest Element in a Sorted Matrix: 
-	 * Given a n x n matrix where each of the rows and columns are sorted in ascending order, find the kth smallest element in the matrix.
-	 * Note that it is the kth smallest element in the sorted order, not the kth distinct element.
-	 * 	Example:
-	 * 	matrix = [[ 1,  5,  9],	[10, 11, 13],[12, 13, 15]], k = 8, return 13.
-	 */
-	public int kthSmallestInMatrix1(int[][] matrix, int k) {
-		if (matrix == null || matrix.length == 0) return 0;
-		int r = matrix.length, c = matrix[0].length;
-		if (k > r * c) return 0;
-
-		// Priority Queue arranged based on val
-		PriorityQueue<Cell> queue = new PriorityQueue<>((ob1, ob2) -> ob1.data - ob2.data);
-
-		// Add 1st row in the matrix: TC: O(n)( Build a min heap which takes O(n) time)
-		for (int j = 0; j < c; j++)
-			queue.add(new Cell(0, j, matrix[0][j]));
-
-		// Remove one by one and next row element corresponding to val; TC:O(klogn)(Heapify k times which takes O(kLogn)
-		// time.)
-		for (int i = 1; i < k; i++) {
-			Cell cell = queue.poll();
-			if (cell.i < r - 1) {
-				queue.add(new Cell(cell.i + 1, cell.j, matrix[cell.i + 1][cell.j]));
-			}
-		}
-
-		return queue.peek().data;
-	}
-
-	//Using Binary Search:
-	/* 1.Since we are given 1 <= k <= n^2, the kth number must exist in [lo, hi] range.
-	 * 2.We use binary search to find the minimum number A, such that the count of ( numbers satisfying num <= A ) is >= k.
-	 */
-	public int kthSmallestInMatrix2(int[][] matrix, int k) {
-		if (matrix == null || matrix.length == 0) return 0;
-		int r = matrix.length, c = matrix[0].length;
-		if (k > r * c) return 0;
-
-		int l = matrix[0][0], h = matrix[r - 1][c - 1];
-		while (l < h) {
-			int m = (l + h) / 2;
-			int count = count1(matrix, m);
-			// int count = count2(matrix, m); 
-			System.out.println(m + " - " + count);
-			if (count < k) l = m + 1;
-			else h = m;
-		}
-		return l;
-	}
-
-	//Count no elements less equal to target
-	public int count1(int[][] matrix, int target) {
-		int r = matrix.length, c = matrix[0].length;
-		int i = r - 1, j = 0, count = 0;
-		while (i >= 0 && j < c) {
-			if (matrix[i][j] <= target) {
-				count += i + 1;
-				j++;
-			} else {
-				i--;
-			}
-		}
-		return count;
-	}
-
-	//binary search to find the count.
-	private int count2(int[][] matrix, int target) {
-		int m = matrix.length;
-		int n = matrix[0].length;
-		int count = 0;
-		for (int i = 0; i < m; i++) {
-			// binary search, speed up a little bit.
-			int left = 0;
-			int right = n - 1;
-			int mid = (left + right) / 2; // may overflow
-			while (left < right) {
-				mid = (left + right + 1) / 2;
-				if (matrix[i][mid] > target) {
-					right = mid - 1;
-				} else {
-					left = mid;
-				}
-			}
-			count += (left + 1);
-			if (matrix[i][left] > target) {
-				count--;
-			}
-		}
-		return count;
-	}
-
-	//	Kth Smallest/Largest Element in a BST 
-	/*
-	 * Kth Smallest Element in a BST:
-	 * Given a binary search tree, write a function kthSmallest to find the kth smallest element in it.
-	 * Note: You may assume k is always valid, 1 <= k <= BST's total elements.
-	 * Example 1: Input: root = [3,1,4,null,2], k = 1
-	 * 
-	 * Solution: 
-	 * 	Approach1: 
-	 * 		i. Inorder traversal - Recursive
-	 * 		ii.Inorder traversal Modification - Recursive
-	 * 		iii.Inorder traversal - Iterative
-	 * 	Approach2: 
-	 * 		Using Priority Queue
-	 */
-	// Approach1: i.Using Inorder Traversal
-	public int kthSmallest11(TreeNode root, int k) {
-		if (root == null || k == 0) return 0;
-		ArrayList<Integer> list = new ArrayList<>();
-		kthSmallest(root, list);
-		return list.get(k - 1);
-	}
-
-	public void kthSmallest(TreeNode root, ArrayList<Integer> list) {
-		if (root == null) return;
-		kthSmallest(root.left, list);
-		list.add(root.val);
-		kthSmallest(root.right, list);
-	}
-
-	// ii.Inorder traversal Modification
-	int count = 0;
-	int result = Integer.MIN_VALUE;
-
-	public int kthSmallest12(TreeNode root, int k) {
-		traverse(root, k);
-		return result;
-	}
-
-	public void traverse(TreeNode root, int k) {
-		if (root == null) return;
-		traverse(root.left, k);
-		count++;
-		if (count == k) {
-			result = root.val;
-			return;
-		}
-		traverse(root.right, k);
-	}
-
-	// iii.Inorder traversal - Iterative
-	public int kthSmallest13(TreeNode root, int k) {
-		Stack<TreeNode> stack = new Stack<TreeNode>();
-		TreeNode p = root;
-		int count = 0;
-		while (!stack.isEmpty() || p != null) {
-			if (p != null) {
-				stack.push(p); // Just like recursion
-				p = p.left;
-			} else {
-				TreeNode node = stack.pop();
-				if (++count == k) return node.val;
-				p = node.right;
-			}
-		}
-		return Integer.MIN_VALUE;
-	}
-
-	// Approach2: Using Heap
-	public int kthSmallest2(TreeNode root, int k) {
-		if (root == null) return 0;
-		PriorityQueue<Integer> queue = new PriorityQueue<>(Collections.reverseOrder());
-		kthSmallest(root, queue, k);
-		return queue.peek();
-	}
-
-	public void kthSmallest(TreeNode root, PriorityQueue<Integer> queue, int k) {
-		if (root == null) return;
-		if (queue.isEmpty() || queue.size() < k || root.val < queue.peek()) {
-			if (queue.size() == k) queue.remove();
-			queue.add(root.val);
-		}
-		kthSmallest(root.left, queue, k);
-		kthSmallest(root.right, queue, k);
 	}
 
 	/*
@@ -397,5 +225,167 @@ public class KthElementPatterns {
 		int[] temp = A[i];
 		A[i] = A[j];
 		A[j] = temp;
+	}
+
+	/* Kth Smallest Element in a Sorted Matrix: 
+	 * Given a n x n matrix where each of the rows and columns are sorted in ascending order, find the kth smallest element in the matrix.
+	 * Note that it is the kth smallest element in the sorted order, not the kth distinct element.
+	 * 	Example:
+	 * 	matrix = [[ 1,  5,  9],	[10, 11, 13],[12, 13, 15]], k = 8, return 13.
+	 */
+	// Approach1: Using Heap K-way merge patterns: 
+	//Time complexity: klogn, where n is col length; or  klogm, where m is row length
+	public int kthSmallestInMatrix1(int[][] matrix, int k) {
+		if (matrix == null || matrix.length == 0) return 0;
+		int m = matrix.length, n = matrix[0].length;
+		if (k > m * n) return 0;
+
+		// Priority Queue arranged based on val
+		PriorityQueue<Cell> queue = new PriorityQueue<>((ob1, ob2) -> ob1.data - ob2.data);
+
+		// Add 1st row in the matrix: TC: O(nlogn), here n is col size
+		for (int j = 0; j < n; j++)
+			queue.add(new Cell(0, j, matrix[0][j]));
+
+		// Remove one by one and next row element corresponding to val; TC:O(klogn)(Heapify k times which takes O(kLogn)
+		// time.)
+		for (int i = 1; i < k; i++) {
+			Cell cell = queue.poll();
+			if (cell.i + 1 < m) {
+				queue.add(new Cell(cell.i + 1, cell.j, matrix[cell.i + 1][cell.j]));
+			}
+		}
+
+		return queue.peek().data;
+	}
+
+	//Using Binary Search:
+	/* 1.Since we are given 1 <= k <= n^2, the kth number must exist in [lo, hi] range.
+	 * 2.We use binary search to find the minimum number A, such that the count of ( numbers satisfying num <= A ) is >= k.
+	 * 
+	 * Time Complexity for this solution: 	
+	 *   Notice that using (low < high) in while loop rather than using (low <= high) to avoid stay in the loop. 
+	 *   It takes log(m * n) times to find mid, and using (m + n) times to get count in each loop, 
+	 *   so time complexity is O(log (m * n) * (m + n) ). The matrix is n x n, So the time complexity is O(n log (n^2)).
+	 */
+	public int kthSmallestInMatrix2(int[][] matrix, int k) {
+		if (matrix == null || matrix.length == 0) return 0;
+		int r = matrix.length, c = matrix[0].length;
+		if (k > r * c) return 0;
+
+		int l = matrix[0][0], h = matrix[r - 1][c - 1];
+		while (l < h) { //Time: log(m*n)
+			int m = (l + h) / 2;
+			int count = count(matrix, m); //Time: O(m+n)
+			System.out.println(m + " - " + count);
+			if (count < k) l = m + 1;
+			else h = m;
+		}
+		return l;
+	}
+
+	// Reference for count no of elements less than target.
+	public void searchMatrix(int[][] matrix, int target) {
+		matrixPatterns.searchMatrixII(matrix, target);
+	}
+
+	//Count no of elements less than equal to target; Time:O(m+n)
+	public int count(int[][] matrix, int target) {
+		int m = matrix.length, n = matrix[0].length;
+		int i = m - 1, j = 0, count = 0;
+		while (i >= 0 && j < n) {
+			if (target < matrix[i][j]) {
+				i--;
+			} else {
+				count += i + 1;
+				j++;
+			}
+		}
+		return count;
+	}
+
+	//	Kth Smallest/Largest Element in a BST 
+	/*
+	 * Kth Smallest Element in a BST:
+	 * Given a binary search tree, write a function kthSmallest to find the kth smallest element in it.
+	 * Note: You may assume k is always valid, 1 <= k <= BST's total elements.
+	 * Example 1: Input: root = [3,1,4,null,2], k = 1
+	 * 
+	 * Solution: 
+	 * 	Approach1: 
+	 * 		i. Inorder traversal - Recursive
+	 * 		ii.Inorder traversal Modification - Recursive
+	 * 		iii.Inorder traversal - Iterative
+	 * 	Approach2: 
+	 * 		Using Priority Queue
+	 */
+	// Approach1: i.Using Inorder Traversal: Time:O(n), Space:O(n) 
+	public int kthSmallest11(TreeNode root, int k) {
+		if (root == null || k == 0) return 0;
+		ArrayList<Integer> list = new ArrayList<>();
+		kthSmallest(root, list);
+		return list.get(k - 1);
+	}
+
+	public void kthSmallest(TreeNode root, ArrayList<Integer> list) {
+		if (root == null) return;
+		kthSmallest(root.left, list);
+		list.add(root.val);
+		kthSmallest(root.right, list);
+	}
+
+	// ii.Inorder traversal Modification: Time:O(k), Space:O(h), h==n for unbalanced BST, h=logn for balanced BST
+	public int kthSmallest12(TreeNode root, int k) {
+		int[] result = new int[1];
+		int[] count = new int[1];
+		traverse(root, k, count, result);
+		return result[0];
+	}
+
+	public void traverse(TreeNode root, int k, int[] count, int[] result) {
+		if (root == null) return;
+		traverse(root.left, k, count, result);
+		count[0]++;
+		if (count[0] == k) {
+			result[0] = root.val;
+			return;
+		}
+		traverse(root.right, k, count, result);
+	}
+
+	// iii.Inorder traversal - Iterative; Time:O(k), Space:O(h)
+	public int kthSmallest13(TreeNode root, int k) {
+		Stack<TreeNode> stack = new Stack<TreeNode>();
+		TreeNode p = root;
+		int count = 0;
+		while (!stack.isEmpty() || p != null) {
+			if (p != null) {
+				stack.push(p); // Just like recursion
+				p = p.left;
+			} else {
+				TreeNode node = stack.pop();
+				if (++count == k) return node.val;
+				p = node.right;
+			}
+		}
+		return Integer.MIN_VALUE;
+	}
+
+	// Approach2: Using Heap; Time:O(nlogk), Space:O(h)
+	public int kthSmallest2(TreeNode root, int k) {
+		if (root == null) return 0;
+		PriorityQueue<Integer> queue = new PriorityQueue<>(Collections.reverseOrder());
+		kthSmallest(root, queue, k);
+		return queue.peek();
+	}
+
+	public void kthSmallest(TreeNode root, PriorityQueue<Integer> queue, int k) {
+		if (root == null) return;
+		if (queue.isEmpty() || queue.size() < k || root.val < queue.peek()) {
+			if (queue.size() == k) queue.remove();
+			queue.add(root.val);
+		}
+		kthSmallest(root.left, queue, k);
+		kthSmallest(root.right, queue, k);
 	}
 }

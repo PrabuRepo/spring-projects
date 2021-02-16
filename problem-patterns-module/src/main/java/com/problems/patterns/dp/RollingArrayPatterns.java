@@ -1,10 +1,14 @@
-package com.problems.patterns.recursion;
+package com.problems.patterns.dp;
 
 import java.util.Arrays;
 
 import com.common.model.TreeNode;
 
 /*
+ * In General DP problems solved using recursion, DP(Top Down or Bottom Up). But here we can solve more efficiently by using
+ * Two variable approach. This is Memory Optimization technique- This will be same time as "Bottom up" approach, but space 
+ * efficient. 
+ * 
  * This class covers DP: Pattern 1: Rolling Array or Fibonacci Patterns
  * Rolling Array or Fibonacci Patterns: 
  * 	Fibonacci numbers are a series of numbers in which each number is the sum of the two preceding numbers.

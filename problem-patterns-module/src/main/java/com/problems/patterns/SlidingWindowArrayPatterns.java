@@ -26,7 +26,7 @@ public class SlidingWindowArrayPatterns {
 		subarraySumKMinLen1(arr, k);
 		subarraySumKMinLen2(arr, k);
 
-		subarraySumCloseToK1(arr, k);
+		subarraySumLenCloseToK(arr, k);
 		subarraySumCloseToK2(arr, k);
 
 		subarraySumZero1(arr);
@@ -97,12 +97,12 @@ public class SlidingWindowArrayPatterns {
 	 */
 	public int subarrayProductMax(int[] nums) {
 		if (nums.length == 0) return 0;
-		int max = 1, min = 1, result = Integer.MIN_VALUE;
+		int maxProd = 1, minProd = 1, result = Integer.MIN_VALUE;
 		for (int num : nums) {
-			int tempMax = max;
-			max = max(max * num, min * num, num);
-			min = min(tempMax * num, min * num, num);
-			result = Math.max(max, result);
+			int tempMax = maxProd;
+			maxProd = max(maxProd * num, minProd * num, num);
+			minProd = min(tempMax * num, minProd * num, num);
+			result = Math.max(maxProd, result);
 		}
 		return result;
 	}
@@ -161,12 +161,12 @@ public class SlidingWindowArrayPatterns {
 	}
 
 	/*
-	 * Maximum Sum of Subarray Close to K (or) Longest Subarray having sum of elements atmost ‘k’:
+	 * Longest Subarray having sum of elements atmost ‘k’:
 	 * Given an array, find the maximum sum of subarray close to k but not larger than k
 	 */
 	//TODO: Solution is wrong, Rewrite this 
 	// Approach1: Using Sliding Window -> This works only array has positive elements
-	public int subarraySumCloseToK1(int[] arr, int k) {
+	public int subarraySumLenCloseToK(int[] arr, int k) {
 		int sum = 0, n = arr.length, len = 0, maxLen = 0;
 
 		for (int i = 0; i < n; i++) {
@@ -242,9 +242,9 @@ public class SlidingWindowArrayPatterns {
 
 	/* Pattern Understanding:
 	 * This pattern problems do not have fixed window/range size. Left and Right pointers varies based on the
-	 * given problem. Map is used to store sum & index and window size can be calculated from map. This pattern 
-	 * mostly used to solve the problem which has both "+ve and -ve" numbers in the input.This pattern problem 
-	 * uses Hashmap where Key stores sum and Value stores Index or frequency(depends on the problem)
+	 * given problem. This pattern mostly used to solve the problem which has both "+ve and -ve" numbers in 
+	 * the input.This pattern problem uses Hashmap where Key stores sum and Value stores Index or 
+	 * frequency(depends on the problem)
 	 * 
 	 * Prefix Sum Patterns Logic: If we consider all prefix sums, we can notice that there is a subarray 
 	 * with 0 sum when : 1) Either a prefix sum repeats or 2) prefix sum becomes 0.
@@ -317,10 +317,27 @@ public class SlidingWindowArrayPatterns {
 		return count;
 	}
 
-	/* Subarray Sum Equals K/Zero Sum Subarrays:
+	/* Subarray Sum Equals K:
 	 * Given an array of integers and an integer k, you need to find the total number of continuous subarrays whose sum
 	 * equals to k. Example 1: Input:nums = [1,1,1], k = 2 Output: 2
 	 */
+	/*
+	 * Why this solution works?
+	 The idea behind this approach is as follows: If the cumulative sum(represented by sum[i] for sum up to ith index) up to two 
+	 indices is the same, the sum of the elements lying in between those indices is zero. 
+	 Extending the same thought further, if the cumulative sum up to two indices, say i and j is at a difference of k
+	 i.e. if sum[i] - sum[j] = k the sum of elements lying between indices i and j is k.
+	 Explanation:
+	1. Hashmap<sum[0,i - 1], frequency>
+	2. sum[i, j] = sum[0, j] - sum[0, i - 1]    --> sum[0, i - 1] = sum[0, j] - sum[i, j]
+	     k           sum      hashmap-key     -->  hashmap-key  =  sum - k
+	3. now, we have k and sum.  
+	    As long as we can find a sum[0, i - 1], we then get a valid subarray
+	   which is as long as we have the hashmap-key,  we then get a valid subarray
+	4. Why don't map.put(sum[0, i - 1], 1) every time ?
+	    if all numbers are positive, this is fine
+	    if there exists negative number, there could be preSum frequency > 1
+	*/
 	public int subarraySumKCount(int[] nums, int k) {
 		int n = nums.length, count = 0, sum = 0;
 		//Hashmap: Key: sum[0,i - 1]; Val: frequency
@@ -343,22 +360,22 @@ public class SlidingWindowArrayPatterns {
 	 * Given an array nums and a target value k, find the maximum length of a subarray that sums to k. If there isn't one, return 0 instead.
 	 */
 	public int subarraySumKMaxLen(int[] nums, int k) {
-		int max = 0, sum = 0;
+		int maxLen = 0, sum = 0;
 		//Hashmap: Key: sum[0,i - 1]; Val: index
 		HashMap<Integer, Integer> map = new HashMap<>();
 		map.put(0, -1); //Use this one or below commented -> if (sum == k) 
 		for (int i = 0; i < nums.length; i++) {
 			sum += nums[i];
-			//if (sum == k) max = Math.max(max, i + 1);
+			//if (sum == k) maxLen = Math.maxLen(maxLen, i + 1);
 			if (map.containsKey(sum - k)) {
-				max = Math.max(max, i - map.get(sum - k));
+				maxLen = Math.max(maxLen, i - map.get(sum - k));
 			}
-			//This condition is not required for normal scenario, but here it needs to find the max size subarray
+			//This condition is not required for normal scenario, but here it needs to find the maxLen size subarray
 			if (!map.containsKey(sum)) {
 				map.put(sum, i);
 			}
 		}
-		return max;
+		return maxLen;
 	}
 
 	//TODO: Find Minimum Length Sub Array With Sum K
@@ -366,27 +383,29 @@ public class SlidingWindowArrayPatterns {
 		return 0;
 	}
 
-	//Maximum Sum of Subarray Close to K (or) Longest Subarray having sum of elements atmost ‘k’:
+	/* Maximum Sum of Subarray Close to K:
+	 * Given an array, find the maximum sum of subarray close to k but not larger than k
+	 */
 	// Approach2: Using Prefix Sum approach - Works for both +ve and -ve numbers
 	//Time Complexity: O(nlogn); Tree Datastructure takes o(logn) time for add() and ceiling() methods
 	//TODO: Revisit and understand this solution
 	public int subarraySumCloseToK2(int[] arr, int k) {
-		int sum = 0, maxLen = Integer.MIN_VALUE;
-		//Here Set datastructure used instead of Map to find the nearest sum k
+		int sum = 0, closestSum = Integer.MIN_VALUE;
+		//Here TreeSet datastructure used instead of Map to find the nearest sum k
 		TreeSet<Integer> set = new TreeSet<Integer>();
 		set.add(0);
 
 		for (int i = 0; i < arr.length; i++) {
 			sum = sum + arr[i];
 
-			Integer ceiling = set.ceiling(sum - k);
+			Integer ceiling = set.floor(sum - k);
 			if (ceiling != null) {
-				maxLen = Math.max(maxLen, sum - ceiling);
+				closestSum = Math.max(closestSum, sum - ceiling);
 			}
 			set.add(sum);
 		}
 
-		return maxLen;
+		return closestSum;
 	}
 
 	/***************** 3.Fixed Window: Calculate value for each fixed window ***********************/
@@ -463,9 +482,9 @@ public class SlidingWindowArrayPatterns {
 		int[] arr = { 3, 9, 1, 7, 8, 2 };
 		System.out.println(ob.subarraySumK(arr, 1));
 
-		int[] nums = { 4, -1, 5, -3, -2 };
-		System.out.println(ob.subarraySumCloseToK1(nums, 7));
-		System.out.println(ob.subarraySumCloseToK2(nums, 7));
+		int[] nums = { 4, -1, 5 };
+		System.out.println("Longest subarray: " + ob.subarraySumLenCloseToK(nums, 7));
+		System.out.println("Approach2: " + ob.subarraySumCloseToK2(nums, 7));
 
 		System.out.println(Arrays.toString(ob.subarraySumMaxRange(nums)));
 	}

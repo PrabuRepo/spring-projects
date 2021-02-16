@@ -1,15 +1,15 @@
-package com.problems.patterns;
+package com.problems.patterns.dp;
 
 import java.util.Arrays;
 
-/*
- * Formula for stock problems:
+/* Formula for stock problems:
  * 	buyingPrice = Min(buyingPrice, currPrice-profit)   //Find Minimum  - Buying Price
  *  profit = Max(profit, currPrice-buyingPrice)        //Find Max difference - Profit(SP - BP)
  * 
  * In below problems min and diff are,
  *  min: Minimum BuyingPrice
  *  diff: Maximum Profit = (Sell Price - Buy Price)
+ *  
  */
 public class StockProblemPatterns {
 	/*

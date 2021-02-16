@@ -1,4 +1,4 @@
-package com.problems.patterns.recursion;
+package com.problems.patterns;
 
 import java.util.ArrayList;
 import java.util.Arrays;
