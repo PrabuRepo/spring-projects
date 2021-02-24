@@ -2,10 +2,8 @@ package com.problems.patterns.crossdomains;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
 import java.util.stream.Collectors;
@@ -13,9 +11,69 @@ import java.util.stream.Collectors;
 import com.common.model.TreeNode;
 
 /*
- * The 'closest' is defined as absolute difference minimized between two integers.
+ * The 'closest' is defined as absolute difference minimized between two integers. Here we have to 
+ * find closest of any given target. abs(target-a[i])
+ * 
+ * Approaches used:
+ * 	  - "Record and Move on" to find the closest values
  */
 public class ClosestNumberPatterns {
+
+	/* 3Sum Closest:
+	 * Given an array nums of n integers and an integer target, find three integers in nums such that the sum is closest
+	 * to target. Return the sum of the three integers. You may assume that each input would have exactly one 
+	 */
+	public int threeSumClosest(int[] nums, int target) {
+		int minDiff = Integer.MAX_VALUE;
+		int result = Integer.MAX_VALUE, n = nums.length;
+		Arrays.sort(nums);
+		for (int i = 0; i < n - 2; i++) {
+			int l = i + 1;
+			int h = n - 1;
+			while (l < h) {
+				int sum = nums[i] + nums[l] + nums[h];
+				if (sum == target) return sum;
+
+				int diff = Math.abs(sum - target);
+				//Record the result and move on
+				if (diff < minDiff) {
+					minDiff = diff;
+					result = sum;
+				}
+				//or
+				/*if (result == Integer.MAX_VALUE || Math.abs(sum - target) < Math.abs(result - target)) {
+					result = sum;
+				}*/
+
+				if (sum <= target) {
+					l++;
+				} else {
+					h--;
+				}
+			}
+		}
+		return result;
+	}
+
+	/*
+	 * Search for closest the element – BS & record-and-move-on approach
+	 * Given the element is sorted
+	 */
+	public int searchClosestElement(int[] arr, int target) {
+		int l = 0, h = arr.length - 1, m = 0, index = -1;
+		while (l <= h) {
+			m = l + (h - l) / 2;
+			if (target == arr[m]) return m;
+			//Record and move on
+			if (index == -1 || (Math.abs(arr[m] - target) < Math.abs(arr[index] - target))) {
+				index = m;
+			}
+
+			if (target < arr[m]) h = m - 1;
+			else l = m + 1;
+		}
+		return index;
+	}
 
 	// Find K Closest Elements
 	//Brute force approach: Time: O(n), Space: O(k)
@@ -33,46 +91,18 @@ public class ClosestNumberPatterns {
 		return Arrays.stream(arr, lo, hi + 1).boxed().collect(Collectors.toList());
 	}
 
-	//Binary Search: Here find the index position for the given element x. Then find the range 
-	//Time: O(log(n + k)), Space: O(k)
-	public List<Integer> findKClosestElements2(int[] arr, int k, int x) {
-		//Find the index of the element
-		int index = binarySearch(arr, x);
-
-		int l = index - 1, h = index;
-		while (k-- > 0) {
-			if (h >= arr.length || (l >= 0 && x - arr[l] <= arr[h] - x)) {
-				l--;
-			} else {
-				h++;
-			}
-		}
-		return Arrays.stream(arr, l + 1, h).boxed().collect(Collectors.toList());
-	}
-
-	private int binarySearch(int[] nums, int target) {
-		int l = 0, h = nums.length - 1, m = 0;
-		while (l <= h) {
-			m = l + (h - l) / 2;
-			if (nums[m] == target) return m;
-			else if (nums[m] < target) l = m + 1;
-			else h = m - 1;
-		}
-		return l;
-	}
-
 	//Binary Search(Better than above): In this approach trying to find the starting index of the range
 	//Time: O(log(n-k)), Space: O(k)
 	//Refer this: https://leetcode.com/problems/find-k-closest-elements/discuss/106426/JavaC%2B%2BPython-Binary-Search-O(log(N-K)-%2B-K)
-	public List<Integer> findKClosestElements3(int[] arr, int k, int x) {
-		int l = 0, h = arr.length - k, m = 0;
+	public List<Integer> findKClosestElements2(int[] arr, int k, int x) {
+		int l = 0, h = arr.length - 1 - k, m = 0;
 
-		while (l < h) {
+		while (l <= h) {
 			m = l + (h - l) / 2;
 			//Here trying to find range instead of single value 
-			// Normal BS condition: x <= arr[m]m but below one is range search
+			// Normal BS condition: x <= arr[m] but below one is find the starting index of range 'k'
 			if (x - arr[m] <= arr[m + k] - x) {
-				h = m;
+				h = m - 1;
 			} else {
 				l = m + 1;
 			}
@@ -80,101 +110,25 @@ public class ClosestNumberPatterns {
 
 		/*  List<Integer> result = new ArrayList<>();
 		for(int i=0; i<k;i++)
-		    result.add(arr[i+l]); */
+		result.add(arr[i+l]); */
 
 		return Arrays.stream(arr, l, l + k).boxed().collect(Collectors.toList());
+
 	}
 
-	//Approach4: Using minheap priority queue
-	//Time: O(n*logk), Space: O(k)
-	public List<Integer> findKClosestElements4(int[] arr, int k, int x) {
-		PriorityQueue<Integer> pq = new PriorityQueue<>();
-		List<Integer> result = new ArrayList<>();
+	//Approach4: Using Queue: This works because input is sorted
+	//Time: O(n), Space: O(k)
+	public List<Integer> findKClosestElements3(int[] arr, int k, int x) {
+		Queue<Integer> queue = new LinkedList<>();
 		for (int i = 0; i < arr.length; i++) {
-			if (pq.size() >= k) {
-				if (Math.abs(x - arr[i]) < Math.abs(x - pq.peek())) {
-					pq.poll();
-					pq.add(arr[i]);
-				}
-			} else {
-				pq.add(arr[i]);
+			if (queue.size() < k) {
+				queue.add(arr[i]);
+			} else if (Math.abs(x - arr[i]) < Math.abs(x - queue.peek())) {
+				queue.poll();
+				queue.add(arr[i]);
 			}
 		}
-		int s = pq.size();
-		for (int i = 0; i < s; i++) {
-			result.add(pq.remove());
-		}
-		return result;
-	}
-
-	//TODO: Learn how sorting works using functional programming/comparator implementation and understand the below 2 approaches
-	//Using maxheap priority queue
-	public List<Integer> findKClosestElements5(int[] arr, int k, int x) {
-		// maxHeap, sort descendingly according to diff to x
-		PriorityQueue<Integer> maxHeap = new PriorityQueue<>(
-				(a, b) -> Math.abs(x - b) == Math.abs(x - a) ? b - a : Math.abs(x - b) - Math.abs(x - a));
-		// each time, if we have better option, delete num with max diff from x, and insert the new num
-		for (int num : arr) {
-			maxHeap.offer(num);
-			if (maxHeap.size() >= k) {
-				maxHeap.poll();
-			}
-		}
-		// convert heap back to List<Integer> and sort them to get the original order
-		List<Integer> res = new ArrayList(maxHeap);
-		res.forEach(i -> System.out.println(i));
-		Collections.sort(res);
-		return res;
-	}
-
-	// Simple collection approach
-	public List<Integer> findKClosestElements6(int[] arr, int k, int x) {
-		// convert int[] to List<Integer> for better implementation simplicity
-		List<Integer> list = Arrays.stream(arr).boxed().collect(Collectors.toList());
-		Collections.sort(list, (a, b) -> a == b ? a - b : Math.abs(a - x) - Math.abs(b - x));
-		list = list.subList(0, k);
-		Collections.sort(list);
-		return list;
-	}
-
-	/*
-	 * Search for closest the element – BS & record-and-move-on approach
-	 * Given the element is sorted
-	 */
-	public int searchClosestElement(int[] arr, int num) {
-
-		return 0;
-	}
-
-	/* 3Sum Closest:
-	 * Given an array nums of n integers and an integer target, find three integers in nums such that the sum is closest
-	 * to target. Return the sum of the three integers. You may assume that each input would have exactly one 
-	 */
-	public int threeSumClosest(int[] nums, int target) {
-		int minDiff = Integer.MAX_VALUE;
-		int result = 0;
-		Arrays.sort(nums);
-		for (int i = 0; i < nums.length; i++) {
-			int l = i + 1;
-			int h = nums.length - 1;
-			while (l < h) {
-				int sum = nums[i] + nums[l] + nums[h];
-				int diff = Math.abs(sum - target);
-
-				if (diff == 0) return sum;
-
-				if (diff < minDiff) {
-					minDiff = diff;
-					result = sum;
-				}
-				if (sum <= target) {
-					l++;
-				} else {
-					h--;
-				}
-			}
-		}
-		return result;
+		return new ArrayList<>(queue);
 	}
 
 	/*
@@ -187,10 +141,23 @@ public class ClosestNumberPatterns {
 	int closestValue = 0;
 
 	public int closestValue(TreeNode root, double target) {
-		closestValue(root, target, Double.MAX_VALUE);
-		return closestValue;
+		return closestValue(root, target, Integer.MAX_VALUE);
 	}
 
+	private int closestValue(TreeNode node, double target, int closest) {
+		if (node == null) return closest;
+
+		//Record and move on
+		if (closest == Integer.MAX_VALUE
+				|| Math.abs(target - (double) node.val) < Math.abs(target - (double) closest)) {
+			closest = node.val;
+		}
+
+		if (target <= node.val) return closestValue(node.left, target, closest);
+		else return closestValue(node.right, target, closest);
+	}
+
+	//Approach 2: Using global variable
 	private void closestValue(TreeNode node, double target, double minDiff) {
 		if (node == null) return;
 
@@ -203,26 +170,29 @@ public class ClosestNumberPatterns {
 		else closestValue(node.right, target, minDiff);
 	}
 
+	/*
+	 * Closest Binary Search Tree Value II/Find K closest values in BST:
+	 */
 	//Time: O(n), Space: O(k)
 	public List<Integer> closestKValues1(TreeNode root, double target, int k) {
-		Queue<Integer> list = new LinkedList<>();
-		inorder(root, target, k, list);
-		return new ArrayList<Integer>(list);
+		Queue<Integer> queue = new LinkedList<>();
+		inorder(root, target, k, queue);
+		return new ArrayList<Integer>(queue);
 	}
 
-	private void inorder(TreeNode node, double target, int k, Queue<Integer> list) {
+	private void inorder(TreeNode node, double target, int k, Queue<Integer> queue) {
 		if (node == null) return;
 
-		inorder(node.left, target, k, list);
+		inorder(node.left, target, k, queue);
 
-		if (list.size() < k) {
-			list.add(node.val);
-		} else if (Math.abs(target - (double) node.val) < Math.abs(target - (double) list.peek())) {
-			list.poll();
-			list.add(node.val);
+		if (queue.size() < k) {
+			queue.add(node.val);
+		} else if (Math.abs(target - (double) node.val) < Math.abs(target - (double) queue.peek())) {
+			queue.poll();
+			queue.add(node.val);
 		}
 
-		inorder(node.right, target, k, list);
+		inorder(node.right, target, k, queue);
 	}
 
 	//TODO: Try to understand the solution
@@ -267,4 +237,12 @@ public class ClosestNumberPatterns {
 		getSuccessor(root.left, target, successor);
 	}
 
+	public static void main(String[] args) {
+		ClosestNumberPatterns ob = new ClosestNumberPatterns();
+		int[] arr = { 1, 1, 2, 2, 2, 2, 2, 3, 3 };
+		ob.findKClosestElements2(arr, 3, 2).forEach(k -> System.out.print(k + " "));
+
+		int[] arr2 = { 3, 2, 1, 2, 1, 2, 3, 2, 2 };
+		ob.findKClosestElements2(arr2, 3, 2).forEach(k -> System.out.print(k + " "));
+	}
 }

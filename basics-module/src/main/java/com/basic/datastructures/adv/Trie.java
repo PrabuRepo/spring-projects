@@ -266,17 +266,14 @@ class Trie2 implements TrieOperations {
 	@Override
 	public void add(String word) {
 		TrieNode curr = root;
-		for (int i = 0; i < word.length(); i++) {
-			char ch = word.charAt(i);
+		for (char ch : word.toCharArray()) {
 			curr = curr.childNodes.computeIfAbsent(ch, node -> new TrieNode());
 			// or
 			/*
-			TrieNode childNode = curr.childNodes.get(ch);
-			if (childNode == null) {
-				childNode = new TrieNode();
-				curr.childNodes.put(ch, childNode);
+			if (curr.childNodes.get(ch) == null) {
+				curr.childNodes.put(ch, new TrieNode());
 			}
-			curr = childNode;*/
+			curr = curr.childNodes.get(ch);*/
 		}
 		curr.isEndOfWord = true;
 	}
@@ -295,8 +292,8 @@ class Trie2 implements TrieOperations {
 
 	private TrieNode wordSearch(String word) {
 		TrieNode curr = root;
-		for (int i = 0; i < word.length(); i++) {
-			curr = curr.childNodes.get(word.charAt(i));
+		for (char ch : word.toCharArray()) {
+			curr = curr.childNodes.get(ch);
 			if (curr == null) return null;
 		}
 		return curr;

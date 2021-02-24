@@ -194,21 +194,18 @@ public class QueuePatterns {
 		int[] result = new int[n - k + 1];
 		//Deque to store the index of the elements; If we store the element, we can't find the elements position and window size has size K. 
 		Deque<Integer> deque = new LinkedList<>();
-		int index = 0;
 
 		for (int i = 0; i < n; i++) {
-			//If 'i' reaches the size k, then Remove the top element 
-			if (!deque.isEmpty() && i - deque.peekFirst() == k) deque.removeFirst();
-
 			//Keep removing the smaller element from the last in deque
 			while (!deque.isEmpty() && nums[i] > nums[deque.peekLast()]) deque.removeLast();
 
 			deque.addLast(i);
 
 			if (i >= k - 1) {
-				result[index++] = nums[deque.peekFirst()];
-				//or
-				//result[i - k + 1] = nums[deque.peek()];
+				result[i - k + 1] = nums[deque.peek()]; //or result[index++] = nums[deque.peekFirst()];
+
+				//If 'i' reaches the size k, then Remove the top element 
+				if (i - deque.peekFirst() == k - 1) deque.removeFirst();
 			}
 		}
 
@@ -224,7 +221,7 @@ public class QueuePatterns {
 	 *  	Where:
 	 *  		- max denotes the largest integer in subArr
 	 *   		- min denotes the smallest integer in subArr*/
-	int maxMin(int k, int[] nums) {
+	public int maxMin(int k, int[] nums) {
 		if (nums.length == 0 || k > nums.length) return 0;
 		Arrays.sort(nums);
 

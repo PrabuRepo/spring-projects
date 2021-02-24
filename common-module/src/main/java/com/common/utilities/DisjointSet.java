@@ -48,6 +48,7 @@ public class DisjointSet implements DisJointOperations {
 		return false; // Means pointed to same parent or union the two sets
 	}
 
+	// Find the node in which node and its parent is same
 	@Override
 	public int find(int i) {
 		while (nodes[i] != i) {

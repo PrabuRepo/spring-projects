@@ -45,42 +45,6 @@ public class BTPatterns {
 	}
 
 	/*********************** 5.BT Print, Path, Sum & LCA Problems ***************/
-	// Diameter of Binary Tree:
-	// Approach1: Time Complexity: O(n^2)
-	public int diameterOfTree1(TreeNode root) {
-		if (root == null) return 0;
-		// Get the height of left and right sub trees
-		int leftHeight = heightOfTree1(root.left);
-		int rightHeight = heightOfTree1(root.right);
-
-		/*
-		 * Return max of following three 1) Height of left subtree + Height of right
-		 * subtree + 1; 2) Diameter of left subtree; 3) Diameter of right subtree
-		 */
-		return Integer.max(leftHeight + rightHeight + 1,
-				Integer.max(diameterOfTree1(root.left), diameterOfTree1(root.right)));
-	}
-
-	int maxDiameter = 0;
-
-	// Efficient Approach: Modification of Height calculation; Time Complexity-O(n)
-	public int diameterOfTree2(TreeNode root) {
-		if (root == null) return 0;
-		heightOfTree3(root);
-		return maxDiameter;
-	}
-
-	// Modification of height of tree logic
-	public int heightOfTree3(TreeNode root) {
-		if (root == null) return 0;
-		int left = heightOfTree3(root.left);
-		int right = heightOfTree3(root.right);
-
-		maxDiameter = Math.max(maxDiameter, left + right + 1);
-
-		return 1 + Math.max(left, right);
-	}
-
 	// Lowest Common Ancestor of a BT
 	/*
 	 * LCA - Approach -1 : This method assumes that keys are present in Binary Tree.
@@ -90,10 +54,10 @@ public class BTPatterns {
 	public TreeNode lowestCommonAncestor1(TreeNode root, int n1, int n2) {
 		if (root == null) return null;
 
-		if (root.val == n1 || root.val == n2) return root;
-
 		TreeNode left = lowestCommonAncestor1(root.left, n1, n2);
 		TreeNode right = lowestCommonAncestor1(root.right, n1, n2);
+
+		if (root.val == n1 || root.val == n2) return root;
 
 		if (left != null && right != null) return root;
 
@@ -101,35 +65,15 @@ public class BTPatterns {
 	}
 
 	/*
-	 * LCA - Approach -2; This method to handle all cases by passing two boolean
-	 * variables node1 and node2. node1 is set as true when n1 is present in tree
-	 * and node2 is set as true if n2 is present in tree.
+	 * LCA - Approach -2; This method to handle all cases by passing boolean array to make sure that 
+	 * both n1 and n2 present in the tree.
 	 */
-	static boolean node1 = false, node2 = false;
-
 	public TreeNode lowestCommonAncestor2(TreeNode root, int n1, int n2) {
 		if (root == null) return null;
-
-		//TreeNode result = lca1(root, n1, n2);
-		//return node1 && node2 ? result : null;
 
 		boolean[] flag = { false, false };
 		TreeNode result = lca2(root, n1, n2, flag);
 		return flag[0] && flag[1] ? result : null;
-	}
-
-	public TreeNode lca1(TreeNode root, int n1, int n2) {
-		if (root == null) return null;
-
-		TreeNode left = lca1(root.left, n1, n2);
-		TreeNode right = lca1(root.right, n1, n2);
-
-		if (root.val == n1) node1 = true;
-		if (root.val == n2) node2 = true;
-		if (root.val == n1 || root.val == n2) return root;
-
-		if (left != null && right != null) return root;
-		return left != null ? left : right;
 	}
 
 	public TreeNode lca2(TreeNode root, int n1, int n2, boolean[] flag) {
@@ -184,7 +128,71 @@ public class BTPatterns {
 		return flag;
 	}
 
-	// Binary Tree Maximum Path Sum:
+	// Diameter of Binary Tree:
+	/*  Approach1:
+	 *  Time Complexity: n+(n-1)+(n-2)+...1 => O(n^2)
+	 */
+	public int diameterOfTree1(TreeNode root) {
+		if (root == null) return 0;
+		// Get the height of left and right sub trees
+		int leftHeight = heightOfTree1(root.left);
+		int rightHeight = heightOfTree1(root.right);
+
+		/*
+		 * Return max of following three 1) Height of left subtree + Height of right
+		 * subtree + 1; 2) Diameter of left subtree; 3) Diameter of right subtree
+		 */
+		return Math.max(leftHeight + rightHeight + 1,
+				Math.max(diameterOfTree1(root.left), diameterOfTree1(root.right)));
+	}
+
+	int maxDiameter = 0;
+
+	// Efficient Approach: Modification of Height calculation; Time Complexity-O(n)
+	public int diameterOfTree2(TreeNode root) {
+		if (root == null) return 0;
+		heightOfTree3(root);
+		return maxDiameter;
+	}
+
+	// Modification of height of tree logic
+	public int heightOfTree3(TreeNode root) {
+		if (root == null) return 0;
+		int left = heightOfTree3(root.left);
+		int right = heightOfTree3(root.right);
+		//Record the result and move on
+		maxDiameter = Math.max(maxDiameter, left + right + 1);
+
+		return 1 + Math.max(left, right);
+	}
+
+	// Modification of previous approach using array variable:s
+	public int diameterOfTree3(TreeNode root) {
+		if (root == null) return 0;
+		int[] max = new int[1];
+		heightOfTree4(root, max);
+		return max[0];
+	}
+
+	// Modification of height of tree logic
+	public int heightOfTree4(TreeNode root, int[] max) {
+		if (root == null) return 0;
+		int left = heightOfTree4(root.left, max);
+		int right = heightOfTree4(root.right, max);
+		//Record the result and move on
+		max[0] = Math.max(max[0], left + right + 1);
+
+		return 1 + Math.max(left, right);
+	}
+
+	/* Binary Tree Maximum Path Sum:
+	 * A path in a binary tree is a sequence of nodes where each pair of adjacent nodes in the sequence has an edge connecting them. A node 
+	 * can only appear in the sequence at most once. Note that the path does not need to pass through the root. The path sum of a path is 
+	 * the sum of the node's values in the path. 
+	 * Given the root of a binary tree, return the maximum path sum of any path.
+	 * Eg: [2,-1], Output: 2
+	 *     [-3], Output: -3
+	 */
 	// Brute Force Approach:
 	public int maxPathSum1(TreeNode root) {
 		if (root == null) return Integer.MIN_VALUE; // Here return MIN_VALUE to handle -ve val
@@ -218,12 +226,13 @@ public class BTPatterns {
 		if (node == null) return 0;
 		int left = maxPathSumUtil2(node.left);
 		int right = maxPathSumUtil2(node.right);
+		//Record the result and move on
 		maxValue = Math.max(maxValue, left + right + node.val);
 		// Compare with zero to eliminate the -ve values
 		return Math.max(0, node.val + Math.max(left, right));
 	}
 
-	// Efficient Approach using array variable:
+	// Modification of previous approach using array variable:
 	public int maxPathSum3(TreeNode root) {
 		int[] max = new int[1];
 		max[0] = Integer.MIN_VALUE;
@@ -236,6 +245,7 @@ public class BTPatterns {
 		if (node == null) return 0;
 		int left = maxPathSumUtil3(node.left, max);
 		int right = maxPathSumUtil3(node.right, max);
+		//Record the result and move on
 		max[0] = Math.max(max[0], left + right + node.val);
 		// Compare with zero to eliminate the -ve values
 		return Math.max(0, node.val + Math.max(left, right));
@@ -247,6 +257,7 @@ public class BTPatterns {
 	public TreeNode constructTreeFromInAndPreOrder(char[] inOrder, char[] preOrder) {
 		OrderIndex preOrderIndex = new OrderIndex();
 		preOrderIndex.index = 0;
+		//Or Instead of OrderIndex class, array can be used to store the preorder index 
 		return buildTreeFromInAndPreOrder(inOrder, preOrder, 0, inOrder.length - 1, preOrderIndex);
 	}
 
@@ -281,7 +292,7 @@ public class BTPatterns {
 
 	private void serialize1(ArrayList<Integer> result, TreeNode root) {
 		if (root == null) {
-			result.add(-1);
+			result.add(-1); //or result.add(null);
 			return;
 		}
 		result.add(root.val);
@@ -333,18 +344,18 @@ public class BTPatterns {
 
 	// Approach2: Convert the string to tree
 	public TreeNode deSerialize2(String data) {
-		OrderIndex in = new OrderIndex();
+		int[] inorder = new int[1];
 		String str[] = data.split(",");
-		return deSerialize2(str, in);
+		return deSerialize2(str, inorder);
 	}
 
-	public TreeNode deSerialize2(String[] str, OrderIndex in) {
-		if (str.length == in.index - 1 || str[in.index].equals("#")) return null;
-		TreeNode root = new TreeNode(Integer.valueOf(str[in.index]));
-		in.index++;
-		root.left = deSerialize2(str, in);
-		in.index++;
-		root.right = deSerialize2(str, in);
+	public TreeNode deSerialize2(String[] str, int[] inOrder) {
+		if (str.length == inOrder[0] || str[inOrder[0]].equals("#")) return null;
+		TreeNode root = new TreeNode(Integer.valueOf(str[inOrder[0]]));
+		inOrder[0]++;
+		root.left = deSerialize2(str, inOrder);
+		inOrder[0]++;
+		root.right = deSerialize2(str, inOrder);
 		return root;
 	}
 
@@ -445,11 +456,7 @@ public class BTPatterns {
 		if (root == null) return;
 
 		if (root.left != null) {
-			if (root.right != null) {
-				root.left.next = root.right;
-			} else {
-				root.left.next = findNext(root);
-			}
+			root.left.next = root.right != null ? root.right : findNext(root);
 		}
 
 		if (root.right != null) {
@@ -461,11 +468,11 @@ public class BTPatterns {
 	}
 
 	private TreeNode findNext(TreeNode node) {
-		TreeNode nextNode = node.next;
-		while (nextNode != null) {
-			if (nextNode.left != null) return nextNode.left;
-			if (nextNode.right != null) return nextNode.right;
-			nextNode = nextNode.next;
+		TreeNode curr = node.next;
+		while (curr != null) {
+			if (curr.left != null) return curr.left;
+			if (curr.right != null) return curr.right;
+			curr = curr.next;
 		}
 		return null;
 	}

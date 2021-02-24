@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import com.problems.patterns.crossdomains.ClosestNumberPatterns;
 import com.problems.patterns.ds.StackPatterns;
 
 public class TwoPointerPatterns {
@@ -157,34 +158,14 @@ public class TwoPointerPatterns {
 		return false;
 	}
 
+	ClosestNumberPatterns closestNumberPatterns = new ClosestNumberPatterns();
+
 	/* 3Sum Closest:
 	 * Given an array nums of n integers and an integer target, find three integers in nums such that the sum is closest
 	 * to target. Return the sum of the three integers. You may assume that each input would have exactly one 
 	 */
 	public int threeSumClosest(int[] nums, int target) {
-		int minDiff = Integer.MAX_VALUE, result = 0;
-		Arrays.sort(nums);
-		for (int i = 0; i < nums.length - 2; i++) {
-			int l = i + 1;
-			int h = nums.length - 1;
-			while (l < h) {
-				int sum = nums[i] + nums[l] + nums[h];
-				int diff = Math.abs(sum - target);
-
-				if (diff == 0) return sum;
-
-				if (diff < minDiff) {
-					minDiff = diff;
-					result = sum;
-				}
-				if (sum < target) {
-					l++;
-				} else {
-					h--;
-				}
-			}
-		}
-		return result;
+		return closestNumberPatterns.threeSumClosest(nums, target);
 	}
 
 	/******************* UnSorted: Forward & Reverse Traversals ****************/

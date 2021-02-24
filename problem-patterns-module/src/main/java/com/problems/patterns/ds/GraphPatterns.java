@@ -24,11 +24,15 @@ import com.problems.patterns.crossdomains.WordProblems;
  */
 public class GraphPatterns {
 
+	private WordProblems wordProblems = new WordProblems();
+
+	private CloneProblems cloneProblems = new CloneProblems();
+
 	/*************************** Type1: Graph DS Problems *******************/
 	public void cloneGraph() {
-		CloneProblems.cloneGraph1(null);
-		CloneProblems.cloneGraph2(null);
-		CloneProblems.cloneGraph3(null);
+		cloneProblems.cloneGraph1(null);
+		cloneProblems.cloneGraph2(null);
+		cloneProblems.cloneGraph3(null);
 	}
 
 	/*************************** Type2: Graph Cycle *******************/
@@ -44,7 +48,7 @@ public class GraphPatterns {
 			adjList[i] = new LinkedList<>();
 
 		for (int[] pair : prerequisites) {
-			//src - pair[1], dest - pair[0]
+			//Note: src - pair[1], dest - pair[0]
 			adjList[pair[1]].add(pair[0]);
 			indegree[pair[0]]++;
 		}
@@ -226,6 +230,7 @@ public class GraphPatterns {
 	}
 
 	// Reconstruct Itinerary - Map & Priority Queue & Topo Sort
+	//Time: O(V+E), Space: O(V+E)
 	public List<String> findItinerary(String[][] tickets) {
 		Map<String, PriorityQueue<String>> map = new HashMap<>();
 		for (String[] ticket : tickets) {
@@ -251,6 +256,12 @@ public class GraphPatterns {
 	 * of an alien language, find order of characters in the language.
 	 */
 	//Alien Order using BFS algorithm	
+	/*
+	 * The first step to create a graph takes O(n + alhpa) time where n is number of given words and alpha is number of characters in given alphabet.
+	 * The second step is also topological sorting. Note that there would be alpha vertices and at-most (n-1) edges in the graph. The time complexity 
+	 * of topological sorting is O(V+E) which is O(n + aplha) here. So overall time complexity is O(n + aplha) + O(n + aplha) which is O(n + aplha).
+	 * Time: O(V+E), Space: O(V+E)
+	 */
 	public String alienOrder1(String[] words) {
 		Map<Character, Set<Character>> graph = new HashMap<>();
 		Map<Character, Integer> inDegree = new HashMap<>();
@@ -507,10 +518,10 @@ public class GraphPatterns {
 
 		// Check the remained person in stack doesn’t have acquaintance with anyone else.
 		int celeb = stack.pop();
-		for (int i = 0; i < n; i++)
-			if (i != celeb && (input[i][celeb] != 1 || input[celeb][i] != 0)) // check celebrity in all the rows, if
-				// cond satisfies return -1;
-				return -1;
+		for (int i = 0; i < n; i++) {
+			// check celebrity in all the rows, if cond satisfies return -1;
+			if (i != celeb && (input[i][celeb] != 1 || input[celeb][i] != 0)) return -1;
+		}
 
 		return celeb;
 	}
@@ -525,10 +536,10 @@ public class GraphPatterns {
 			if (input[celeb][j] == 1) // Find the celebrity from first row
 				celeb = j;
 
-		for (int i = 0; i < n; i++)
-			if (i != celeb && (input[i][celeb] != 1 || input[celeb][i] != 0)) // check celebrity in all the rows, if
-				// cond satisfies return -1;
-				return -1;
+		for (int i = 0; i < n; i++) {
+			// check celebrity in all the rows, if cond satisfies return -1;
+			if (i != celeb && (input[i][celeb] != 1 || input[celeb][i] != 0)) return -1;
+		}
 
 		return celeb;
 	}
@@ -568,12 +579,12 @@ public class GraphPatterns {
 
 	//	Word Ladder I, II - BFS -> Refer: WordProblem Patterns
 	public void wordLadderI() {
-		WordProblems.wordLadderI1(null, null, null);
-		WordProblems.wordLadderI2(null, null, null);
+		wordProblems.wordLadderI1(null, null, null);
+		wordProblems.wordLadderI2(null, null, null);
 	}
 
 	public void wordLadderII() {
-		WordProblems.wordLadderII(null, null, null);
+		wordProblems.wordLadderII(null, null, null);
 	}
 
 }

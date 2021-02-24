@@ -390,7 +390,11 @@ public class WordProblems {
 	 * Given word = "ABCCED", return true.
 	 * Given word = "SEE", return true.
 	 */
-	public static boolean wordSearchI(char[][] board, String str) {
+	/*
+	 * Time is O(M * N * 4^L) where M*N is the size of the board and we have 4^L for each cell because of the recursion. 
+	 * where L is the length of the word;
+	 */
+	public boolean wordSearchI(char[][] board, String str) {
 		if (str.length() == 0 || board.length == 0 || board[0].length == 0) return false;
 
 		int row = board.length, col = board[0].length;
@@ -404,7 +408,7 @@ public class WordProblems {
 		return false;
 	}
 
-	public static boolean dfsSearch(char[][] board, String word, int i, int j, int index) {
+	public boolean dfsSearch(char[][] board, String word, int i, int j, int index) {
 		int row = board.length, col = board[0].length;
 		if (i < 0 || i >= row || j < 0 || j >= col || index >= word.length() || word.charAt(index) != board[i][j]
 				|| board[i][j] == '#')
@@ -441,7 +445,7 @@ public class WordProblems {
 	 *  Output: ["eat","oath"]
 	 */
 	// Approach1: Using DFS -> Time Complexity: O(len*m*n) where len- no of words, m- row size, n-colSize
-	public static List<String> wordSearchII1(char[][] board, String[] words) {
+	public List<String> wordSearchII1(char[][] board, String[] words) {
 		List<String> result = new ArrayList<>();
 		if (words.length == 0 || board.length == 0 || board[0].length == 0) return result;
 
@@ -455,11 +459,14 @@ public class WordProblems {
 		return result;
 	}
 
-	public static List<String> wordSearchII2(char[][] board, String[] words) {
+	public List<String> wordSearchII2(char[][] board, String[] words) {
 		List<String> result = new ArrayList<>();
 
-		// Build Trie datastructure
-		TrieNode root = buildTrie1(words);
+		// Build Trie data structure
+		TrieNode root = new TrieNode();
+		for (String word : words) {
+			insert1(root, word);
+		}
 
 		// dfs search
 		for (int i = 0; i < board.length; i++)
@@ -470,60 +477,16 @@ public class WordProblems {
 		return result;
 	}
 
-	public static List<String> wordSearchII3(char[][] board, String[] words) {
-		List<String> result = new ArrayList<>();
-
-		// Build Trie data structure
-		TrieNode root = buildTrie2(words);
-
-		// dfs search
-		for (int i = 0; i < board.length; i++)
-			for (int j = 0; j < board[0].length; j++)
-				dfsSearch2(board, root, i, j, new StringBuilder(), result);
-
-		result.stream().forEach(k -> System.out.print(k + " "));
-		return result;
-	}
-
-	// Insert all the words in the Trie DS
-	public static TrieNode buildTrie1(String[] words) {
-		TrieNode root = new TrieNode();
-		for (String word : words) {
-			TrieNode curr = root;
-			for (int i = 0; i < word.length(); i++) {
-				int index = word.charAt(i) - 'a';
-				if (curr.children[index] == null) curr.children[index] = new TrieNode();
-				curr = curr.children[index];
-			}
-			curr.word = word;
-		}
-		return root;
-	}
-
-	// Insert all the words in the Trie DS
-	public static TrieNode buildTrie2(String[] words) {
-		TrieNode root = new TrieNode();
-		for (String word : words) {
-			TrieNode curr = root;
-			for (int i = 0; i < word.length(); i++) {
-				int index = word.charAt(i) - 'a';
-				if (curr.children[index] == null) curr.children[index] = new TrieNode();
-				curr = curr.children[index];
-			}
-			curr.isEndOfWord = true;
-		}
-		return root;
-	}
-
-	public static void dfsSearch1(char[][] board, TrieNode root, int i, int j, List<String> result) {
+	public void dfsSearch1(char[][] board, TrieNode root, int i, int j, List<String> result) {
 		int rSize = board.length, cSize = board[0].length;
 		// Row & col Validation
 		if (i < 0 || i >= rSize || j < 0 || j >= cSize) return;
 		// Trie Validation
 		char ch = board[i][j];
-		if (ch == '#' || root.children[ch - 'a'] == null) return;
+		if (ch == '#' || root.childNodes.get(ch) == null) return;
 
-		root = root.children[ch - 'a'];
+		root = root.childNodes.get(ch);
+		//Record and move on
 		if (root.word != null) {
 			result.add(root.word);
 			root.word = null;
@@ -539,15 +502,33 @@ public class WordProblems {
 		board[i][j] = ch;
 	}
 
-	public static void dfsSearch2(char[][] board, TrieNode root, int i, int j, StringBuilder sb, List<String> result) {
+	public List<String> wordSearchII3(char[][] board, String[] words) {
+		List<String> result = new ArrayList<>();
+
+		// Build Trie data structure
+		TrieNode root = new TrieNode();
+		for (String word : words) {
+			insert2(root, word);
+		}
+
+		// dfs search
+		for (int i = 0; i < board.length; i++)
+			for (int j = 0; j < board[0].length; j++)
+				dfsSearch2(board, root, i, j, new StringBuilder(), result);
+
+		result.stream().forEach(k -> System.out.print(k + " "));
+		return result;
+	}
+
+	public void dfsSearch2(char[][] board, TrieNode root, int i, int j, StringBuilder sb, List<String> result) {
 		int rSize = board.length, cSize = board[0].length;
 		// Row & col Validation
 		if (i < 0 || i >= rSize || j < 0 || j >= cSize) return;
 		// Trie Validation
 		char ch = board[i][j];
-		if (ch == '#' || root.children[ch - 'a'] == null) return;
+		if (ch == '#' || root.childNodes.get(ch) == null) return;
 
-		root = root.children[ch - 'a'];
+		root = root.childNodes.get(ch);
 
 		if (root.isEndOfWord) {
 			result.add(sb.toString() + ch);
@@ -566,6 +547,27 @@ public class WordProblems {
 		board[i][j] = ch;
 	}
 
+	// Insert all the words in the Trie DS
+	public void insert1(TrieNode root, String word) {
+		TrieNode curr = root;
+		for (char ch : word.toCharArray()) {
+			curr = curr.childNodes.computeIfAbsent(ch, node -> new TrieNode());
+			/*
+			if (curr.childNodes.get(ch) == null) curr.childNodes.put(ch, new TrieNode());
+			curr = curr.childNodes.get(ch);*/
+		}
+		curr.word = word;
+	}
+
+	// Insert all the words in the Trie DS
+	public void insert2(TrieNode root, String word) {
+		TrieNode curr = root;
+		for (char ch : word.toCharArray()) {
+			curr = curr.childNodes.computeIfAbsent(ch, node -> new TrieNode());
+		}
+		curr.isEndOfWord = true;
+	}
+
 	/* Word Ladder: Find the ladder length
 	 * Given two words (beginWord and endWord), and a dictionary's word list, find the length of shortest transformation sequence 
 	 * from beginWord to endWord, such that:
@@ -581,7 +583,7 @@ public class WordProblems {
 	 * we find all unseen words that differ by exactly one character which takes O(26 * wordLength^2) time.
 	 * Space complexity: O(wordList.size()) space. Because we add all words into a HashSet, and queue and seen set can't have more than wordList.size() elements.
 	 */
-	public static int wordLadderI1(String beginWord, String endWord, List<String> wordList) {
+	public int wordLadderI1(String beginWord, String endWord, List<String> wordList) {
 		LinkedList<WordNode> queue = new LinkedList<>();
 		queue.add(new WordNode(beginWord, 1));
 		Set<String> wordDict = new HashSet<>(wordList);
@@ -609,7 +611,7 @@ public class WordProblems {
 	}
 
 	//Approach2: Using BFS and String
-	public static int wordLadderI2(String beginWord, String endWord, List<String> wordList) {
+	public int wordLadderI2(String beginWord, String endWord, List<String> wordList) {
 		if (beginWord == null || endWord == null || wordList == null || wordList.size() == 0) return 0;
 
 		LinkedList<String> queue = new LinkedList<>();
@@ -648,7 +650,7 @@ public class WordProblems {
 	 *    Input: beginWord = "hit", endWord = "cog"; wordList = ["hot","dot","dog","lot","log","cog"]
 	 *    Output: [["hit","hot","dot","dog","cog"], ["hit","hot","lot","log","cog"]]
 	 */
-	public static List<List<String>> wordLadderII(String start, String end, List<String> dict) {
+	public List<List<String>> wordLadderII(String start, String end, List<String> dict) {
 		List<List<String>> result = new ArrayList<List<String>>();
 
 		LinkedList<WordNode> queue = new LinkedList<WordNode>();

@@ -16,6 +16,8 @@ import com.problems.patterns.crossdomains.WordProblems;
 public class MatrixPatterns {
 	private DisjointSetProblems disjointSetProblems = new DisjointSetProblems();
 
+	private WordProblems wordProblems = new WordProblems();
+
 	/************** Type1: Basic Matrix Problems ***************/
 	// Anti clock wise direction:
 	// Apprach1: Take transpose, reverse the column & use an additional space
@@ -436,7 +438,7 @@ public class MatrixPatterns {
 
 	/************** 5.2.Find the Region/Data: ***************/
 
-	// Number of Islands I:
+	// Number of Islands I: Time: O(m*n);
 	public int numIslands1(char[][] grid) {
 		if (grid.length == 0) return 0;
 
@@ -579,14 +581,14 @@ public class MatrixPatterns {
 
 	// Word Boggle/Word Search I:
 	public void wordSearchI(char[][] board, String str) {
-		WordProblems.wordSearchI(board, str);
+		wordProblems.wordSearchI(board, str);
 	}
 
 	// Word Search II:
 	public void wordSearchII(char[][] board, String[] words) {
-		WordProblems.wordSearchII1(board, words);
-		WordProblems.wordSearchII2(board, words);
-		WordProblems.wordSearchII3(board, words);
+		wordProblems.wordSearchII1(board, words);
+		wordProblems.wordSearchII2(board, words);
+		wordProblems.wordSearchII3(board, words);
 	}
 
 	/************** 5.3.Find one path from src to dest: ***************/

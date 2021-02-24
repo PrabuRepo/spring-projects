@@ -36,8 +36,10 @@ public class SweepLinePatterns {
 		return res;
 	}
 
-	// The Skyline Problem
-	/* Approaches:
+	/* The Skyline Problem: This problem basically removing the overlapping building from the input
+	 *  or merging the 2D intervals.
+	 * 
+	 *  Approaches:
 	 * Skyline problem without any additional object 
 	 * SkyLine Problem using Priority Queue: TimeComplexity:  O(n^2) (Here n - no of building points)
 	 * SkyLine Problem using TreeMap: TimeComplexity: O(nlogn);
@@ -46,29 +48,34 @@ public class SweepLinePatterns {
 	public List<int[]> getSkyline1(int[][] buildings) {
 		List<int[]> points = new ArrayList<>();
 		List<int[]> result = new ArrayList<>();
+		//1.Split the input into two points (0,2) and (1,-ve of 2) and add both into list of array
 		for (int[] building : buildings) {
 			points.add(new int[] { building[0], building[2] }); //Start point
 			points.add(new int[] { building[1], -building[2] }); //End point
 		}
-		// Sort: if start points are not equal, then sort(asc) based on point in 0th index
-		// else if start poits are equal, then sort(desc) based on height in the 1st index 
+		//2.Sort the points array as per below logic.
+		/* Here 0th index denotes x, 1st index denotes y or height
+		 * 1. a[0]!=b[0] => ascending order based on x 
+		 * 2. a[0]==b[0] => desc order based on height if both are +ve or one +ve and one -ve.
+		 * 					asc order based on height if both are -ve.
+		 */
 		Collections.sort(points, (a, b) -> a[0] != b[0] ? a[0] - b[0] : b[1] - a[1]);
 
+		//3.Add the heights in max priority queue one by one and find the max for each iteration
 		PriorityQueue<Integer> queue = new PriorityQueue<>(Collections.reverseOrder());
 		queue.add(0);
-		int prevHeight = 0, currHeight = 0;
-		//Add the heights in queue one by one process it
+		int prevHeight = 0, maxHeight = 0;
 		for (int[] point : points) {
 			if (point[1] < 0) { //If it is end point(or negative), remove from queue
 				queue.remove(-point[1]);
 			} else { //If point is start point add it into the queue
 				queue.add(point[1]);
 			}
-			currHeight = queue.peek();
-			//If prevHeight != currHeight, then add it into the result, otherwise ignore it(because it means overlapping building).
-			if (prevHeight != currHeight) {
-				result.add(new int[] { point[0], currHeight });
-				prevHeight = currHeight;
+			maxHeight = queue.peek();
+			//If prevHeight != maxHeight, then add it into the result, otherwise ignore it(because it means overlapping building).
+			if (prevHeight != maxHeight) {
+				result.add(new int[] { point[0], maxHeight });
+				prevHeight = maxHeight;
 			}
 		}
 		return result;
@@ -82,13 +89,17 @@ public class SweepLinePatterns {
 			points.add(new int[] { building[0], building[2] });
 			points.add(new int[] { building[1], -building[2] });
 		}
-		// Using lambda expression
+		/* Here 0th index denotes x, 1st index denotes y or height
+		 * 1. a[0]!=b[0] => ascending order based on x 
+		 * 2. a[0]==b[0] => desc order based on height if both are +ve or one +ve and one -ve
+		 * 					asc order based on height if both are -ve,
+		 */
 		Collections.sort(points, (a, b) -> a[0] != b[0] ? a[0] - b[0] : b[1] - a[1]);
 
 		//Key - Height, Val - Count
 		TreeMap<Integer, Integer> map = new TreeMap<>();
 		map.put(0, 1);
-		int prevHeight = 0, currHeight = 0;
+		int prevHeight = 0, maxHeight = 0;
 		for (int[] point : points) {
 			if (point[1] < 0) {
 				int value = map.get(-point[1]);
@@ -98,10 +109,10 @@ public class SweepLinePatterns {
 				map.put(point[1], map.getOrDefault(point[1], 0) + 1);
 			}
 			//Get the max value from tree map
-			currHeight = map.lastKey();
-			if (prevHeight != currHeight) {
-				result.add(new int[] { point[0], currHeight });
-				prevHeight = currHeight;
+			maxHeight = map.lastKey();
+			if (prevHeight != maxHeight) {
+				result.add(new int[] { point[0], maxHeight });
+				prevHeight = maxHeight;
 			}
 		}
 		return result;

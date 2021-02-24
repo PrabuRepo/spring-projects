@@ -776,13 +776,12 @@ public class HeapPatterns {
 		lower = new PriorityQueue<>(Collections.reverseOrder());
 		upper = new PriorityQueue<>();
 		double[] result = new double[n - k + 1];
-		int index = 0;
 
 		for (int i = 0; i < n; i++) {
 			addNum(nums[i]);
 
 			if (i >= k - 1) {
-				result[index++] = findMedian();
+				result[i - k + 1] = findMedian(); // or result[index++]
 				removeNum(nums[i - k + 1]);
 			}
 		}
@@ -798,20 +797,20 @@ public class HeapPatterns {
 	TreeSet<Integer> left = null;
 	TreeSet<Integer> right = null;
 
-	public double[] medianSlidingWindow(int[] nums, int k) {
+	public double[] medianSlidingWindow2(int[] nums, int k) {
 		// Should add index in the set to handle duplicate elements
 		Comparator<Integer> comparator = (i, j) -> nums[i] != nums[j] ? Integer.compare(nums[i], nums[j]) : i - j;
 		left = new TreeSet<>(comparator.reversed());
 		right = new TreeSet<>(comparator);
 
-		int n = nums.length, index = 0;
+		int n = nums.length;
 		double[] result = new double[n - k + 1];
 
 		for (int i = 0; i < n; i++) {
 			addNum(nums, i);
 
 			if (i >= k - 1) {
-				result[index++] = findMedian(nums);
+				result[i - k + 1] = findMedian(nums); //result[index++] 
 				removeNum(nums, i - k + 1);
 			}
 

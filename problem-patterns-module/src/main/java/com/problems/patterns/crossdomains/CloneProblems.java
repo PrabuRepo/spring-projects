@@ -11,87 +11,81 @@ public class CloneProblems {
 
 	// Clone an Undirected Graph - DFS/BFS
 	// Using BFS traversal to clone the graph
-	public static GraphNode2 cloneGraph1(GraphNode2 root) {
+	public GraphNode2 cloneGraph1(GraphNode2 root) {
 		if (root == null) return null;
 		Queue<GraphNode2> queue = new LinkedList<>();
-		// cloneMap: node, cloneNode
-		HashMap<GraphNode2, GraphNode2> cloneMap = new HashMap<>();
-		cloneMap.put(root, new GraphNode2(root.label));
+		// Here visited map used to store the visited nodes as well clone node for each node.
+		// visited: node.label, cloneNode
+		HashMap<Integer, GraphNode2> visited = new HashMap<>();
+		visited.put(root.label, new GraphNode2(root.label));
 		queue.add(root);
 		while (!queue.isEmpty()) {
-			GraphNode2 currCloneNode, neighborClone, currNode;
-			currNode = queue.poll();
-			currCloneNode = cloneMap.get(currNode);
+			GraphNode2 currNode = queue.poll();
+			GraphNode2 cloneNode = visited.get(currNode.label);
+			//Iterate all neighbors
 			for (GraphNode2 neighbor : currNode.neighbors) {
-				neighborClone = cloneMap.get(neighbor);
-				if (neighborClone == null) {
-					neighborClone = new GraphNode2(neighbor.label);
-					cloneMap.put(neighbor, neighborClone);
+				if (!visited.containsKey(neighbor.label)) {
+					visited.put(neighbor.label, new GraphNode2(neighbor.label));
 					queue.add(neighbor);
 				}
-				currCloneNode.neighbors.add(neighborClone);
+				cloneNode.neighbors.add(visited.get(neighbor.label));
 			}
 		}
-		return cloneMap.get(root);
+		return visited.get(root.label);
 	}
 
 	// DFS traversal using stack & iterative
-	public static GraphNode2 cloneGraph2(GraphNode2 node) {
-		if (node == null) return null;
-
-		HashMap<GraphNode2, GraphNode2> hm = new HashMap<GraphNode2, GraphNode2>();
+	public GraphNode2 cloneGraph2(GraphNode2 root) {
+		if (root == null) return null;
 		LinkedList<GraphNode2> stack = new LinkedList<GraphNode2>();
-		GraphNode2 head = new GraphNode2(node.label);
-		hm.put(node, head);
-		stack.push(node);
+		// visited: node.label, cloneNode
+		HashMap<Integer, GraphNode2> visited = new HashMap<>();
+		visited.put(root.label, new GraphNode2(root.label));
+		stack.push(root);
 
 		while (!stack.isEmpty()) {
-			GraphNode2 curnode = stack.pop();
-			for (GraphNode2 aneighbor : curnode.neighbors) {// check each neighbor
-				if (!hm.containsKey(aneighbor)) {// if not visited,then push to stack
-					stack.push(aneighbor);
-					GraphNode2 newneighbor = new GraphNode2(aneighbor.label);
-					hm.put(aneighbor, newneighbor);
+			GraphNode2 currNode = stack.pop();
+			GraphNode2 cloneNode = visited.get(currNode.label);
+			//Iterate all neighbors
+			for (GraphNode2 neighbor : currNode.neighbors) {
+				if (!visited.containsKey(neighbor.label)) {
+					visited.put(neighbor.label, new GraphNode2(neighbor.label));
+					stack.push(neighbor);
 				}
-
-				hm.get(curnode).neighbors.add(hm.get(aneighbor));
+				cloneNode.neighbors.add(visited.get(neighbor.label));
 			}
 		}
 
-		return head;
+		return visited.get(root.label);
 	}
 
 	// Using DFS traversal recursive
-	public static GraphNode2 cloneGraph3(GraphNode2 root) {
+	public GraphNode2 cloneGraph3(GraphNode2 root) {
 		if (root == null) return root;
-		// CloneMap: node label, Clone node
-		HashMap<Integer, GraphNode2> cloneMap = new HashMap<>();
-		return cloneGraph(root, cloneMap);
+		// visited: node label, Clone node
+		HashMap<Integer, GraphNode2> visited = new HashMap<>();
+		return cloneGraph(root, visited);
 	}
 
-	private static GraphNode2 cloneGraph(GraphNode2 root,
-			HashMap<Integer, GraphNode2> cloneMap) {
-		GraphNode2 clone = new GraphNode2(root.label);
-		cloneMap.put(root.label, clone);
+	private GraphNode2 cloneGraph(GraphNode2 root, HashMap<Integer, GraphNode2> visited) {
+		GraphNode2 cloneNode = new GraphNode2(root.label);
+		visited.put(root.label, cloneNode);
+
 		for (GraphNode2 neigbhor : root.neighbors) {
-			GraphNode2 neighborClone = cloneMap.get(neigbhor.label);
-			if (neighborClone != null) {
-				clone.neighbors.add(neighborClone);
+			if (!visited.containsKey(neigbhor.label)) {
+				cloneNode.neighbors.add(cloneGraph(neigbhor, visited));
 			} else {
-				clone.neighbors.add(cloneGraph(neigbhor, cloneMap));
+				cloneNode.neighbors.add(visited.get(neigbhor.label));
 			}
 		}
-		return clone;
+		return cloneNode;
 	}
 
 	/* Copy List with Random Pointer:
 	 * A linked list is given such that each node contains an additional random pointer which could point to any node
 	 * in the list or null.	Return a deep copy of the list.
 	 */
-	/* Approach1: Using HashMap: Time-O(n), Space:O(n)
-	 * Approach2: Efficient Linear Approach: Time-O(n), Space-O(1)
-	 */
-	// Approach1:
+	// Approach1: Using HashMap: Time-O(n), Space:O(n)
 	public Node copyRandomList1(Node head) {
 		if (head == null) return head;
 		Map<Integer, Node> map = new HashMap<>();
@@ -101,8 +95,7 @@ public class CloneProblems {
 			curr = curr.next;
 		}
 		curr = head;
-		Node cloneHead = map.get(head.val);
-		Node clone = cloneHead;
+		Node clone = map.get(head.val);
 		while (curr != null) {
 			clone.next = curr.next == null ? null : map.get(curr.next.val);
 			clone.random = curr.random == null ? null : map.get(curr.random.val);
@@ -110,18 +103,21 @@ public class CloneProblems {
 			curr = curr.next;
 			clone = clone.next;
 		}
-		return cloneHead;
+		return map.get(head.val);
 	}
 
-	// Approach2:
+	// Approach2: Efficient Linear Approach: Time-O(n), Space-O(1)
 	public Node copyRandomList2(Node head) {
 		if (head == null) return head;
 		Node curr = head, clone;
+		//1.Create clone node after each node 
 		while (curr != null) {
 			clone = new Node(curr.val, curr.next, null);
 			curr.next = clone;
 			curr = clone.next;
 		}
+
+		//2.Arrange random pointer for the clone node 
 		curr = head;
 		clone = null;
 		while (curr != null) {
@@ -129,6 +125,9 @@ public class CloneProblems {
 			clone.random = curr.random == null ? null : curr.random.next;
 			curr = clone.next;
 		}
+
+		//3.Split the original and cloned nodes
+		//Note: Cant merge step 2 and 3, because random pointer which points to behind the curr nodes does not work.
 		curr = head;
 		Node cloneHead = curr.next;
 		clone = cloneHead;

@@ -13,17 +13,16 @@ import com.common.model.TreeNode;
  * Rolling Array or Fibonacci Patterns: 
  * 	Fibonacci numbers are a series of numbers in which each number is the sum of the two preceding numbers.
  *  All these problems follow the same rule. Every iteration result is based on sum of last two or three 
- *  preceeding numbers. Sometime preceeding values calculated with additional logic like min or max of last
- *  two values etc.
+ *  preceeding numbers/results. Sometime preceding values calculated with additional logic like min or max
+ *  of last two values etc.
  * 
  * Two State Sequence Pattern/Two Variable Approach:
- *   - This approach work for sequence problems 
- *     with last values decide the next result
- *   - Use last 2 variables as p1(prev), p2(curr) 
- *   - assign p2 to tmp 
- *   - calculate p2 using p1, based on problem 
- *   - assign tmp to p1 
- *   - Final result will be p2.
+ *   - This approach work for sequence problems with last values decide the next result
+ *   - Use last 2 variables as prev, curr 
+ *   - assign tmp = curr 
+ *   - calculate curr using prev, based on problem 
+ *   - assign prev = tmp 
+ *   - Final result will be curr.
  *
  */
 public class RollingArrayPatterns {
@@ -63,16 +62,28 @@ public class RollingArrayPatterns {
 	 * elements with the maximum sum. Calculate the sum of that subset.
 	 */
 	// Recursive slow solution.
-	public int maxSubsetSum1(int arr[], int index) {
-		if (index == 0) {
-			return arr[0];
-		} else if (index == 1) {
-			return Math.max(arr[0], arr[1]);
-		}
-		return Math.max(maxSubsetSum1(arr, index - 2) + arr[index], maxSubsetSum1(arr, index - 1));
+
+	public int maxSubsetSum1(int[] arr) {
+		//return maxSubsetSum11(arr, arr.length - 1);
+		//or
+		return maxSubsetSum12(arr, 0);
 	}
 
-	public int maxSubsetSum(int[] arr) {
+	private int maxSubsetSum11(int arr[], int i) {
+		if (i == 0) {
+			return arr[0];
+		} else if (i == 1) {
+			return Math.max(arr[0], arr[1]);
+		}
+		return Math.max(arr[i] + maxSubsetSum11(arr, i - 2), maxSubsetSum11(arr, i - 1));
+	}
+
+	private int maxSubsetSum12(int arr[], int i) {
+		if (i >= arr.length) return 0;
+		return Math.max(arr[i] + maxSubsetSum12(arr, i + 2), maxSubsetSum12(arr, i + 1));
+	}
+
+	public int maxSubsetSum4(int[] arr) {
 		if (arr.length == 0) return 0;
 		int curr = 0, prev = 0, temp = 0;
 		for (int a : arr) {
@@ -117,7 +128,7 @@ public class RollingArrayPatterns {
 	 *     4.Bottom Up - 2 variable approach
 	 *     5.Bottom up - odd/even approach
 	 */
-	// 1.Recursion:
+	// 1.Recursion: Solution exactly similar to previous problem
 	public int houseRob11(int[] nums) {
 		return rob1(nums, nums.length - 1);
 	}
@@ -128,18 +139,18 @@ public class RollingArrayPatterns {
 	}
 
 	// 2.DP-Top Down Approach
-	int[] memo;
-
 	public int houseRob12(int[] nums) {
-		memo = new int[nums.length + 1];
+		int[] memo = new int[nums.length + 1];
 		Arrays.fill(memo, -1);
-		return rob2(nums, nums.length - 1);
+		return rob2(nums, 0, memo);
 	}
 
-	private int rob2(int[] nums, int i) {
-		if (i < 0) return 0;
+	//Small modification of recursive solution - recursion from 0 to nums.length
+	private int rob2(int[] nums, int i, int[] memo) {
+		if (i >= nums.length) return 0;
 		if (memo[i] >= 0) return memo[i];
-		memo[i] = Math.max(rob2(nums, i - 2) + nums[i], rob2(nums, i - 1));
+
+		memo[i] = Math.max(nums[i] + rob2(nums, i + 2, memo), rob2(nums, i + 1, memo));
 		return memo[i];
 	}
 
@@ -149,6 +160,7 @@ public class RollingArrayPatterns {
 		if (nums == null || nums.length == 0) return 0;
 		int n = nums.length;
 		if (n == 1) return nums[0];
+
 		int[] dp = new int[n];
 		dp[0] = nums[0];
 		dp[1] = Math.max(nums[0], nums[1]);
@@ -271,6 +283,7 @@ public class RollingArrayPatterns {
 		int n = s.length();
 		if (i == n) return 1;
 		if (i > n || s.charAt(i) == '0') return 0;
+
 		int sum = numDecodings(s, i + 1);
 		if (i + 1 < n) {
 			if (s.charAt(i) == '1' || (s.charAt(i) == '2' && s.charAt(i + 1) <= '6')) {

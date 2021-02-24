@@ -156,7 +156,7 @@ public class KthElementPatterns {
 
 	//Sort:  O(NlogN),
 	public int[][] kClosest1(int[][] points, int K) {
-		//Sort in ascending order
+		//Sort in ascending order based on each distance from origin(0,0).
 		Arrays.sort(points, (p1, p2) -> (getDistance(p1) - getDistance(p2)));
 		return Arrays.copyOfRange(points, 0, K);
 	}

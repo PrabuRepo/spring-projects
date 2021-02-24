@@ -360,22 +360,9 @@ class BinarySearchTree implements TreeOperations {
 		return result;
 	}
 
-	//TODO: Change recursive solution. Because it looks like level by level logic Recursive
+	//DFS:
 	@Override
 	public void levelorder(TreeNode root) {
-		List<List<Integer>> result = new java.util.LinkedList<>();
-		levelOrder(root, result, 0);
-		result.forEach(k -> System.out.println(k));
-	}
-
-	public void levelOrder(TreeNode root, List<List<Integer>> result, int level) {
-		if (root == null) return;
-
-		if (result.size() <= level) result.add(new ArrayList<>());
-		result.get(level).add(root.val);
-
-		levelOrder(root.left, result, level + 1);
-		levelOrder(root.right, result, level + 1);
 	}
 
 	@Override

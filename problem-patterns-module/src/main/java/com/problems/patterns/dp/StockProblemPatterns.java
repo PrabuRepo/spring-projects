@@ -2,7 +2,9 @@ package com.problems.patterns.dp;
 
 import java.util.Arrays;
 
-/* Formula for stock problems:
+/* 
+ * The core problem is finding the maximum difference between two numbers such that the second number is ahead of the first.
+ * Formula for stock problems:
  * 	buyingPrice = Min(buyingPrice, currPrice-profit)   //Find Minimum  - Buying Price
  *  profit = Max(profit, currPrice-buyingPrice)        //Find Max difference - Profit(SP - BP)
  * 

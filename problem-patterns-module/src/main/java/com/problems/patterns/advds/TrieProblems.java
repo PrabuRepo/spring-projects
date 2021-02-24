@@ -14,6 +14,8 @@ import com.problems.patterns.crossdomains.WordProblems;
 
 public class TrieProblems {
 
+	private WordProblems wordProblems = new WordProblems();
+
 	/* Valid Word Square:
 	 * Given a sequence of words, check whether it forms a valid word square.
 	 * For example, the word sequence ["ball","area","lead","lady"] forms a word square because each word reads the same both horizontally and vertically.
@@ -28,14 +30,12 @@ public class TrieProblems {
 	Output: true
 	 */
 	public boolean validWordSquare(List<String> words) {
-		if (words == null || words.size() == 0)
-			return true;
+		if (words == null || words.size() == 0) return true;
 		int m = words.size();
 		for (int i = 0; i < m; i++) {
 			int n = words.get(i).length();
 			for (int j = 0; j < n; j++)
-				if (j >= m || m != n || words.get(i).charAt(j) != words.get(j).charAt(i))
-					return false;
+				if (j >= m || m != n || words.get(i).charAt(j) != words.get(j).charAt(i)) return false;
 		}
 		return true;
 	}
@@ -49,8 +49,7 @@ public class TrieProblems {
 
 	public List<List<String>> wordSquares(String[] words) {
 		List<List<String>> ans = new ArrayList<>();
-		if (words == null || words.length == 0)
-			return ans;
+		if (words == null || words.length == 0) return ans;
 		int len = words[0].length();
 		// Build Trie
 		buildTrie(words);
@@ -71,8 +70,7 @@ public class TrieProblems {
 			TrieNode cur = root;
 			for (char ch : w.toCharArray()) {
 				int idx = ch - 'a';
-				if (cur.children[idx] == null)
-					cur.children[idx] = new TrieNode();
+				if (cur.children[idx] == null) cur.children[idx] = new TrieNode();
 				cur.children[idx].startWith.add(w);
 				cur = cur.children[idx];
 			}
@@ -102,8 +100,7 @@ public class TrieProblems {
 		TrieNode cur = root;
 		for (char ch : prefix.toCharArray()) {
 			int idx = ch - 'a';
-			if (cur.children[idx] == null)
-				return ans;
+			if (cur.children[idx] == null) return ans;
 
 			cur = cur.children[idx];
 		}
@@ -113,14 +110,14 @@ public class TrieProblems {
 
 	// Word Boggle/Word Search I:
 	public void wordSearchI() {
-		WordProblems.wordSearchI(null, null);
+		wordProblems.wordSearchI(null, null);
 	}
 
 	// Word Search II:
 	public void wordSearchII() {
-		WordProblems.wordSearchII1(null, null);
-		WordProblems.wordSearchII2(null, null);
-		WordProblems.wordSearchII3(null, null);
+		wordProblems.wordSearchII1(null, null);
+		wordProblems.wordSearchII2(null, null);
+		wordProblems.wordSearchII3(null, null);
 	}
 
 	//TODO: Move below to Consolidated Module
@@ -129,29 +126,19 @@ public class TrieProblems {
 	 *  Input  : {“geeksforgeeks”, “geeks”, “geek”, “geezer”}	Output : "gee"
 	 *  Input  : {"apple", "ape", "april"} 	Output : "ap"
 	 */
-	int index;
-
 	public String longestCommonPrefix(String[] arr) {
-		TrieNode pCrawl = new TrieNode();
+		TrieNode trie = new TrieNode();
 		for (String str : arr)
-			insert(pCrawl, str);
+			insert(trie, str);
+
 		StringBuilder prefix = new StringBuilder();
-		while (countChildren(pCrawl) == 1 && !pCrawl.isEndOfWord) {
-			pCrawl = pCrawl.children[index];
-			prefix.append((char) ('a' + index));
+		while (trie.childNodes.size() == 1 && !trie.isEndOfWord) {
+			//Since trie has one child node, getting the key directly from the map
+			char ch = trie.childNodes.keySet().iterator().next();
+			trie = trie.childNodes.get(ch);
+			prefix.append(ch);
 		}
 		return prefix.toString();
-	}
-
-	private int countChildren(TrieNode node) {
-		int count = 0;
-		for (int i = 0; i < 26; i++) {
-			if (node.children[i] != null) {
-				count++;
-				index = i;
-			}
-		}
-		return count;
 	}
 
 	/* Palindrome Pairs:
@@ -185,8 +172,7 @@ public class TrieProblems {
 			int index = map.get("");
 			for (int i = 0; i < n; i++) {
 				if (isPalindrome(words[i])) {
-					if (i == index)
-						continue;
+					if (i == index) continue;
 					result.add(Arrays.asList(index, i));
 					result.add(Arrays.asList(i, index));
 				}
@@ -196,8 +182,7 @@ public class TrieProblems {
 			String revStr = new StringBuilder(words[i]).reverse().toString();
 			if (map.containsKey(revStr)) {
 				int revIndex = map.get(revStr);
-				if (i == revIndex)
-					continue;
+				if (i == revIndex) continue;
 				result.add(Arrays.asList(i, revIndex));
 			}
 		}
@@ -208,8 +193,7 @@ public class TrieProblems {
 					String revStr = new StringBuilder(curr.substring(j)).reverse().toString();
 					if (map.containsKey(revStr)) {
 						int index = map.get(revStr);
-						if (index == i)
-							continue;
+						if (index == i) continue;
 						result.add(Arrays.asList(index, i));
 					}
 				}
@@ -217,8 +201,7 @@ public class TrieProblems {
 					String revStr = new StringBuilder(curr.substring(0, j)).reverse().toString();
 					if (map.containsKey(revStr)) {
 						int index = map.get(revStr);
-						if (index == i)
-							continue;
+						if (index == i) continue;
 						result.add(Arrays.asList(i, index));
 					}
 				}
@@ -230,8 +213,7 @@ public class TrieProblems {
 	private boolean isPalindrome(String str) {
 		int l = 0, r = str.length() - 1;
 		while (l < r) {
-			if (str.charAt(l) != str.charAt(r))
-				return false;
+			if (str.charAt(l) != str.charAt(r)) return false;
 			l++;
 			r--;
 		}
@@ -251,8 +233,7 @@ public class TrieProblems {
 
 				// check if the concatenated string is
 				// palindrome
-				if (isPalindrome(check_str))
-					return true;
+				if (isPalindrome(check_str)) return true;
 			}
 		}
 		return false;
@@ -288,10 +269,8 @@ public class TrieProblems {
 					break;
 				}
 			}
-			if (conflict)
-				generateAbbr(target, abbr, visited, q);
-			else
-				return NumAbbr(abbr);
+			if (conflict) generateAbbr(target, abbr, visited, q);
+			else return NumAbbr(abbr);
 		}
 
 		return null;
@@ -299,8 +278,7 @@ public class TrieProblems {
 
 	boolean isConflict(String abbr, String str) {
 		for (int i = 0; i < abbr.length(); i++)
-			if (abbr.charAt(i) != '*' && str.charAt(i) != abbr.charAt(i))
-				return false;
+			if (abbr.charAt(i) != '*' && str.charAt(i) != abbr.charAt(i)) return false;
 		return true;
 	}
 
@@ -346,34 +324,31 @@ public class TrieProblems {
 				count++;
 			}
 		}
-		if (count > 0)
-			ret += count;
+		if (count > 0) ret += count;
 		return ret;
 	}
 
 	/******************************* Trie Operations ***********************************/
 	public void insert(TrieNode root, String word) {
-		int index;
-		TrieNode current = root;
-		for (int i = 0; i < word.length(); i++) {
-			index = word.charAt(i) - 'a';
-			if (current.children[index] == null) {
-				current.children[index] = new TrieNode();
+		TrieNode curr = root;
+		for (char ch : word.toCharArray()) {
+			if (curr.childNodes.get(ch) == null) {
+				curr.childNodes.put(ch, new TrieNode());
 			}
-			current = current.children[index];
+			curr = curr.childNodes.get(ch);
 		}
 		// Set last node of isEndOfWord as true, to mark it as leaf
-		current.isEndOfWord = true;
+		curr.isEndOfWord = true;
 	}
 
 	// Build Trie for word Boogle. Here we add word in the end of char, instead of isEndOfWord flag
 	public TrieNode insert2(TrieNode root, String word) {
 		TrieNode curr = root;
-		for (int i = 0; i < word.length(); i++) {
-			int index = word.charAt(i) - 'a';
-			if (curr.children[index] == null)
-				curr.children[index] = new TrieNode();
-			curr = curr.children[index];
+		for (char ch : word.toCharArray()) {
+			if (curr.childNodes.get(ch) == null) {
+				curr.childNodes.put(ch, new TrieNode());
+			}
+			curr = curr.childNodes.get(ch);
 		}
 		curr.word = word; // Add word; isEndOfWord is not required for this case
 		return root;

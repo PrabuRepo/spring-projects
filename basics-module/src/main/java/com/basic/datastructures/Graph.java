@@ -22,7 +22,7 @@ import com.common.utilities.DisjointSet;
 /* 
  * Graph Representation: 
  * 		- Adjacency Matrix Representation
- * 		- Adjacency List Representation - Using LL array, Using Map
+ * 		- Adjacency List Representation - Using LL array, Using List of List, Using Map
  * 		- Edge List Representation
  * 	    - Incidence Matrix Representation
  */
@@ -223,7 +223,7 @@ public class Graph {
 
 			for (int i = 0; i < N; i++) {
 				// Find the minimum value index in the edgeWeight array
-				int u = findMinWeight(edgeWeight, visited);
+				int u = GraphUtil.findMinWeight(edgeWeight, visited);
 				visited[u] = true;
 
 				for (int v = 0; v < N; v++) {
@@ -234,7 +234,7 @@ public class Graph {
 				}
 			}
 
-			printMST(parent, edgeWeight, N);
+			GraphUtil.printMST(parent, edgeWeight, N);
 		}
 
 		@Override
@@ -256,7 +256,7 @@ public class Graph {
 			// parent[0] = -1;
 
 			for (int i = 0; i < N; i++) {
-				int u = findMinWeight(edgeWeight, visited); // Find the minimum value index in the edgeWeight array
+				int u = GraphUtil.findMinWeight(edgeWeight, visited); // Find the minimum value index in the edgeWeight array
 				visited[u] = true;
 
 				for (int v = 0; v < N; v++)
@@ -264,7 +264,7 @@ public class Graph {
 						edgeWeight[v] = Math.min(edgeWeight[v], edgeWeight[u] + adjMatrix[u][v]);
 			}
 
-			printSP(edgeWeight, N);
+			GraphUtil.printSP(edgeWeight, N);
 		}
 
 		@Override
@@ -286,44 +286,7 @@ public class Graph {
 						if (dist[i][v] != Integer.MAX_VALUE && dist[v][j] != Integer.MAX_VALUE)
 							dist[i][j] = Math.min(dist[i][j], dist[i][v] + dist[v][j]);
 
-			printfloydWarshallSP(dist, N);
-		}
-
-		private int findMinWeight(int[] weight, boolean[] visited) {
-			int index = -1, min = Integer.MAX_VALUE;
-			for (int i = 0; i < weight.length; i++) {
-				if (weight[i] < min && !visited[i]) {
-					min = weight[i];
-					index = i;
-				}
-			}
-			return index;
-		}
-
-		private void printMST(int[] parent, int[] weight, int n) {
-			System.out.println(" Edge " + " Weight ");
-			for (int i = 1; i < n; i++) {
-				System.out.println(i + "-" + parent[i] + "  " + weight[i]); // adjMatrix[i][parent[i]]
-			}
-		}
-
-		private void printfloydWarshallSP(int dist[][], int n) {
-			System.out.println("Following matrix shows the shortest distances between every pair of vertices");
-			for (int i = 0; i < n; ++i) {
-				for (int j = 0; j < n; ++j) {
-					if (dist[i][j] == Integer.MAX_VALUE) System.out.print("INF ");
-					else System.out.print(dist[i][j] + "   ");
-				}
-				System.out.println();
-			}
-		}
-
-		private void printSP(int[] weight, int n) {
-			System.out.println("Shortest path from source vertex to all the vertex");
-			System.out.println(" Vertex " + "  Distance/Weight");
-			for (int i = 0; i < n; i++) {
-				System.out.println("    " + i + "   -    " + weight[i]);
-			}
+			GraphUtil.printfloydWarshallSP(dist, N);
 		}
 
 		@Override
@@ -348,6 +311,9 @@ public class Graph {
 		int N;
 		LinkedList<Integer>[] adjList;
 		LinkedList<GraphNode>[] adjListW;
+
+		// This representation is convenient for non-sequence nodes, char, string etc.
+		List<List<Integer>> adjList2 = new ArrayList<>();
 
 		@Override
 		public void buildDirectedGraph(int[][] edges) {
@@ -537,7 +503,7 @@ public class Graph {
 			int count = 0;
 
 			// Step-1: Compute in-degree
-			indegree = indegree(adjList, N);
+			indegree = GraphUtil.indegree(adjList, N);
 
 			// Step-2: Pick all the vertices with in-degree as 0 and add them into a queue
 			for (int i = 0; i < N; i++)
@@ -673,7 +639,7 @@ public class Graph {
 				}
 			}
 
-			printSP(edgeWeight, N);
+			GraphUtil.printSP(edgeWeight, N);
 
 		}
 
@@ -712,7 +678,7 @@ public class Graph {
 				}
 			}
 
-			printSP(edgeWeight, N);
+			GraphUtil.printSP(edgeWeight, N);
 		}
 
 		@Override
@@ -723,26 +689,6 @@ public class Graph {
 		@Override
 		public void spFloydWarshallAlg() {
 			// TODO Auto-generated method stub
-		}
-
-		private int[] indegree(LinkedList<Integer>[] adjList, int n) {
-			int[] indegree = new int[n];
-
-			for (int i = 0; i < n; i++) {
-				if (adjList[i].size() > 0) {
-					ListIterator<Integer> iterator = adjList[i].listIterator();
-					while (iterator.hasNext()) indegree[iterator.next()]++;
-				}
-			}
-			return indegree;
-		}
-
-		private void printSP(int[] weight, int n) {
-			System.out.println("Shortest path from source vertex to all the vertex");
-			System.out.println(" Vertex " + "  Distance/Weight");
-			for (int i = 0; i < n; i++) {
-				System.out.println("    " + i + "   -    " + weight[i]);
-			}
 		}
 
 		@Override
@@ -783,7 +729,8 @@ public class Graph {
 
 			// Add edges in the adjList
 			for (int[] edge : edges) {
-				if (!adjMap.containsKey(edge[0])) adjMap.put(edge[0], new HashSet<>());
+				adjMap.putIfAbsent(edge[0], new HashSet<>());
+				//or if (!adjMap.containsKey(edge[0])) adjMap.put(edge[0], new HashSet<>());
 				adjMap.get(edge[0]).add(edge[1]);
 			}
 		}
@@ -841,24 +788,24 @@ public class Graph {
 
 		@Override
 		public List<Integer> dfsIterative(int source) {
-			boolean[] visited = new boolean[N];
+			Set<Integer> visited = new HashSet<>();
 			List<Integer> result = new ArrayList<>();
 			dfs2(source, visited, result);
 			return result;
 		}
 
-		private void dfs2(int s, boolean[] visited, List<Integer> result) {
+		private void dfs2(int s, Set<Integer> visited, List<Integer> result) {
 			Stack<Integer> stack = new Stack<>();
-			visited[s] = true;
+			visited.add(s);
 			stack.push(s);
 			while (!stack.isEmpty()) {
 				int v = stack.pop();
 				result.add(v);
 				if (adjMap.get(v) == null) continue;
 				for (int adjNode : adjMap.get(v)) {
-					if (visited[adjNode]) continue;
-					visited[adjNode] = true;
-					stack.push(adjNode);
+					if (visited.add(adjNode)) {
+						stack.push(adjNode);
+					}
 				}
 			}
 		}
@@ -871,18 +818,17 @@ public class Graph {
 
 		@Override
 		public List<Integer> bfsIterative(int source) {
-			boolean[] visited = new boolean[N];
+			Set<Integer> visited = new HashSet<>();
 			Queue<Integer> queue = new LinkedList<>();
 			List<Integer> result = new ArrayList<>();
 			queue.add(source);
-			visited[source] = true;
+			visited.add(source);
 			while (!queue.isEmpty()) {
 				int v = queue.poll();
 				result.add(v);
 				if (adjMap.get(v) == null) continue;
 				for (int adjNode : adjMap.get(v)) {
-					if (!visited[adjNode]) {
-						visited[adjNode] = true;
+					if (visited.add(adjNode)) {
 						queue.add(adjNode);
 					}
 				}
@@ -937,7 +883,7 @@ public class Graph {
 			int count = 0;
 
 			// Step-1: Compute in-degree
-			indegree = indegree(adjMap);
+			indegree = GraphUtil.indegree(adjMap);
 
 			// Step-2: Pick all the vertices with in-degree as 0 and add them into a queue
 			for (int i = 0; i < N; i++)
@@ -982,15 +928,13 @@ public class Graph {
 			// If this condition satisfies, then adjMap contains cycle
 			if (recStack.contains(v)) return true;
 
-			if (visited.contains(v)) return false;
-
 			// Mark vertex as visited and set recursion stack
 			visited.add(v);
 			recStack.add(v);
 
 			if (adjMap.get(v) != null) {
 				for (int adjVertex : adjMap.get(v)) {
-					if (hasCycle(adjVertex, visited, recStack)) return true;
+					if (!visited.contains(adjVertex) && hasCycle(adjVertex, visited, recStack)) return true;
 				}
 			}
 			// Reset the recursion stack 
@@ -1032,19 +976,6 @@ public class Graph {
 		public void spFloydWarshallAlg() {
 			// TODO Auto-generated method stub
 
-		}
-
-		private int[] indegree(Map<Integer, Set<Integer>> adjMap) {
-			int n = adjMap.size();
-			int[] indegree = new int[n];
-
-			for (Map.Entry<Integer, Set<Integer>> entry : adjMap.entrySet()) {
-				if (entry.getValue() == null) continue;
-				for (int adjNode : entry.getValue())
-					indegree[adjNode]++;
-			}
-
-			return indegree;
 		}
 
 		//TODO: Rewrite this
@@ -1621,4 +1552,69 @@ public class Graph {
 		int weight;
 	}
 
+	static class GraphUtil {
+
+		private static int[] indegree(Map<Integer, Set<Integer>> adjMap) {
+			int n = adjMap.size();
+			int[] indegree = new int[n];
+
+			for (Map.Entry<Integer, Set<Integer>> entry : adjMap.entrySet()) {
+				if (entry.getValue() == null) continue;
+				for (int adjNode : entry.getValue())
+					indegree[adjNode]++;
+			}
+
+			return indegree;
+		}
+
+		private static int[] indegree(LinkedList<Integer>[] adjList, int n) {
+			int[] indegree = new int[n];
+
+			for (int i = 0; i < n; i++) {
+				if (adjList[i].size() > 0) {
+					ListIterator<Integer> iterator = adjList[i].listIterator();
+					while (iterator.hasNext()) indegree[iterator.next()]++;
+				}
+			}
+			return indegree;
+		}
+
+		private static int findMinWeight(int[] weight, boolean[] visited) {
+			int index = -1, min = Integer.MAX_VALUE;
+			for (int i = 0; i < weight.length; i++) {
+				if (weight[i] < min && !visited[i]) {
+					min = weight[i];
+					index = i;
+				}
+			}
+			return index;
+		}
+
+		private static void printSP(int[] weight, int n) {
+			System.out.println("Shortest path from source vertex to all the vertex");
+			System.out.println(" Vertex " + "  Distance/Weight");
+			for (int i = 0; i < n; i++) {
+				System.out.println("    " + i + "   -    " + weight[i]);
+			}
+		}
+
+		private static void printMST(int[] parent, int[] weight, int n) {
+			System.out.println(" Edge " + " Weight ");
+			for (int i = 1; i < n; i++) {
+				System.out.println(i + "-" + parent[i] + "  " + weight[i]); // adjMatrix[i][parent[i]]
+			}
+		}
+
+		private static void printfloydWarshallSP(int dist[][], int n) {
+			System.out.println("Following matrix shows the shortest distances between every pair of vertices");
+			for (int i = 0; i < n; ++i) {
+				for (int j = 0; j < n; ++j) {
+					if (dist[i][j] == Integer.MAX_VALUE) System.out.print("INF ");
+					else System.out.print(dist[i][j] + "   ");
+				}
+				System.out.println();
+			}
+		}
+
+	}
 }

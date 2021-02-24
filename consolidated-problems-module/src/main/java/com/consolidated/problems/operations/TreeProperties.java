@@ -22,10 +22,6 @@ public interface TreeProperties {
 
 	public int countNodes2(TreeNode root);
 
-	/* Height of Binary Tree == Depth of  Binary Tree == Level of Binary Tree
-	 * Height of the tree: Height from root to longest leaf
-	 * Maximum Depth of Binary Tree or Depth of the Tree: Path/no of nodes from root to longest leaf Depth of the tree
-	 */
 	public int heightOfTree1(TreeNode root);
 
 	public int heightOfTree2(TreeNode root);
@@ -37,7 +33,9 @@ public interface TreeProperties {
 
 	public int heightOfNode(TreeNode root, int data);
 
-	public int depthOfNode(TreeNode root, int data);
+	public int depthOfNode1(TreeNode root, int data);
+
+	public int depthOfNode2(TreeNode root, int data);
 
 	public int levelOfNode1(TreeNode root, int data);
 

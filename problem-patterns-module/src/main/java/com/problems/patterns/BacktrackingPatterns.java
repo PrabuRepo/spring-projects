@@ -1,7 +1,6 @@
 package com.problems.patterns;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -9,52 +8,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
+/*
+ * Backtracking Problems:
+ * 	All the problems here follows the auxiliary buffer technique
+ */
 public class BacktrackingPatterns {
 
-	/********************* 1.Backtracking – Auxiliary Buffer Technique I ***********************/
-	// Combination Sum-II
-	public List<List<Integer>> combinationSum2(int[] nums, int target) {
-		List<List<Integer>> res = new ArrayList<>();
-		Arrays.sort(nums);
-		backtrack5(res, new ArrayList<>(), nums, target, 0);
-		res.stream().forEach(k -> System.out.print(k + ", "));
-		return res;
-	}
-
-	private void backtrack5(List<List<Integer>> res, List<Integer> buffer, int[] nums, int target, int startIndex) {
-		if (target < 0) return;
-		else if (target == 0) res.add(new ArrayList<>(buffer));
-		else {
-			for (int i = startIndex; i < nums.length; i++) {
-				if (i > startIndex && nums[i] == nums[i - 1]) continue;
-				buffer.add(nums[i]);
-				backtrack5(res, buffer, nums, target - nums[i], i + 1);
-				buffer.remove(buffer.size() - 1);
-			}
-		}
-	}
-
-	// Combination Sum-III
-	public List<List<Integer>> combinationSum3(int n, int k) {
-		List<List<Integer>> res = new ArrayList<>();
-		backtrack6(n, k, 1, new ArrayList<>(), res);
-		res.stream().forEach(data -> System.out.print(data + ", "));
-		return res;
-	}
-
-	public void backtrack6(int sum, int k, int startIndex, List<Integer> buffer, List<List<Integer>> res) {
-		if (buffer.size() == k && sum == 0) res.add(new ArrayList<>(buffer));
-		else if (buffer.size() >= k || sum < 0) return;
-		else {
-			for (int i = startIndex; i <= 9; i++) {
-				buffer.add(i);
-				backtrack6(sum - i, k, i + 1, buffer, res);
-				buffer.remove(buffer.size() - 1);
-			}
-		}
-	}
-
-	// Factor Combinations
+	/* Factor Combinations
+	 * Numbers can be regarded as product of its factors. For example, 
+	 * 	8 = 2 x 2 x 2; 2 x 4.
+	 * 12 = [[2, 6], [2, 2, 3],[3, 4]]
+	 * Write a function that takes an integer n and return all possible combinations of its factors.
+	 * You may assume that n is always positive. Factors should be greater than 1 and less than n.
+	 */
+	//Division approach
 	public List<List<Integer>> getFactors(int n) {
 		List<List<Integer>> res = new ArrayList<>();
 		backtrack7(n, 2, res, new ArrayList<>());
@@ -63,7 +30,7 @@ public class BacktrackingPatterns {
 	}
 
 	public void backtrack7(int n, int startIndex, List<List<Integer>> res, List<Integer> buffer) {
-		if (n == 1) {
+		if (n == 1 && buffer.size() > 1) { // buffer.size() > 1 -> This condition is to eliminate 'n' as single value
 			res.add(new ArrayList<>(buffer));
 		} else {
 			for (int i = startIndex; i <= n; i++) {
@@ -75,11 +42,35 @@ public class BacktrackingPatterns {
 		}
 	}
 
+	//Multiplication approach:
+	public List<List<Integer>> getFactors2(int n) {
+		List<List<Integer>> res = new ArrayList<>();
+		backtrack7(n, 2, 1, res, new ArrayList<>());
+		res.stream().forEach(data -> System.out.print(data + ", "));
+		return res;
+	}
+
+	public void backtrack7(int n, int startIndex, int prod, List<List<Integer>> res, List<Integer> buffer) {
+		if (prod > n || startIndex > n) return;
+
+		if (prod == n) {
+			res.add(new ArrayList<>(buffer));
+		} else {
+			for (int i = startIndex; i <= n; i++) {
+				if (i * prod > n) break;
+				if (n % i != 0) continue;
+				buffer.add(i);
+				backtrack7(n, i, i * prod, res, buffer);
+				buffer.remove(buffer.size() - 1);
+			}
+		}
+	}
+
 	/*
 	 *  Letter Case Permutation:
 	 *  Examples: Input: S = "a1b2" Output: ["a1b2", "a1B2", "A1b2", "A1B2"]
 	 */
-	// Approach1: DFS
+	// Approach1: DFS - Time:O(2^n), here n is no of alphabets in string 
 	public List<String> letterCasePermutation1(String S) {
 		List<String> result = new ArrayList<>();
 		backtrack(S.toCharArray(), 0, result);
@@ -136,7 +127,6 @@ public class BacktrackingPatterns {
 		return new ArrayList<String>(set);
 	}
 
-	/********************* 2.Backtracking – Auxiliary Buffer Technique problems ***********************/
 	/* Palindrome Partitioning: 
 	 * Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome
 	 *  partitioning of s.
@@ -151,8 +141,9 @@ public class BacktrackingPatterns {
 	}
 
 	public void backtrack12(List<List<String>> res, List<String> buffer, String s, int startIndex) {
-		if (startIndex == s.length()) res.add(new ArrayList<>(buffer));
-		else {
+		if (startIndex == s.length()) {
+			res.add(new ArrayList<>(buffer));
+		} else {
 			for (int i = startIndex; i < s.length(); i++) {
 				if (isPalindrome(s, startIndex, i)) {
 					buffer.add(s.substring(startIndex, i + 1));
@@ -164,7 +155,9 @@ public class BacktrackingPatterns {
 	}
 
 	public boolean isPalindrome(String s, int low, int high) {
-		while (low < high) {if (s.charAt(low++) != s.charAt(high--)) return false;}
+		while (low < high) {
+			if (s.charAt(low++) != s.charAt(high--)) return false;
+		}
 		return true;
 	}
 
@@ -204,9 +197,11 @@ public class BacktrackingPatterns {
 		}
 	}
 
-	/*Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could
-	 represent.
-	 Combination: Eg: 236 -> 3C1*3C1*3C1 -> 3*3*3 -> 27 combinations
+	/*
+	 * Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent.
+	 * Eg: 236 -> 3C1*3C1*3C1 -> 3*3*3 -> 27 combinations
+	 * Eg: 579 -> 3C1*4C1*4C1 -> 3*4*4 -> 48 combinations
+	 * Time complexity: O(n*O(3!)) or O(n*(4!))
 	 */
 	public List<String> letterCombinations(String num) {
 		if (num.length() == 0) return new ArrayList<>();
@@ -234,38 +229,80 @@ public class BacktrackingPatterns {
 			//2.Find candidates
 			String letters = phoneNoMap.get(num.charAt(index));
 			//3.Place candidate in buffer
-			for (int i = 0; i < letters.length(); i++) {
-				buffer.append(letters.charAt(i));
-				//4.Recurse to next index
+			for (char ch : letters.toCharArray()) {
+				buffer.append(ch);
+				//4.Recurse to next index or number
 				backtrack13(num, index + 1, phoneNoMap, buffer, res);
 				buffer.deleteCharAt(index);
 			}
 		}
 	}
 
-	// Generate IP Addresses/Restore IP Addresses
-	public List<String> restoreIpAddresses1(String s) {
+	/* Generate IP Addresses/Restore IP Addresses:
+	 * Given a string s containing only digits, return all possible valid IP addresses that can be obtained from s. You can return them in any order.
+	 * A valid IP address consists of exactly four integers, each integer is between 0 and 255, separated by single dots and cannot have leading zeros.
+	 * For example, "0.1.2.201" and "192.168.1.1" are valid IP addresses and "0.011.255.245", "192.168.1.312" and "192.168@1.1" are invalid IP addresses.
+	 * Example 1: Input: s = "25525511135"; Output: ["255.255.11.135","255.255.111.35"]
+	 * Example 2: Input: s = "0000"; Output: ["0.0.0.0"]
+	 * Example 3: Input: s = "010010"; Output: ["0.10.0.10","0.100.1.0"]
+	 */
+
+	//Approach1: Iterative Method; Time: O(27*n), 27 - for 3*3*3 iterations, n -> Substring process 
+	public List<String> restoreIpAddresses(String s) {
+		List<String> result = new ArrayList<>();
+		if (s == null || s.length() < 4) return result;
+
+		int n = s.length();
+		for (int i = 1; i <= 3; i++) { // first cut
+			if (n - i > 9) continue;
+			for (int j = i + 1; j <= i + 3; j++) { // second cut
+				if (n - j > 6) continue;
+				for (int k = j + 1; k <= j + 3 && k < n; k++) { // third cut 
+					if (n - k > 3) continue;
+					int a = Integer.valueOf(s.substring(0, i));
+					int b = Integer.valueOf(s.substring(i, j));
+					int c = Integer.valueOf(s.substring(j, k));
+					int d = Integer.valueOf(s.substring(k)); // Make sure that k < n, otherwise empty string throws number format exception
+
+					if (a > 255 || b > 255 || c > 255 || d > 255) continue;
+					String ip = a + "." + b + "." + c + "." + d;
+					// this is to reject those int's parsed from "01" or "00"-like substrings. n+3=> 3 denotes three dots
+					if (ip.length() < n + 3) continue;
+					result.add(ip);
+				}
+			}
+		}
+		return result;
+	}
+
+	//Approach1: Iterative Method; Time: O(81*n), 27 - for 3*3*3*3 iterations, n -> Substring process
+	public List<String> restoreIpAddresses2(String s) {
 		List<String> res = new ArrayList<>();
 		for (int i = 1; i <= 3; i++)
 			for (int j = 1; j <= 3; j++)
 				for (int k = 1; k <= 3; k++)
 					for (int l = 1; l <= 3; l++)
+						//If i+j+k+l meets exact input(s) length, then look for valid ip address 
 						if (i + j + k + l == s.length()) {
 							String a = s.substring(0, i);
-							if (Integer.parseInt(a) > 255 || (a.charAt(0) == '0' && a.length() > 1)) continue;
+							if (isValid(a)) continue;
 							String b = s.substring(i, i + j);
-							if (Integer.parseInt(b) > 255 || (b.charAt(0) == '0' && b.length() > 1)) continue;
+							if (isValid(b)) continue;
 							String c = s.substring(i + j, i + j + k);
-							if (Integer.parseInt(c) > 255 || (c.charAt(0) == '0' && c.length() > 1)) continue;
+							if (isValid(c)) continue;
 							String d = s.substring(i + j + k, i + j + k + l);
-							if (Integer.parseInt(d) > 255 || (d.charAt(0) == '0' && d.length() > 1)) continue;
+							if (isValid(d)) continue;
 							res.add(a + "." + b + "." + c + "." + d);
 						}
 		return res;
 	}
 
+	private boolean isValid(String s) {
+		return (Integer.parseInt(s) > 255 || (s.charAt(0) == '0' && s.length() > 1));
+	}
+
 	// Approach2: Recursive Method; DFS Search
-	public List<String> restoreIpAddresses2(String s) {
+	public List<String> restoreIpAddresses3(String s) {
 		List<String> result = new ArrayList<String>();
 		restoreIp(s, result, 0, "", 0);
 		result.stream().forEach(k -> System.out.print(k + ", "));
@@ -282,5 +319,11 @@ public class BacktrackingPatterns {
 			if (Integer.parseInt(s) > 255 || (s.startsWith("0") && s.length() > 1)) continue;
 			restoreIp(ip, result, currIndex + i, ipCombinations + s + (count < 3 ? "." : ""), count + 1);
 		}
+	}
+
+	public static void main(String[] args) {
+		BacktrackingPatterns ob = new BacktrackingPatterns();
+		System.out.println("Factor Combinations: ");
+		ob.getFactors(12);
 	}
 }

@@ -7,9 +7,13 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.TreeSet;
 
+import com.problems.patterns.ds.HeapPatterns;
+import com.problems.patterns.ds.QueuePatterns;
+
 public class SlidingWindowArrayPatterns {
 
 	/***************************** Sliding Window: Array ******************************/
+
 	public void subarrayConsolidation() {
 		int[] arr = { 2, 5, 6, -1, -3, 6, 8, -4, 7 };
 		int k = 12;
@@ -27,7 +31,8 @@ public class SlidingWindowArrayPatterns {
 		subarraySumKMinLen2(arr, k);
 
 		subarraySumLenCloseToK(arr, k);
-		subarraySumCloseToK2(arr, k);
+		subarraySumCloseToK21(arr, k);
+		subarraySumCloseToK22(arr, k);
 
 		subarraySumZero1(arr);
 		subarraySumZero2(arr);
@@ -45,7 +50,89 @@ public class SlidingWindowArrayPatterns {
 		subarrayMaxConsecutiveOnesII2(arr);
 	}
 
-	/************* 1.Varying Window Size: Move from left to right till reach the target *************/
+	/***************** 1.Fixed Window: Calculate value for each fixed window ***********************/
+	/*
+	 * This pattern solves problems for the given input array and fixed window size. We have to perform action 
+	 * on this given window size depends on problem such as add, distinct no, avg etc.
+	 */
+
+	/* Sliding Window Motivation Problem: To understand the Sliding Window Concepts
+	 * Find the sum of subarrays of size k in a given array
+	 * Solution:
+	 *   BruteForce Algorithm: O(nk)
+	 *   Sliding Window Algorithm: O(n)
+	 */
+	public int[] subarraySumInWindowK(int[] arr, int k) {
+		int sum = 0, n = arr.length;
+		int[] result = new int[n - k + 1];
+		for (int i = 0; i < n; i++) {
+			sum += arr[i];
+
+			if (i >= k - 1) {
+				result[i - k + 1] = sum; // or initialize index=0 and increment->result[index++]
+				sum -= arr[i - k + 1];
+			}
+		}
+		return result;
+	}
+
+	/* Maximum Average Subarray I, II/Maximum average subarray of size k:
+	 * Given an array consisting of n integers, find the contiguous subarray of given length k that has the maximum
+	 * average value. And you need to output the maximum average value. 
+	 * Example 1: Input: [1,12,-5,-6,50,3], k = 4 Output: 12.75 Explanation: Maximum average is (12-5-6+50)/4 = 51/4 = 12.75
+	 */
+	public double subarrayAvgMaxInWindowK(int[] arr, int k) {
+		if (arr.length == 0 || arr.length < k) return 0;
+
+		int sum = 0;
+		double maxAvg = Integer.MIN_VALUE;
+		for (int i = 0; i < arr.length; i++) {
+			sum += arr[i];
+
+			if (i >= k - 1) {
+				maxAvg = Math.max(maxAvg, (double) sum / k);
+				sum -= arr[i - k + 1];
+			}
+		}
+
+		return maxAvg;
+	}
+
+	/*Count distinct elements in every window:
+	 * Given an array A[] of size N and an integer K. Your task is to complete the function countDistinct() which prints
+	 * the count of distinct numbers in all windows of size k in the array A[].
+	 */
+	public int[] countDistinctInWindowK(int A[], int k) {
+		Map<Integer, Integer> map = new HashMap<>(); // Number, count
+		int n = A.length;
+		int[] result = new int[n - k + 1];
+		for (int i = 0; i < n; i++) {
+			map.put(A[i], map.getOrDefault(A[i], 0) + 1);
+
+			if (i >= k - 1) {
+				result[i - k + 1] = map.size();
+				int count = map.get(A[i - k + 1]);
+				if (count == 1) map.remove(A[i - k + 1]);
+				else map.put(A[i - k + 1], --count);
+			}
+		}
+		return result;
+	}
+
+	//TODO: Moving Average from Data Stream - Queue/Array - Design
+
+	// Few more sliding window pattern problems
+	QueuePatterns queuePatterns = new QueuePatterns();
+	HeapPatterns heapPatterns = new HeapPatterns();
+
+	public void slidingWindow(int[] nums, int k) {
+		queuePatterns.maxSlidingWindow(nums, k);
+		queuePatterns.maxMin(k, nums);
+		heapPatterns.medianSlidingWindow1(nums, k);
+		heapPatterns.medianSlidingWindow2(nums, k);
+	}
+
+	/************* 2.Varying Window Size: Move from left to right till reach the target *************/
 	/* Pattern Understanding:
 	 * This pattern problems do not have fixed window/range size. Left and Right pointers varies based on the
 	 * given problem.
@@ -102,7 +189,7 @@ public class SlidingWindowArrayPatterns {
 			int tempMax = maxProd;
 			maxProd = max(maxProd * num, minProd * num, num);
 			minProd = min(tempMax * num, minProd * num, num);
-			result = Math.max(maxProd, result);
+			result = Math.max(result, maxProd);
 		}
 		return result;
 	}
@@ -164,25 +251,31 @@ public class SlidingWindowArrayPatterns {
 	 * Longest Subarray having sum of elements atmost ‘k’:
 	 * Given an array, find the maximum sum of subarray close to k but not larger than k
 	 */
-	//TODO: Solution is wrong, Rewrite this 
+	//TODO: Test this solution
 	// Approach1: Using Sliding Window -> This works only array has positive elements
-	public int subarraySumLenCloseToK(int[] arr, int k) {
-		int sum = 0, n = arr.length, len = 0, maxLen = 0;
+	public int subarraySumLenCloseToK(int[] nums, int k) {
+		if (nums.length == 0) return 0;
 
-		for (int i = 0; i < n; i++) {
-			if ((sum + arr[i]) <= k) { // If adding current element doesn't cross limit add it to current window
-				sum += arr[i];
-				len++;
-			} else if (sum != 0) { // Else, remove first element of current window.
-				sum = sum - arr[i - len] + arr[i];
+		int l = 0, r = 0, sum = 0;
+		int maxLen = Integer.MIN_VALUE, prevSum = -1;
+		while (r < nums.length) {
+			sum += nums[r];
+			while (sum > k) {
+				sum -= nums[l];
+				l++;
 			}
-
-			maxLen = Math.max(len, maxLen);
+			//Record and Move on: To find atmost 'k'
+			if (prevSum == -1 || sum - k < prevSum - k) {
+				prevSum = sum;
+				maxLen = Math.max(maxLen, r - l + 1);
+			}
+			r++;
 		}
-		return maxLen;
+		return maxLen == Integer.MIN_VALUE ? 0 : maxLen;
 	}
 
-	/* Max Consecutive one I:
+	/* 
+	 * Max Consecutive one I:
 	 * Given a binary array, find the maximum number of consecutive 1s in this array. Example 1: Input: [1,1,0,1,1,1]
 	 * Output: 3
 	 */
@@ -351,6 +444,14 @@ public class SlidingWindowArrayPatterns {
 			}
 
 			map.put(sum, map.getOrDefault(sum, 0) + 1);
+
+			//or
+			/*
+			 map.put(k, 1); //Initalize 'k' as 1, instead of 0. 
+			 if (map.containsKey(sum)) {
+				count += map.get(sum);
+			}
+			map.put(sum + k, map.getOrDefault(sum + k, 0) + 1);*/
 		}
 		return count;
 	}
@@ -380,7 +481,19 @@ public class SlidingWindowArrayPatterns {
 
 	//TODO: Find Minimum Length Sub Array With Sum K
 	public int subarraySumKMinLen2(int[] nums, int k) {
-		return 0;
+		int minLen = Integer.MAX_VALUE, sum = 0;
+		//Hashmap: Key: sum[0,i - 1]; Val: index
+		HashMap<Integer, Integer> map = new HashMap<>();
+		map.put(0, -1); //Use this one or below commented -> if (sum == k) 
+		for (int i = 0; i < nums.length; i++) {
+			sum += nums[i];
+			//if (sum == k) minLen = Math.minLen(minLen, i + 1);
+			if (map.containsKey(sum - k)) {
+				minLen = Math.min(minLen, i - map.get(sum - k));
+			}
+			map.put(sum, i);
+		}
+		return minLen;
 	}
 
 	/* Maximum Sum of Subarray Close to K:
@@ -388,8 +501,30 @@ public class SlidingWindowArrayPatterns {
 	 */
 	// Approach2: Using Prefix Sum approach - Works for both +ve and -ve numbers
 	//Time Complexity: O(nlogn); Tree Datastructure takes o(logn) time for add() and ceiling() methods
-	//TODO: Revisit and understand this solution
-	public int subarraySumCloseToK2(int[] arr, int k) {
+	public int subarraySumCloseToK21(int[] arr, int k) {
+		int sum = 0;
+		TreeSet<Integer> set = new TreeSet<Integer>();
+		int maxLen = Integer.MIN_VALUE;
+		set.add(0);
+
+		for (int i = 0; i < arr.length; i++) {
+			sum = sum + arr[i];
+
+			Integer ceiling = set.ceiling(sum - k);
+			if (ceiling != null) {
+				maxLen = Math.max(maxLen, sum - ceiling);
+			}
+
+			set.add(sum);
+		}
+
+		return maxLen;
+	}
+
+	/* Maximum Sum of Subarray Close to K:
+	 * Given an array, find the maximum sum of subarray close to k but not larger than k
+	 */
+	public int subarraySumCloseToK22(int[] arr, int k) {
 		int sum = 0, closestSum = Integer.MIN_VALUE;
 		//Here TreeSet datastructure used instead of Map to find the nearest sum k
 		TreeSet<Integer> set = new TreeSet<Integer>();
@@ -408,83 +543,16 @@ public class SlidingWindowArrayPatterns {
 		return closestSum;
 	}
 
-	/***************** 3.Fixed Window: Calculate value for each fixed window ***********************/
-	/*
-	 * This pattern solves problems for the given input array and fixed window size. We have to perform action 
-	 * on this given window size depends on problem such as add, distinct no, avg etc.
-	 */
-
-	/* Sliding Window Motivation Problem: To understand the Sliding Window Concepts
-	 * Find the sum of subarrays of size k in a given array
-	 * Solution:
-	 *   BruteForce Algorithm: O(nk)
-	 *   Sliding Window Algorithm: O(n)
-	 */
-	public int[] subarraySumInWindowK(int[] arr, int k) {
-		int sum = 0, n = arr.length;
-		int[] result = new int[n - k + 1];
-		for (int i = 0; i <= n; i++) {
-			if (i >= k) {
-				result[i - k] = sum; // or initialize index=0 and increment->result[index++]
-				sum -= arr[i - k];
-			}
-			if (i == n) break;
-			sum += arr[i];
-		}
-		return result;
-	}
-
-	/* Maximum Average Subarray I, II/Maximum average subarray of size k:
-	 * Given an array consisting of n integers, find the contiguous subarray of given length k that has the maximum
-	 * average value. And you need to output the maximum average value. 
-	 * Example 1: Input: [1,12,-5,-6,50,3], k = 4 Output: 12.75 Explanation: Maximum average is (12-5-6+50)/4 = 51/4 = 12.75
-	 */
-	public double subarrayAvgMaxInWindowK(int[] arr, int k) {
-		if (arr.length == 0 || arr.length < k) return 0;
-
-		int sum = 0;
-		double maxAvg = Integer.MIN_VALUE;
-		for (int i = 0; i < arr.length; i++) {
-			if (i >= k) {
-				maxAvg = Math.max(maxAvg, (double) sum / k);
-				sum -= arr[i - k];
-			}
-			sum += arr[i];
-		}
-
-		return Math.max(maxAvg, (double) sum / k);
-	}
-
-	/*Count distinct elements in every window:
-	 * Given an array A[] of size N and an integer K. Your task is to complete the function countDistinct() which prints
-	 * the count of distinct numbers in all windows of size k in the array A[].
-	 */
-	public void countDistinctInWindowK(int A[], int k) {
-		Map<Integer, Integer> map = new HashMap<>(); // Number, count
-		int n = A.length;
-		for (int i = 0; i < n; i++) {
-			if (i >= k) {
-				int val = map.get(A[i - k]);
-				if (val > 1) map.put(A[i - k], --val);
-				else map.remove(A[i - k]);
-			}
-
-			map.put(A[i], map.getOrDefault(A[i], 0) + 1);
-
-			if (i >= k - 1) System.out.print(map.size() + " ");
-		}
-	}
-
-	//TODO: Moving Average from Data Stream - Queue/Array - Design
-
 	public static void main(String[] args) {
 		SlidingWindowArrayPatterns ob = new SlidingWindowArrayPatterns();
 		int[] arr = { 3, 9, 1, 7, 8, 2 };
 		System.out.println(ob.subarraySumK(arr, 1));
 
+		int[] nums1 = { 1, 3, 2, 4, 2, 1 };
+		System.out.println("Longest subarray: " + ob.subarraySumLenCloseToK(nums1, 7));
 		int[] nums = { 4, -1, 5 };
-		System.out.println("Longest subarray: " + ob.subarraySumLenCloseToK(nums, 7));
-		System.out.println("Approach2: " + ob.subarraySumCloseToK2(nums, 7));
+		System.out.println("Closer to K, but Not larger than K: " + ob.subarraySumCloseToK21(nums, 7));
+		System.out.println("Closer to K, but larger than K: " + ob.subarraySumCloseToK22(nums, 7));
 
 		System.out.println(Arrays.toString(ob.subarraySumMaxRange(nums)));
 	}

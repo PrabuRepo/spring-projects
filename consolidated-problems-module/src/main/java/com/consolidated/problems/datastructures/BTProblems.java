@@ -28,73 +28,66 @@ public class BTProblems implements TreeProperties, TreePaths {
 
 	/************************ Type1: Basics & Properties ************************/
 
+	//Time: O(n), Space:(1)
 	@Override
 	public int sizeOfTree1(TreeNode root) {
 		if (root == null) return 0;
 		return 1 + sizeOfTree1(root.left) + sizeOfTree1(root.right);
 	}
 
+	//Time: O(n), Space:(n)
 	@Override
 	public int sizeOfTree2(TreeNode root) {
-		return 0;
+		int count = 0;
+		Queue<TreeNode> queue = new LinkedList<>();
+		queue.add(root);
+		while (!queue.isEmpty()) {
+			count++;
+			TreeNode curr = queue.poll();
+			if (curr.left != null) queue.add(curr.left);
+			if (curr.right != null) queue.add(curr.right);
+		}
+		return count;
 	}
 
 	/* Count Complete Tree Nodes/Check Completeness of a BT
-	 * Count Complete Tree Nodes: Given a complete binary tree, count the number of
-	 * nodes. Definition of a complete binary tree: In a complete binary tree every
-	 * level, except possibly the last, is completely filled, and all nodes in the
-	 * last level are as far left as possible. It can have between 1 and 2h nodes
-	 * inclusive at the last level h.
+	 * Count Complete Tree Nodes: Given a complete binary tree, count the number of nodes. Definition of a complete binary tree: 
+	 * In a complete binary tree every level, except possibly the last, is completely filled, and all nodes in the last level are 
+	 * as far left as possible. It can have between 1 and 2h nodes inclusive at the last level h.
 	 */
 	/*
-	 * Approach1: Time Complexity-O(log(n)^2) - A fully completed tree has node
-	 * number: count = 2 ^ h - 1 - Compare left height and right height, if equal,
-	 * use the formular, otherwise recursively search left and right at next level -
-	 * The search pattern is very similar to binary search, the difference of
-	 * heights ethier exsits in left side, or right side - Due to the reason stated
-	 * in point 3, the time complexity is h ^ 2, there is h times for each level,
-	 * and h times for calculating height at each level
+	 * Approach1: A fully completed tree has nodes atmost 2 ^ h - 1. h is height of the tree or level of the tree 
+	 * Time Complexity-O(log(n)^2) or O(h^2); 
+	 *  Recursion -> O(h)+O(h-1)+O(h-2)+...O(1) = O(h^2)
 	 */
 	@Override
 	public int countNodes1(TreeNode root) {
-		int lh = leftHeight(root);
-		int rh = rightHeight(root);
+		int lh = leftSize(root); //no of nodes in left 
+		int rh = rightSize(root); //no of nodes in right
 
+		//if no of nodes are equals in both side, then total nodes in tree = 2^h-1
 		if (lh == rh) return (1 << lh) - 1; // or return (int)Math.pow(2, lh) -1;
 
 		return 1 + countNodes1(root.left) + countNodes1(root.right);
 	}
 
 	/*
-	 * Approach2: Time Complexity-O(log(n)^2) The height of a tree can be found by
-	 * just going left. Let a single node tree have height 0. Find the height h of
-	 * the whole tree. If the whole tree is empty, i.e., has height -1, there are 0
-	 * nodes.
-	 * 
-	 * Otherwise check whether the height of the right subtree is just one less than
-	 * that of the whole tree, meaning left and right subtree have the same height.
-	 * - If yes, then the last node on the last tree row is in the right subtree and
-	 * the left subtree is a full tree of height h-1. So we take the 2^h-1 nodes of
-	 * the left subtree plus the 1 root node plus recursively the number of nodes in
-	 * the right subtree. - If no, then the last node on the last tree row is in the
-	 * left subtree and the right subtree is a full tree of height h-2. So we take
-	 * the 2^(h-1)-1 nodes of the right subtree plus the 1 root node plus
-	 * recursively the number of nodes in the left subtree. Since I halve the tree
-	 * in every recursive step, I have O(log(n)) steps. Finding a height costs
-	 * O(log(n)). So overall O(log(n)^2).
+	 * Approach2: Time Complexity-O(log(n)^2) The height of a tree can be found by just going left. Let a single node tree have height 0.
+	 * Find the height h of the whole tree. If the whole tree is empty, i.e., has height -1, there are 0 nodes.
+	 * Finding a height costs O(log(n)). So overall O(log(n)^2).
 	 */
 	@Override
 	public int countNodes2(TreeNode root) {
 		int count = 0, h;
-		h = height(root); // Overall Height
+		h = leftSize(root);
 
 		while (root != null) {
-			int rh = height(root.right); // Right Subtree height
+			int rh = leftSize(root.right);
 			if (rh == h - 1) {
-				count += 1 << h;
+				count += 1 << h - 1; //2^h-1
 				root = root.right;
 			} else {
-				count += 1 << (h - 1);
+				count += 1 << (h - 2);
 				root = root.left;
 			}
 			h--;
@@ -103,22 +96,20 @@ public class BTProblems implements TreeProperties, TreePaths {
 		return count;
 	}
 
-	// Required Methods for countNodes - start
-	private int leftHeight(TreeNode root) {
+	private int leftSize(TreeNode root) {
 		if (root == null) return 0;
-		return leftHeight(root.left) + 1;
+		return leftSize(root.left) + 1;
 	}
 
-	private int rightHeight(TreeNode root) {
+	private int rightSize(TreeNode root) {
 		if (root == null) return 0;
-		return rightHeight(root.right) + 1;
+		return rightSize(root.right) + 1;
 	}
 
-	private int height(TreeNode root) {
-		if (root == null) return -1;
-		return height(root.left) + 1;
-	}
-
+	/* Height of Binary Tree == Depth of  Binary Tree == Level of Binary Tree
+	 * Height of the tree: Height from root to longest leaf
+	 * Maximum Depth of Binary Tree or Depth of the Tree: Path/no of nodes from root to longest leaf Depth of the tree
+	 */
 	@Override
 	public int heightOfTree1(TreeNode root) {
 		if (root == null) return 0; // 0 means count the nodes, -1 means count the edges
@@ -128,31 +119,34 @@ public class BTProblems implements TreeProperties, TreePaths {
 
 	@Override
 	public int heightOfTree2(TreeNode root) {
-		int nodeCount = 0, height = 0; // 0 means count the nodes, -1 means count the edges
-		if (root != null) {
-			TreeNode temp;
-			Queue<TreeNode> queue = new LinkedList<>();
-			queue.add(root);
-			while (!queue.isEmpty()) {
-				nodeCount = queue.size();
-				height++;
-				while (nodeCount > 0) {
-					temp = queue.poll();
-					if (temp.left != null) queue.add(temp.left);
-					if (temp.right != null) queue.add(temp.right);
-					nodeCount--;
-				}
+		int height = 0; // 0 means count the nodes, -1 means count the edges
+		Queue<TreeNode> queue = new LinkedList<>();
+		queue.add(root);
+		while (!queue.isEmpty()) {
+			int levelSize = queue.size();
+			height++;
+			while (levelSize > 0) {
+				TreeNode curr = queue.poll();
+				if (curr.left != null) queue.add(curr.left);
+				if (curr.right != null) queue.add(curr.right);
+				levelSize--;
 			}
 		}
 		return height;
 	}
 
+	// Minimum Depth of a Binary Tree - Minimum Depth of Binary Tree is equal to the nearest leaf from root.
+	/* Solution 1: DFS 
+	 * if a node only has one child -> MUST return the depth of the side with child, i.e. MAX(left, right) + 1
+	 * if a node has two children on both side -> return min depth of two sides, i.e. MIN(left, right) + 1
+	 */
 	@Override
 	public int minDepthOfTree1(TreeNode root) {
 		if (root == null) return 0;
+
 		int left = minDepthOfTree1(root.left);
 		int right = minDepthOfTree1(root.right);
-		return (left == 0 || right == 0) ? left + right + 1 : Math.min(left, right) + 1;
+		return (left == 0 || right == 0) ? Math.max(left, right) + 1 : Math.min(left, right) + 1;
 	}
 
 	// Using BFS version 1
@@ -160,16 +154,16 @@ public class BTProblems implements TreeProperties, TreePaths {
 		if (root == null) return 0;
 		Queue<TreeNode> queue = new LinkedList<>();
 		queue.add(root);
-		int level = 1;
+		int level = 0;
 		while (!queue.isEmpty()) {
 			int len = queue.size();
+			level++;
 			while (len-- > 0) {
 				TreeNode node = queue.poll();
 				if (node.left == null && node.right == null) return level;
 				if (node.left != null) queue.add(node.left);
 				if (node.right != null) queue.add(node.right);
 			}
-			level++;
 		}
 		return 0;
 	}
@@ -195,48 +189,52 @@ public class BTProblems implements TreeProperties, TreePaths {
 	}
 
 	@Override
-	public int depthOfNode(TreeNode root, int data) {
-		return depthOfNode(root, data, 1);
+	public int depthOfNode1(TreeNode root, int data) {
+		return depthOfNode1(root, data, 1);
 	}
 
-	private int depthOfNode(TreeNode root, int data, int level) {
+	private int depthOfNode1(TreeNode root, int data, int level) {
 		if (root == null) return -1;
 		if (root.val == data) return level;
-		int depth = depthOfNode(root.left, data, level + 1);
-		if (depth == -1) depth = depthOfNode(root.right, data, level + 1);
+		int depth = depthOfNode1(root.left, data, level + 1);
+		if (depth == -1) depth = depthOfNode1(root.right, data, level + 1);
 		return depth;
 	}
 
 	@Override
-	public int levelOfNode1(TreeNode root, int data) {
-		return depthOfNode(root, data);
-	}
-
-	@Override
-	public int levelOfNode2(TreeNode root, int element) {
+	public int depthOfNode2(TreeNode root, int element) {
 		if (root == null) return 0;
-		int level = 1, count = 0;
+		int level = 0;
 		Queue<TreeNode> queue = new LinkedList<>();
 		queue.add(root);
 		while (!queue.isEmpty()) {
-			count = queue.size();
-			while (count-- > 0) {
+			int size = queue.size();
+			level++;
+			while (size-- > 0) {
 				TreeNode curr = queue.remove();
 				if (curr.val == element) return level;
 
 				if (curr.left != null) queue.add(curr.left);
 				if (curr.right != null) queue.add(curr.right);
 			}
-			level++;
 		}
-
 		return level;
+	}
+
+	@Override
+	public int levelOfNode1(TreeNode root, int data) {
+		return depthOfNode1(root, data);
+	}
+
+	@Override
+	public int levelOfNode2(TreeNode root, int element) {
+		return depthOfNode2(root, element);
 	}
 
 	@Override
 	public int countLeafNodes1(TreeNode root) {
 		if (root == null) return 0;
-		else if (root.left == null && root.right == null) return 1;
+		if (root.left == null && root.right == null) return 1;
 		return countLeafNodes1(root.left) + countLeafNodes1(root.right);
 	}
 
@@ -447,6 +445,23 @@ public class BTProblems implements TreeProperties, TreePaths {
 				System.out.println();
 			}
 		}
+	}
+
+	//Using recursive function
+	public void levelorder3(TreeNode root) {
+		List<List<Integer>> result = new java.util.LinkedList<>();
+		levelOrder(root, result, 0);
+		result.forEach(k -> System.out.println(k));
+	}
+
+	public void levelOrder(TreeNode root, List<List<Integer>> result, int level) {
+		if (root == null) return;
+
+		if (result.size() <= level) result.add(new ArrayList<>());
+		result.get(level).add(root.val);
+
+		levelOrder(root.left, result, level + 1);
+		levelOrder(root.right, result, level + 1);
 	}
 
 	// Bottom-up/Reverse level order traversal: Traverse level by level using queue

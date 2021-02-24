@@ -22,7 +22,8 @@ public class BSTPatterns {
 		return isValidBST(root.left, min, root) && isValidBST(root.right, root, max);
 	}
 
-	// Serialize & Deserialize - Uses Preorder
+	/*Serialize & Deserialize - Uses Preorder
+	 */
 	// 1.Serialize:Uses Tree to List
 	public ArrayList<Integer> serialize1(ArrayList<Integer> result, TreeNode root) {
 		if (root != null) {
@@ -111,11 +112,8 @@ public class BSTPatterns {
 		return root;
 	}
 
-	//	Convert Sorted Array to Binary Search Tree/Minimal Tree
-	/*	Binary Tree to Binary Search Tree Conversion
-	 * 	Convert Sorted Array to Binary Search Tree
+	/* Convert Sorted Array to Binary Search Tree/Minimal Tree
 	 */
-
 	public TreeNode sortedArrayToBST(int[] nums) {
 		if (nums.length == 0) return null;
 		return arrayToBST(nums, 0, nums.length - 1);
@@ -130,6 +128,9 @@ public class BSTPatterns {
 		return root;
 	}
 
+	/*
+	 * Lowest Common Ancestor:
+	 */
 	public TreeNode lowestCommonAncestor(TreeNode root, int data1, int data2) {
 		if (root != null) {
 			if (data1 < root.val && data2 < root.val) {
@@ -143,18 +144,21 @@ public class BSTPatterns {
 		return root;
 	}
 
+	/*
+	 * Inorder Predecessor:
+	 */
 	public int inOrderPredecessor(TreeNode root, int key) {
 		if (root == null) return -1;
 
-		if (key == root.val) {
-			//Find the max element in the left subtree 
-			return findMax(root.left);
-		} else if (key < root.val) {
+		if (key < root.val) {
 			return inOrderPredecessor(root.left, key);
-		} else {
+		} else if (key > root.val) {
 			int pred = inOrderPredecessor(root.right, key);
 			// If there is no element in leftSubtree, then root element should be previous element
 			return pred == -1 ? root.val : pred;
+		} else {
+			//Find the max element in the left subtree 
+			return findMax(root.left);
 		}
 	}
 
@@ -166,18 +170,21 @@ public class BSTPatterns {
 		return curr.val;
 	}
 
+	/*
+	 * Inorder Successor:
+	 */
 	public int inOrderSuccessor(TreeNode root, int key) {
 		if (root == null) return -1;
 
-		if (key == root.val) {
-			// Find the min element in the right subtree
-			return findMin(root.right);
-		} else if (key < root.val) {
+		if (key < root.val) {
 			int successor = inOrderSuccessor(root.left, key);
 			// If there is no element in rightSubtree, then root element should be next element
 			return successor == -1 ? root.val : successor;
-		} else {
+		} else if (key > root.val) {
 			return inOrderSuccessor(root.right, key);
+		} else {
+			// Find the min element in the right subtree
+			return findMin(root.right);
 		}
 	}
 
@@ -204,7 +211,9 @@ public class BSTPatterns {
 	public void inorderTraversal(TreeNode root) {
 		if (root == null) return;
 		inorderTraversal(root.left);
+		//firstNode gets updated only once in entire tree
 		if (firstNode == null && prevNode.val >= root.val) firstNode = prevNode;
+		//secondNode updates many time based on values in the tree
 		if (firstNode != null && prevNode.val >= root.val) secondNode = root;
 		prevNode = root;
 		inorderTraversal(root.right);
