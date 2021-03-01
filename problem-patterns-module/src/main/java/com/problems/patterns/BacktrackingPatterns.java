@@ -77,16 +77,16 @@ public class BacktrackingPatterns {
 		return result;
 	}
 
-	public void backtrack(char[] arr, int i, List<String> result) {
-		if (i == arr.length) {
-			result.add(new String(arr));
-		} else if (Character.isDigit(arr[i])) {
-			backtrack(arr, i + 1, result);
+	public void backtrack(char[] buffer, int i, List<String> result) {
+		if (i == buffer.length) {
+			result.add(new String(buffer));
+		} else if (Character.isDigit(buffer[i])) {
+			backtrack(buffer, i + 1, result);
 		} else {
-			arr[i] = Character.toLowerCase(arr[i]);
-			backtrack(arr, i + 1, result);
-			arr[i] = Character.toUpperCase(arr[i]);
-			backtrack(arr, i + 1, result);
+			buffer[i] = Character.toLowerCase(buffer[i]);
+			backtrack(buffer, i + 1, result);
+			buffer[i] = Character.toUpperCase(buffer[i]);
+			backtrack(buffer, i + 1, result);
 		}
 	}
 

@@ -270,20 +270,44 @@ public class DPKnapsackPatterns {
 
 	/***************************** Pattern 4: Unbounded Knapsack *************************/
 	// Unbounded Knapsack: 3 Approaches
-	// 1.Recursive Approach
+	// 1.Recursive Approach - Time Complexity: O(2^n); Additional Space: O(1); recursion space: O(n)
 	public int unboundedKnapsack1(int val[], int wt[], int W) {
 		return unboundedKnapsack1(W, wt, val, wt.length - 1);
 	}
 
 	public int unboundedKnapsack1(int cap, int wt[], int val[], int i) {
-		if (i == 0 || cap == 0) return 0;
+		if (i < 0 || cap == 0) return 0;
 		if (wt[i] > cap) return unboundedKnapsack1(cap, wt, val, i - 1);
 		return Math.max(val[i] + unboundedKnapsack1(cap - wt[i], wt, val, i), unboundedKnapsack1(cap, wt, val, i - 1));
 	}
 
+	// Approach2: DP - Top Up Approach
+	// Time Complexity: O(n*Weight), As redundant calculations of states are avoided. 
+	// Space: O(n*Weight), The use of 2D array data structure for storing intermediate states
+	public int unboundedKnapsack2(int[] val, int[] wt, int cap) {
+		int n = wt.length;
+		int[][] memo = new int[n + 1][cap + 1];
+
+		//Intialize memo array to -1.
+		for (int i = 0; i <= n; i++) {
+			Arrays.fill(memo[i], -1);
+		}
+
+		return unboundedKnapsack2(cap, wt, val, n - 1, memo);
+	}
+
+	public int unboundedKnapsack2(int W, int wt[], int val[], int i, int[][] memo) {
+		if (i < 0 || W == 0) return 0;
+		if (memo[i][W] != -1) return memo[i][W];
+
+		if (wt[i] > W) return memo[i][W] = unboundedKnapsack2(W, wt, val, i - 1, memo);
+
+		return memo[i][W] = Math.max(val[i] + unboundedKnapsack2(W - wt[i], wt, val, i, memo),
+				unboundedKnapsack2(W, wt, val, i - 1, memo));
+	}
+
 	// Using DP - Bottom Up Approach
-	// Note: For unbounded knapsack prob, iteration
-	// should be from wt[i] to cap
+	// Note: For unbounded knapsack prob, iteration should be from wt[i] to cap
 	public int unboundedKnapsack3(int val[], int wt[], int cap) {
 		int n = wt.length;
 		int dp[] = new int[cap + 1];
@@ -321,7 +345,7 @@ public class DPKnapsackPatterns {
 	}
 
 	//Coin Change: Min Coins-
-	//Simple Recursive approach:
+	//Simple Recursive approach: Time: O(2^n)
 	public int minCoins11(int[] coins, int amt) {
 		int result = minCoins11(amt, coins, coins.length - 1, 0);
 		return result == Integer.MAX_VALUE ? -1 : result;
@@ -336,6 +360,47 @@ public class DPKnapsackPatterns {
 		return Math.min(minCoins11(amt, coins, i - 1, count), minCoins11(amt - coins[i], coins, i, count + 1));
 	}
 
+	//Top Down approach/Memoization: O(n*amt), Space:O(n*amt)
+	//TODO: Its not working. Revisit this
+	public int minCoins2(int[] coins, int amt) {
+		int n = coins.length;
+		int[][] memo = new int[n][amt + 1];
+
+		for (int[] arr : memo)
+			Arrays.fill(arr, -1);
+
+		int result = minCoins2(amt, coins, n - 1, 0, memo);
+		return result == Integer.MAX_VALUE ? -1 : result;
+	}
+
+	public int minCoins2(int amt, int[] coins, int i, int count, int[][] memo) {
+		if (amt == 0) return count;
+		if (i < 0 || amt < 0) return Integer.MAX_VALUE;
+
+		if (memo[i][amt] != -1) return memo[i][amt];
+
+		if (amt < coins[i]) memo[i][amt] = minCoins2(amt, coins, i - 1, count, memo);
+
+		return memo[i][amt] = Math.min(minCoins2(amt, coins, i - 1, count, memo),
+				minCoins2(amt - coins[i], coins, i, count + 1, memo));
+	}
+
+	//DP(Bottom up): Time Complexity: O(S*n)
+	public int minCoins31(int[] coins, int amount) {
+		int max = amount + 1;
+		int[] dp = new int[max];
+		Arrays.fill(dp, max);
+		dp[0] = 0;
+
+		for (int i = 0; i < coins.length; i++)
+			for (int j = coins[i]; j <= amount; j++)
+				dp[j] = Math.min(dp[j], 1 + dp[j - coins[i]]);
+
+		return dp[amount] > amount ? -1 : dp[amount];
+	}
+
+	//Another approach for mincoins problem:
+	//TODO: Compare below 3 approaches with combination sum IV problem
 	//Recursive another approach - Time: Exponential O(S^n), where S = Total amount
 	public int minCoins12(int[] coins, int amt) {
 		int result = minCoins(coins, amt);
@@ -347,15 +412,15 @@ public class DPKnapsackPatterns {
 		if (amt == 0) return 0;
 
 		int min = Integer.MAX_VALUE;
-		for (int coin : coins) {
-			int currMin = minCoins(coins, amt - coin);
+		for (int i = 0; i < coins.length; i++) {
+			int currMin = minCoins(coins, amt - coins[i]);
 			if (currMin >= 0 && currMin < min) min = currMin + 1;
 		}
 		return min == Integer.MAX_VALUE ? -1 : min;
 	}
 
 	//DP(Memoization): Time Complexity: O(S*n)
-	public int minCoins2(int[] coins, int amt) {
+	public int minCoins22(int[] coins, int amt) {
 		return minCoins2(coins, amt, new int[amt]);
 	}
 
@@ -373,20 +438,6 @@ public class DPKnapsackPatterns {
 		return dp[amt - 1];
 	}
 
-	//DP(Bottom up): Time Complexity: O(S*n)
-	public int minCoins31(int[] coins, int amount) {
-		int max = amount + 1;
-		int[] dp = new int[max];
-		Arrays.fill(dp, max);
-		dp[0] = 0;
-
-		for (int i = 0; i < coins.length; i++)
-			for (int j = coins[i]; j <= amount; j++)
-				dp[j] = Math.min(dp[j], 1 + dp[j - coins[i]]);
-
-		return dp[amount] > amount ? -1 : dp[amount];
-	}
-
 	// DP(Bottom up): Time Complexity: O(S*n) - Other approach
 	public int coinChange32(int[] coins, int amount) {
 		int max = amount + 1;
@@ -395,7 +446,7 @@ public class DPKnapsackPatterns {
 		dp[0] = 0;
 		for (int i = 1; i <= amount; i++) {
 			for (int coin : coins) {
-				if (coin <= i) dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+				if (i >= coin) dp[i] = Math.min(dp[i], dp[i - coin] + 1);
 			}
 		}
 		return dp[amount] > amount ? -1 : dp[amount];
@@ -450,8 +501,8 @@ public class DPKnapsackPatterns {
 		int[] dp = new int[target + 1];
 		dp[0] = 1;
 		for (int i = 1; i <= target; i++) {
-			for (int j = 0; j < nums.length; j++) {
-				if (i >= nums[j]) dp[i] += dp[i - nums[j]];
+			for (int num : nums) {
+				if (i >= num) dp[i] += dp[i - num];
 			}
 		}
 		return dp[target];

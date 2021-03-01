@@ -9,11 +9,6 @@ import java.util.Set;
 import java.util.Stack;
 
 public class ParenthesesProblems {
-	public static void main(String[] args) {
-		//System.out.println(balancedParentheses("()[]{}"));
-		generateParentheses(3);
-	}
-
 	/* Valid or Well Formed Parentheses
 	 *   You have been asked to Write an algorithm to find Whether Given the Sequence of parentheses are well formed. 
 	 * Eg:
@@ -28,37 +23,86 @@ public class ParenthesesProblems {
 	 *  If at the end both counters are equal, return true 
 	 */
 
-	//Using Counter:
-	public Boolean isWellFormed1(String strParentheses) {
-		if (strParentheses == null) return false;
-		int openParenCounter = 0;
-		int closeParenCounter = 0;
-		for (int i = 0; i < strParentheses.length(); i++) {
-			char x = strParentheses.charAt(i);
-			if (x == '{') openParenCounter++;
-			else if (x == '}') closeParenCounter++;
+	public void isWellFormed(String str) {
+		isWellFormed11(str);
+		isWellFormed12(str, 0, str.length() - 1);
 
-			if (closeParenCounter > openParenCounter) return false;
-		}
-
-		return (openParenCounter == closeParenCounter) ? true : false;
+		isWellFormed21(str);
+		isWellFormed22(str.toCharArray());
+		isWellFormed23(str, 0, str.length() - 1);
+		isWellFormed24(str);
 	}
 
-	//Using Stack:
-	public Boolean isWellFormed2(String str) {
+	//Approach1: Using Stack: Time-O(n), Space-O(n)
+	public Boolean isWellFormed11(String str) {
 		if (str == null) return false;
 		Stack<Character> stack = new Stack<>();
 		for (int i = 0; i < str.length(); i++) {
 			char c = str.charAt(i);
 			if (c == '{') {
 				stack.push(c);
-			} else if (c == '}') {
-				if (stack.isEmpty()) return false;
-				else stack.pop();
+			} else if (c == '}' && !stack.isEmpty()) {
+				stack.pop();
+			} else {
+				return false;
 			}
 		}
 
-		return stack.isEmpty() ? true : false;
+		return stack.isEmpty();
+	}
+
+	public boolean isWellFormed12(String s, int l, int h) {
+		Stack<Character> stack = new Stack<Character>();
+		for (int i = l; i <= h; i++) {
+			if (s.charAt(i) == '(') {
+				stack.push('(');
+			} else if (!stack.empty() && stack.peek() == '(') {
+				stack.pop();
+			} else {
+				return false;
+			}
+		}
+		return stack.empty();
+	}
+
+	//Approach2: Using Counter: Time-O(n), Space-O(1)
+	public Boolean isWellFormed21(String str) {
+		if (str == null) return false;
+		int op = 0, cp = 0;
+		for (char ch : str.toCharArray()) {
+			if (ch == '{') op++;
+			else cp++;
+
+			if (cp > op) return false;
+		}
+
+		return (op == cp);
+	}
+
+	public boolean isWellFormed22(char[] arr) {
+		int balance = 0;
+		for (char c : arr) {
+			if (c == '(') balance++;
+			else balance--;
+			if (balance < 0) return false;
+		}
+		return (balance == 0);
+	}
+
+	public boolean isWellFormed23(String s, int l, int h) {
+		int count = 0;
+		for (int i = l; i <= h; i++) {
+			char ch = s.charAt(i);
+			if (ch == '(') count++;
+			else count--;
+
+			if (count < 0) return false;
+		}
+		return count == 0;
+	}
+
+	boolean isWellFormed24(String s) {
+		return isWellFormed23(s, 0, s.length() - 1);
 	}
 
 	//Valid Multiple Parentheses/Balanced Brackets 
@@ -104,7 +148,36 @@ public class ParenthesesProblems {
 	/* Generate Parentheses - Backtracking 
 	 * Write a function to generate all combinations of well-formed parentheses.
 	 */
-	public static List<String> generateParentheses(int n) {
+	/*
+	 * Approach1: Using Auxiliary Buffer: Similar to "Letter Case Permutation" Problem
+	 * Time: O(n2^n), Space: O(n2^n)
+	 */
+	public List<String> generateParenthesis(int n) {
+		List<String> combinations = new ArrayList<>();
+		generateAll(new char[2 * n], 0, combinations);
+		return combinations;
+	}
+
+	public void generateAll(char[] buffer, int index, List<String> result) {
+		if (index == buffer.length) {
+			if (isWellFormed22(buffer)) result.add(new String(buffer));
+		} else {
+			buffer[index] = '(';
+			generateAll(buffer, index + 1, result);
+			buffer[index] = ')';
+			generateAll(buffer, index + 1, result);
+		}
+	}
+
+	/* Approach2:
+	 * Instead of adding '(' or ')' every time as in Approach 1, let's only add them when we know it will remain a valid sequence.
+	 * We can do this by keeping track of the number of opening and closing brackets we have placed so far. We can start an opening 
+	 * bracket if we still have one (of n) left to place. And we can start a closing bracket if it would not exceed the number of 
+	 * opening brackets.
+	 * Time: O(2^n) (Say exponential time complexity, because so much mathematical operations required to find time complexity).
+	 * Space: O(2n) 2n -> 'str' space. Its not 'res' space. 
+	 */
+	public List<String> generateParentheses(int n) {
 		if (n <= 0) return null;
 		List<String> res = new ArrayList<>();
 		backtrack14(0, 0, n, res, "");
@@ -112,7 +185,7 @@ public class ParenthesesProblems {
 		return res;
 	}
 
-	public static void backtrack14(int op, int cp, int n, List<String> res, String str) {
+	public void backtrack14(int op, int cp, int n, List<String> res, String str) {
 		if (op == n && cp == n) {
 			res.add(str);
 		} else {
@@ -127,8 +200,9 @@ public class ParenthesesProblems {
 	public int longestValidParentheses1(String s) {
 		int n = s.length(), max = 0;
 		for (int i = 0; i < n; i++) {
+			//Here j is incremented by 2, because valid parentheses length should be even
 			for (int j = i + 1; j < n; j += 2) {
-				if (isValid1(s, i, j)) {
+				if (isWellFormed23(s, i, j)) {
 					max = Math.max(max, j - i + 1);
 				}
 			}
@@ -136,28 +210,8 @@ public class ParenthesesProblems {
 		return max;
 	}
 
-	//Approach2: Dynamic Programming Approach
-	//Time:O(n), Space:O(n)
+	//Approach2: Using Stack - Time:O(n), Space:O(n)
 	public int longestValidParentheses2(String s) {
-		int n = s.length(), max = 0;
-		int[] dp = new int[n];
-
-		for (int i = 1; i < n; i++) {
-			if (s.charAt(i) == '(') continue;
-
-			if (s.charAt(i - 1) == '(') { //This condition for "()()"
-				dp[i] = (i >= 2 ? dp[i - 2] : 0) + 2;
-			} else if (i - dp[i - 1] > 0 && s.charAt(i - dp[i - 1] - 1) == '(') { //This condition for "((()))"
-				dp[i] = dp[i - 1] + ((i - dp[i - 1]) >= 2 ? dp[i - dp[i - 1] - 2] : 0) + 2;
-			}
-			max = Math.max(max, dp[i]);
-		}
-
-		return max;
-	}
-
-	//Approach3 Using Stack - Time:O(n), Space:O(n)
-	public int longestValidParentheses3(String s) {
 		Stack<Integer> stack = new Stack<>();
 		stack.push(-1);
 		int max = 0;
@@ -175,67 +229,85 @@ public class ParenthesesProblems {
 
 	//Two pointer - Forward & Backward Navigation
 	//Time: O(n), Space:O(1)
-	public int longestValidParentheses(String s) {
-		int l = 0, r = 0, max = 0, n = s.length();
-		//Forward traversal -> for cases (())))
+	public int longestValidParentheses3(String s) {
+		int op = 0, cp = 0, max = 0, n = s.length();
+		//Forward traversal -> for cases (()))); FT doesnt work for "(((())"
 		for (int i = 0; i < n; i++) {
 			char ch = s.charAt(i);
-			if (ch == '(') l++;
-			if (ch == ')') r++;
+			if (ch == '(') op++;
+			else cp++;
 
-			if (l == r) max = Math.max(max, 2 * r); //2*l
-			else if (r > l) l = r = 0;
+			if (op == cp) max = Math.max(max, 2 * cp); //2*op
+			else if (cp > op) op = cp = 0;
 		}
 
-		//Reverse traversal -> For cases: (((())
+		//Reverse traversal -> For cases: (((())op RT doesnt work for "(())))"
 		//Alternative for reverse traversal: Reverse the string and use the forward reversal
-		l = r = 0;
+		op = cp = 0;
 		for (int i = n - 1; i >= 0; i--) {
 			char ch = s.charAt(i);
-			if (ch == '(') l++;
-			if (ch == ')') r++;
+			if (ch == '(') op++;
+			else cp++;
 
-			if (l == r) max = Math.max(max, 2 * r); //2*l
-			else if (l > r) l = r = 0;
+			if (op == cp) max = Math.max(max, 2 * cp); //2*op
+			else if (op > cp) op = cp = 0; // Condition different from previous one
 		}
 
 		return max;
 	}
 
-	//Using Stack: Time-O(n), Space-O(n)
-	public boolean isValid1(String s, int l, int h) {
-		Stack<Character> stack = new Stack<Character>();
-		for (int i = l; i <= h; i++) {
-			if (s.charAt(i) == '(') {
-				stack.push('(');
-			} else if (!stack.empty() && stack.peek() == '(') {
-				stack.pop();
-			} else {
-				return false;
-			}
-		}
-		return stack.empty();
-	}
+	//Approach4: Dynamic Programming Approach -> This is optional 
+	//Time: O(n), Space:O(n)
+	public int longestValidParentheses4(String s) {
+		int n = s.length(), max = 0;
+		int[] dp = new int[n];
 
-	//Using Counter: Time-O(n), Space-O(1)
-	public boolean isValid2(String s, int l, int h) {
-		int count = 0;
-		for (int i = l; i <= h; i++) {
-			char ch = s.charAt(i);
-			if (ch == '(') {
-				count++;
-			} else if (count > 0 && ch == ')') {
-				count--;
-			} else {
-				return false;
+		for (int i = 1; i < n; i++) {
+			if (s.charAt(i) == '(') continue;
+
+			if (s.charAt(i - 1) == '(') { //This condition for "()()"
+				dp[i] = (i >= 2 ? dp[i - 2] : 0) + 2;
+			} else if (i - dp[i - 1] > 0 && s.charAt(i - dp[i - 1] - 1) == '(') { //This condition for "((()))"
+				dp[i] = dp[i - 1] + ((i - dp[i - 1]) >= 2 ? dp[i - dp[i - 1] - 2] : 0) + 2;
 			}
+			max = Math.max(max, dp[i]);
 		}
-		return count == 0;
+		return max;
 	}
 
 	//Remove Invalid Parentheses - DFS/BFS
-	//DFS Approach: Time: O(2^n), Space:O(1)
+	//Simple BFS Approach - Time-O(2^n), Space-O(n)
 	public List<String> removeInvalidParentheses1(String s) {
+		List<String> result = new ArrayList<>();
+		Queue<String> queue = new LinkedList<>();
+		Set<String> visited = new HashSet<>();
+
+		queue.add(s);
+		visited.add(s);
+		while (!queue.isEmpty()) {
+			String curr = queue.poll();
+
+			if (isWellFormed24(curr)) {
+				result.add(curr);
+				continue;
+			}
+
+			for (int i = 0; i < curr.length(); i++) {
+				//Ignore if char is not a parentheses
+				if (curr.charAt(i) != '(' && curr.charAt(i) != ')') continue;
+
+				String newStr = curr.substring(0, i) + curr.substring(i + 1);
+				if (!visited.contains(newStr)) {
+					queue.add(newStr);
+					visited.add(newStr);
+				}
+			}
+		}
+		return result;
+	}
+
+	//DFS Approach: Time: O(2^n), Space:O(1)
+	public List<String> removeInvalidParentheses2(String s) {
 		List<String> result = new ArrayList<>();
 		char[] paren = new char[] { '(', ')' };
 		dfs(s, result, 0, 0, paren);
@@ -271,42 +343,9 @@ public class ParenthesesProblems {
 		}
 	}
 
-	//Simple BFS Approach - Time-O(2^n), Space-O(n)
-	public List<String> removeInvalidParentheses2(String s) {
-		List<String> result = new ArrayList<>();
-		Queue<String> queue = new LinkedList<>();
-		Set<String> visited = new HashSet<>();
-
-		boolean level = false;
-		queue.add(s);
-		visited.add(s);
-
-		while (!queue.isEmpty()) {
-			String curr = queue.poll();
-
-			if (isValid(curr)) {
-				result.add(curr);
-				level = true;
-			}
-
-			if (level) continue;
-
-			for (int i = 0; i < curr.length(); i++) {
-				if (curr.charAt(i) != '(' && curr.charAt(i) != ')') continue;
-
-				String newStr = curr.substring(0, i) + curr.substring(i + 1);
-				if (!visited.contains(newStr)) {
-					queue.add(newStr);
-					visited.add(newStr);
-				}
-			}
-		}
-		return result;
-	}
-
 	//Efficient BFS Approach - Time-O(2^n), Space-O(1)
 	//Similar to DFS
-	public List<String> removeInvalidParentheses(String s) {
+	public List<String> removeInvalidParentheses3(String s) {
 		List<String> result = new ArrayList<>();
 		Queue<Tuple> queue = new LinkedList<>();
 		char[] paren = new char[] { '(', ')' };
@@ -345,16 +384,11 @@ public class ParenthesesProblems {
 		return result;
 	}
 
-	boolean isValid(String s) {
-		int count = 0;
+	public static void main(String[] args) {
 
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
-			if (c == '(') count++;
-			if (c == ')' && count-- == 0) return false;
-		}
-
-		return count == 0;
+		ParenthesesProblems ob = new ParenthesesProblems();
+		//System.out.println(ob.balancedParentheses("()[]{}"));
+		ob.generateParentheses(3);
 	}
 
 }

@@ -31,12 +31,10 @@ public class DPStringPatterns {
 		for (int i = 1; i < n; i++)
 			result[i][i] = 1;
 		for (int len = 2; len <= n; len++) {
-			for (int i = 0; i < (n - len + 1); i++) {
+			for (int i = 0; i <= n - len; i++) {
 				int j = i + len - 1;
-				if (str.charAt(i) == str.charAt(j) && len == 2) {
-					result[i][j] = 2;
-				} else if (str.charAt(i) == str.charAt(j)) {
-					result[i][j] = result[i + 1][j - 1] + 2;
+				if (str.charAt(i) == str.charAt(j)) {
+					result[i][j] = len == 2 ? 2 : 2 + result[i + 1][j - 1];
 				} else {
 					result[i][j] = Math.max(result[i][j - 1], result[i + 1][j]);
 				}
@@ -121,6 +119,8 @@ public class DPStringPatterns {
 		return true;
 	}
 
+	// Palindromic Partitioning I???
+
 	/*
 	 * Palindrome Partitioning II:
 	 *   Given a string s, partition s such that every substring of the partition is a palindrome. Return the minimum cuts needed for 
@@ -133,15 +133,15 @@ public class DPStringPatterns {
 		int[] cut = new int[n];
 
 		for (int r = 0; r < n; r++) {
-			cut[r] = r;
+			int min = r;
 			for (int l = 0; l <= r; l++) {
 				if (s.charAt(l) == s.charAt(r) && (r - l <= 1 || dp[l + 1][r - 1])) {
 					dp[l][r] = true;
 					//if l == 0 means substring(0, r) is palindrome, so no cut is needed
-					if (l < 0) cut[r] = 0;
-					else cut[r] = Math.min(cut[r], cut[l - 1] + 1);
+					min = l == 0 ? 0 : Math.min(min, cut[l - 1] + 1);
 				}
 			}
+			cut[r] = min;
 		}
 		return cut[n - 1];
 	}
@@ -197,11 +197,7 @@ public class DPStringPatterns {
 		for (int i = 0; i < m; i++) {
 			for (int j = 0; j < n; j++) {
 				if (s1.charAt(i) == s2.charAt(j)) {
-					if (i == 0 || j == 0) {
-						dp[i][j] = 1;
-					} else {
-						dp[i][j] = dp[i - 1][j - 1] + 1;
-					}
+					dp[i][j] = (i == 0 || j == 0) ? 1 : 1 + dp[i - 1][j - 1];
 					if (max < dp[i][j]) {
 						max = dp[i][j];
 						row = i;
@@ -257,10 +253,11 @@ public class DPStringPatterns {
 	// 3.DP Bottom Up Approach
 	public int lcs3(String s1, String s2) {
 		int m = s1.length(), n = s2.length();
-		int[][] dp = new int[m + 1][n + 1];
-		for (int i = 0; i <= m; i++) {
-			for (int j = 0; j <= n; j++) {
-				if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
+		int[][] dp = new int[m][n];
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
+				if (s1.charAt(i) == s2.charAt(j)) {
+					dp[i][j] = (i == 0 || j == 0) ? 1 : 1 + dp[i - 1][j - 1];
 					dp[i][j] = 1 + dp[i - 1][j - 1];
 				} else {
 					dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
@@ -268,7 +265,7 @@ public class DPStringPatterns {
 			}
 		}
 		printLCS(dp, s1, s2);
-		return dp[m][n];
+		return dp[m - 1][n - 1];
 	}
 
 	// Print the longest common sub sequence
@@ -277,9 +274,9 @@ public class DPStringPatterns {
 		int longSeqCount = dp[i][j];
 		char[] result = new char[longSeqCount];
 		int index = longSeqCount;
-		while (i > 0 && j > 0) {
-			if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
-				result[--index] = s1.charAt(i - 1);
+		while (i >= 0 && j >= 0) {
+			if (s1.charAt(i) == s2.charAt(j)) {
+				result[--index] = s1.charAt(i);
 				i--;
 				j--;
 			} else if (dp[i - 1][j] > dp[i][j - 1]) {
@@ -294,8 +291,15 @@ public class DPStringPatterns {
 		}
 	}
 
-	// Edit Distance: Find minimum number of edits (operations) required to convert ‘str1’ into ‘str2’.
-	// Recursion Approach
+	/* Edit Distance: Find minimum number of edits (operations) required to convert ‘str1’ into ‘str2’.
+	 * You have the following three operations permitted on a word: 
+	 * 	- Insert a character
+	 * 	- Delete a character
+	 * 	- Replace a character
+	 * Input: word1 = "horse", word2 = "ros"; Output: 3
+	 * Input: word1 = "intention", word2 = "execution"; Output: 5
+	 */
+	// Recursion Approach: O(3^n), n is Max(s1.length(), s2.length()).
 	public int minDistance1(String s1, String s2) {
 		return minDistance(s1, s2, s1.length() - 1, s2.length() - 1);
 	}
@@ -310,8 +314,28 @@ public class DPStringPatterns {
 				minDistance(s1, s2, i - 1, j - 1)); // represents replace operation
 	}
 
-	// DP-Bottom up Approach
-	public int minDistance(String s1, String s2) {
+	//DP- Top down Approach/Memoization: Time: O(mn), Space:O(mn)
+	public int minDistance2(String s1, String s2) {
+		int m = s1.length(), n = s2.length();
+		int[][] memo = new int[m][n];
+		for (int i = 0; i < m; i++)
+			Arrays.fill(memo[i], -1);
+		return minDistance2(s1, s2, m - 1, n - 1, memo);
+	}
+
+	public int minDistance2(String s1, String s2, int i, int j, int[][] memo) {
+		if (i < 0) return j + 1;
+		if (j < 0) return i + 1;
+		if (memo[i][j] != -1) return memo[i][j];
+
+		if (s1.charAt(i) == s2.charAt(j)) return memo[i][j] = minDistance2(s1, s2, i - 1, j - 1, memo);
+
+		return memo[i][j] = 1 + Utils.min(minDistance2(s1, s2, i, j - 1, memo), minDistance2(s1, s2, i - 1, j, memo),
+				minDistance2(s1, s2, i - 1, j - 1, memo));
+	}
+
+	// DP-Bottom up Approach: Time: O(mn), Space:O(mn)
+	public int minDistance3(String s1, String s2) {
 		int m = s1.length(), n = s2.length();
 		if (m == 0 && n == 0) return 0;
 		int[][] dp = new int[m + 1][n + 1];
@@ -367,6 +391,7 @@ public class DPStringPatterns {
 				}
 			}
 		}
+
 		return dp[n1][n2];
 	}
 

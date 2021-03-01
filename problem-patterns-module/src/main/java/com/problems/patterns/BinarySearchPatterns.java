@@ -1,3 +1,4 @@
+
 package com.problems.patterns;
 
 import java.util.Arrays;

@@ -2,8 +2,6 @@ package com.problems.patterns.dp;
 
 import java.util.Arrays;
 
-import com.common.utilities.Utils;
-
 /* All the below problems are solved in 4 approaches such as,
  *    1.Recursion -  Time: exponential time O(2^n), space complexity is O(n) which is used to store the recursion stack.
  *    2.DP: Top Down Approach or Memoization - Time and space complexity is same as memoization array size. Mostly same as Bottomup space and time.
@@ -18,9 +16,6 @@ public class DPArraySeqPatterns {
 
 	/***************************** Pattern 7: Array-Subsequence Probs *******************************/
 	// Longest Increasing Sequence:
-	// Approach1: Recursive APproach
-	// stores the LIS
-
 	/* To make use of recursive calls, this function must return two things: 
 	1) Length of LIS ending with element arr[n-1]. We use max_ending_here for this purpose 
 	2) Overall maximum as the LIS may end with an element before arr[n-1] max_ref is used this purpose. 
@@ -40,33 +35,6 @@ public class DPArraySeqPatterns {
 		}
 		notTaken = lengthOfLIS(nums, i + 1, prevNum);
 		return Math.max(taken, notTaken);
-	}
-
-	private int max_ref; // stores the LIS
-
-	//Recursive2:
-	public int LIS11(int arr[], int n) {
-		max_ref = 1;
-		lis(arr, n);
-		return max_ref;
-	}
-
-	private int lis(int arr[], int n) {
-		if (n == 1) return 1;
-		int res, max_ending_here = 1; // 'max_ending_here' is length of LIS ending with arr[n-1]
-
-		/* Recursively get all LIS ending with arr[0], arr[1] ... arr[n-2]. If   arr[i-1] is smaller than arr[n-1], and 
-		   max ending with arr[n-1] needs to be updated, then update it */
-		for (int i = 1; i < n; i++) {
-			res = lis(arr, i);
-			if (arr[i - 1] < arr[n - 1] && res + 1 > max_ending_here) {
-				max_ending_here = res + 1;
-			}
-		}
-
-		max_ref = Math.max(max_ref, max_ending_here);
-
-		return max_ending_here;
 	}
 
 	// Approach2: DP Approach : O(n^2)
@@ -93,19 +61,37 @@ public class DPArraySeqPatterns {
 		int[] dp = new int[nums.length];
 		int size = 0;
 		for (int num : nums) {
-			int l = 0, h = size;
-			while (l != h) {
-				int m = (l + h) / 2;
-				if (num > dp[m]) l = m + 1;
-				else h = m;
-			}
-			dp[l] = num;
-			if (l == size) ++size;
+			//Here num is target, should find insert position for each num
+			int index = searchInsert(dp, 0, size, num);
+
+			// After finding the insert position store it in dp array
+			dp[index] = num;
+
+			//Size will be increased only insert position reaches the last index
+			if (index == size) ++size;
 		}
 		return size;
 	}
 
-	// Longest Bitonic Subsequence
+	//Here we should use BS insert position second approach, because here index h is arr.length   
+	private int searchInsert(int[] nums, int l, int h, int target) {
+		while (l < h) {
+			int m = l + (h - l) / 2;
+			if (target > nums[m]) {
+				l = m + 1;
+			} else {
+				h = m;
+			}
+		}
+		return l;
+	}
+
+	/* Longest Bitonic Subsequence:
+	 * Given an array arr[0 … n-1] containing n positive integers, a subsequence of arr[] is called Bitonic if it is first increasing, then decreasing.
+	 * Write a function that takes an array as argument and returns the length of the longest bitonic subsequence.
+	 * Input arr[] = {1, 11, 2, 10, 4, 5, 2, 1}; Output: 6 (A Longest Bitonic Subsequence of length 6 is 1, 2, 10, 4, 2, 1)
+	 * Input arr[] = {80, 60, 30, 40, 20, 10}; Output: 5 (A Longest Bitonic Subsequence of length 5 is 80, 60, 30, 20, 10)
+	 */
 	// Approach3: DP-Bottom Up Approach
 	public int lbs3(int[] arr) {
 		int n = arr.length;
@@ -127,21 +113,26 @@ public class DPArraySeqPatterns {
 				if (arr[j] < arr[i] && lds[i] < lds[j] + 1) lds[i] = lds[j] + 1;
 
 		// Find the Bitonic value from LIS & LDS ( LIS+LDS-1)
-		int max = Integer.MIN_VALUE, temp;
+		int max = Integer.MIN_VALUE;
 		for (int i = 0; i < n; i++) {
-			temp = lds[i] + lis[i] - 1;
-			if (temp > max) max = temp;
+			max = Math.max(max, lis[i] + lds[i] - 1);
 		}
 		return max;
 	}
 
-	// Maximum Sum Increasing Subsequence:
+	/* Maximum Sum Increasing Subsequence:
+	 * Given an array of n positive integers. Write a program to find the sum of maximum sum subsequence of the given array such that the
+	 *  integers in the subsequence are sorted in increasing order. 
+	 *  For example, if input is {1, 101, 2, 3, 100, 4, 5}, then output should be 106 (1 + 2 + 3 + 100),
+	 *  			 if the input array is {3, 4, 5, 10}, then output should be 22 (3 + 4 + 5 + 10) 
+	 *   			 if the input array is {10, 5, 4, 3}, then output should be 10
+	 */
 	// Approach3: DP-Bottom Up Approach
 	public int MSIS3(int[] a) {
 		int n = a.length;
 		if (n <= 1) return n;
-		int[] dp = new int[n];
-		int[] indexSeq = new int[n];
+		int[] dp = new int[n], indexSeq = new int[n];
+		int max = 0;
 		for (int i = 0; i < n; i++) {
 			dp[i] = a[i];
 			indexSeq[i] = i;
@@ -153,9 +144,10 @@ public class DPArraySeqPatterns {
 					indexSeq[i] = j;
 				}
 			}
+			max = Math.max(max, dp[i]);
 		}
 		printMSIS(a, dp, indexSeq);
-		return Utils.max(dp);
+		return max;
 	}
 
 	private void printMSIS(int[] a, int[] msis, int[] indexSeq) {
@@ -163,7 +155,7 @@ public class DPArraySeqPatterns {
 		for (int i = 0; i < msis.length; i++) {
 			if (msis[i] > max) {
 				max = msis[i];
-				index = i;
+				index = i; //Max Index
 			}
 		}
 		int temp = max;
