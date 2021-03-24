@@ -474,7 +474,7 @@ public class BTProblems implements TreeProperties, TreePaths {
 	}
 
 	// Bottom-up/Reverse level order traversal: Traverse level by level using queue
-	// and store the result in Stack
+	// and store the result in Stack 
 	public void reverseLevelOrder(TreeNode root) {
 		if (root != null) {
 			Stack<TreeNode> stack = new Stack<>();
@@ -488,7 +488,6 @@ public class BTProblems implements TreeProperties, TreePaths {
 			}
 
 			while (!stack.isEmpty()) System.out.print(stack.pop().val + " ");
-
 		}
 	}
 
