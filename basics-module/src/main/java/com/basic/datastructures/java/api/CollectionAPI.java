@@ -497,6 +497,7 @@ public class CollectionAPI {
 		set.add(2);
 		set.add(3);
 		set.add(6);
+		set.add(null); //TreeSet doesnt allow null value
 
 		//2.Get: contains
 		set.contains(5);
@@ -581,7 +582,7 @@ public class CollectionAPI {
 		map.put(7, "eiii");
 		map.put(2, "iwoe");
 		map.put(9, "fdhd");
-		map.put(null, null);
+		map.put(null, null); //TreeMap doesnt allow null value
 		map.put(10, null);
 		// It adds only if key doesnt present
 		map.putIfAbsent(7, "add new");
