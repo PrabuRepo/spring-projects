@@ -183,11 +183,13 @@ public class BTProblems implements TreeProperties, TreePaths {
 		return 0;
 	}
 
+	//The height of a node is the number of edges from the node to the deepest leaf.
 	@Override
 	public int heightOfNode(TreeNode root, int data) {
 		return 0;
 	}
 
+	//The depth of a node is the number of edges from the root to the node.
 	@Override
 	public int depthOfNode1(TreeNode root, int data) {
 		return depthOfNode1(root, data, 1);
@@ -274,6 +276,12 @@ public class BTProblems implements TreeProperties, TreePaths {
 		return 0;
 	}
 
+	/*
+	 * Given a binary tree, collect a tree's nodes as if you were doing this: Collect and remove all leaves, repeat until the tree is empty.
+	 * Example1: 
+	 * 	Input: {1,2,3,4,5} 
+	 *  Output: [[4, 5, 3], [2], [1]].
+	 */
 	@Override
 	public List<List<Integer>> findLeaves(TreeNode root) {
 		List<List<Integer>> result = new ArrayList<>();
@@ -413,9 +421,10 @@ public class BTProblems implements TreeProperties, TreePaths {
 			int levelSize = queue.size();
 			List<Integer> subList = new LinkedList<Integer>();
 			while (levelSize-- > 0) {
-				if (queue.peek().left != null) queue.offer(queue.peek().left);
-				if (queue.peek().right != null) queue.offer(queue.peek().right);
-				subList.add(queue.poll().val);
+				TreeNode curr = queue.poll();
+				subList.add(curr.val);
+				if (curr.left != null) queue.offer(curr.left);
+				if (curr.right != null) queue.offer(curr.right);
 			}
 			result.add(subList);
 		}

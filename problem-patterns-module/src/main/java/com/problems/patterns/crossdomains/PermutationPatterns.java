@@ -97,7 +97,7 @@ public class PermutationPatterns {
 
 		if (i > 0) {
 			int j = nums.length - 1;
-			//2.Identify thr pivot; Let array[i - 1] be the pivot
+			//2.Identify the pivot; Let array[i - 1] be the pivot
 			int pivot = nums[i - 1];
 
 			//3.Find rightmost element that exceeds the pivot
@@ -262,23 +262,27 @@ public class PermutationPatterns {
 	 * Example 1: Input:s1 = "ab" s2 = "eidbaooo" Output:True Explanation: s2 contains one permutation of s1 ("ba").
 	 */
 	// Using Sliding Window
-	public boolean checkInclusion(String s1, String s2) { // Here s1 is Pattern, s2 is whole string
-		int l = 0, r = 0;
+	public boolean checkInclusion(String pat, String str) { // Here pat is Pattern, str is whole string
 		int[] hash = new int[26];
 
-		for (int i = 0; i < s1.length(); i++)
-			hash[s1.charAt(i) - 'a']++;
+		for (int i = 0; i < pat.length(); i++)
+			hash[pat.charAt(i) - 'a']++;
 
-		while (r < s2.length()) {
-			int index = s2.charAt(r) - 'a';
+		int l = 0, r = 0, counter = 0;
+		while (r < str.length()) {
+			int index = str.charAt(r) - 'a';
+			if (hash[index] > 0) counter++;
 			hash[index]--;
 
-			while (hash[index] < 0) {
-				hash[s2.charAt(l) - 'a']++;
+			while (counter == pat.length()) {
+				if (r - l + 1 == pat.length()) return true;
+
+				index = str.charAt(l) - 'a';
+				hash[index]++;
+				if (hash[index] > 0) counter--;
 				l++;
 			}
 
-			if (r - l + 1 == s1.length()) return true;
 			r++;
 		}
 

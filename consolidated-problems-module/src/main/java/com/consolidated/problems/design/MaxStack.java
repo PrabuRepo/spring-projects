@@ -71,9 +71,7 @@ class MaxStack1 {
 
 	public void pop() {
 		if (top == null) return;
-		StckNode temp = top.next;
-		top.next = null;
-		top = temp;
+		top = top.next;
 	}
 
 	public int top() {
@@ -88,9 +86,9 @@ class MaxStack1 {
 }
 
 class StckNode {
-	public int		value;
-	public int		max;
-	public StckNode	next;
+	public int value;
+	public int max;
+	public StckNode next;
 
 	public StckNode(int value, int max) {
 		this.value = value;

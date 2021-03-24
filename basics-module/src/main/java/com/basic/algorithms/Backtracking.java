@@ -295,7 +295,7 @@ public class Backtracking {
 
 	public void backtrack11(int[] nums, int s, List<List<Integer>> res) {
 		if (s >= nums.length) {
-			List<Integer> list = Arrays.stream(nums).boxed().collect(Collectors.<Integer>toList());
+			List<Integer> list = Arrays.stream(nums).boxed().collect(Collectors.toList());
 			res.add(list);
 		} else {
 			Set<Integer> appeared = new HashSet<>();

@@ -117,7 +117,7 @@ public class SlidingWindowStringPatterns {
 
 				char c2 = s.charAt(l);
 				hash[c2]++;
-				if (hash[c2] > 0) counter++;
+				if (hash[c2] > 0) counter--;
 				l++;
 			}
 			r++;

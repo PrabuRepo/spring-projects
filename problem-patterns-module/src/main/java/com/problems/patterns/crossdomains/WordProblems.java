@@ -187,8 +187,27 @@ public class WordProblems {
 		return false;
 	}
 
-	// DP: Using string length & dict size; Time: O(string length * dict size).
+	// DP: Using only string length; Time: O(string length * string length); Space:O(n+dictSize)
 	public boolean wordBreakI2(String s, List<String> wordDict) {
+		int n = s.length();
+		boolean[] lookup = new boolean[n + 1];
+		lookup[0] = true;
+		Set<String> set = new HashSet<>();
+		set.addAll(wordDict);
+
+		for (int i = 0; i < n; i++) {
+			if (!lookup[i]) continue;
+			for (int j = i + 1; j <= n; j++)
+				if (set.contains(s.substring(i, j))) {
+					lookup[j] = true;
+				}
+		}
+
+		return lookup[n];
+	}
+
+	// DP: Using string length & dict size; Time: O(string length * dict size).
+	public boolean wordBreakI3(String s, List<String> wordDict) {
 		int n = s.length();
 		boolean[] lookup = new boolean[n + 1];
 		lookup[0] = true;
@@ -203,23 +222,6 @@ public class WordProblems {
 				}
 			}
 		}
-		return lookup[n];
-	}
-
-	// DP: Using only string length; Time: O(string length * string length*dict size).
-	public boolean wordBreakI3(String s, List<String> wordDict) {
-		int n = s.length();
-		boolean[] lookup = new boolean[n + 1];
-		lookup[0] = true;
-
-		for (int i = 0; i < n; i++) {
-			if (lookup[i]) {
-				for (int j = i + 1; j <= n; j++)
-					if (wordDict.contains(s.substring(i, j))) //contains take dict size times
-						lookup[j] = true;
-			}
-		}
-
 		return lookup[n];
 	}
 
@@ -262,15 +264,15 @@ public class WordProblems {
 		lookup[0] = new ArrayList<>();
 
 		for (int i = 0; i < n; i++) {
-			if (lookup[i] != null) {
-				for (int j = i + 1; j <= n; j++) {
-					String subStr = s.substring(i, j);
-					if (wordDict.contains(subStr)) {
-						if (lookup[j] == null) lookup[j] = new ArrayList<>();
-						lookup[j].add(subStr);
-					}
+			if (lookup[i] == null) continue;
+			for (int j = i + 1; j <= n; j++) {
+				String subStr = s.substring(i, j);
+				if (wordDict.contains(subStr)) {
+					if (lookup[j] == null) lookup[j] = new ArrayList<>();
+					lookup[j].add(subStr);
 				}
 			}
+
 		}
 
 		List<String> result = new ArrayList<>();
@@ -579,8 +581,10 @@ public class WordProblems {
 	 */
 	//Approach1: Using BFS and WordNode
 	/*
-	 * Time complexity: O(wordList.size() * 26 * wordLength^2) time. Every word gets added and removed from the queue at most once, for every word
-	 * we find all unseen words that differ by exactly one character which takes O(26 * wordLength^2) time.
+	 * Time complexity: O(N * 26 * wordLength^2) time. where N=wordList.size(), M = Word length
+	 * For each word in the word list, we iterate over its length to find all the intermediate words corresponding to it. Since the length 
+	 * of each word is M and we have N words, the total number of iterations the algorithm takes M×N. Additionally, forming each of the 
+	 * intermediate word takes O(M) time because of the substring operation used to create the new string. This adds up to a complexity of O(M^2*N).
 	 * Space complexity: O(wordList.size()) space. Because we add all words into a HashSet, and queue and seen set can't have more than wordList.size() elements.
 	 */
 	public int wordLadderI1(String beginWord, String endWord, List<String> wordList) {

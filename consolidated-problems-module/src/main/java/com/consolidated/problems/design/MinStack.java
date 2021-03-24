@@ -91,10 +91,7 @@ class MinStack1 {
 
 	public void pop() {
 		if (top == null) return;
-		StackNode temp = top.next;
-		top.next = null;
-		top = temp;
-
+		top = top.next;
 	}
 
 	public int top() {
@@ -109,9 +106,9 @@ class MinStack1 {
 }
 
 class StackNode {
-	public int			value;
-	public int			min;
-	public StackNode	next;
+	public int value;
+	public int min;
+	public StackNode next;
 
 	public StackNode(int value, int min) {
 		this.value = value;
@@ -160,8 +157,8 @@ class MinStack2 extends Stack<Integer> {
  * updating minEle.
  */
 class MinStack3 {
-	public int				minElement;
-	public Stack<Integer>	stack	= new Stack<>();
+	public int minElement;
+	public Stack<Integer> stack = new Stack<>();
 
 	public void push(int x) {
 		if (stack.isEmpty()) {
@@ -182,6 +179,7 @@ class MinStack3 {
 		if (!stack.isEmpty()) {
 			if (stack.peek() < minElement) {
 				top = minElement;
+				//Find next min element
 				minElement = 2 * minElement - stack.peek();
 				stack.pop();
 			} else {

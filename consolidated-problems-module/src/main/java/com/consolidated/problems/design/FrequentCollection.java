@@ -13,7 +13,6 @@ import java.util.HashSet;
 public class FrequentCollection {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		FrequentCollection fc = new FrequentCollection();
 		fc.insert(1);
 		fc.insert(2);
@@ -31,8 +30,8 @@ public class FrequentCollection {
 
 	}
 
-	HashMap<Integer, Node>	map;
-	Node					head, tail;
+	HashMap<Integer, Node> map;
+	Node head, tail;
 
 	/** Initialize your data structure here. */
 	public FrequentCollection() {
@@ -82,9 +81,7 @@ public class FrequentCollection {
 				tail.set.add(val);
 				map.put(val, tail);
 			}
-
 		}
-
 	}
 
 	/**
@@ -115,10 +112,10 @@ public class FrequentCollection {
 }
 
 class Node {
-	int					value;
-	Node				prev;
-	Node				next;
-	HashSet<Integer>	set;
+	int value;
+	Node prev;
+	Node next;
+	HashSet<Integer> set;
 
 	public Node(int v) {
 		value = v;

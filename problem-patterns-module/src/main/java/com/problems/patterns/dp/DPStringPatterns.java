@@ -34,7 +34,7 @@ public class DPStringPatterns {
 			for (int i = 0; i <= n - len; i++) {
 				int j = i + len - 1;
 				if (str.charAt(i) == str.charAt(j)) {
-					result[i][j] = len == 2 ? 2 : 2 + result[i + 1][j - 1];
+					result[i][j] = len == 2 ? 2 : result[i + 1][j - 1] + 2;
 				} else {
 					result[i][j] = Math.max(result[i][j - 1], result[i + 1][j]);
 				}

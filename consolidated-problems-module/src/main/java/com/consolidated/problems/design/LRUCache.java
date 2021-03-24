@@ -43,9 +43,9 @@ public class LRUCache {
 		System.out.println(cache.get(3));
 	}
 
-	private Map<Integer, CacheNode> map  = null;
-	private int                     cap  = 0;
-	DoublyLinkedList                list = null;
+	private Map<Integer, CacheNode> map = null;
+	private int cap = 0;
+	DoublyLinkedList list = null;
 
 	public LRUCache(int capacity) {
 		this.cap = capacity;
@@ -58,9 +58,7 @@ public class LRUCache {
 
 		CacheNode node = map.get(key);
 		list.delete(node);
-		CacheNode newNode = list.addFirst(node.key,
-				node.value);
-		map.put(key, newNode);
+		addElement(node.key, node.value);
 		return node.value;
 	}
 
@@ -73,8 +71,12 @@ public class LRUCache {
 			list.delete(rear);
 		}
 
-		CacheNode node = list.addFirst(key, value);
-		map.put(key, node);
+		addElement(key, value);
+	}
+
+	private void addElement(int key, int value) {
+		CacheNode newNode = list.addFirst(key, value);
+		map.put(key, newNode);
 	}
 
 }
@@ -91,8 +93,8 @@ class LRUCache2 {
 	}
 
 	private HashMap<Integer, CacheNode> map;
-	private DoubleLinkedList            dll;
-	private int                         capacity;
+	private DoubleLinkedList dll;
+	private int capacity;
 
 	public LRUCache2(int size) {
 		this.capacity = size;
@@ -126,13 +128,13 @@ class LRUCache2 {
 
 class LRUCache3 {
 	// store keys of cache 
-	static Deque<Integer>   dq;
+	static Deque<Integer> dq;
 
 	// store references of key in cache 
 	static HashSet<Integer> map;
 
 	// maximum capacity of cache 
-	static int              csize;
+	static int csize;
 
 	LRUCache3(int n) {
 		dq = new LinkedList<>();
@@ -194,8 +196,7 @@ class DoubleLinkedList {
 	public CacheNode front, rear;
 
 	public CacheNode addLast(int key, int val) {
-		CacheNode newNode = new CacheNode(key,
-				val);
+		CacheNode newNode = new CacheNode(key, val);
 		if (front == null) {
 			front = rear = newNode;
 		} else {
@@ -208,21 +209,19 @@ class DoubleLinkedList {
 
 	public void remove(CacheNode currNode) {
 		// Update the prev ptr or head currNode
-		if (currNode.prev != null)
-			currNode.prev.next = currNode.next;
+		if (currNode.prev != null) currNode.prev.next = currNode.next;
 		else front = currNode.next;
 
 		// Update the next ptr or rear currNode
-		if (currNode.next != null)
-			currNode.next.prev = currNode.prev;
+		if (currNode.next != null) currNode.next.prev = currNode.prev;
 		else rear = currNode.prev;
 	}
 
 }
 
 class CacheNode {
-	int              value;
-	int              key;
+	int value;
+	int key;
 	public CacheNode prev, next;
 
 	public CacheNode(int key, int val) {
