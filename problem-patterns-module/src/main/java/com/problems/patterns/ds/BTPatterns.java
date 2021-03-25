@@ -141,8 +141,7 @@ public class BTPatterns {
 		int leftHeight = heightOfTree1(root.left);
 		int rightHeight = heightOfTree1(root.right);
 
-		/*
-		 * Return max of following three 1) Height of left subtree + Height of right
+		/* Return max of following three 1) Height of left subtree + Height of right
 		 * subtree + 1; 2) Diameter of left subtree; 3) Diameter of right subtree
 		 */
 		return Math.max(leftHeight + rightHeight + 1,
