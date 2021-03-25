@@ -28,8 +28,10 @@ public class BTPatterns {
 		return 1 + Math.max(left, right);
 	}
 
-	// Approach 2: This approach avoids two recursive calls & check the tree 
-	// is balanced or not while calculating the height. Time Complexity: O(n);
+	/* Approach 2: This approach avoids two recursive calls & check the tree 
+	 * is balanced or not while calculating the height. 
+	 * Time Complexity: O(n);
+	 */
 	public boolean isBinaryTreeBalanced2(TreeNode root) {
 		return heightOfTree2(root) != Integer.MIN_VALUE;
 	}
