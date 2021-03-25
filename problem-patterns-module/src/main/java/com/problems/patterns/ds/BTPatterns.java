@@ -21,7 +21,8 @@ public class BTPatterns {
 	}
 
 	public int heightOfTree1(TreeNode root) {
-		if (root == null) return 0; // 0 means count the nodes, -1 means count the edges
+		// 0 means count the nodes, -1 means count the edges
+		if (root == null) return 0;
 		int left = heightOfTree1(root.left);
 		int right = heightOfTree1(root.right);
 		return 1 + Math.max(left, right);
