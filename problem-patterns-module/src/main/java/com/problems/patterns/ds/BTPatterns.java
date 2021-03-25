@@ -10,7 +10,7 @@ import com.common.model.TreeNode;
 //Binary Tree Patterns - DFS/BFS
 public class BTPatterns {
 
-	/*********************** 4.BT Checking ***************/
+	/*********************** 4.BT Checking ***********************/
 	// Check if given BT is Height Balanced/Balanced Binary Tree:
 	// Approach 1: Time Complexity: O(n^2)
 	public boolean isBinaryTreeBalanced1(TreeNode root) {
