@@ -129,7 +129,6 @@ public class StringAPI {
 		System.out.println("String Array to List Conversion: ");
 		List<String> alphabets = Arrays.asList(new String[] { "a", "b", "b", "d" });
 		alphabets.stream().forEach(i -> System.out.print(i + " "));
-
 	}
 
 	public void StringRegexAPIs() {

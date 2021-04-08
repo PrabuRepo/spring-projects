@@ -5,10 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Stack;
-import java.util.TreeMap;
 
 import com.common.model.OrderIndex;
 import com.common.model.QueuePack;
@@ -574,28 +572,23 @@ public class BTProblems implements TreeProperties, TreePaths {
 	 *  - Right View - DFS 
 	 *  - Diagonal View - DFS
 	 */
-	// Vertical View1: DFS Approach
+	// Vertical View: DFS Approach
 	public void verticalViewTraversal1(TreeNode root) {
 		if (root != null) {
-			//TODO: Change this to Hashmap; Becaue Treemap takes logn time to insert/update the data
-			Map<Integer, ArrayList<Integer>> map = new TreeMap<>();
+			Map<Integer, List<Integer>> map = new HashMap<>();
 			verticalOrder(root, map, 0);
 
-			if (map != null) {
-				for (Entry<Integer, ArrayList<Integer>> entry : map.entrySet())
-					System.out.println(entry.getKey() + "-" + entry.getValue());
-			}
+			//To print vertical views in order:
+			printViewTraversal1(map);
 		}
 	}
 
-	private void verticalOrder(TreeNode root, Map<Integer, ArrayList<Integer>> map, int hd) {
+	// hd - horizontal distance
+	private void verticalOrder(TreeNode root, Map<Integer, List<Integer>> map, int hd) {
 		if (root == null) return;
-		// hd - horizontal distance
 
-		/*ArrayList<Integer> list = map.get(hd);
-		if (list == null) list = new ArrayList<>();
-		list.add(root.val);
-		map.put(hd, list);*/
+		/*if (!map.containsKey(hd)) map.put(hd, new ArrayList<>());
+		map.get(hd).add(root.val);*/
 
 		map.putIfAbsent(hd, new ArrayList<>());
 		map.get(hd).add(root.val);
@@ -604,25 +597,19 @@ public class BTProblems implements TreeProperties, TreePaths {
 		verticalOrder(root.right, map, hd + 1);
 	}
 
-	// Vertical View1: BFS Approach
+	// Vertical View: BFS Approach
 	public void verticalViewTraversal2(TreeNode root) {
-		//TODO: Change this to Hashmap; Becaue Treemap takes logn time to insert/update the data
-		TreeMap<Integer, ArrayList<Integer>> map = new TreeMap<>();
+		Map<Integer, List<Integer>> map = new HashMap<>();
 		Queue<QueuePack> queue = new LinkedList<>();
-		QueuePack queuePack;
-		//ArrayList<Integer> list = new ArrayList<>();
-		TreeNode curr;
-		int hd;
+
 		queue.add(new QueuePack(0, root));
 		while (!queue.isEmpty()) {
-			queuePack = queue.poll();
-			hd = queuePack.hd;
-			curr = queuePack.node;
+			QueuePack queuePack = queue.poll();
+			int hd = queuePack.hd;
+			TreeNode curr = queuePack.node;
 
-			/*list = map.get(hd);
-			if (list == null) list = new ArrayList<>();
-			list.add(curr.val);
-			map.put(hd, list);*/
+			/*if (!map.containsKey(hd)) map.put(hd, new ArrayList<>());
+			map.get(hd).add(root.val);*/
 
 			map.putIfAbsent(hd, new ArrayList<>());
 			map.get(hd).add(curr.val);
@@ -631,88 +618,102 @@ public class BTProblems implements TreeProperties, TreePaths {
 			if (curr.right != null) queue.add(new QueuePack(hd + 1, curr.right));
 		}
 
-		for (Entry<Integer, ArrayList<Integer>> entry : map.entrySet())
-			System.out.println(entry.getKey() + "-" + entry.getValue());
+		//To print vertical views in order:
+		printViewTraversal1(map);
 	}
 
 	// Top View - BFS Approach
 	public void topViewTraversal(TreeNode root) {
-		TreeMap<Integer, Integer> map = new TreeMap<>(); // Using Map Api
+		Map<Integer, Integer> map = new HashMap<>(); // Using Map Api
 		// Set<Integer> set = new HashSet<>(); // Using Set Api
 		Queue<QueuePack> queue = new LinkedList<>();
-		QueuePack queuePack;
-		TreeNode curr;
-		int hd;
+
 		queue.add(new QueuePack(0, root));
 		while (!queue.isEmpty()) {
-			queuePack = queue.poll();
-			hd = queuePack.hd;
-			curr = queuePack.node;
+			QueuePack queuePack = queue.poll();
+			int hd = queuePack.hd;
+			TreeNode curr = queuePack.node;
 
-			/*
-			 * if (!set.contains(hd)) { set.add(hd); System.out.print(curr.val + " "); }
-			 */
+			//if (!set.contains(hd)) { set.add(hd); System.out.print(curr.val + " "); }
 			if (!map.containsKey(hd)) map.put(hd, curr.val);
 
 			if (curr.left != null) queue.add(new QueuePack(hd - 1, curr.left));
-
 			if (curr.right != null) queue.add(new QueuePack(hd + 1, curr.right));
 		}
 
-		for (Integer key : map.keySet())
-			System.out.print(map.get(key) + "-");
+		printViewTraversal2(map);
 	}
 
-	//	Print Bottom View of Binary Tree
+	// Print Bottom View of Binary Tree
 	// Bottom View - BFS Approach
 	public void bottomViewTraversal(TreeNode root) {
-		TreeMap<Integer, Integer> map = new TreeMap<>();
+		Map<Integer, Integer> map = new HashMap<>();
 		Queue<QueuePack> queue = new LinkedList<>();
-		QueuePack queuePack;
-		TreeNode curr;
-		int hd;
+
 		queue.add(new QueuePack(0, root));
 		while (!queue.isEmpty()) {
-			queuePack = queue.poll();
-			hd = queuePack.hd;
-			curr = queuePack.node;
+			QueuePack queuePack = queue.poll();
+			int hd = queuePack.hd;
+			TreeNode curr = queuePack.node;
 
 			map.put(hd, curr.val);
 
 			if (curr.left != null) queue.add(new QueuePack(hd - 1, curr.left));
-
 			if (curr.right != null) queue.add(new QueuePack(hd + 1, curr.right));
 		}
 
-		for (Integer key : map.keySet())
-			System.out.print(map.get(key) + "-");
-
+		printViewTraversal2(map);
 	}
 
 	// Diagonal View - DFS Approach
 	public void diagonalTraversal(TreeNode root) {
-		Map<Integer, ArrayList<Integer>> map = new HashMap<>();
+		Map<Integer, List<Integer>> map = new HashMap<>();
 
 		diagonalTraversal(root, 0, map);
 
-		for (Entry<Integer, ArrayList<Integer>> entry : map.entrySet())
-			System.out.println(entry.getKey() + " - " + entry.getValue());
-
+		printViewTraversal1(map);
 	}
 
-	public void diagonalTraversal(TreeNode root, int dist, Map<Integer, ArrayList<Integer>> map) {
+	public void diagonalTraversal(TreeNode root, int dist, Map<Integer, List<Integer>> map) {
 		if (root == null) return;
 
-		/*ArrayList<Integer> list = map.get(dist);
-		if (list == null) list = new ArrayList<>();
-		list.add(root.val);
-		map.put(dist, list);*/
+		/*if (!map.containsKey(hd)) map.put(hd, new ArrayList<>());
+		map.get(hd).add(root.val);*/
 
 		map.putIfAbsent(dist, new ArrayList<>());
 		map.get(dist).add(root.val);
 
 		diagonalTraversal(root.left, dist + 1, map);
 		diagonalTraversal(root.right, dist, map);
+	}
+
+	private void printViewTraversal1(Map<Integer, List<Integer>> map) {
+		int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+		for (int key : map.keySet()) {
+			min = Math.min(min, key);
+			max = Math.max(max, key);
+		}
+
+		for (int i = min; i <= max; i++) {
+			if (map.get(i) != null && !map.get(i).isEmpty()) {
+				System.out.println(i + " - " + map.get(i));
+				map.get(i).forEach(val -> System.out.print(val + " "));
+			}
+		}
+	}
+
+	private void printViewTraversal2(Map<Integer, Integer> map) {
+		int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+		for (int key : map.keySet()) {
+			min = Math.min(min, key);
+			max = Math.max(max, key);
+		}
+
+		for (int i = min; i <= max; i++) {
+			if (map.get(i) != null) {
+				System.out.println(i + " - " + map.get(i));
+			}
+		}
 	}
 
 	/*
@@ -725,38 +726,20 @@ public class BTProblems implements TreeProperties, TreePaths {
 	}
 
 	//	Binary Tree Left/Right Side View
-	// Left View - DFS Approach
-	static int maxLeftLevel = 0;
 
-	public void leftViewOfTree2(TreeNode root) {
-		leftViewOfTree2(root, 1);
-	}
-
-	public void leftViewOfTree2(TreeNode root, int level) {
-		if (root == null) return;
-
-		if (maxLeftLevel < level) {
-			System.out.print(root.val + " ");
-			maxLeftLevel = level;
-		}
-
-		leftViewOfTree2(root.left, level + 1);
-		leftViewOfTree2(root.right, level + 1);
-	}
-
-	public List<Integer> leftViewOfTree3(TreeNode root) {
+	public List<Integer> leftViewOfTree2(TreeNode root) {
 		List<Integer> result = new ArrayList<>();
-		leftViewOfTree3(root, result, 0);
+		leftViewOfTree(root, result, 0);
 		return result;
 	}
 
-	public void leftViewOfTree3(TreeNode root, List<Integer> result, int level) {
+	public void leftViewOfTree(TreeNode root, List<Integer> result, int level) {
 		if (root == null) return;
 		if (level == result.size()) // Add one element per level
 			result.add(root.val);
 
-		leftViewOfTree3(root.left, result, level + 1);
-		leftViewOfTree3(root.right, result, level + 1);
+		leftViewOfTree(root.left, result, level + 1);
+		leftViewOfTree(root.right, result, level + 1);
 	}
 
 	/*
@@ -768,30 +751,11 @@ public class BTProblems implements TreeProperties, TreePaths {
 
 	}
 
-	// Right View - DFS Approach
-	static int maxRightLevel = 0;
-
-	public void rightViewOfTree2(TreeNode root) {
-		rightViewOfTree2(root, 1);
-	}
-
-	public void rightViewOfTree2(TreeNode root, int level) {
-		if (root == null) return;
-		if (maxRightLevel < level) {
-			System.out.print(root.val + " ");
-			maxRightLevel = level;
-		}
-
-		rightViewOfTree2(root.right, level + 1);
-		rightViewOfTree2(root.left, level + 1);
-	}
-
-	/*
-	 * Right Side View - DFS Approach: The core idea of this algorithm: 1.Each
+	/* Right Side View - DFS Approach: The core idea of this algorithm: 1.Each
 	 * depth/level of the tree only select one node. 2. View depth/level is current
 	 * size of result list.
 	 */
-	public List<Integer> rightSideView(TreeNode root) {
+	public List<Integer> rightSideView2(TreeNode root) {
 		List<Integer> result = new ArrayList<>();
 		rightSideView(root, result, 0);
 		return result;

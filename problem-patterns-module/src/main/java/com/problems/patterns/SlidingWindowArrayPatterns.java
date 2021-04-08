@@ -54,6 +54,8 @@ public class SlidingWindowArrayPatterns {
 	/*
 	 * This pattern solves problems for the given input array and fixed window size. We have to perform action 
 	 * on this given window size depends on problem such as add, distinct no, avg etc.
+	 * Note:
+	 * 	To remove or access k index before, use this "i-k+1"
 	 */
 
 	/* Sliding Window Motivation Problem: To understand the Sliding Window Concepts
@@ -479,7 +481,7 @@ public class SlidingWindowArrayPatterns {
 		return maxLen;
 	}
 
-	//TODO: Find Minimum Length Sub Array With Sum K
+	// Find Minimum Length Sub Array With Sum K
 	public int subarraySumKMinLen2(int[] nums, int k) {
 		int minLen = Integer.MAX_VALUE, sum = 0;
 		//Hashmap: Key: sum[0,i - 1]; Val: index
@@ -504,7 +506,7 @@ public class SlidingWindowArrayPatterns {
 	public int subarraySumCloseToK21(int[] arr, int k) {
 		int sum = 0;
 		TreeSet<Integer> set = new TreeSet<Integer>();
-		int maxLen = Integer.MIN_VALUE;
+		int closestSum = Integer.MIN_VALUE;
 		set.add(0);
 
 		for (int i = 0; i < arr.length; i++) {
@@ -512,13 +514,13 @@ public class SlidingWindowArrayPatterns {
 
 			Integer ceiling = set.ceiling(sum - k);
 			if (ceiling != null) {
-				maxLen = Math.max(maxLen, sum - ceiling);
+				closestSum = Math.max(closestSum, sum - ceiling);
 			}
 
 			set.add(sum);
 		}
 
-		return maxLen;
+		return closestSum;
 	}
 
 	/* Maximum Sum of Subarray Close to K:

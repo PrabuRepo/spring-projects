@@ -152,4 +152,36 @@ class TreeNode1 {
 		else if (i == leftSize) return this;
 		else return right.getIthNode(i - (leftSize + 1));
 	}
+
+	// Move this consolidated Module:
+	// 528. Random Pick with Weight
+	int[] prefixSum;
+	Random random;
+
+	public void init(int[] w) {
+		random = new Random();
+		prefixSum = w;
+		for (int i = 1; i < w.length; i++)
+			prefixSum[i] += prefixSum[i - 1];
+	}
+
+	public int pickIndex() {
+		// generate random number in [1,sum of elements]
+		int val = random.nextInt(prefixSum[prefixSum.length - 1]) + 1;
+		//this returns the index of the random number
+		return insertPosition(prefixSum, val);
+	}
+
+	//Search Insert Position
+	private int insertPosition(int[] prefixSum, int target) {
+		int l = 0, r = prefixSum.length - 1;
+		while (l <= r) {
+			int m = l + (r - l) / 2;
+			if (target == prefixSum[m]) return m;
+			else if (target < prefixSum[m]) r = m - 1;
+			else l = m + 1;
+		}
+		return l;
+	}
+
 }

@@ -58,9 +58,9 @@ public class IntervalPatterns {
 
 		//This problem is basically to find the overlapping b/w the interval
 		//So it can be sorted based on both start & finish time
-		Arrays.sort(intervals, (ob1, ob2) -> ob1.start - ob2.start);
+		//Arrays.sort(intervals, (ob1, ob2) -> ob1.start - ob2.start);
 		//or 
-		//Arrays.sort(intervals, (ob1, ob2) -> ob1.end - ob2.end);
+		Arrays.sort(intervals, (ob1, ob2) -> ob1.end - ob2.end);
 
 		for (int i = 0; i < intervals.length - 1; i++) {
 			if (intervals[i].end > intervals[i + 1].start) return false;
@@ -125,6 +125,7 @@ public class IntervalPatterns {
 		if (intervals.size() <= 1) return intervals;
 		Collections.sort(intervals, Comparator.comparing(i -> i.start));
 		//Collections.sort(intervals, (a, b) -> (a.start - b.start));
+
 		// Merge the overlapping intervals
 		List<Interval> result = new ArrayList<>();
 		Interval prev = intervals.get(0);
@@ -351,6 +352,8 @@ public class IntervalPatterns {
 					Math.max(intervals.get(i).end, newInterval.end));
 			intervals.remove(i);
 		}
+
+		//Time is O(n^2), if list is ArrayList. Time is O(n), if list is LinkedList  
 		intervals.add(i, newInterval);
 		return intervals;
 	}

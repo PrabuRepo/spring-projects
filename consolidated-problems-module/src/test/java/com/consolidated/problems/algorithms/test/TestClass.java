@@ -14,6 +14,7 @@ import java.util.Stack;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import com.common.model.ListNode;
 import com.common.utilities.Utils;
 
 public class TestClass {
@@ -37,7 +38,7 @@ public class TestClass {
 		//System.out.println(Arrays.toString(ob.zeroSumSubArray(new int[] { 1, -3, 2 })));
 
 		int[] arr = { 3, 2, 8, 5, 1, 4, 6, 0 };
-		ob.dutchFlagAlgSample(arr, 4);
+		//ob.dutchFlagAlgSample(arr, 4);
 		//System.out.println(Arrays.toString(arr));
 
 		String str = "Bob hit a ball, the hit BALL flew far after it was hit.";
@@ -45,9 +46,41 @@ public class TestClass {
 		//System.out.println(Arrays.toString(words));
 
 		String words1[] = { "Tushar", "likes", "to", "write", "code", "at", "free", "time" };
-		System.out.println(ob.justify1(words1, 12));
+		//System.out.println(ob.justify1(words1, 12));
 
-		System.out.println(ob.justify2(words1, 12));
+		//System.out.println(ob.justify2(words1, 12));
+
+		ListNode head = new ListNode(2);
+		head.next = new ListNode(1);
+		head.next.next = new ListNode(5);
+
+		System.out.println(ob.nextLargerNodes(head));
+	}
+
+	public int[] nextLargerNodes(ListNode head) {
+		//0=>index, 1=>val
+		Stack<int[]> stack = new Stack<>();
+		int index = 0;
+		List<Integer> result = new ArrayList<>();
+
+		while (head != null) {
+			while (!stack.isEmpty() && head.data > stack.peek()[1]) {
+				int[] curr = stack.pop();
+				System.out.println(Arrays.toString(curr));
+				result.add(curr[0], curr[1]);
+				System.out.println(Arrays.toString(curr));
+			}
+			stack.push(new int[] { index, head.data });
+			index++;
+			head = head.next;
+		}
+
+		while (!stack.isEmpty()) {
+			int[] curr = stack.pop();
+			result.set(curr[0], curr[1]);
+		}
+
+		return result.stream().mapToInt(i -> i.intValue()).toArray();
 	}
 
 	//Using Greedy Algorithm:

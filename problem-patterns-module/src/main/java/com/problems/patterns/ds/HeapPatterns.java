@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -288,8 +287,8 @@ public class HeapPatterns {
 
 		// 1.Count the frequency of elements
 		Map<Integer, Integer> map = new HashMap<>();
-		for (int i = 0; i < n; i++)
-			map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
+		for (int num : nums)
+			map.put(num, map.getOrDefault(num, 0) + 1);
 
 		if (map.size() < k) return null;
 
@@ -320,9 +319,8 @@ public class HeapPatterns {
 
 		// Count the frequency of elements
 		Map<Integer, Integer> map = new HashMap<>(); // Key - Element; Value - Count
-		for (int i = 0; i < n; i++) {
-			map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
-		}
+		for (int num : nums)
+			map.put(num, map.getOrDefault(num, 0) + 1);
 
 		if (map.size() < k) return null;
 
@@ -350,10 +348,8 @@ public class HeapPatterns {
 
 		// Count the frequency of elements
 		Map<Integer, Integer> map = new HashMap<>(); // Key - Element; Value - Count
-		for (int i = 0; i < n; i++) {
-			int count = map.getOrDefault(nums[i], 0);
-			map.put(nums[i], count + 1);
-		}
+		for (int num : nums)
+			map.put(num, map.getOrDefault(num, 0) + 1);
 
 		if (map.size() < k) return null;
 
@@ -425,46 +421,39 @@ public class HeapPatterns {
 	public String rearrangeString(String str, int k) {
 		if (k == 0) return str;
 
-		// initialize the counter for each character
-		final HashMap<Character, Integer> map = new HashMap<Character, Integer>();
-		for (int i = 0; i < str.length(); i++) {
-			char c = str.charAt(i);
-			map.put(c, map.getOrDefault(c, 0) + 1);
+		Map<Character, Integer> map = new HashMap<Character, Integer>();
+		for (char ch : str.toCharArray()) {
+			map.put(ch, map.getOrDefault(ch, 0) + 1);
 		}
 
 		// Max Heap: sort the chars by frequency
 		PriorityQueue<Character> queue = new PriorityQueue<>(
 				(c1, c2) -> map.get(c1) != map.get(c2) ? map.get(c2) - map.get(c1) : c1.compareTo(c2));
 
-		for (char c : map.keySet())
-			queue.offer(c);
-
-		// or queue.addAll(map.keySet());
+		queue.addAll(map.keySet());
 
 		StringBuilder sb = new StringBuilder();
 		int len = str.length();
 		while (!queue.isEmpty()) {
 			//Waiting Queue is used to process the chars in the next iteration, if char count is more one
-			List<Character> waitingQueue = new LinkedList<>();
-			for (int i = 0; i < Math.min(k, len); i++) {
+			List<Character> waitingQueue = new ArrayList<>();
+			int i = Math.min(k, len);
+			while (i-- > 0) {
 				//It is not possible to rearrange the string.
 				if (queue.isEmpty()) return "";
 
-				char c = queue.poll();
-				sb.append(String.valueOf(c));
-
-				map.put(c, map.get(c) - 1);
+				char ch = queue.poll();
+				sb.append(String.valueOf(ch));
 				//if char count is greater than one, then add into the waiting queue to process in next iteration
-				if (map.get(c) > 0) waitingQueue.add(c);
-
-				/*	if (map.get(c) == 1) {
-						map.remove(c);
-					} else { 
-						map.put(c, map.get(c) - 1);
-						waitingQueue.add(c);
-					}*/
+				if (map.get(ch) == 1) {
+					map.remove(ch);
+				} else {
+					map.put(ch, map.get(ch) - 1);
+					waitingQueue.add(ch);
+				}
 				len--;
 			}
+			//Add waitingQueue values again in the queue
 			queue.addAll(waitingQueue);
 		}
 
@@ -480,44 +469,44 @@ public class HeapPatterns {
 	 * Example: Input: tasks = ["A","A","A","B","B","B"], n = 2 Output: 8 
 	 * Explanation: A -> B -> idle -> A -> B -> idle -> A -> B.
 	 */
-	// Approach1:
+	/* Approach1: Greedy Algorithm
+	 *  As per greedy approach, intervals are based on max_occuring_element. 
+	 *  	- no of idle = (max_occuring_element - 1) * n
+	 *  	- intervals =  (max_occuring_element - 1) * (n+1) + max_occuring_element_count; 
+	 *  
+	 *  Eg: A,A,A n=2;
+	 *  	A I I A I I A; Here Idle = (3-1) * 2 = 4; Intervals = (3-1) * (2+1) + 1 = 7; 
+	 *  	max_occuring_element_count = 1
+	 *  	Output = 7
+	 *      
+	 *      A,A,A,B; n=2
+	 *      A B I A I I A; Here Idle = (3-1) * 2 = 4; Intervals = (3-1) * (2+1) + 1 = 7; 
+	 *      Output = 7
+	 *      
+	 *      A,A,A,B,B,C,C; n=2
+	 *      A B C A B C A; Here Idle = (3-1) * 2 = 4; Intervals = (3-1) * (2+1) + 1 = 7;
+	 *      Output = 7
+	 *      
+	 *      A,A,A,B,B,B,C,C; n=2
+	 *      A B C A B C A B; Here Idle = (3-1) * 2 = 4; Intervals = (3-1) * (2+1) + 2 = 8;
+	 *      max_occuring_element_count = 2; A & B are present max times
+	 *      Output = 8
+	 *      
+	 *      A,A,A,B,B,B,C,C,C; n=2
+	 *      A B C A B C A B C; Here Idle = (3-1) * 2 = 4; Intervals = (3-1) * (2+1) + 3 = 9;
+	 *      max_occuring_element_count = 3; A,B,C are present max times
+	 *      Output = 8
+	 *      
+	 *      Reference: https://www.youtube.com/watch?v=CHlCkJadQ7o
+	 */
 	public int leastInterval1(char[] tasks, int n) {
 		int[] cnt = new int[26];
-		for (char c : tasks) {
-			cnt[c - 'A']++;
-		}
-		int maxChar = 0, maxCharCnt = 0;
-		for (int i = 0; i < 26; i++) {
-			if (cnt[i] == maxChar) {
-				maxCharCnt++;
-			} else if (cnt[i] > maxChar) {
-				maxChar = cnt[i];
-				maxCharCnt = 1;
-			}
-		}
-		int minimum = (maxChar - 1) * (n + 1) + maxCharCnt;
-		return (tasks.length > minimum) ? tasks.length : minimum;
-	}
-
-	/*
-	Steps:
-	First count the number of occurrences of each element.
-	Let the max frequency seen be M for element E. //maxFreq -> M
-	Run through the frequency dictionary and for every element which has frequency == M, add 1 cycle to result. //maxFreqCount
-	We can schedule the first M-1 occurrences of E, each E will be followed by at least N CPU cycles in between successive schedules of E
-	Total CPU cycles after scheduling M-1 occurrences of E = (M-1) * (N + 1) // 1 comes for the CPU cycle for E itself
-	Now schedule the final round of tasks. We will need at least 1 CPU cycle of the last occurrence of E. If there are multiple tasks with frequency M, they will all need 1 more cycle.
-	If we have more number of tasks than the max slots we need as computed above we will return the length of the tasks array as we need at least those many CPU cycles.
-	 */
-
-	public int leastInterval11(char[] tasks, int n) {
-		int[] cnt = new int[26];
 		int maxFreq = 0;
-		for (char c : tasks) {
+		for (char ch : tasks) {
 			//First count the number of occurrences of each element.
-			cnt[c - 'A']++;
+			cnt[ch - 'A']++;
 			//Find max frequency of element in the tasks
-			maxFreq = Math.max(maxFreq, cnt[c - 'A']);
+			maxFreq = Math.max(maxFreq, cnt[ch - 'A']);
 		}
 
 		//Find no of times max freq in cnt[] array
@@ -526,16 +515,44 @@ public class HeapPatterns {
 			if (cnt[i] == maxFreq) maxFreqCount++;
 		}
 
-		int result = (maxFreq - 1) * (n + 1) + maxFreqCount;
+		int minTime = (maxFreq - 1) * (n + 1) + maxFreqCount;
 
-		//return Math.max(result, tasks.length);
-
-		return (tasks.length > result) ? tasks.length : result;
+		return Math.max(minTime, tasks.length);
+		//return (tasks.length > minTime) ? tasks.length : minTime;
 	}
 
-	// Approach-2
-	// Java PriorityQueue solution - Similar problem Rearrange string K distance apart
+	//Approach2: Java PriorityQueue solution - Similar problem Rearrange string K distance apart
 	public int leastInterval2(char[] tasks, int n) {
+		if (tasks.length == 0) return 0;
+
+		Map<Character, Integer> map = new HashMap<>();
+		for (char ch : tasks)
+			map.put(ch, map.getOrDefault(ch, 0) + 1);
+
+		PriorityQueue<Integer> queue = new PriorityQueue<>(Collections.reverseOrder());
+		queue.addAll(map.values());
+
+		int count = 0;
+
+		while (!queue.isEmpty()) {
+			List<Integer> list = new ArrayList<>();
+
+			int interval = n + 1;
+			while (interval-- > 0 && !queue.isEmpty()) {
+				int val = queue.poll();
+				if (--val > 0) list.add(val);
+			}
+
+			queue.addAll(list);
+
+			count += queue.isEmpty() ? list.size() : n + 1;
+		}
+
+		return count;
+	}
+
+	// Approach-3 Similar to previous one 
+	public int leastInterval3(char[] tasks, int n) {
 		if (tasks == null || tasks.length == 0) return -1;
 		// build map to sum the amount of each task
 		HashMap<Character, Integer> map = new HashMap<>();
@@ -1132,6 +1149,6 @@ public class HeapPatterns {
 
 	public static void main(String[] args) {
 		HeapPatterns ob = new HeapPatterns();
-		System.out.println(ob.rearrangeString("aaabc", 3));
+		System.out.println("Rearrange String: " + ob.rearrangeString("aabbcc", 3));
 	}
 }

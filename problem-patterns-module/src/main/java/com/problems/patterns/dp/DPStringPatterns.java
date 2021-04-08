@@ -48,11 +48,12 @@ public class DPStringPatterns {
 
 	private String printLPS3(int[][] result, String str) {
 		int n = str.length();
-		int row = 0, col = n - 1, start = 0, end = result[0][n - 1] - 1;
-		char[] seq = new char[result[0][n - 1]];
+		int subSeqLen = result[0][n - 1];
+		int row = 0, col = n - 1, start = 0, end = subSeqLen - 1;
+		char[] seq = new char[subSeqLen];
 		while (row <= col) {
 			if (result[row][col] > result[row][col - 1] && result[row][col] > result[row + 1][col]) {
-				seq[start++] = str.charAt(col);
+				seq[start++] = str.charAt(col); //or str.charAt(row);
 				seq[end--] = str.charAt(col);
 				row++;
 				col--;
@@ -125,7 +126,11 @@ public class DPStringPatterns {
 	 * Palindrome Partitioning II:
 	 *   Given a string s, partition s such that every substring of the partition is a palindrome. Return the minimum cuts needed for 
 	 *   a palindrome partitioning of s.*/
-	//Approach 1: Time O(n^2), Space: O(n^2)
+	/* 
+	 * Approach 1: Time O(n^2), Space: O(n^2)
+	 * 
+	 * This solution is exactly same as "Longest Palindromic Subsequence" solution. In addition to that solution, there is a mincuts logic to cut array.
+	 */
 	public int minCut1(String s) {
 		int n = s.length();
 		if (n <= 1) return 0;
@@ -135,10 +140,11 @@ public class DPStringPatterns {
 		for (int r = 0; r < n; r++) {
 			int min = r;
 			for (int l = 0; l <= r; l++) {
+				//Here r-l==1 condition is similar to "len==2" condition in LPS. i.e 2 chars palindrome
 				if (s.charAt(l) == s.charAt(r) && (r - l <= 1 || dp[l + 1][r - 1])) {
 					dp[l][r] = true;
 					//if l == 0 means substring(0, r) is palindrome, so no cut is needed
-					min = l == 0 ? 0 : Math.min(min, cut[l - 1] + 1);
+					min = (l == 0) ? 0 : Math.min(min, cut[l - 1] + 1);
 				}
 			}
 			cut[r] = min;
@@ -258,7 +264,6 @@ public class DPStringPatterns {
 			for (int j = 0; j < n; j++) {
 				if (s1.charAt(i) == s2.charAt(j)) {
 					dp[i][j] = (i == 0 || j == 0) ? 1 : 1 + dp[i - 1][j - 1];
-					dp[i][j] = 1 + dp[i - 1][j - 1];
 				} else {
 					dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
 				}
@@ -309,9 +314,9 @@ public class DPStringPatterns {
 		if (j < 0) return i + 1;
 		if (s1.charAt(i) == s2.charAt(j)) return minDistance(s1, s2, i - 1, j - 1);
 
-		return 1 + Utils.min(minDistance(s1, s2, i, j - 1), //  represents insert operation
-				minDistance(s1, s2, i - 1, j), // represents delete operation
-				minDistance(s1, s2, i - 1, j - 1)); // represents replace operation
+		return 1 + Utils.min(minDistance(s1, s2, i, j - 1), //  represents insert operation in S1
+				minDistance(s1, s2, i - 1, j), // represents delete operation in S1
+				minDistance(s1, s2, i - 1, j - 1)); // represents replace operation in S1
 	}
 
 	//DP- Top down Approach/Memoization: Time: O(mn), Space:O(mn)

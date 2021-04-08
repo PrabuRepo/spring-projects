@@ -70,7 +70,7 @@ public class TwoPointerPatterns {
 		int[] result = new int[2];
 		Arrays.fill(result, -1);
 		Map<Integer, Integer> map = new HashMap<>(); // Value, Index
-		for (int i = 0; i < nums.length - 1; i++) {
+		for (int i = 0; i < nums.length; i++) {
 			if (map.get(nums[i]) != null) {
 				result[0] = map.get(nums[i]);
 				result[1] = i;
@@ -200,9 +200,8 @@ public class TwoPointerPatterns {
 	// Its similar to approach1 without any additional space
 	// Time Complexity: O(n) without Auxiliary Space
 	public int trappingRainWater2(int[] a) {
-		int sum = 0;
+		int sum = 0, tallestLeft = 0, tallestRight = 0;
 		int l = 0, h = a.length - 1;
-		int tallestLeft = 0, tallestRight = 0;
 		while (l < h) {
 			// Find the tallest bar from the left side & right side and execute corresponding block
 			if (a[l] < a[h]) {

@@ -82,10 +82,8 @@ public class QueuePatterns {
 	public int firstUniqChar2(String s) {
 		if (s == null) return -1;
 		int n = s.length();
-		char ch;
 		HashMap<Character, Integer> map = new HashMap<>();
-		for (int i = 0; i < n; i++) {
-			ch = s.charAt(i);
+		for (char ch : s.toCharArray()) {
 			map.put(ch, map.getOrDefault(ch, 0) + 1);
 		}
 
@@ -196,7 +194,7 @@ public class QueuePatterns {
 		Deque<Integer> deque = new LinkedList<>();
 
 		for (int i = 0; i < n; i++) {
-			//Keep removing the smaller element from the last in deque
+			//Keep removing the smaller element from the last in deque to make sure that always max element present in front
 			while (!deque.isEmpty() && nums[i] > nums[deque.peekLast()]) deque.removeLast();
 
 			deque.addLast(i);
@@ -223,6 +221,7 @@ public class QueuePatterns {
 	 *   		- min denotes the smallest integer in subArr*/
 	public int maxMin(int k, int[] nums) {
 		if (nums.length == 0 || k > nums.length) return 0;
+		//TODO: Why this sorting? Looks like sorting is not required
 		Arrays.sort(nums);
 
 		int n = nums.length, maxDiff = Integer.MAX_VALUE;

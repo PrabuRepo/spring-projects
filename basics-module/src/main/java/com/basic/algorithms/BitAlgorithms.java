@@ -25,7 +25,7 @@ public class BitAlgorithms {
 	public static void main(String[] args) {
 		BitAlgorithms ob = new BitAlgorithms();
 
-		ob.testBasicIdeas();
+		//ob.testBasicIdeas();
 
 		ob.testSimpleTricks();
 
@@ -199,6 +199,7 @@ public class BitAlgorithms {
 		swap2(2905, 6079);
 		System.out.println("Compliment of all bits: " + Integer.toBinaryString(compliment1(9)));
 		System.out.println("Compliment of only till left most set bit: " + Integer.toBinaryString(compliment2(9)));
+		System.out.println("Reverse Bits: " + reverseBits(-3));
 	}
 
 	public int intMaxValue() {
@@ -530,17 +531,17 @@ public class BitAlgorithms {
 
 	// Its better than previous approach
 	public int reverseBits2(int n) {
-		int bitCount = 31;
-		int rev = 0;
+		int rev = 0, bits = 32;
 		//Reverse bits only till n reaches zero
-		while (n > 0) {
+		while (n != 0) {
 			rev <<= 1;
-			rev |= n & 1;
-			n >>= 1;
-			bitCount--;
+			rev |= (n & 1);
+			bits--;
+			n >>>= 1;
 		}
+
 		//Remaining bits will be reversed here
-		rev <<= bitCount;
+		rev <<= bits;
 		return rev;
 	}
 

@@ -477,8 +477,6 @@ public class Graph {
 			// If this condition satisfies, then graph contains cycle
 			if (recursionStack[v]) return true;
 
-			if (visited[v]) return false;
-
 			// Mark vertex as visited and set recursion stack
 			visited[v] = true;
 			recursionStack[v] = true;
@@ -486,7 +484,7 @@ public class Graph {
 			ListIterator<Integer> listIterator = adjList[v].listIterator();
 			while (listIterator.hasNext()) {
 				int next = listIterator.next();
-				if (topoSortUtil(next, visited, recursionStack, result)) return true;
+				if (!visited[v] && topoSortUtil(next, visited, recursionStack, result)) return true;
 			}
 
 			result.addFirst(v);

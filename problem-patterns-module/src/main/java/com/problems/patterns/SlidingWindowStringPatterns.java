@@ -203,52 +203,12 @@ public class SlidingWindowStringPatterns {
 	 * Given a string, find the longest substring that contains only two unique characters. For example, given "abcbbbbcccbdddadacb",
 	 * the longest substring that contains 2 unique character is "bcbbbbcccb".
 	 */
-	public int lengthOfLongestSubstringTwoDistinct(String s) {
-		int[] hash = new int[128];
-		int l = 0, r = 0, maxLen = 0, counter = 0;
-
-		while (r < s.length()) {
-			char c1 = s.charAt(r);
-			if (hash[c1] == 0) counter++;
-			hash[c1]++;
-
-			while (counter > 2) {
-				char c2 = s.charAt(l);
-				hash[c2]--;
-				if (hash[c2] == 0) counter--;
-				l++;
-			}
-
-			maxLen = Math.max(maxLen, r - l + 1);
-			r++;
-		}
-
-		return maxLen;
+	public int lengthOfLongestSubstringTwoDistinct1(String s) {
+		return lengthOfLongestSubstringKDistinct1(s, 2);
 	}
 
 	public int lengthOfLongestSubstringTwoDistinct2(String s) {
-		int maxLen = 0, l = 0, r = 0;
-		HashMap<Character, Integer> map = new HashMap<>();
-
-		while (r < s.length()) {
-			char c1 = s.charAt(r);
-			map.put(c1, map.getOrDefault(c1, 0) + 1);
-
-			while (map.size() > 2) {
-				char c2 = s.charAt(l);
-				int count = map.get(c2);
-				if (count == 1) {
-					map.remove(c2);
-				} else {
-					map.put(c2, count - 1);
-				}
-				l++;
-			}
-			maxLen = Math.max(maxLen, r - l + 1);
-			r++;
-		}
-
-		return maxLen;
+		return lengthOfLongestSubstringKDistinct2(s, 2);
 	}
 
 	/*
@@ -309,6 +269,7 @@ public class SlidingWindowStringPatterns {
 	 * Example: Input: s = "AABABBA", k = 1 Output: 4 Explanation: Replace the one 'A' in the middle with 'B' and form "AABBBBA". 
 	 * The substring "BBBB" has the longest repeating letters, which is 4.
 	 */
+	//TODO : Revisit this: Confusion in maxCharCount below
 	// Sliding Window approach
 	// Time Complexity: O(n)
 	public int characterReplacement1(String s, int k) {

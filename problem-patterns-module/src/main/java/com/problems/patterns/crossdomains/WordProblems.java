@@ -904,6 +904,7 @@ public class WordProblems {
 		for (String word : words)
 			map.put(word, map.getOrDefault(word, 0) + 1);
 
+		//TODO: Refactor this code 
 		PriorityQueue<Map.Entry<String, Integer>> queue = new PriorityQueue<>((a, b) -> {
 			if (a.getValue() == b.getValue()) return a.getKey().compareTo(b.getKey());
 			return b.getValue() - a.getValue();

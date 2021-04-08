@@ -9,7 +9,7 @@ import java.util.Arrays;
  * Note: 
  *  If target is mid element(t==a[m]) return mid index
  *  If target presents left side(t<a[m]), h = m-1
- *  If target presents right side(a[m]<t), l = m+1
+ *  If target presents right side(t>a[m]), l = m+1
  * 
  * 	Mostly l=m+1, h=m -> This condition allows to move the index
  *  But l=m, h=m-1 -> This condition doesnt move and loop runs without exit. 

@@ -22,15 +22,15 @@ public class DivideAndConquerPatterns {
 
 	// Divide & conquer Alg(Iterative Approach)-> Time Complexity: O(logn)
 	public double findMedian2(int[] a1, int[] a2) {
-		int l1 = 0, h1 = a1.length - 1, l2 = 0, h2 = a2.length - 1, m1 = 0, m2 = 0, len = 0;
+		int l1 = 0, h1 = a1.length - 1, l2 = 0, h2 = a2.length - 1, len = 0;
 
 		while (l1 <= h1 && l2 <= h2) {
 			len = h1 - l1 + 1; // or h2-l2+1; Because every call, both arrays have equal no of values
 			if (l1 == h1 && l2 == h2) return (double) (a1[l1] + a2[l2]) / 2;
 			if (h1 - l1 == 1 && h2 - l2 == 1) return (double) (Math.max(a1[l1], a2[l2]) + Math.min(a1[h1], a2[h2])) / 2;
 
-			m1 = (l1 + h1) / 2;
-			m2 = (l2 + h2) / 2;
+			int m1 = (l1 + h1) / 2;
+			int m2 = (l2 + h2) / 2;
 
 			if (a1[m1] == a2[m2]) {
 				return a1[m1];
@@ -99,19 +99,19 @@ public class DivideAndConquerPatterns {
 
 		if (lenX > lenY) return findMedianDiffSizeArray2(Y, X);
 
-		int leftX, rightX, leftY, rightY, low = 0, high = lenX;
+		int l = 0, h = lenX; //Note: h is size of X[]; not n-1
 		int totLength = lenX + lenY;
-		while (low <= high) {
-			//patitionX is mid element in the array X
-			int partitionX = (low + high) / 2;
+		while (l <= h) {
+			//patitionX is mid element in the array X; partitionX = m
+			int partitionX = (l + h) / 2;
 			//totLength+1 is used to handle the odd no elements. This make sure left side partition has additional one element in the left side.
 			int partitionY = ((totLength + 1) / 2) - partitionX;
 
-			leftX = getLeft(X, partitionX);
-			rightX = getRight(X, partitionX);
+			int leftX = getLeft(X, partitionX);
+			int rightX = getRight(X, partitionX);
 
-			leftY = getLeft(Y, partitionY);
-			rightY = getRight(Y, partitionY);
+			int leftY = getLeft(Y, partitionY);
+			int rightY = getRight(Y, partitionY);
 
 			if (leftX <= rightY && leftY <= rightX) {
 				if (totLength % 2 == 0) { // For even no of data
@@ -120,10 +120,10 @@ public class DivideAndConquerPatterns {
 					return (double) (Math.max(leftX, leftY));
 				}
 			} else if (leftX > rightY) {
-				// we are too far on right side for partitionX. Go on left side(Reduce high value).
-				high = partitionX - 1;
-			} else {// we are too far on left side for partitionX. Go on right side(Increase low value).
-				low = partitionX + 1;
+				// we are too far on right side for partitionX. Go on left side(Reduce h value).
+				h = partitionX - 1;
+			} else {// we are too far on left side for partitionX. Go on right side(Increase l value).
+				l = partitionX + 1;
 			}
 		}
 		return 0.0;

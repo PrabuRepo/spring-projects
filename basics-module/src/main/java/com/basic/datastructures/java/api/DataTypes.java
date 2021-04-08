@@ -66,12 +66,11 @@ public class DataTypes {
 		System.out.println("\nASCII: 128 to 256 chars: ");
 		for (int i = 128; i < 256; i++) {
 			char ch = (char) i;
-			System.out.print((char) i + " ");
+			System.out.print(ch + " ");
 		}
 
 		System.out.println("\nAfter 256 chars: ");
 		for (int i = 256; i < 300; i++) {
-			char ch = (char) i;
 			System.out.print((char) i + " ");
 		}
 	}
@@ -135,10 +134,22 @@ public class DataTypes {
 		for (int i = 0; i < n; i++) {
 			ch = str.charAt(i);
 			if (!Character.isDigit(ch)) continue;
+			//or
+			//if (Character.isLetter(ch)) continue;
 
+			//Approach1:
 			int startIndex = i;
 			while (i + 1 < n && Character.isDigit(str.charAt(i + 1))) i++;
 			int val = Integer.valueOf(str.substring(startIndex, i + 1));
+			System.out.print(val + ", ");
+
+			//or
+			//Approach2:
+			val = str.charAt(i) - '0';
+			while (i + 1 < n && Character.isDigit(str.charAt(i + 1))) {
+				i++;
+				val = val * 10 + str.charAt(i) - '0';
+			}
 			System.out.print(val + ", ");
 		}
 

@@ -71,7 +71,8 @@ public class ArrayAPI {
 		int[] a = { 1, 5, 7, 9 };
 		int[][] arr = { { 1, 6 }, { 9, 8 }, { 3, 5 } };
 
-		Arrays.asList(a); // array
+		List<int[]> result = Arrays.asList(a); // convert to List of Integer array
+		System.out.println(result);
 		Arrays.sort(a); // array
 		Arrays.sort(a, 1, 3); // array, fromIndex, toIndex
 		Arrays.sort(arr, (x, y) -> x[1] - y[1]); // array, comparator

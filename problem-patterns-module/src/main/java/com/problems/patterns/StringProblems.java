@@ -2,7 +2,9 @@ package com.problems.patterns;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.common.utilities.Utils;
 
@@ -280,6 +282,36 @@ public class StringProblems {
 			if (arr1[i] != arr2[i]) return false;
 
 		return true;
+	}
+
+	int maxArithmeticLength(int[] a, int[] b) {
+		int n = a.length, m = b.length;
+		int[] arr = new int[n + m];
+		System.arraycopy(a, 0, arr, 0, n);
+		System.arraycopy(b, 0, arr, n, m);
+		Arrays.sort(arr);
+		int result = 0;
+		Map<Integer, Integer>[] d = new HashMap[n + m];
+		for (int i = 0; i < arr.length; i++) {
+			d[i] = new HashMap<Integer, Integer>();
+		}
+		for (int i = 1; i < arr.length; ++i) {
+			for (int j = 0; j < i; ++j) {
+				int diff = arr[i] - arr[j];
+
+				int len = 2;
+
+				if (d[j].containsKey(diff)) {
+					len = d[j].get(diff) + 1;
+				}
+
+				d[i].put(diff, len);
+
+				result = Math.max(result, d[i].get(diff));
+
+			}
+		}
+		return result;
 	}
 
 	public static void main(String[] args) {

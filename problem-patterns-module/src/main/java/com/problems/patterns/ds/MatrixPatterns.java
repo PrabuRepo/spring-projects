@@ -21,12 +21,12 @@ public class MatrixPatterns {
 	/************** Type1: Basic Matrix Problems ***************/
 	// Anti clock wise direction:
 	// Apprach1: Take transpose, reverse the column & use an additional space
-	public void rotateRightMatrix1(int[][] matrix) {
+	public void rotate90AntiClockwise1(int[][] matrix) {
 		System.out.println("Before: ");
 		Utils.printMatrix(matrix);
 
 		matrix = transpose(matrix);
-		reverseMatrixColumn(matrix);
+		reverseColumns(matrix);
 
 		System.out.println("After: ");
 		Utils.printMatrix(matrix);
@@ -43,7 +43,7 @@ public class MatrixPatterns {
 		return transpose;
 	}
 
-	public void reverseMatrixColumn(int[][] A) {
+	public void reverseColumns(int[][] A) {
 		int n = A.length, rowStart = 0, rowEnd = 0, temp = 0;
 		for (int col = 0; col < n; col++) {
 			rowStart = 0;
@@ -60,7 +60,7 @@ public class MatrixPatterns {
 	}
 
 	// Approach2: without using any space
-	public void rotateRightMatrix2(int[][] matrix) {
+	public void rotate90AntiClockwise2(int[][] matrix) {
 		System.out.println("Before: ");
 		Utils.printMatrix(matrix);
 
@@ -86,18 +86,18 @@ public class MatrixPatterns {
 
 	// Clock wise direction:
 	// Apprach1: Take transpose, reverse the row & use an additional space
-	public void rotateLeftMatrix1(int[][] matrix) {
+	public void rotate90Clockwise1(int[][] matrix) {
 		System.out.println("Before: ");
 		Utils.printMatrix(matrix);
 
 		matrix = transpose(matrix);
-		reverseMatrixRow(matrix);
+		reverseRows(matrix);
 
 		System.out.println("After: ");
 		Utils.printMatrix(matrix);
 	}
 
-	public void reverseMatrixRow(int[][] A) {
+	public void reverseRows(int[][] A) {
 		int n = A.length, colStart = 0, colEnd = 0, temp = 0;
 		for (int row = 0; row < n; row++) {
 			colStart = 0;
@@ -114,7 +114,7 @@ public class MatrixPatterns {
 	}
 
 	// Approach2: without using any space
-	public void rotateLeftMatrix2(int[][] matrix) {
+	public void rotate90Clockwise2(int[][] matrix) {
 
 		System.out.println("Before: ");
 		Utils.printMatrix(matrix);
@@ -312,7 +312,7 @@ public class MatrixPatterns {
 		if (matrix.length == 0 || matrix[0].length == 0) return;
 
 		int m = matrix.length, n = matrix[0].length;
-		//Traverse the border(Row:0 to m) and change 'O' to '#'
+		//Traverse the border(Left and Right) and change 'O' to '#'
 		for (int i = 0; i < m; i++) {
 			if (matrix[i][0] == 'O') {
 				// surroundedRegionsDFS(matrix, i, 0);
@@ -324,7 +324,7 @@ public class MatrixPatterns {
 			}
 		}
 
-		//Traverse the border(Col:0 to n) and change 'O' to '#'
+		//Traverse the border(Top and Bottom) and change 'O' to '#'
 		for (int j = 0; j < n; j++) {
 			if (matrix[0][j] == 'O') {
 				// surroundedRegionsDFS(matrix, 0, j);

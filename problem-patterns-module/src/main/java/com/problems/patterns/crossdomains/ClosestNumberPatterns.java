@@ -45,7 +45,7 @@ public class ClosestNumberPatterns {
 					result = sum;
 				}*/
 
-				if (sum <= target) {
+				if (sum < target) {
 					l++;
 				} else {
 					h--;

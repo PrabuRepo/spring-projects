@@ -4,10 +4,9 @@ import com.common.utilities.Utils;
 
 /*
  * Quick Select or Partition Problems:
- * 	2-way partitioning  - Forward & Reverse
+ * 	2-way partitioning - Forward & Reverse
  *  3-way partitioning
  *  
- * Note: Dont add too many problems here, These problems are already covered in DataRearrangement Patterns
  */
 public class QuickSelectPatterns {
 
@@ -120,7 +119,7 @@ public class QuickSelectPatterns {
 	 */
 	/*
 	 * Solution1: A simple solution is to use another array. We copy all elements of original array to new array. We then traverse 
-	 * the new array and copy all negative and positive elements back in original array one by one. Time: O(n^2); Space O(n)
+	 * the new array and copy all negative and positive elements back in original array one by one. Time: O(n); Space O(n)
 	 * Solution2: Using Insertion Sort; Time: O(n^2); Space O(1)
 	 * Solution3: Using Merge Sort; Time: O(nlogn); Space O(1); Merge Sort takes O(n) space, but here use reverse alg to save space;
 	 */

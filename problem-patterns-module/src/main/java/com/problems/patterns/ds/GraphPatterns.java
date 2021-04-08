@@ -135,15 +135,13 @@ public class GraphPatterns {
 		// If this condition satisfies, then graph contains cycle
 		if (recStack.contains(v)) return true;
 
-		if (visited.contains(v)) return false;
-
 		// Mark vertex as visited and set recursion stack
 		visited.add(v);
 		recStack.add(v);
 
 		if (graph.get(v) != null) {
 			for (int adjVertex : graph.get(v)) {
-				if (hasCycle(graph, adjVertex, visited, recStack)) return true;
+				if (!visited.contains(v) && hasCycle(graph, adjVertex, visited, recStack)) return true;
 			}
 		}
 		// Reset the recursion stack 
@@ -174,8 +172,6 @@ public class GraphPatterns {
 		// If this condition satisfies, then graph contains cycle
 		if (recursionStack[vertex]) return true;
 
-		if (visited[vertex]) return false;
-
 		// Mark vertex as visited and set recursion stack
 		visited[vertex] = true;
 		recursionStack[vertex] = true;
@@ -184,7 +180,7 @@ public class GraphPatterns {
 			ListIterator<Integer> iter = adjList[vertex].listIterator();
 			while (iter.hasNext()) {
 				int adjVertex = iter.next();
-				if (hasCycle(adjList, adjVertex, visited, recursionStack)) return true;
+				if (!visited[vertex] && hasCycle(adjList, adjVertex, visited, recursionStack)) return true;
 			}
 		}
 		// Reset the recursion stack array
