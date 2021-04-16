@@ -12,7 +12,7 @@ import java.util.TreeMap;
 import com.common.model.Interval;
 
 /*
- * Reason for sorting finishing time:
+ * Reason for sorting based on finishing time:
  * https://www.freecodecamp.org/news/what-is-a-greedy-algorithm/
  * 
  * Sort based on start time:

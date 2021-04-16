@@ -34,13 +34,15 @@ public class ClosestNumberPatterns {
 				int sum = nums[i] + nums[l] + nums[h];
 				if (sum == target) return sum;
 
-				int diff = Math.abs(sum - target);
 				//Record the result and move on
+				//Approach1:
+				int diff = Math.abs(sum - target);
 				if (diff < minDiff) {
 					minDiff = diff;
 					result = sum;
 				}
 				//or
+				//Approach2:
 				/*if (result == Integer.MAX_VALUE || Math.abs(sum - target) < Math.abs(result - target)) {
 					result = sum;
 				}*/

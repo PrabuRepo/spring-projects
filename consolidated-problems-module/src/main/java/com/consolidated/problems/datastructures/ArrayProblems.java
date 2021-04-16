@@ -440,25 +440,22 @@ public class ArrayProblems {
 	/* Find Majority Element in an Array/Majority Element I, II
 	 * Given an array of size n, find the majority element. The majority element is the element that appears more than n/2 times.
 	 */
-	//Using Sorting:
+	//Using Sorting: O(nlogn)
 	public int majorityElement1(int[] nums) {
 		Arrays.sort(nums);
 		return nums[nums.length / 2];
 	}
 
-	// Hashtable 
+	// Hashtable: Time-O(n), Space:O(n)
 	public int majorityElement2(int[] nums) {
 		Map<Integer, Integer> map = new HashMap<>();
-		int ret = 0;
 		for (int num : nums) {
-			if (!map.containsKey(num)) map.put(num, 1);
-			else map.put(num, map.get(num) + 1);
+			map.put(num, map.getOrDefault(num, 0) + 1);
 			if (map.get(num) > nums.length / 2) {
-				ret = num;
-				break;
+				return num;
 			}
 		}
-		return ret;
+		return 0;
 	}
 
 	/* Using Moore’s Voting Algorithm: Time Complexity:O(n)
@@ -467,6 +464,30 @@ public class ArrayProblems {
 	 * e will exist till end if it is a majority element.
 	*/
 	public int majorityElement3(int[] nums) {
+		if (nums == null || nums.length == 0) return -1;
+
+		int element = nums[0], count = 1;
+		for (int num : nums) {
+			if (num == element) {
+				count++;
+			} else if (count > 0) {
+				count--;
+			} else {
+				element = num;
+				count = 1;
+			}
+		}
+
+		// check array, verify element is majority
+		count = 0;
+		for (int num : nums) {
+			if (num == element) count++;
+		}
+
+		return count > nums.length / 2 ? element : -1;
+	}
+
+	public int majorityElement4(int[] nums) {
 		if (nums == null || nums.length == 0) return -1;
 		int count = 0, element = 0;
 		for (int num : nums) {
@@ -482,30 +503,6 @@ public class ArrayProblems {
 		}
 
 		return count > nums.length / 2 ? element : -1;
-	}
-
-	public int majorityElement4(int[] nums) {
-		if (nums == null || nums.length == 0) return -1;
-
-		int element = nums[0], count = 1, n = nums.length;
-		for (int i = 1; i < n; i++) {
-			if (nums[i] == element) {
-				count++;
-			} else if (count > 0) {
-				count--;
-			} else {
-				element = nums[i];
-				count = 1;
-			}
-		}
-
-		// check array, verify element is majority
-		count = 0;
-		for (int num : nums) {
-			if (num == element) count++;
-		}
-
-		return count > n / 2 ? element : -1;
 	}
 
 	/* Majority of 1/K element:

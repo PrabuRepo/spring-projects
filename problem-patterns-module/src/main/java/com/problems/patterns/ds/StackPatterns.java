@@ -220,7 +220,7 @@ public class StackPatterns {
 			if (ch == ' ') {
 				continue;
 			} else if (Character.isDigit(ch)) {
-				int num = (int) ch - '0'; //or Character.getNumericValue(s.charAt(i)); 
+				int num = (int) ch - '0'; //or Character.getNumericValue(ch); 
 
 				while (i + 1 < n && Character.isDigit(s.charAt(i + 1))) {
 					num = num * 10 + Character.getNumericValue(s.charAt(i + 1));

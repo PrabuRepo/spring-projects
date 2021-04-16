@@ -130,11 +130,11 @@ public class Backtracking {
 		return res;
 	}
 
-	public void backtrack3(int n, int k, int startIndex, List<Integer> buffer, List<List<Integer>> res) {
+	public void backtrack3(int n, int k, int startVal, List<Integer> buffer, List<List<Integer>> res) {
 		if (buffer.size() == k) {
 			res.add(new ArrayList<>(buffer));
 		} else {
-			for (int i = startIndex; i <= n; i++) {
+			for (int i = startVal; i <= n; i++) {
 				buffer.add(i);
 				backtrack3(n, k, i + 1, buffer, res);
 				buffer.remove(buffer.size() - 1);
@@ -203,11 +203,11 @@ public class Backtracking {
 		return res;
 	}
 
-	public void backtrack6(int sum, int k, int startIndex, List<Integer> buffer, List<List<Integer>> res) {
+	public void backtrack6(int sum, int k, int startVal, List<Integer> buffer, List<List<Integer>> res) {
 		if (buffer.size() == k && sum == 0) res.add(new ArrayList<>(buffer));
 		else if (buffer.size() >= k || sum < 0) return;
 		else {
-			for (int i = startIndex; i <= 9; i++) {
+			for (int i = startVal; i <= 9; i++) {
 				buffer.add(i);
 				backtrack6(sum - i, k, i + 1, buffer, res);
 				buffer.remove(buffer.size() - 1);

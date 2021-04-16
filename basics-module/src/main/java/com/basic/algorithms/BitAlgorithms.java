@@ -232,7 +232,7 @@ public class BitAlgorithms {
 		return min;
 	}
 
-	//Mask N Bits: Eg: n=3, 2^3-1 = 7 => 111 (3 set bits)
+	//Mask N Bits or get all set bits: Eg: n=3, 2^3-1 = 7 => 111 (3 set bits)
 	public int maskNBits(int n) {
 		return (1 << n) - 1;
 	}

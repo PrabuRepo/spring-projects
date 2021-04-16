@@ -94,9 +94,8 @@ public class InPlaceReversalLLPatterns {
 		int count = 1;
 		ListNode curr = head;
 		// Validation and find the k+1th node
-		while (count <= k && curr != null) {
+		while (count++ <= k && curr != null) {
 			curr = curr.next;
-			count++;
 		}
 
 		//If count is less than equal to k, then do not reverse the list

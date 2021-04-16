@@ -50,13 +50,13 @@ public class BacktrackingPatterns {
 		return res;
 	}
 
-	public void backtrack7(int n, int startIndex, int prod, List<List<Integer>> res, List<Integer> buffer) {
-		if (prod > n || startIndex > n) return;
+	public void backtrack7(int n, int startVal, int prod, List<List<Integer>> res, List<Integer> buffer) {
+		if (prod > n || startVal > n) return;
 
 		if (prod == n) {
 			res.add(new ArrayList<>(buffer));
 		} else {
-			for (int i = startIndex; i <= n; i++) {
+			for (int i = startVal; i <= n; i++) {
 				if (i * prod > n) break;
 				if (n % i != 0) continue;
 				buffer.add(i);
@@ -285,19 +285,19 @@ public class BacktrackingPatterns {
 						//If i+j+k+l meets exact input(s) length, then look for valid ip address 
 						if (i + j + k + l == s.length()) {
 							String a = s.substring(0, i);
-							if (isValid(a)) continue;
+							if (isNotValidIp(a)) continue;
 							String b = s.substring(i, i + j);
-							if (isValid(b)) continue;
+							if (isNotValidIp(b)) continue;
 							String c = s.substring(i + j, i + j + k);
-							if (isValid(c)) continue;
+							if (isNotValidIp(c)) continue;
 							String d = s.substring(i + j + k, i + j + k + l);
-							if (isValid(d)) continue;
+							if (isNotValidIp(d)) continue;
 							res.add(a + "." + b + "." + c + "." + d);
 						}
 		return res;
 	}
 
-	private boolean isValid(String s) {
+	private boolean isNotValidIp(String s) {
 		return (Integer.parseInt(s) > 255 || (s.charAt(0) == '0' && s.length() > 1));
 	}
 

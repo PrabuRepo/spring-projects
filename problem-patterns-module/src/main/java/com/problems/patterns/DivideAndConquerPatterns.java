@@ -25,6 +25,7 @@ public class DivideAndConquerPatterns {
 		int l1 = 0, h1 = a1.length - 1, l2 = 0, h2 = a2.length - 1, len = 0;
 
 		while (l1 <= h1 && l2 <= h2) {
+			//TODO: Revisit the "len" variable for a1 = {1,2,3}; a2 ={4,5,6}
 			len = h1 - l1 + 1; // or h2-l2+1; Because every call, both arrays have equal no of values
 			if (l1 == h1 && l2 == h2) return (double) (a1[l1] + a2[l2]) / 2;
 			if (h1 - l1 == 1 && h2 - l2 == 1) return (double) (Math.max(a1[l1], a2[l2]) + Math.min(a1[h1], a2[h2])) / 2;

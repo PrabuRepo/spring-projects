@@ -48,13 +48,13 @@ public class TwoPointerPatterns {
 	}
 
 	// 3.Two Ptr Approach: Time Complexity: O(nlogn) for both sorted and unsorted array;
-	public int[] twoSum3(int[] arr, int k) {
+	public int[] twoSum3(int[] arr, int target) {
 		int n = arr.length;
 		int[] result = new int[2];
 
 		Arrays.sort(arr);
 		for (int i = 0; i < n - 1; i++) {
-			int index = Arrays.binarySearch(arr, i + 1, n, k - arr[i]);
+			int index = Arrays.binarySearch(arr, i + 1, n, target - arr[i]);
 			if (index >= 0) {
 				result[0] = i;
 				result[1] = index;

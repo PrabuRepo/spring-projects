@@ -14,5 +14,6 @@
   	<module>problem-patterns-module</module>
   	<module>basics-module</module>
   	<module>consolidated-problems-module</module>
+  	<module>others-module</module>
   </modules>
 </project>

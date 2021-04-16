@@ -1,16 +1,20 @@
 
-package com.consolidated.problems.algorithms.test;
+package com.others.test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
@@ -54,7 +58,81 @@ public class TestClass {
 		head.next = new ListNode(1);
 		head.next.next = new ListNode(5);
 
-		System.out.println(ob.nextLargerNodes(head));
+		//System.out.println(ob.nextLargerNodes(head));
+
+		ob.sortMap();
+	}
+
+	public void sortMap() {
+		Map<String, Integer> map = getUnSortedMap();
+
+		//Sort based on key
+		System.out.println("Sort map based on key ->");
+		TreeMap<String, Integer> treeMap = new TreeMap<>(map);
+		treeMap.forEach((k, v) -> System.out.println(k + " - " + v));
+
+		System.out.println("\nSort map based on value using list ->");
+		//Sort based on value using list:
+		List<Entry<String, Integer>> entryList = new ArrayList<>();
+		//Add all the entryset into list
+		entryList.addAll(map.entrySet());
+		Collections.sort(entryList, (a, b) -> a.getValue().equals(b.getValue()) ? a.getKey().compareTo(b.getKey())
+				: a.getValue() - b.getValue());
+
+		LinkedHashMap<String, Integer> linkedHashMap = new LinkedHashMap<>();
+		for (Entry<String, Integer> entry : entryList) {
+			linkedHashMap.put(entry.getKey(), entry.getValue());
+		}
+		linkedHashMap.forEach((k, v) -> System.out.println(k + " - " + v));
+
+		System.out.println("\nSort map based on value using priority queue ->");
+		//Sort based on value using list:
+		PriorityQueue<Entry<String, Integer>> queue = new PriorityQueue<>(
+				(a, b) -> a.getValue().equals(b.getValue()) ? a.getKey().compareTo(b.getKey())
+						: b.getValue() - a.getValue());
+		//Add all the entryset into priority queue
+		queue.addAll(map.entrySet());
+
+		LinkedHashMap<String, Integer> linkedHashMap2 = new LinkedHashMap<>();
+		while (!queue.isEmpty()) {
+			Entry<String, Integer> entry = queue.poll();
+			linkedHashMap2.put(entry.getKey(), entry.getValue());
+		}
+		linkedHashMap2.forEach((k, v) -> System.out.println(k + " - " + v));
+	}
+
+	public void sortByValueJava8Stream() {
+		Map<String, Integer> unSortedMap = getUnSortedMap();
+
+		System.out.println("Unsorted Map : " + unSortedMap);
+
+		LinkedHashMap<String, Integer> sortedMap = new LinkedHashMap<>();
+		unSortedMap.entrySet().stream().sorted(Map.Entry.comparingByValue())
+				.forEachOrdered(x -> sortedMap.put(x.getKey(), x.getValue()));
+
+		System.out.println("Sorted Map   : " + sortedMap);
+
+		LinkedHashMap<String, Integer> reverseSortedMap = new LinkedHashMap<>();
+		unSortedMap.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+				.forEachOrdered(x -> reverseSortedMap.put(x.getKey(), x.getValue()));
+
+		System.out.println("Reverse Sorted Map   : " + reverseSortedMap);
+	}
+
+	private Map<String, Integer> getUnSortedMap() {
+		Map<String, Integer> map = new HashMap<>();
+		map.put("com", 1345);
+		map.put("google.com", 900);
+		map.put("stackoverflow.com", 10);
+		map.put("yahoo.com", 410);
+		map.put("mail.yahoo.com", 60);
+		map.put("mobile.sports.yahoo.com", 10);
+		map.put("sports.yahoo.com", 50);
+		map.put("org", 3);
+		map.put("wikipedia.org", 3);
+		map.put("mobile.sports", 1);
+		map.put("sports", 1);
+		return map;
 	}
 
 	public int[] nextLargerNodes(ListNode head) {
