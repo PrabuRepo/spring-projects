@@ -2,7 +2,6 @@ package com.basic.datastructures.adv;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.basic.datastructures.adv.operations.TrieOperations;
 import com.common.model.TrieNode;
@@ -19,8 +18,12 @@ import com.common.model.TrieNode;
  *    - T9 Predective Search
  *    - Solving Word Games - Word Boggle
  *    
- *  Time Complexity for Insert, Search: O(m); m - length of string
- *  Space Complexity: O(alphabet_size * len of string * no of string)
+ *  For single string:
+ *  	Time Complexity for Insert, Search: O(m); m - length of string/word
+ *  	Space Complexity: O(alphabet_size * m)
+ *  For collection of string:
+ *  	Time Complexity for Insert, Search: O(m * n); n is no of string/words 
+ *  	Space Complexity: O(alphabet_size * m * n)
  *  
  *  Why Trie?
  *   - Finding all keys with a common prefix.
@@ -194,28 +197,28 @@ class Trie1 implements TrieOperations {
 		return false;
 	}
 
+	//TypeAhead Search or Auto Suggestions or Auto Complete
 	@Override
-	public void typeAheadSearch(String prefix) {
+	public List<String> typeAheadSearch(String prefix) {
+
+		List<String> words = new ArrayList<>();
+
 		TrieNode node = wordSearch(prefix);
 
-		if (node == null) {
-			System.out.println("Prefix not found!");
-		} else {
-			List<String> suggestions = new ArrayList<>();
-			autoSuggestions(node, suggestions);
-			suggestions.stream().forEach(k -> System.out.print(k + "-> "));
-			System.out.println();
+		if (node != null) {
+			getWords(node, words);
+			words.forEach(k -> System.out.println(k));
 		}
+		return words;
 	}
 
-	// Autocomplete or Autosuggestions
-	private void autoSuggestions(TrieNode node, List<String> suggestions) {
+	private void getWords(TrieNode node, List<String> words) {
 		if (node == null) return;
-		if (node.isEndOfWord) suggestions.add(node.word);
+		if (node.isEndOfWord) words.add(node.word);
 
 		for (int i = 0; i < 26; i++) {
 			if (node.children[i] != null) {
-				autoSuggestions(node.children[i], suggestions);
+				getWords(node.children[i], words);
 			}
 		}
 	}
@@ -269,13 +272,13 @@ class Trie2 implements TrieOperations {
 		for (char ch : word.toCharArray()) {
 			curr = curr.childNodes.computeIfAbsent(ch, node -> new TrieNode());
 			// or
-			/*
-			if (curr.childNodes.get(ch) == null) {
+			/*if (!curr.childNodes.containsKey(ch)) {
 				curr.childNodes.put(ch, new TrieNode());
 			}
 			curr = curr.childNodes.get(ch);*/
 		}
 		curr.isEndOfWord = true;
+		curr.word = word;
 	}
 
 	@Override
@@ -310,8 +313,8 @@ class Trie2 implements TrieOperations {
 
 		char ch = word.charAt(index);
 		if (ch == '.') {
-			for (Map.Entry<Character, TrieNode> entry : curr.childNodes.entrySet()) {
-				if (dfs(entry.getValue(), word, index + 1)) return true;
+			for (char ch2 : curr.childNodes.keySet()) {
+				if (dfs(curr.childNodes.get(ch2), word, index + 1)) return true;
 			}
 		} else {
 			TrieNode next = curr.childNodes.get(ch);
@@ -352,10 +355,28 @@ class Trie2 implements TrieOperations {
 		return false;
 	}
 
+	//TypeAhead Search or Auto Suggestions or Auto Complete
 	@Override
-	public void typeAheadSearch(String prefix) {
-		// TODO Auto-generated method stub
+	public List<String> typeAheadSearch(String prefix) {
+		List<String> words = new ArrayList<>();
 
+		TrieNode node = wordSearch(prefix);
+
+		if (node != null) {
+			getWords(node, words);
+			words.forEach(k -> System.out.println(k));
+		}
+		return words;
+	}
+
+	private void getWords(TrieNode node, List<String> words) {
+		if (node == null) return;
+
+		if (node.isEndOfWord) words.add(node.word);
+
+		for (char ch : node.childNodes.keySet()) {
+			getWords(node.childNodes.get(ch), words);
+		}
 	}
 
 }

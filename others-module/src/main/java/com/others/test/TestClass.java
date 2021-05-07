@@ -26,6 +26,9 @@ public class TestClass {
 
 		TestClass ob = new TestClass();
 
+		byte var1 = -51, var2 = -28;
+		System.out.println(var1 & var2);
+
 		int[] A = { 2, 2, 2, 3, 3 };
 		int[][] B = { { 1, 3 }, { 5, 4 }, { 2, 4 } };
 		//System.out.println(Arrays.toString(getMode(A, B)));

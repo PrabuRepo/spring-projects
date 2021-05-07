@@ -71,7 +71,7 @@ public class TwoPointerPatterns {
 		Arrays.fill(result, -1);
 		Map<Integer, Integer> map = new HashMap<>(); // Value, Index
 		for (int i = 0; i < nums.length; i++) {
-			if (map.get(nums[i]) != null) {
+			if (map.containsKey(nums[i])) {
 				result[0] = map.get(nums[i]);
 				result[1] = i;
 				break;
@@ -108,8 +108,20 @@ public class TwoPointerPatterns {
 
 		// 2. Take element one by one from 0th the index
 		for (int i = 0; i < n - 2; i++) {
+
 			// 3. Find remaining two elements using two ptr alg
-			if (sumPresent1(a, i + 1, n - 1, a[i], sum - a[i])) return true;
+			int l = i + 1, h = n - 1;
+			while (l < h) {
+				int val = a[i] + a[l] + a[h];
+				if (val == sum) {
+					System.out.println("The Triplet is: " + a[i] + ", " + a[l] + ", " + a[h]);
+					return true;
+				} else if (val < sum) {
+					l++;
+				} else {
+					h--;
+				}
+			}
 		}
 
 		return false;
@@ -121,40 +133,20 @@ public class TwoPointerPatterns {
 
 		// 1. Take element one by one from 0th the index
 		for (int i = 0; i < n - 2; i++) {
-			// 3. Find remaining two elements using hash DS
-			if (sumPresent2(a, i + 1, n - 1, a[i], sum - a[i])) return true;
-		}
 
-		return false;
-	}
-
-	// Using 2 ptr approach
-	public boolean sumPresent1(int[] nums, int l, int h, int firstValue, int target) {
-		while (l < h) {
-			if (nums[l] + nums[h] == target) {
-				System.out.println("The Triplet is: " + firstValue + ", " + nums[l] + ", " + nums[h]);
-				return true;
-			} else if (nums[l] + nums[h] > target) {
-				h--;
-			} else {
-				l++;
+			// 2. Find remaining two elements using hash DS
+			HashSet<Integer> set = new HashSet<>();
+			int target = sum - a[i];
+			for (int j = i + 1; j < n; j++) {
+				if (set.contains(target - a[i])) {
+					System.out.println("The Triplet is: " + a[i] + ", " + (sum - a[i]) + ", " + a[i]);
+					return true;
+				} else {
+					set.add(a[i]);
+				}
 			}
 		}
 
-		return false;
-	}
-
-	public boolean sumPresent2(int[] nums, int l, int h, int firstValue, int target) {
-		HashSet<Integer> set = new HashSet<>();
-
-		for (int i = l; i <= h; i++) {
-			if (set.contains(target - nums[i])) {
-				System.out.println("The Triplet is: " + firstValue + ", " + (target - nums[i]) + ", " + nums[i]);
-				return true;
-			} else {
-				set.add(nums[i]);
-			}
-		}
 		return false;
 	}
 

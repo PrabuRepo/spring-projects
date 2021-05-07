@@ -287,7 +287,9 @@ class BinarySearchTree implements TreeOperations {
 
 	@Override
 	public void postorderIterative(TreeNode root) {
+		postorderTraversal1(root);
 		postorderTraversal2(root);
+		postorderTraversal3(root);
 	}
 
 	public List<Integer> postorderTraversal1(TreeNode root) {
@@ -383,6 +385,37 @@ class BinarySearchTree implements TreeOperations {
 	public void set(int index, int data) {
 		// TODO Auto-generated method stub
 
+	}
+
+	//Build a Tree from array using level order traversal Eg: {1, -1, 1, -1, -1, -1, 1}
+	public TreeNode buildTree(int[] arr) {
+		int i = 0, n = arr.length;
+		java.util.Queue<TreeNode> queue = new java.util.LinkedList<>();
+		TreeNode root = new TreeNode(arr[i++]);
+		queue.add(root);
+
+		while (!queue.isEmpty() && i < n) {
+			TreeNode top = queue.poll();
+			if (i < n && arr[i] != -1 && top != null) {
+				TreeNode left = new TreeNode(arr[i]);
+				top.left = left;
+				queue.add(left);
+			} else {
+				queue.add(null);
+			}
+			i++;
+
+			if (i < n && arr[i] != -1 && top != null) {
+				TreeNode right = new TreeNode(arr[i]);
+				top.right = right;
+				queue.add(right);
+			} else {
+				queue.add(null);
+			}
+			i++;
+		}
+
+		return root;
 	}
 
 }

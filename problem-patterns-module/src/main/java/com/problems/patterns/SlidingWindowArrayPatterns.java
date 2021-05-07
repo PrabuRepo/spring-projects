@@ -162,18 +162,18 @@ public class SlidingWindowArrayPatterns {
 
 	//Use Kadane's Algorithm to find max sum subarray
 	public int[] subarraySumMaxRange(int[] a) {
-		int max = Integer.MIN_VALUE, sum = 0, startIndexUpdate = 0, start = 0, end = 0;
+		int max = Integer.MIN_VALUE, sum = 0, startIndex = 0, start = 0, end = 0;
 		for (int i = 0; i < a.length; i++) {
 			sum += a[i];
 			if (sum > max) {
 				max = sum;
-				start = startIndexUpdate;
+				start = startIndex;
 				end = i;
 			}
 
 			if (sum < 0) {
 				sum = 0;
-				startIndexUpdate = i + 1;
+				startIndex = i + 1;
 			}
 		}
 		System.out.println("Starting Index: " + start + "; Ending Index: " + end);

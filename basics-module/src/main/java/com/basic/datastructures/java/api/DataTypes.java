@@ -1,6 +1,8 @@
 package com.basic.datastructures.java.api;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class DataTypes {
 
@@ -58,6 +60,7 @@ public class DataTypes {
 	 *  This method is used to understand the possible chars supported by Java.
 	 */
 	public static void printChars() {
+		Set<Integer> currencySet = new HashSet<>(Arrays.asList(10, 20, 50, 100, 200, 500, 1000));
 		System.out.println("\nASCII: 0 to 128 chars: ");
 		for (int i = 0; i < 128; i++) {
 			System.out.print((char) i + " ");

@@ -7,8 +7,7 @@ import java.util.List;
 /*
  *Flatten 2D Vector:
  *  Implement an iterator to flatten a 2d vector. For example, 
- *  Given 2d vector =
- *  [[1,2], [3], [4,5,6]]
+ *  Given 2d vector = [[1,2], [3], [4,5,6]]
  *  By calling next repeatedly until hasNext returns false, the order of elements returned by next should be: [1,2,3,4,5,6].
  */
 public class Flatten2DVector {
@@ -71,8 +70,8 @@ public class Flatten2DVector {
 // Approach1:
 class Flatten2DVector1 {
 
-	private List<List<Integer>>	vector;
-	private int					row, col;
+	private List<List<Integer>> vector;
+	private int row, col;
 
 	public Flatten2DVector1(List<List<Integer>> list) {
 		this.vector = list;
@@ -96,16 +95,15 @@ class Flatten2DVector1 {
 
 	public boolean hasNext() {
 		int max = vector.size();
-		while (row < max && (vector.get(row) == null || vector.get(row).isEmpty()))
-			row++;
+		while (row < max && (vector.get(row) == null || vector.get(row).isEmpty())) row++;
 
 		return !vector.isEmpty() && row < max;
 	}
 }
 
 class Flatten2DVector2 {
-	private Iterator<List<Integer>>	outer;
-	private Iterator<Integer>		inner;
+	private Iterator<List<Integer>> outer;
+	private Iterator<Integer> inner;
 
 	public Flatten2DVector2(List<List<Integer>> vec2d) {
 		outer = vec2d.iterator();
@@ -125,8 +123,7 @@ class Flatten2DVector2 {
 		if (!outer.hasNext()) return false;
 
 		inner = outer.next().iterator();
-		while (!inner.hasNext() && outer.hasNext())
-			inner = outer.next().iterator();
+		while (!inner.hasNext() && outer.hasNext()) inner = outer.next().iterator();
 
 		return inner.hasNext();
 	}

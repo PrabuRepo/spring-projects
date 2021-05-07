@@ -97,7 +97,6 @@ public class DynamicProgramming {
 
 	// Staircase/Climbing Stairs/Triple Step/ Davis' Staircase/Count number of ways to cover a distance
 	// 1.Recursive Solution
-
 	public int tripleSteps1(int n) {
 		if (n < 0) return 0;
 		else if (n == 0) return 1;
@@ -130,7 +129,7 @@ public class DynamicProgramming {
 		dp[0] = 1;
 		dp[1] = 1;
 		dp[2] = 2;
-		for (int i = 1; i <= n; i++) {
+		for (int i = 3; i <= n; i++) {
 			dp[i] = dp[i - 1] + dp[i - 2] + dp[i - 3];
 		}
 

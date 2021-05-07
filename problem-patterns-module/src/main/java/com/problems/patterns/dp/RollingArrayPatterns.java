@@ -64,17 +64,14 @@ public class RollingArrayPatterns {
 	// Recursive slow solution.
 
 	public int maxSubsetSum1(int[] arr) {
-		//return maxSubsetSum11(arr, arr.length - 1);
+		int max = maxSubsetSum11(arr, arr.length - 1);
 		//or
-		return maxSubsetSum12(arr, 0);
+		max = maxSubsetSum12(arr, 0);
+		return max;
 	}
 
 	private int maxSubsetSum11(int arr[], int i) {
-		if (i == 0) {
-			return arr[0];
-		} else if (i == 1) {
-			return Math.max(arr[0], arr[1]);
-		}
+		if (i < 0) return 0;
 		return Math.max(arr[i] + maxSubsetSum11(arr, i - 2), maxSubsetSum11(arr, i - 1));
 	}
 
@@ -85,9 +82,9 @@ public class RollingArrayPatterns {
 
 	public int maxSubsetSum4(int[] arr) {
 		if (arr.length == 0) return 0;
-		int curr = 0, prev = 0, temp = 0;
+		int curr = 0, prev = 0;
 		for (int a : arr) {
-			temp = curr;
+			int temp = curr;
 			curr = Math.max(curr, prev + a);
 			prev = temp;
 		}
@@ -261,9 +258,7 @@ public class RollingArrayPatterns {
 	}
 
 	public int[] helper(TreeNode root) {
-		if (root == null) {
-			return new int[] { 0, 0 };
-		}
+		if (root == null) return new int[] { 0, 0 };
 
 		int[] left = helper(root.left);
 		int[] right = helper(root.right);
@@ -287,12 +282,14 @@ public class RollingArrayPatterns {
 
 		int sum = numDecodings(s, i + 1);
 
-		/*if (i + 1 < n) {
+		/*
+		  if (i + 1 < n) {
 			int num = Integer.valueOf(s.substring(i, i + 2));
 			if (num >= 10 && num <= 26) { //This condition eliminates if there is any leading zero.
 				sum += numDecodings(s, i + 2);
 			}
 		}*/
+
 		//or
 		if (i + 1 < n && (s.charAt(i) == '1' || (s.charAt(i) == '2' && s.charAt(i + 1) <= '6'))) {
 			sum += numDecodings(s, i + 2);
@@ -305,10 +302,12 @@ public class RollingArrayPatterns {
 	 *  dp[1] means the way to decode a string of size 1. I then check one digit and two digit combination and save the results
 	 *   along the way. In the end, dp[n] will be the end result.*/
 	public int numDecodings3(String s) {
+		if (s.charAt(0) == '0') return 0;
+
 		int n = s.length();
 		int[] dp = new int[n + 1];
 		dp[0] = 1;
-		dp[1] = s.charAt(0) != '0' ? 1 : 0;
+		dp[1] = 1;
 		for (int i = 2; i <= n; i++) {
 			int first = Integer.valueOf(s.substring(i - 1, i));
 			int second = Integer.valueOf(s.substring(i - 2, i));
@@ -338,6 +337,12 @@ public class RollingArrayPatterns {
 			prev = tmp;
 		}
 		return curr;
+	}
+
+	public static void main(String[] args) {
+		RollingArrayPatterns ob = new RollingArrayPatterns();
+		int arr[] = new int[] { 16, 5, 4, 8 };
+		System.out.println("Max Non Adjacent Sum: " + ob.maxSubsetSum1(arr));
 	}
 
 }

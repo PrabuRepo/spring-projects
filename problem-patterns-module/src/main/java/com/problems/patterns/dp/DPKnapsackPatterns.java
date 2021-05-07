@@ -176,7 +176,6 @@ public class DPKnapsackPatterns {
 
 	/*
 	 * Count of Subset Sum/Perfect Sum Problem:
-	 * 
 	 */
 	// Approach1: Using Recursive Function; Time Complexity: O(2^n)
 	public int countSubsetSum1(int arr[], int sum) {
@@ -192,10 +191,9 @@ public class DPKnapsackPatterns {
 
 	// Approach3: Bottom Up DP - Time: O(n*sum); Space: O(n*sum)
 	public int countSubsetSum3(int[] nums, int sum) {
-		int n = nums.length;
 		int[] dp = new int[sum + 1];
 		dp[0] = 1;
-		for (int i = 0; i < n; i++)
+		for (int i = 0; i < nums.length; i++)
 			for (int j = sum; j >= nums[i]; j--)
 				dp[j] = dp[j] + dp[j - nums[i]];
 
@@ -254,18 +252,7 @@ public class DPKnapsackPatterns {
 		int sum = 0;
 		for (int n : nums)
 			sum += n;
-		return sum < target || (target + sum) % 2 != 0 ? 0 : countSubsetSum(nums, (sum + target) / 2);
-	}
-
-	// Solution for subset sum problem
-	public int countSubsetSum(int[] nums, int sum) {
-		int[] dp = new int[sum + 1];
-		dp[0] = 1;
-		for (int i = 0; i < nums.length; i++)
-			for (int j = sum; j >= nums[i]; j--)
-				dp[j] = dp[j] + dp[j - nums[i]];
-
-		return dp[sum];
+		return sum < target || (target + sum) % 2 != 0 ? 0 : countSubsetSum3(nums, (sum + target) / 2);
 	}
 
 	/***************************** Pattern 4: Unbounded Knapsack *************************/
@@ -309,9 +296,8 @@ public class DPKnapsackPatterns {
 	// Using DP - Bottom Up Approach
 	// Note: For unbounded knapsack prob, iteration should be from wt[i] to cap
 	public int unboundedKnapsack3(int val[], int wt[], int cap) {
-		int n = wt.length;
 		int dp[] = new int[cap + 1];
-		for (int i = 0; i < n; i++)
+		for (int i = 0; i < wt.length; i++)
 			for (int j = wt[i]; j <= cap; j++)
 				dp[j] = Math.max(dp[j], val[i] + dp[j - wt[i]]);
 		return dp[cap];
@@ -344,118 +330,8 @@ public class DPKnapsackPatterns {
 		return dp[amt];
 	}
 
-	//Coin Change: Min Coins-
-	//Simple Recursive approach: Time: O(2^n)
-	public int minCoins11(int[] coins, int amt) {
-		int result = minCoins11(amt, coins, coins.length - 1, 0);
-		return result == Integer.MAX_VALUE ? -1 : result;
-	}
-
-	public int minCoins11(int amt, int[] coins, int i, int count) {
-		if (amt == 0) return count;
-		if (i < 0 || amt < 0) return Integer.MAX_VALUE;
-
-		if (amt < coins[i]) return minCoins11(amt, coins, i - 1, count);
-
-		return Math.min(minCoins11(amt, coins, i - 1, count), minCoins11(amt - coins[i], coins, i, count + 1));
-	}
-
-	//Top Down approach/Memoization: O(n*amt), Space:O(n*amt)
-	//TODO: Its not working. Revisit this
-	public int minCoins2(int[] coins, int amt) {
-		int n = coins.length;
-		int[][] memo = new int[n][amt + 1];
-
-		for (int[] arr : memo)
-			Arrays.fill(arr, -1);
-
-		int result = minCoins2(amt, coins, n - 1, 0, memo);
-		return result == Integer.MAX_VALUE ? -1 : result;
-	}
-
-	public int minCoins2(int amt, int[] coins, int i, int count, int[][] memo) {
-		if (amt == 0) return count;
-		if (i < 0 || amt < 0) return Integer.MAX_VALUE;
-
-		if (memo[i][amt] != -1) return memo[i][amt];
-
-		if (amt < coins[i]) memo[i][amt] = minCoins2(amt, coins, i - 1, count, memo);
-
-		return memo[i][amt] = Math.min(minCoins2(amt, coins, i - 1, count, memo),
-				minCoins2(amt - coins[i], coins, i, count + 1, memo));
-	}
-
-	//DP(Bottom up): Time Complexity: O(S*n)
-	public int minCoins31(int[] coins, int amount) {
-		int max = amount + 1;
-		int[] dp = new int[max];
-		Arrays.fill(dp, max);
-		dp[0] = 0;
-
-		for (int i = 0; i < coins.length; i++)
-			for (int j = coins[i]; j <= amount; j++)
-				dp[j] = Math.min(dp[j], 1 + dp[j - coins[i]]);
-
-		return dp[amount] > amount ? -1 : dp[amount];
-	}
-
-	//Another approach for mincoins problem:
-	//TODO: Compare below 3 approaches with combination sum IV problem
-	//Recursive another approach - Time: Exponential O(S^n), where S = Total amount
-	public int minCoins12(int[] coins, int amt) {
-		int result = minCoins(coins, amt);
-		return result == Integer.MAX_VALUE ? -1 : result;
-	}
-
-	public int minCoins(int coins[], int amt) {
-		if (amt < 0) return -1;
-		if (amt == 0) return 0;
-
-		int min = Integer.MAX_VALUE;
-		for (int i = 0; i < coins.length; i++) {
-			int currMin = minCoins(coins, amt - coins[i]);
-			if (currMin >= 0 && currMin < min) min = currMin + 1;
-		}
-		return min == Integer.MAX_VALUE ? -1 : min;
-	}
-
-	//DP(Memoization): Time Complexity: O(S*n)
-	public int minCoins22(int[] coins, int amt) {
-		return minCoins2(coins, amt, new int[amt]);
-	}
-
-	public int minCoins2(int coins[], int amt, int[] dp) {
-		if (amt < 0) return -1;
-		if (amt == 0) return 0;
-		if (dp[amt - 1] != 0) return dp[amt - 1];
-
-		int min = Integer.MAX_VALUE;
-		for (int coin : coins) {
-			int currMin = minCoins2(coins, amt - coin, dp);
-			if (currMin >= 0 && currMin < min) min = currMin + 1;
-		}
-		dp[amt - 1] = min == Integer.MAX_VALUE ? -1 : min;
-		return dp[amt - 1];
-	}
-
-	// DP(Bottom up): Time Complexity: O(S*n) - Other approach
-	public int coinChange32(int[] coins, int amount) {
-		int max = amount + 1;
-		int[] dp = new int[max];
-		Arrays.fill(dp, max);
-		dp[0] = 0;
-		for (int i = 1; i <= amount; i++) {
-			for (int coin : coins) {
-				if (i >= coin) dp[i] = Math.min(dp[i], dp[i - coin] + 1);
-			}
-		}
-		return dp[amount] > amount ? -1 : dp[amount];
-	}
-
-	//TODO: Check this
-
-	// Combination Sum IV  - Permutation Problem
-	/* Eg: nums = [1, 2, 3],  target = 4
+	// Combination Sum IV  - No of ways to get the sum(Permutation Problem)
+	/* Eg: nums = [1, 2, 3],  target = 4 
 	 * The possible combination ways are:
 	 * 	(1, 1, 1, 1)
 	 *  (1, 1, 2)
@@ -507,4 +383,92 @@ public class DPKnapsackPatterns {
 		}
 		return dp[target];
 	}
+
+	/* Coin Change: Min Coins-
+	 *  1. Solved using Coin Change
+	 *  2. Solved using Combination Sum 
+	 */
+
+	//Approach 1. Solved using Coin Change
+	//Simple Recursive approach: Time: O(2^n)
+	public int minCoins11(int[] coins, int amt) {
+		int result = minCoins11(amt, coins, coins.length - 1, 0);
+		return result == Integer.MAX_VALUE ? -1 : result;
+	}
+
+	public int minCoins11(int amt, int[] coins, int i, int count) {
+		if (amt == 0) return count;
+		if (i < 0 || amt < 0) return Integer.MAX_VALUE;
+
+		if (amt < coins[i]) return minCoins11(amt, coins, i - 1, count);
+
+		return Math.min(minCoins11(amt, coins, i - 1, count), minCoins11(amt - coins[i], coins, i, count + 1));
+	}
+
+	//DP(Bottom up): Time Complexity: O(S*n)
+	public int minCoins31(int[] coins, int amount) {
+		int max = amount + 1;
+		int[] dp = new int[max];
+		Arrays.fill(dp, max);
+		dp[0] = 0;
+
+		for (int i = 0; i < coins.length; i++)
+			for (int j = coins[i]; j <= amount; j++)
+				dp[j] = Math.min(dp[j], 1 + dp[j - coins[i]]);
+
+		return dp[amount] >= max ? -1 : dp[amount];
+	}
+
+	//Approach 2. Solved using Combination Sum
+	//Recursive another approach - Time: Exponential O(S^n), where S = Total amount
+	public int minCoins12(int[] coins, int amt) {
+		int result = minCoins(coins, amt);
+		return result == Integer.MAX_VALUE ? -1 : result;
+	}
+
+	public int minCoins(int coins[], int amt) {
+		if (amt < 0) return -1;
+		if (amt == 0) return 0;
+
+		int min = Integer.MAX_VALUE;
+		for (int i = 0; i < coins.length; i++) {
+			int currMin = minCoins(coins, amt - coins[i]);
+			if (currMin >= 0 && currMin < min) min = currMin + 1;
+		}
+		return min == Integer.MAX_VALUE ? -1 : min;
+	}
+
+	// DP(Memoization): Time Complexity: O(S*n)
+	public int minCoins22(int[] coins, int amt) {
+		return minCoins2(coins, amt, new int[amt]);
+	}
+
+	public int minCoins2(int coins[], int amt, int[] dp) {
+		if (amt < 0) return -1;
+		if (amt == 0) return 0;
+		if (dp[amt - 1] != 0) return dp[amt - 1];
+
+		int min = Integer.MAX_VALUE;
+		for (int coin : coins) {
+			int currMin = minCoins2(coins, amt - coin, dp);
+			if (currMin >= 0 && currMin < min) min = currMin + 1;
+		}
+		dp[amt - 1] = min == Integer.MAX_VALUE ? -1 : min;
+		return dp[amt - 1];
+	}
+
+	// DP(Bottom up): Time Complexity: O(S*n) - Other approach
+	public int coinChange32(int[] coins, int amount) {
+		int max = amount + 1;
+		int[] dp = new int[max];
+		Arrays.fill(dp, max);
+		dp[0] = 0;
+		for (int i = 1; i <= amount; i++) {
+			for (int coin : coins) {
+				if (i >= coin) dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+			}
+		}
+		return dp[amount] >= max ? -1 : dp[amount];
+	}
+
 }

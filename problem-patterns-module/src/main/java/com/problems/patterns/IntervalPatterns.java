@@ -120,7 +120,7 @@ public class IntervalPatterns {
 	 * Given a collection of intervals, merge all overlapping intervals.
 	 * Example 1: Input: [[1,3],[2,6],[8,10],[15,18]]; Output: [[1,6],[8,10],[15,18]]
 	 */
-	// intverals list
+	// intervals list
 	public List<Interval> merge(List<Interval> intervals) {
 		if (intervals.size() <= 1) return intervals;
 		Collections.sort(intervals, Comparator.comparing(i -> i.start));
@@ -152,7 +152,7 @@ public class IntervalPatterns {
 		List<int[]> result = new ArrayList<>();
 		for (int i = 1; i < intervals.length; i++) {
 			if (prev[1] >= intervals[i][0]) {
-				prev[0] = Math.min(prev[0], intervals[i][0]);
+				//prev[0] = Math.min(prev[0], intervals[i][0]); This is not needed
 				prev[1] = Math.max(prev[1], intervals[i][1]);
 			} else {
 				result.add(prev);

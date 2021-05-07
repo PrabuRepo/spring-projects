@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class TrieNode {
 	// To implement Trie datastructure using map
-	public Map<Character, TrieNode> childNodes;
+	public Map<Character, TrieNode> childNodes; //or chars
 
 	// To implement Trie datastructure using array
 	public TrieNode[] children;

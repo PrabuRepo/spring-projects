@@ -1,6 +1,8 @@
 package com.basic.generic.datastructures;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 /*
@@ -40,8 +42,7 @@ public class MyHashMap<K, V> {
 			hashNode = new HashNode<K, V>(key, value);
 		} else {// If index already has some element link the new element with existing one
 			HashNode<K, V> temp = hashNode;
-			while (temp.next != null)
-				temp = temp.next;
+			while (temp.next != null) temp = temp.next;
 			temp.next = new HashNode<K, V>(key, value);
 		}
 		// Finally set the updated elements in the array
@@ -144,6 +145,138 @@ public class MyHashMap<K, V> {
 
 	}
 
+}
+
+//Simple implementation: Allocate max possible number as size of map to avoid the collisions.
+class MyHashMap1 {
+
+	int size;
+	HashMapNode[] map;
+
+	/** Initialize your data structure here. */
+	public MyHashMap1() {
+		this.size = 1000001;
+		this.map = new HashMapNode[size];
+	}
+
+	/** value will always be non-negative. */
+	public void put(int key, int value) {
+		int index = getIndex(key);
+		map[index] = new HashMapNode(key, value);
+	}
+
+	/**
+	 * Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for
+	 * the key
+	 */
+	public int get(int key) {
+		int index = getIndex(key);
+
+		return map[index] != null ? map[index].value : -1;
+	}
+
+	/** Removes the mapping of the specified value key if this map contains a mapping for the key */
+	public void remove(int key) {
+		int index = getIndex(key);
+		map[index] = null;
+	}
+
+	private int getIndex(int key) {
+		return key % size;
+	}
+}
+
+//Implementation similar to Java Built-in Hashset implementations: Separate Chaining
+class MyHashMap2 {
+	List<HashMapNode>[] container = null;
+	int cap;
+	double loadFactor;
+	int count;
+
+	/** Initialize your data structure here. */
+	public MyHashMap2() {
+		cap = 1000;
+		loadFactor = 0.75;
+		count = 0;
+		container = new java.util.LinkedList[cap];
+	}
+
+	/** value will always be non-negative. */
+	public void put(int key, int value) {
+		//If key already presents, remove first
+		if (get(key) != -1) remove(key);
+
+		//Number of elements(count) reaches 75%, then double the cap size and rehash all the elements in the container 
+		if (loadFactor * cap == count) {
+			//TODO: Do this later
+			//rehashing();
+		}
+
+		int hash = key % cap;
+		if (container[hash] == null) container[hash] = new java.util.LinkedList<>();
+		container[hash].add(new HashMapNode(key, value));
+		++count;
+	}
+
+	/** Removes the mapping of the specified value key if this map contains a mapping for the key */
+	public void remove(int key) {
+		int hash = key % cap;
+		List<HashMapNode> list = container[hash];
+		if (list == null) return;
+
+		Iterator<HashMapNode> itr = list.iterator();
+		while (itr.hasNext()) {
+			if (itr.next().key == key) {
+				itr.remove();
+				--count;
+			}
+		}
+	}
+
+	/**
+	 * Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for
+	 * the key
+	 */
+	public int get(int key) {
+		int hash = key % cap;
+		List<HashMapNode> list = container[hash];
+		if (list != null) {
+			for (HashMapNode curr : list) {
+				if (curr.key == key) {
+					return curr.value;
+				}
+			}
+		}
+		return -1;
+	}
+
+	//TODO: Revist this logic
+	private void rehashing() {
+		count = 0;
+		cap *= 2; // Double the capacity
+		List<HashMapNode>[] oldContainer = container;
+		container = new java.util.LinkedList[cap];
+
+		//Copy the elements from the oldContainer to new contianer
+		for (int i = 0; i < oldContainer.length; i++) {
+			List<HashMapNode> list = oldContainer[i];
+			if (list == null || list.isEmpty()) continue;
+
+			for (HashMapNode curr : list)
+				this.put(curr.key, curr.value);
+		}
+	}
+
+}
+
+class HashMapNode {
+	public int key;
+	public int value;
+
+	public HashMapNode(int k, int v) {
+		this.key = k;
+		this.value = v;
+	}
 }
 
 class HashNode<K, V> {

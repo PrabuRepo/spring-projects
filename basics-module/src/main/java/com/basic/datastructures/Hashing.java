@@ -1,6 +1,5 @@
 package com.basic.datastructures;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 import com.basic.datastructures.operations.HashingOperations;
@@ -38,7 +37,9 @@ import com.basic.datastructures.operations.HashingOperations;
  *
  */
 public class Hashing {
+	public static void main(String[] args) {
 
+	}
 }
 
 /*
@@ -443,43 +444,4 @@ class HashSeperateChaining implements HashingOperations {
 		in.close();
 
 	}
-}
-
-class MyHashSet {
-
-	public static void main(String[] args) {
-		MyHashSet set = new MyHashSet();
-		set.add(1);
-		set.add(2);
-		System.out.println("Contains: " + set.contains(1));
-		System.out.println("Contains: " + set.contains(2));
-		set.remove(2);
-		set.remove(3);
-		System.out.println("Contains: " + set.contains(1));
-		System.out.println("Contains: " + set.contains(2));
-	}
-
-	private int[] map;
-	private int size;
-
-	/** Initialize your data structure here. */
-	public MyHashSet() {
-		int size = 1000000;
-		map = new int[size];
-		Arrays.fill(map, -1);
-	}
-
-	public void add(int key) {
-		if (!contains(key)) map[key % size] = key;
-	}
-
-	public void remove(int key) {
-		if (!contains(key)) map[key % size] = -1;
-	}
-
-	/** Returns true if this set contains the specified element */
-	public boolean contains(int key) {
-		return map[key % size] == -1 ? false : true;
-	}
-
 }

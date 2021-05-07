@@ -1,5 +1,7 @@
 package com.basic.datastructures.adv.operations;
 
+import java.util.List;
+
 public interface TrieOperations {
 
 	/** Add: Add a word into the trie. */
@@ -21,7 +23,7 @@ public interface TrieOperations {
 	public void remove(String word);
 
 	/** Auto Suggestions: Auto-complete feature using Trie */
-	/* Type ahead strings or Auto-complete feature using Trie:
+	/* Type ahead strings or Auto-complete or Auto Suggestions feature using Trie:
 	 * We are given a Trie with a set of strings stored in it. Now the user types in a prefix of his search query, we
 	 * need to give him all recommendations to auto-complete his query based on the strings stored in the Trie. We
 	 * assume that the Trie stores past searches by the users.
@@ -29,6 +31,6 @@ public interface TrieOperations {
 	 * then he must be shown {“abc”, “abcd”, “abbbaba”}.
 	 * Time: O(prefixLen + noOfStringInDictionary);
 	 */
-	public void typeAheadSearch(String prefix);
+	public List<String> typeAheadSearch(String prefix);
 
 }
