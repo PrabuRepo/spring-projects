@@ -113,7 +113,7 @@ public class FastAndSlowPtrPatterns {
 	}
 
 	// Middle of the LinkedList (easy)
-	//Approach1: For getting first mid element in the even size of LL; i.e. fastPtr.next != null
+	//Approach1: For getting second mid element in the even size of LL; i.e. fastPtr.next != null
 	public ListNode middleNode1(ListNode head) {
 		ListNode slowPtr = head, fastPtr = head;
 		while (fastPtr != null && fastPtr.next != null) {
@@ -123,7 +123,7 @@ public class FastAndSlowPtrPatterns {
 		return slowPtr;
 	}
 
-	//Approach2: For getting second mid element in the even size of LLl i.e. fastPtr.next.next != null
+	//Approach2: For getting first mid element in the even size of LLl i.e. fastPtr.next.next != null
 	public ListNode middleNode2(ListNode head) {
 		if (head == null) return null;
 		ListNode slowPtr = head, fastPtr = head;

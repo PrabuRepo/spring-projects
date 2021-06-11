@@ -25,9 +25,13 @@ public class TestClass {
 	public static void main(String[] args) {
 
 		TestClass ob = new TestClass();
+		String st = "abc.com.fsdf";
+		System.out.println(st.split(",").length);
+		System.out.println(Arrays.toString(st.split(",")));
+		System.out.println(st.contains("abc"));
 
-		byte var1 = -51, var2 = -28;
-		System.out.println(var1 & var2);
+		//System.out.println(Integer.parseInt('2'));
+		//System.out.println(Integer.parseInt("2"));
 
 		int[] A = { 2, 2, 2, 3, 3 };
 		int[][] B = { { 1, 3 }, { 5, 4 }, { 2, 4 } };
@@ -63,7 +67,7 @@ public class TestClass {
 
 		//System.out.println(ob.nextLargerNodes(head));
 
-		ob.sortMap();
+		//	ob.sortMap();
 	}
 
 	public void sortMap() {

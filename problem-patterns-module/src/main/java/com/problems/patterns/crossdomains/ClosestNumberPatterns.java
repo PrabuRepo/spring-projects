@@ -15,6 +15,8 @@ import com.common.model.TreeNode;
  * find closest of any given target. abs(target-a[i])
  * 
  * Approaches used:
+ * 	  - formula to find the closest values:
+ * 		   (currResult - target) < (prevResult -target) or abs(currResult - target) < abs(prevResult -target)
  * 	  - "Record and Move on" to find the closest values
  */
 public class ClosestNumberPatterns {

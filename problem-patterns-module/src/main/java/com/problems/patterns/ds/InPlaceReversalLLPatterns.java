@@ -57,10 +57,9 @@ public class InPlaceReversalLLPatterns {
 		ListNode curr = head, prev = null;
 		int i = 1;
 		// Move to mth node:
-		while (i < m) {
+		while (i++ < m) {
 			prev = curr;
 			curr = curr.next;
-			i++;
 		}
 
 		ListNode mthNode = curr, prevMthNode = prev, next;
@@ -164,7 +163,8 @@ public class InPlaceReversalLLPatterns {
 	}
 
 	// Rotate a LinkedList (medium)
-	/* Eg:Input: 1->2->3->4->5->NULL, k = 2;
+	/* 1. Rotate Left or Clockwise rotation:
+	 *  Eg:Input: 1->2->3->4->5->NULL, k = 2;
 	 * Output: 3->4->5->1->2->NULL
 	 */
 	public ListNode rotateLeft(ListNode head, int k) {
@@ -186,7 +186,7 @@ public class InPlaceReversalLLPatterns {
 		return head;
 	}
 
-	/* Rotate Right:
+	/* Rotate Right or Anti Clockwise Rotation:
 	 * Eg:Input: 1->2->3->4->5->NULL, k = 2;
 	 * Output: 4->5->1->2->3->NULL
 	 */

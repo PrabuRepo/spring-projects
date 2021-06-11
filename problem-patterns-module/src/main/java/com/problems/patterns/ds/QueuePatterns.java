@@ -22,16 +22,17 @@ public class QueuePatterns {
 	 *       cost[i] -> Cost of gas required to travel from ith station to i+1th station
 	 */
 	public int canCompleteCircuit1(int[] gas, int[] cost) {
-		int n = gas.length, tank = 0;
+		int n = gas.length, rem = 0;
 		//1.Find the sum of differences b/w gas and cost_required.
 		for (int i = 0; i < n; i++)
-			tank += gas[i] - cost[i];
+			rem += gas[i] - cost[i];
 
 		//2.If difference is less than zero, you cant travel around the circuit.
-		if (tank < 0) return -1;
+		if (rem < 0) return -1;
 
 		//3.Find the gas station's starting index
-		int rem = 0, start = 0;
+		rem = 0;
+		int start = 0;
 		for (int i = 0; i < n; i++) {
 			rem += gas[i] - cost[i];
 			if (rem < 0) {
@@ -174,6 +175,76 @@ public class QueuePatterns {
 		}
 	}
 
+	/* 
+	 * Moving Average from Data Stream - Queue/Array
+	 * Given a stream of integers and a window size, calculate the moving average of all integers in the sliding window.
+	 * 		Example
+	 * 		MovingAverage m = new MovingAverage(3);
+	 * 		m.next(1) = 1 // return 1.00000
+	 * 		m.next(10) = (1 + 10) / 2 // return 5.50000
+	 * 		m.next(3) = (1 + 10 + 3) / 3 // return 4.66667
+	 * 		m.next(5) = (10 + 3 + 5) / 3 // return 6.00000
+	 */
+
+	//Approach1: Using Queue
+	public void subarrayAvgMaxInStream1() {
+		initialize1(3);
+		next1(10);
+	}
+
+	//Approach2: Using Array(Circular Queue)
+	public void subarrayAvgMaxInStream2() {
+		initialize2(3);
+		next2(10);
+	}
+
+	//Approach1: Using Queue
+	private int windowSize = 0;
+	private Queue<Integer> list = null;
+	private long sum = 0;
+
+	// Alternate for Constructor
+	public void initialize1(int size) {
+		this.windowSize = size;
+		this.list = new LinkedList<>();
+	}
+
+	public double next1(int val) {
+		list.add(val);
+		this.sum += val;
+
+		if (this.list.size() > this.windowSize) {
+			this.sum -= list.poll();
+		}
+
+		return this.sum / this.list.size();
+	}
+
+	//Approach2: Using Circular Queue
+	private int size;
+	private int[] array;
+	private int nextIndex;
+	private double totalSum;
+
+	// Alternate for Constructor
+	public void initialize2(int size) {
+		this.size = size;
+		array = new int[size];
+	}
+
+	public double next2(int val) {
+		nextIndex %= size;
+		int prevValue = array[nextIndex];
+
+		totalSum -= prevValue;
+		totalSum += val;
+		array[nextIndex] = val;
+
+		nextIndex++;
+
+		return totalSum / size;
+	}
+
 	/* Sliding Window Maximum/Maximum of all subarrays of size k:
 	 * Given an array nums, there is a sliding window of size k which is moving from the very left of the array to the
 	 * very right. You can only see the k numbers in the window. Each time the sliding window moves right by one
@@ -191,7 +262,7 @@ public class QueuePatterns {
 		int n = nums.length;
 		int[] result = new int[n - k + 1];
 		//Deque to store the index of the elements; If we store the element, we can't find the elements position and window size has size K. 
-		Deque<Integer> deque = new LinkedList<>();
+		Deque<Integer> deque = new ArrayDeque<>();//new LinkedList<>();
 
 		for (int i = 0; i < n; i++) {
 			//Keep removing the smaller element from the last in deque to make sure that always max element present in front

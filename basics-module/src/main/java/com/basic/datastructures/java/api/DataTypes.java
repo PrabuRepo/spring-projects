@@ -180,5 +180,12 @@ public class DataTypes {
 
 	public static void integerAPI() {
 		// Integer.parseInt(s.substring(start, i + 1))
+		char ch = '1';
+		System.out.println(ch - '0'); // This returns exact number
+		System.out.println(Integer.valueOf('1')); // char returns only ASCII value, not returning exact number
+		System.out.println(Integer.valueOf("1")); // String returns exact number
+
+		//System.out.println(Integer.parseInt('2')); //char throws compilation errors
+		System.out.println(Integer.parseInt("2")); // String returns exact number
 	}
 }

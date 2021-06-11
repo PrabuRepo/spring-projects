@@ -10,13 +10,23 @@ import java.util.TreeSet;
 import com.problems.patterns.ds.HeapPatterns;
 import com.problems.patterns.ds.QueuePatterns;
 
+/*
+ * Sliding Window Array Patterns solves subarray problems.
+ * Window Sliding Technique: 
+ *    This technique shows how a nested for loop in few problems can be converted to single for loop and hence reducing the time complexity.
+ */
 public class SlidingWindowArrayPatterns {
 
-	/***************************** Sliding Window: Array ******************************/
-
+	// This method just consolidates all the subarray problems
 	public void subarrayConsolidation() {
 		int[] arr = { 2, 5, 6, -1, -3, 6, 8, -4, 7 };
 		int k = 12;
+
+		//Subarray calculation for given window:
+		int window = 4;
+		subarraySumInWindowK(arr, window);
+		subarrayAvgMaxInWindowK(arr, window);
+		countDistinctInWindowK(arr, window);
 
 		//Subarray Sum: 
 		subarraySumMax(arr);
@@ -37,12 +47,6 @@ public class SlidingWindowArrayPatterns {
 		subarraySumZero1(arr);
 		subarraySumZero2(arr);
 		subarraySumZeroCount(arr);
-
-		//Subarray calculation for given window:
-		int window = 4;
-		subarraySumInWindowK(arr, window);
-		subarrayAvgMaxInWindowK(arr, window);
-		countDistinctInWindowK(arr, window);
 
 		//Subarray - Count consecutive ones
 		subarrayMaxConsecutiveOnes(arr);
@@ -121,13 +125,13 @@ public class SlidingWindowArrayPatterns {
 		return result;
 	}
 
-	//TODO: Moving Average from Data Stream - Queue/Array - Design
-
 	// Few more sliding window pattern problems
 	QueuePatterns queuePatterns = new QueuePatterns();
 	HeapPatterns heapPatterns = new HeapPatterns();
 
 	public void slidingWindow(int[] nums, int k) {
+		queuePatterns.subarrayAvgMaxInStream1();
+		queuePatterns.subarrayAvgMaxInStream2();
 		queuePatterns.maxSlidingWindow(nums, k);
 		queuePatterns.maxMin(k, nums);
 		heapPatterns.medianSlidingWindow1(nums, k);
@@ -253,7 +257,7 @@ public class SlidingWindowArrayPatterns {
 	 * Longest Subarray having sum of elements atmost ‘k’:
 	 * Given an array, find the maximum sum of subarray close to k but not larger than k
 	 */
-	//TODO: Test this solution
+	//TODO: Test this solution & move to closest pattterns 
 	// Approach1: Using Sliding Window -> This works only array has positive elements
 	public int subarraySumLenCloseToK(int[] nums, int k) {
 		if (nums.length == 0) return 0;
@@ -498,6 +502,7 @@ public class SlidingWindowArrayPatterns {
 		return minLen;
 	}
 
+	//TODO: Move this to closest number patterns
 	/* Maximum Sum of Subarray Close to K:
 	 * Given an array, find the maximum sum of subarray close to k but not larger than k
 	 */
@@ -535,9 +540,9 @@ public class SlidingWindowArrayPatterns {
 		for (int i = 0; i < arr.length; i++) {
 			sum = sum + arr[i];
 
-			Integer ceiling = set.floor(sum - k);
-			if (ceiling != null) {
-				closestSum = Math.max(closestSum, sum - ceiling);
+			Integer floor = set.floor(sum - k);
+			if (floor != null) {
+				closestSum = Math.max(closestSum, sum - floor);
 			}
 			set.add(sum);
 		}

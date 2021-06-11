@@ -817,6 +817,9 @@ public class HeapPatterns {
 	public double[] medianSlidingWindow2(int[] nums, int k) {
 		// Should add index in the set to handle duplicate elements
 		Comparator<Integer> comparator = (i, j) -> nums[i] != nums[j] ? Integer.compare(nums[i], nums[j]) : i - j;
+		//or 
+		//TODO: Test this one
+		//Comparator<Integer> comparator = (i, j) -> nums[i] != nums[j] ? nums[i] - nums[j] : i - j;
 		left = new TreeSet<>(comparator.reversed());
 		right = new TreeSet<>(comparator);
 

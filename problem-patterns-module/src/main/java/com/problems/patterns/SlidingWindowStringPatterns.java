@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/*
+ * Sliding Window String Patterns solves the substring problems.
+ * Window Sliding Technique: 
+ *    This technique shows how a nested for loop in few problems can be converted to single for loop and hence reducing the time complexity.
+ */
 public class SlidingWindowStringPatterns {
 
-	/***************************** Type1: Sliding Window: String ******************************/
-	/* Window Sliding Technique: 
-	 * 	This technique shows how a nested for loop in few problems can be converted to single for loop and hence reducing the time 
-	 *  complexity.
+	/* 
 	 *  Sliding Window String Pattern: This pattern needs,
 	 *  	- Two pointers(l & r) to iterate the string from 0th index to n-1
 	 *  	- Fixed hash array or map to store the required chars for the given logic

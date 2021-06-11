@@ -303,6 +303,13 @@ public class DPKnapsackPatterns {
 		return dp[cap];
 	}
 
+	/*
+	 * Note: Compare these 3 problems
+	 * 		1. Count Subset Sum
+	 * 		2. Coin Change 2 /Coins - No of ways to get amount
+	 * 		3. Combination Sum IV
+	 */
+
 	/*Coin Change 2 /Coins - No of ways to get amount
 	 * Given an infinite number of quarters (25 cents), dimes (10 cents), nickels (5 cents), and pennies (1 cent), 
 	 * write code to calculate the number of ways of representing n cents.
